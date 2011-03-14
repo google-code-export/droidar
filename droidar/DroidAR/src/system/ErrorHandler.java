@@ -1,0 +1,308 @@
+package system;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.Thread.UncaughtExceptionHandler;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import de.rwth.R;
+
+/**
+ * must be the same "x/y" string as in the AndroidManifest. </br>
+ * 
+ * The ErrorHandler has to be registered in the AndroidManifest.xml like this:
+ * 
+ * <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal;mso-layout-grid-align:none;text-autospace:none'>
+ * <span style='font-size: 10.0pt;font-family:"Courier New";color:teal;mso-ansi
+ * -language:DE'>&lt;</span><span class=SpellE><span
+ * style='font-size:10.0pt;font-family:"Courier New";
+ * color:#3F7F7F;mso-ansi-language:DE'>activity</span></span><span
+ * style='font-size:10.0pt;font-family:"Courier New";mso-ansi-language:DE'>
+ * <span class=SpellE><span
+ * style='color:#7F007F'>android:name</span></span><span
+ * style='color:black'>=</span><i><span style='color:#2A00FF'>&quot;<span
+ * class=SpellE>system.ErrorHandler</span>&quot;</span></i> <span
+ * class=SpellE><span style='color:#7F007F'>android:process</span></span><span
+ * style='color:black'>=</span><i><span style='color:#2A00FF'>&quot;:<span
+ * class=SpellE>myexeptionprocess</span>&quot;</span></i><o:p></o:p></span>
+ * </p>
+ * 
+ * <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal;mso-layout-grid-align:none;text-autospace:none'>
+ * <span style='font-size:
+ * 10.0pt;font-family:"Courier New";mso-ansi-language:DE'><span
+ * style='mso-tab-count: 1'>      </span><span class=SpellE><span
+ * style='color:#7F007F'>android:taskAffinity</span></span><span
+ * style='color:black'>=</span><i><span style='color:#2A00FF'>&quot;<span
+ * class=SpellE>system.ErrorHandler</span>&quot;</span></i><span style='color:
+ * teal'>&gt;</span><o:p></o:p></span>
+ * </p>
+ * 
+ * <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal;mso-layout-grid-align:none;text-autospace:none'>
+ * <span style='font-size:
+ * 10.0pt;font-family:"Courier New";color:black;mso-ansi-language:DE'><span
+ * style='mso-tab-count:1'>      </span></span><span style='font-size:10.0pt;
+ * font-family:"Courier New";color:teal;mso-ansi-language :DE'>&lt;</span><span
+ * class=SpellE><span style='font-size:10.0pt;font-family:"Courier New";
+ * color:#3F7F7F;mso-ansi-language:DE'>intent</span></span><span
+ * style='font-size: 10.0pt;font-family:"Courier New";color:#3F7F7F;mso-ansi-
+ * language:DE'>-filter</span><span style='font-size:10.0pt;font-family:"Courier
+ * New";color:teal;mso-ansi-language: DE'>&gt;</span><span
+ * style='font-size:10.0pt;font-family:"Courier New";
+ * mso-ansi-language:DE'><o:p></o:p></span>
+ * </p>
+ * 
+ * <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal;mso-layout-grid-align:none;text-autospace:none'>
+ * <span style='font-size:
+ * 10.0pt;font-family:"Courier New";color:black;mso-ansi-language:DE'><span
+ * style='mso-tab-count:2'>            </span></span><span
+ * style='font-size:10.0pt;
+ * font-family:"Courier New";color:teal;mso-ansi-language :DE'>&lt;</span><span
+ * class=SpellE><span style='font-size:10.0pt;font-family:"Courier New";
+ * color:#3F7F7F;mso-ansi-language:DE'>category</span></span><span
+ * style='font-size:10.0pt;font-family:"Courier New";mso-ansi-language:DE'>
+ * <span class=SpellE><span
+ * style='color:#7F007F'>android:name</span></span><span
+ * style='color:black'>=</span><i><span style='color:#2A00FF'>&quot;<span
+ * class=SpellE>android.intent.category.DEFAULT</span>&quot;</span></i> <span
+ * style='color:teal'>/&gt;</span><o:p></o:p></span>
+ * </p>
+ * 
+ * <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal;mso-layout-grid-align:none;text-autospace:none'>
+ * <span style='font-size:
+ * 10.0pt;font-family:"Courier New";color:black;mso-ansi-language:DE'><span
+ * style='mso-tab-count:1'>      </span><span style='mso-tab-count:1'>     
+ * </span></span><span style='font-size:10.0pt;font-family:"Courier
+ * New";color:teal;mso-ansi-language: DE'>&lt;</span><span class=SpellE><span
+ * style='font-size:10.0pt;font-family: "Courier New";color
+ * :#3F7F7F;mso-ansi-language:DE'>action</span></span><span
+ * style='font-size:10.0pt;font-family:"Courier New";mso-ansi-language:DE'>
+ * <span class=SpellE><span
+ * style='color:#7F007F'>android:name</span></span><span
+ * style='color:black'>=</span><i><span style='color:#2A00FF'>&quot;<span
+ * class=SpellE>android.intent.action.VIEW</span>&quot;</span></i> <span
+ * style='color:teal'>/&gt;</span><o:p></o:p></span>
+ * </p>
+ * 
+ * <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal;mso-layout-grid-align:none;text-autospace:none'>
+ * <span style='font-size:
+ * 10.0pt;font-family:"Courier New";color:black;mso-ansi-language:DE'><span
+ * style='mso-tab-count:1'>      </span><span style='mso-tab-count:1'>     
+ * </span></span><span style='font-size:10.0pt;font-family:"Courier
+ * New";color:teal;mso-ansi-language: DE'>&lt;</span><span class=SpellE><span
+ * style='font-size:10.0pt;font-family:
+ * "Courier New";color:#3F7F7F;mso-ansi-language:DE'>data</span></span><span
+ * style='font-size:10.0pt;font-family:"Courier New";mso-ansi-language:DE'>
+ * <span class=SpellE><span
+ * style='color:#7F007F'>android:mimeType</span></span><span
+ * style='color:black'>=</span><i><span style='color:#2A00FF'>&quot;<span
+ * class=SpellE>errors</span>/<span
+ * class=SpellE>myUnhandleCatcher</span>&quot;</span></i> <span
+ * style='color:teal'>/&gt;</span><o:p></o:p></span>
+ * </p>
+ * 
+ * <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal;mso-layout-grid-align:none;text-autospace:none'>
+ * <span style='font-size:
+ * 10.0pt;font-family:"Courier New";color:black;mso-ansi-language:DE'><span
+ * style='mso-tab-count:1'>      </span></span><span style='font-size:10.0pt;
+ * font-family:"Courier New";color:teal;mso-ansi-language :DE'>&lt;/</span><span
+ * class=SpellE><span style='font-size:10.0pt;font-family:"Courier New";
+ * color:#3F7F7F;mso-ansi-language:DE'>intent</span></span><span
+ * style='font-size: 10.0pt;font-family:"Courier New";color:#3F7F7F;mso-ansi-
+ * language:DE'>-filter</span><span style='font-size:10.0pt;font-family:"Courier
+ * New";color:teal;mso-ansi-language: DE'>&gt;</span><span
+ * style='font-size:10.0pt;font-family:"Courier New";
+ * mso-ansi-language:DE'><o:p></o:p></span>
+ * </p>
+ * 
+ * <p class=MsoNormal>
+ * <span style='font-size:10.0pt;line-height:115%;font-family:
+ * "Courier New";color:teal;mso-ansi-language:DE'>&lt;/</span><span
+ * class=SpellE><span
+ * style='font-size:10.0pt;line-height:115%;font-family:"Courier
+ * New";color:#3F7F7F; mso-ansi-language:DE'>activity</span></span><span
+ * style='font-size:10.0pt; line-height:115%;font-family:"Courier New";color:
+ * teal;mso-ansi-language:DE'>&gt;</span>
+ * </p>
+ * 
+ * @author Spobo
+ * 
+ */
+public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
+
+	private static Activity myCurrentActivity;
+	private static UncaughtExceptionHandler defaultHandler;
+	private static String myDeveloperMailAdress;
+	private static String myMailSubject = "Error in DroidAR";
+	private static final String PASSED_ERROR_TEXT_ID = "Error Text";
+	private static final CharSequence ERROR_ACTIVITY_TITLE = "Error :(";
+	private static final String DEV_MAIL = "dev mail";
+	private static final String TITLE_MAIL = "title mail";
+
+	/**
+	 * see {@link ErrorHandler}
+	 */
+	private static final String DEFINED_TYPE = "errors/myUnhandleCatcher";
+
+	/*
+	 * Dont forget to add the ErrorReports xml Layout file to your res/layout
+	 * folder
+	 */
+	private static final int ERROR_WINDOW_ID = R.layout.errorreports;
+	private static final int ERROR_TEXT_VIEW_ID = R.id.errorText;
+	private static final int ERROR_MAIL_BUTTON_ID = R.id.errorMailButton;
+
+	/**
+	 * don't forget to set the current activity if you use this constructor!
+	 */
+	public ErrorHandler() {
+		if (defaultHandler == null)
+			defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+	}
+
+	public ErrorHandler(Activity a) {
+		setCurrentActivity(a);
+		if (defaultHandler == null)
+			defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+	}
+
+	public static void showErrorLog(Activity a, Exception errorToShow,
+			boolean keepBrokenProcessRunning) {
+		showErrorActivity(a, throwableToString(errorToShow),
+				keepBrokenProcessRunning);
+	}
+
+	public static String throwableToString(Throwable t) {
+		StringWriter sw = new StringWriter();
+		PrintWriter p = new PrintWriter(sw);
+		t.printStackTrace(p);
+		String s = sw.toString();
+		p.close();
+		return s;
+	}
+
+	private static void showErrorActivity(final Activity activity,
+			final String errorText, boolean keepBrokenProcessRunning) {
+		if (activity != null) {
+			myCurrentActivity = activity;
+			Intent i = new Intent(Intent.ACTION_VIEW);
+			i.putExtra(PASSED_ERROR_TEXT_ID, errorText);
+			i.putExtra(DEV_MAIL, myDeveloperMailAdress);
+			i.putExtra(TITLE_MAIL, myMailSubject);
+			i.setType(DEFINED_TYPE);
+			Log.e("ErrorHandler", "Starting from " + activity + " to "
+					+ ErrorHandler.class);
+			activity.startActivity(i);
+
+			if (!keepBrokenProcessRunning) {
+				/*
+				 * After displaying the error in a new process the current
+				 * process can be killed. This wont affect the
+				 * ErrorHandler-activity because it is running in its own
+				 * process (see AndroidManifest)
+				 */
+				activity.finish();
+				android.os.Process.killProcess(android.os.Process.myPid());
+				System.exit(1);
+			}
+
+		}
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		String myErrorText = getIntent().getExtras().getString(
+				PASSED_ERROR_TEXT_ID);
+		/*
+		 * because this is a new process even the static fields will be reseted!
+		 * the correct values can be restored by passing them in the intent
+		 */
+		myDeveloperMailAdress = getIntent().getExtras().getString(DEV_MAIL);
+		myMailSubject = getIntent().getExtras().getString(TITLE_MAIL);
+		loadErrorLayout(this, myErrorText);
+	}
+
+	private static void loadErrorLayout(Activity a, String myErrorText) {
+		a.setContentView(ERROR_WINDOW_ID);
+		a.setTitle(ERROR_ACTIVITY_TITLE);
+		EditText myTextView = (EditText) a.findViewById(ERROR_TEXT_VIEW_ID);
+		myErrorText = addDebugInfosToErrorMessage(myErrorText);
+		if (myErrorText != null)
+			myTextView.setText(myErrorText);
+
+		if (myDeveloperMailAdress != null) {
+			enableMailButton(a, myTextView);
+		}
+	}
+
+	private static void enableMailButton(final Activity a,
+			final EditText myTextView) {
+		Button b = (Button) a.findViewById(ERROR_MAIL_BUTTON_ID);
+		b.setVisibility(View.VISIBLE);
+		b.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				sendMail(a, myTextView);
+			}
+		});
+	}
+
+	private static void sendMail(Activity a, EditText myTextView) {
+		final Intent emailIntent = new Intent(
+				android.content.Intent.ACTION_SEND);
+		emailIntent.setType("plain/text");
+		emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+				new String[] { myDeveloperMailAdress });
+		emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+				myMailSubject);
+		emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+				myTextView.getText());
+		a.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+	}
+
+	private static String addDebugInfosToErrorMessage(String s) {
+		s += "\n \n <Debug Infos>";
+		s += "\n OS Version: " + System.getProperty("os.version") + " ("
+				+ android.os.Build.VERSION.INCREMENTAL + ")";
+		s += "\n OS API Level: " + android.os.Build.VERSION.SDK;
+		s += "\n Device: " + android.os.Build.DEVICE;
+		s += "\n Model (and Product): " + android.os.Build.MODEL + " ("
+				+ android.os.Build.PRODUCT + ")";
+		// TODO add application version!
+		s += " \n \n [You can add a description of what you were doing here]:";
+		s += " \n ...";
+		return s;
+	}
+
+	@Override
+	public void uncaughtException(final Thread thread, final Throwable ex) {
+		Log.e("ErrorHandler", "A wild 'Uncaught exeption' appeares!");
+		ex.printStackTrace();
+		if (myCurrentActivity != null) {
+			Log.e("ErrorHandler", "Starting error activity");
+			showErrorActivity(myCurrentActivity, throwableToString(ex), false);
+		} else {
+			Log.e("ErrorHandler",
+					"No current activity set -> error activity couldn't be started");
+			defaultHandler.uncaughtException(thread, ex);
+		}
+	}
+
+	public static void enableEmailReports(String developerEmailAdress,
+			String emailTitle) {
+		myDeveloperMailAdress = developerEmailAdress;
+		myMailSubject = emailTitle;
+	}
+
+	public static void setCurrentActivity(Activity a) {
+		myCurrentActivity = a;
+	}
+
+}

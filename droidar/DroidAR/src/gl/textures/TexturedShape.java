@@ -1,0 +1,50 @@
+package gl.textures;
+
+import gl.Shape;
+
+import java.util.ArrayList;
+
+import util.Vec;
+import android.graphics.Bitmap;
+import android.util.Log;
+
+public class TexturedShape extends Shape {
+
+	/**
+	 * this values are corresponding to the shape edges
+	 */
+	ArrayList<Vec> myTexturePositions = new ArrayList<Vec>();
+
+	public TexturedShape(String textureName, Bitmap texture) {
+		super(null);
+		myRenderData = new TexturedRenderData();
+		/*
+		 * TODO redesign this so that the input texture is projected on the mesh
+		 * correctly
+		 */
+		if (texture != null) {
+			texture = TextureManager.getInstance().resizeBitmapIfNecessary(texture);
+			TextureManager.getInstance().addTexture((TexturedRenderData) myRenderData,
+					texture, textureName);
+		} else {
+			Log.e("TexturedShape",
+					"got null-bitmap! check bitmap creation process");
+		}
+	}
+
+	public void add(Vec vec, int x, int y) {
+		myShapeArray.add(vec);
+		// z coordinate not needed for 2d textures:
+		myTexturePositions.add(new Vec(x, y, 0));
+		myRenderData.updateShape(myShapeArray);
+		((TexturedRenderData) myRenderData)
+				.updateTextureBuffer(myTexturePositions);
+	}
+
+	@Override
+	public void add(Vec v) {
+		// TODO throw error
+		super.add(v);
+	}
+
+}
