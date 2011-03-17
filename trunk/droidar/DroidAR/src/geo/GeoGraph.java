@@ -1,5 +1,6 @@
 package geo;
 
+import geo.GeoUtils.EdgeListener;
 import gl.MeshComponent;
 
 import java.util.Arrays;
@@ -217,13 +218,23 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 	}
 
 	public void addEdgesToCreatePath() {
+		addEdgesToCreatePath(null);
+	}
+
+	public void addEdgesToCreatePath(EdgeListener li) {
 		GeoObj lastPos = null;
 		final int l = myNodes.myLength;
 		GeoObj p;
 		for (int i = 0; i < l; i++) {
 			p = myNodes.get(i);
-			if (lastPos != null)
-				this.addEdge(lastPos, p, null);
+			if (lastPos != null) {
+				if (li != null) {
+					li.addEdgeToGraph(this, lastPos, p);
+				} else {
+					// add default mesh:
+					this.addEdge(lastPos, p, null);
+				}
+			}
 			lastPos = p;
 		}
 		setIsPath(true);
