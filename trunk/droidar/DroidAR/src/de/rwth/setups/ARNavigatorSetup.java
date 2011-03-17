@@ -335,7 +335,7 @@ public class ARNavigatorSetup extends Setup {
 				disableWalkFlag, enableWalkFlag);
 		guiSetup.addTaskmanagerToView(guiSetup.getTopView());
 	}
-
+ 
 	@Override
 	public void _f_addInfoScreen(InfoScreenSettings infoScreenData) {
 
