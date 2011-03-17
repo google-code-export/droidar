@@ -32,7 +32,7 @@ public class GuiSetup {
 
 	private static final String LOG_TAG = "GuiSetup";
 	private static final long VIBRATION_DURATION_IN_MS = 20;
-	private static final int BUTTON_BACKGROUND = android.R.drawable.alert_light_frame;
+	//private static final int BUTTON_BACKGROUND = android.R.drawable.alert_light_frame;
 	private LinearLayout topOuter;
 	private LinearLayout bottomOuter;
 	private LinearLayout leftOuter;
@@ -107,7 +107,7 @@ public class GuiSetup {
 			int imageId) {
 		if (target != null) {
 			ImageButton b = new ImageButton(target.getContext());
-			b.setBackgroundResource(BUTTON_BACKGROUND);
+			//b.setBackgroundResource(BUTTON_BACKGROUND);
 			b.setImageResource(imageId);
 			b.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
@@ -133,9 +133,9 @@ public class GuiSetup {
 			final Command onClickCommand, String buttonText) {
 		if (target != null) {
 			Button b = new Button(target.getContext());
-			b.setBackgroundResource(BUTTON_BACKGROUND);
-			b.setTextColor(gl.Color.blackTransparent().toIntRGB());
-			b.setText(" " + buttonText + " ");
+			//b.setBackgroundResource(BUTTON_BACKGROUND);
+			//b.setTextColor(gl.Color.blackTransparent().toIntRGB());
+			b.setText(buttonText);
 			b.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					if (isVibrationFeedbackEnabled() && vibrateCommand != null) {
@@ -192,6 +192,8 @@ public class GuiSetup {
 		v.addView(c);
 	}
 
+
+	
 	public void addCheckBoxToView(LinearLayout v, String string,
 			Wrapper wrapperWithTheBooleanToSwitchInside) {
 		CommandSetWrapperToValue setTrue = new CommandSetWrapperToValue(

@@ -518,6 +518,7 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	}
 
 	public Vec getMyNewPosition() {
+		
 		return myNewPosition;
 	}
 

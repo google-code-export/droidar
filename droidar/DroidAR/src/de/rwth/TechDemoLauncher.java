@@ -70,9 +70,6 @@ public class TechDemoLauncher extends Activity {
 		public SimpleButton(String text) {
 			super(TechDemoLauncher.this);
 			setText(text);
-			setTextColor(Color.red().toIntRGB());
-			setBackgroundResource(android.R.drawable.editbox_background);
-			setHeight(50);
 			setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {

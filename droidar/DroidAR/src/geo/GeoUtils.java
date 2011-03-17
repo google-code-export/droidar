@@ -17,6 +17,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import util.Wrapper;
+import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.location.Criteria;
@@ -125,18 +126,37 @@ public class GeoUtils {
 		return null;
 	}
 
-	public Location getCurrentLocation() {
-		return GeoUtils.getCurrentLocation(myContext);
+	public static Location getCurrentLocation(Context context) {
+		Location l = getCurrentLocation(context, Criteria.ACCURACY_FINE);
+		if (l == null) {
+			Log.e(LOG_TAG, "Fine accuracy position could not be detected!");
+			l = GeoUtils
+					.getCurrentLocation(context, Criteria.ACCURACY_COARSE);
+		}
+		return l;
 	}
 
-	public static Location getCurrentLocation(Context context) {
+	public Location getCurrentLocation() {
+		Location l = GeoUtils.getCurrentLocation(myContext,
+				Criteria.ACCURACY_FINE);
+		if (l == null) {
+			Log.e(LOG_TAG, "Fine accuracy position could not be detected!");
+			l = GeoUtils
+					.getCurrentLocation(myContext, Criteria.ACCURACY_COARSE);
+		}
+		Log.d(LOG_TAG, "current position=" + l.toString());
+		return l;
+	}
+
+	public static Location getCurrentLocation(Context context, int accuracy) {
 		if (context != null) {
 			try {
 				LocationManager lm = (LocationManager) context
 						.getSystemService(Context.LOCATION_SERVICE);
-				Criteria fine = new Criteria();
-				fine.setAccuracy(Criteria.ACCURACY_FINE);
-				return lm.getLastKnownLocation(lm.getBestProvider(fine, true));
+				Criteria criteria = new Criteria();
+				criteria.setAccuracy(accuracy);
+				return lm.getLastKnownLocation(lm.getBestProvider(criteria,
+						true));
 			} catch (Exception e) {
 				Log.e(LOG_TAG, "Could not receive the current location");
 				e.printStackTrace();
