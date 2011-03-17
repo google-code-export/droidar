@@ -396,19 +396,16 @@ public abstract class Setup {
 	}
 
 	/**
-	 * ok i solved this problem, you can now init your setup class as any other
-	 * usual class. so don't use this method anymore! do it in the constructor
-	 * or wherever you want;)
 	 * 
-	 * its very important that you init fields in your custom setup class in
-	 * this method and not directly when defining it. so dont write things like
 	 * 
-	 * "public Vec pos=new Vec();"
+	 * this is called after the initialization of the AR view started. Doing
+	 * field initialization here is a difference to doing it right in the
+	 * constructor, because normally a Setup object is created not directly
+	 * before it is used to start the AR view. So placing your field
+	 * initialization here normaly means to reduce the amount of created objects
+	 * if you are using more then one Setup.
 	 * 
-	 * this would not work because the methods are called BEFORE the fields an
-	 * initialized
 	 */
-	@Deprecated
 	public abstract void _a_initFieldsIfNecessary();
 
 	/**
