@@ -235,7 +235,7 @@ public abstract class Setup {
 
 			debugLogDoSetupStep(STEP12);
 			_f_addInfoScreen(infoScreenData);
-			if (!InfoScreen.closeInstantly) {
+			if (!infoScreenData.closeInstantly()) {
 				/*
 				 * on old devices the info-dialog isn't necessary to fix the
 				 * wrong order of the overlays, so it only has to be displayed
@@ -287,7 +287,7 @@ public abstract class Setup {
 	 */
 	public void _f_addInfoScreen(InfoScreenSettings infoScreenData) {
 		Log.d(LOG_TAG, "Info screen will be closed instantly");
-		InfoScreen.closeInstantly = true;
+		infoScreenData.setCloseInstantly();
 	}
 
 	private void showInfoDialog(InfoScreenSettings infoScreenData) {

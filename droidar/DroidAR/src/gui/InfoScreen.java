@@ -23,7 +23,7 @@ import de.rwth.R;
 public class InfoScreen extends Activity {
 
 	protected static final long AUTO_CLOSE_TIME = 1200;
-	public static boolean closeInstantly = false;
+	private InfoScreenSettings myInfos;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +35,16 @@ public class InfoScreen extends Activity {
 				.loadObjFromNewlyCreatedActivity(this);
 
 		if (infos instanceof InfoScreenSettings)
-			addContent((InfoScreenSettings) infos,
-					(ScrollView) findViewById(R.id.infoScreenScrollview));
+			myInfos = (InfoScreenSettings) infos;
+		addContent(myInfos,
+				(ScrollView) findViewById(R.id.infoScreenScrollview));
 
 	}
 
 	private void addContent(InfoScreenSettings infos, ScrollView s) {
 		s.setBackgroundColor(infos.backgroundColor.toIntARGB());
 		s.addView(infos.getLinLayout());
-		if (!closeInstantly) {
+		if (!infos.closeInstantly()) {
 			infos.getLinLayout().addView(newCloseButton(infos));
 		} else {
 			infos.getLinLayout().addView(newLoadingInfo(infos));
@@ -83,7 +84,7 @@ public class InfoScreen extends Activity {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				if (closeInstantly)
+				if (myInfos.closeInstantly())
 					InfoScreen.this.finish();
 			}
 		}).start();

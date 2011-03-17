@@ -18,7 +18,8 @@ public class InfoScreenSettings {
 	public int padding = 10;
 	public int iconPadding = 3;
 	public int spacerPadding = 0;
-	private String myLoadingText=" Loading... ";
+	private String myLoadingText = " Loading... ";
+	private boolean closeInstantly;
 
 	public InfoScreenSettings(Context c) {
 		myContext = c;
@@ -48,7 +49,7 @@ public class InfoScreenSettings {
 		LinearLayout l = new LinearLayout(myContext);
 		l.setGravity(Gravity.CENTER_VERTICAL);
 		ImageView i = new ImageView(myContext);
-		i.setPadding(0, iconPadding, iconPadding*2, iconPadding);
+		i.setPadding(0, iconPadding, iconPadding * 2, iconPadding);
 		i.setImageResource(iconId);
 		l.addView(i);
 		TextView t = new TextView(myContext);
@@ -72,6 +73,14 @@ public class InfoScreenSettings {
 
 	public void setLoadingText(String myLoadingText) {
 		this.myLoadingText = myLoadingText;
+	}
+
+	public boolean closeInstantly() {
+		return closeInstantly;
+	}
+
+	public void setCloseInstantly() {
+		closeInstantly = true;
 	}
 
 }
