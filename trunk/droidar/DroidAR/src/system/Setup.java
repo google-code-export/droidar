@@ -230,6 +230,7 @@ public abstract class Setup {
 		InfoScreenSettings infoScreenData = new InfoScreenSettings(
 				myTargetActivity);
 		if (isOldDeviceWhereNothingWorksAsExpected) {
+			Log.d(LOG_TAG, "This is an old device (old Android version)");
 			addOverlaysInCrazyOrder();
 
 			debugLogDoSetupStep(STEP12);
@@ -285,6 +286,7 @@ public abstract class Setup {
 	 * @param infoScreenData
 	 */
 	public void _f_addInfoScreen(InfoScreenSettings infoScreenData) {
+		Log.d(LOG_TAG, "Info screen will be closed instantly");
 		InfoScreen.closeInstantly = true;
 	}
 
@@ -619,10 +621,8 @@ public abstract class Setup {
 	public void onStop(Activity a) {
 		Log.d(LOG_TAG, "main onStop (setup=" + this + ")");
 		glRenderer.pause();
-		// myGLSurfaceView.onPause();
 		worldUpdater.pauseUpdater();
-		// worldUpdater.killUpdaterThread();
-		myCameraView.releaseCamera();
+		// myCameraView.releaseCamera();
 	}
 
 	public void onStart(Activity a) {
