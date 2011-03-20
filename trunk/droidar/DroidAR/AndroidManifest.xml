@@ -11,6 +11,8 @@
 			</intent-filter>
 		</activity>
 
+
+
 		<!-- The maps library has to be added to use some location calculation 
 			methods -->
 		<uses-library android:name="com.google.android.maps" />
