@@ -6,10 +6,10 @@ import gl.GLFactory;
 import gl.GLRenderer;
 import gui.GuiSetup;
 import gui.InfoScreenSettings;
-import android.app.Activity;
 import system.EventManager;
 import system.Setup;
 import worldData.SystemUpdater;
+import android.app.Activity;
 
 public class MySetup extends Setup {
 

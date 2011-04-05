@@ -1,7 +1,6 @@
 package geo;
 
 import util.EfficientList;
-import util.EfficientListQualified;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 

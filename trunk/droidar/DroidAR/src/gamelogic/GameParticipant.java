@@ -1,11 +1,12 @@
 package gamelogic;
 
+import gui.simpleUI.EditItem;
+import gui.simpleUI.ModifierGroup;
+
 import java.util.Arrays;
 
 import util.EfficientList;
 import android.util.Log;
-import gui.simpleUI.EditItem;
-import gui.simpleUI.ModifierGroup;
 
 import components.Component;
 

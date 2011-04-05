@@ -17,7 +17,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import util.Wrapper;
-import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.location.Criteria;

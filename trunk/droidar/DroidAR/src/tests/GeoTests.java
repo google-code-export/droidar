@@ -1,6 +1,5 @@
 package tests;
 
-import android.util.Log;
 import geo.GeoGraph;
 import geo.GeoObj;
 import util.Vec;

@@ -1,20 +1,19 @@
 package system;
 
-import commands.Command;
-
 import geo.GeoObj;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gui.GuiSetup;
-import util.Vec;
 import worldData.SystemUpdater;
 import worldData.World;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
 import android.R;
 import android.app.Activity;
+
+import commands.Command;
 
 /**
  * This is an example how you can use the default setup: <br>

@@ -5,10 +5,9 @@ import gl.GLCamera;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.util.Log;
-
 import util.EfficientList;
 import util.Vec;
+import android.util.Log;
 
 //TODO not the best way to extend ArrayList here..
 public class World extends EfficientList<AbstractObj> implements Updateable,

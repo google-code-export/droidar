@@ -1,6 +1,5 @@
 package commands.ui;
 
-import system.ActivityConnector;
 import gui.simpleUI.EditItem;
 import gui.simpleUI.SimpleUI;
 import android.app.Activity;

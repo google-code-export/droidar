@@ -1,6 +1,5 @@
 package tests;
 
-import android.util.Log;
 import gl.MeshComponent;
 import gl.MeshGroup;
 import gl.Shape;

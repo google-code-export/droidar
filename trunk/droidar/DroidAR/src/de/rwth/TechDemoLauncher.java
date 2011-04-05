@@ -1,15 +1,9 @@
 package de.rwth;
 
-import geo.GeoObj;
-import gl.Color;
-import gl.GLFactory;
 import system.ArActivity;
-import system.DefaultARSetup;
 import system.ErrorHandler;
 import system.Setup;
 import tests.SimpleTesting;
-import util.Vec;
-import worldData.World;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;

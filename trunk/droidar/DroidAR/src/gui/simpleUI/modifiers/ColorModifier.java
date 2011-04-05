@@ -2,7 +2,6 @@ package gui.simpleUI.modifiers;
 
 import gui.simpleUI.AbstractModifier;
 import gui.simpleUI.Theme;
-import gui.simpleUI.Theme.ThemeColors;
 import android.content.Context;
 import android.view.KeyEvent;
 import android.view.View;

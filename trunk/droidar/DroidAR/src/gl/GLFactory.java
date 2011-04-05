@@ -1,7 +1,5 @@
 package gl;
 
-import components.Component;
-
 import geo.GeoObj;
 import gl.animations.Animation;
 import gl.animations.AnimationGroup;
@@ -14,6 +12,8 @@ import worldData.Obj;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
+
+import components.Component;
 
 /**
  * Use this factory to understand how to create 3D objects with {@link Shape}s

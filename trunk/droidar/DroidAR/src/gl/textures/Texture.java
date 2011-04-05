@@ -1,9 +1,6 @@
 package gl.textures;
 
 import util.EfficientList;
-
-import com.google.android.maps.MyLocationOverlay;
-
 import android.graphics.Bitmap;
 import android.util.Log;
 

@@ -1,11 +1,7 @@
 package util;
 
-import geo.GeoObj;
-import worldData.Obj;
 import worldData.UpdateTimer;
 import worldData.Updateable;
-import worldData.Visitor;
-import components.Component;
 
 public class DebugMonitor implements Updateable {
 

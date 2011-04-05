@@ -1,7 +1,5 @@
 package gui.simpleUI;
 
-import java.net.NoRouteToHostException;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;

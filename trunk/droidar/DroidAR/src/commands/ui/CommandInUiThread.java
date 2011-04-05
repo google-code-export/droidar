@@ -2,6 +2,7 @@ package commands.ui;
 
 import android.os.Handler;
 import android.os.Looper;
+
 import commands.Command;
 
 public abstract class CommandInUiThread extends Command {
