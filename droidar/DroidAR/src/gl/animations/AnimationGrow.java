@@ -4,10 +4,9 @@ import gl.MeshComponent;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.util.Log;
-
 import worldData.Obj;
 import worldData.UpdateTimer;
+import android.util.Log;
 
 public class AnimationGrow implements Animation {
 

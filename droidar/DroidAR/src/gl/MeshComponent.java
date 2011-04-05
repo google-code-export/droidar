@@ -2,7 +2,6 @@ package gl;
 
 import geo.GeoObj;
 import gl.animations.Animation;
-import gl.animations.AnimationFaceToCamera;
 import gl.animations.AnimationGroup;
 
 import javax.microedition.khronos.opengles.GL10;

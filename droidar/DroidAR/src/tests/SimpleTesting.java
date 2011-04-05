@@ -2,9 +2,6 @@ package tests;
 
 import system.EventManager;
 import android.app.Activity;
-import android.content.Context;
-import android.hardware.SensorManager;
-import android.location.LocationManager;
 
 public abstract class SimpleTesting {
 

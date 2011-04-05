@@ -1,6 +1,5 @@
 package gui.simpleUI;
 
-import gui.simpleUI.modifiers.ButtonModifier;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;

@@ -1,7 +1,7 @@
 package actions;
 
-import worldData.Updateable;
 import gl.GLCamera;
+import worldData.Updateable;
 
 /**
  * this class is for debugging purpose only at the moment and has to be modified

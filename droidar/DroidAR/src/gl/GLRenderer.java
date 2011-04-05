@@ -10,7 +10,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 import util.EfficientList;
 import worldData.Renderable;
-import worldData.World;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.util.Log;

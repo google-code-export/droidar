@@ -14,8 +14,8 @@ import system.EventManager;
 import system.markerDetection.MarkerDetectionSetup;
 import system.markerDetection.MyMarker1Class;
 import util.Vec;
-import worldData.World;
 import worldData.SystemUpdater;
+import worldData.World;
 import android.app.Activity;
 
 import commands.gl.CommandCameraMoveAndLookAt;

@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import commands.Command;
-import de.rwth.R;
 
 public class CommandShowToast extends Command {
 
