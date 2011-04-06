@@ -17,8 +17,8 @@ import de.rwth.setups.ARNavigatorSetup;
 import de.rwth.setups.CollectItemsSetup;
 import de.rwth.setups.DebugSetup;
 import de.rwth.setups.IndoorSetup;
-import de.rwth.setups.MyMarkerDetectionSetup;
 import de.rwth.setups.PlaceObjectsSetup;
+import de.rwth.setups.PositionTestsSetup;
 import de.rwth.setups.SensorTestSetup;
 
 public class TechDemoLauncher extends Activity {
@@ -29,6 +29,8 @@ public class TechDemoLauncher extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.demoselector);
 
+		//showSetup("With calibration dialogs", new CalibratorSetup());
+		showSetup("Position tests", new PositionTestsSetup());
 		showSetup("Animation Demo", new DebugSetup());
 		showSetup("Collecting Items Demo", new CollectItemsSetup());
 		showSetup("Placing objects Demo", new PlaceObjectsSetup());
@@ -45,8 +47,7 @@ public class TechDemoLauncher extends Activity {
 
 		showSetup("Indoor Navigator (Needs special localization service!)",
 				new IndoorSetup());
-		showSetup("Marker Detection (in development)",
-				new MyMarkerDetectionSetup());
+		
 	}
 
 	private void showSetup(String string, final Setup aSetupInstance) {

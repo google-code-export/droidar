@@ -31,7 +31,7 @@ import commands.Command;
  * 
  * @author Spobo
  * 
- */
+ */ 
 
 public class EventManager implements LocationListener, SensorEventListener {
 
@@ -67,7 +67,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 	public static EventManager getInstance() {
 		return myInstance;
-	} 
+	}
 
 	public void registerListeners(Activity targetActivity,
 			boolean useAccelAndMagnetoSensors) {
@@ -441,6 +441,20 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 	public static void resetInstance() {
 		myInstance = new EventManager();
+	}
+
+	/**
+	 * This method differs from the normal
+	 * {@link EventManager#getCurrentLocationObject()} because it will return
+	 * the geoPos of the virtual (0,0,0) position. The other method would return the
+	 * current device position (and because of this also the current camera
+	 * position)
+	 * 
+	 * @return
+	 */
+	public GeoObj getZeroPositionLocationObject() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -157,6 +157,7 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 	private static final int ERROR_WINDOW_ID = R.layout.errorreports;
 	private static final int ERROR_TEXT_VIEW_ID = R.id.errorText;
 	private static final int ERROR_MAIL_BUTTON_ID = R.id.errorMailButton;
+	private static final String LOG_TAG = "ErrorHandler";
 
 	/**
 	 * don't forget to set the current activity if you use this constructor!
@@ -283,7 +284,8 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 
 	@Override
 	public void uncaughtException(final Thread thread, final Throwable ex) {
-		Log.e("ErrorHandler", "A wild 'Uncaught exeption' appeares!");
+		Log.e(LOG_TAG, "A wild 'Uncaught exeption' appeares!");
+		// Log.e(LOG_TAG, "Error=" + ex.toString());
 		ex.printStackTrace();
 		if (myCurrentActivity != null) {
 			Log.e("ErrorHandler", "Starting error activity");

@@ -439,11 +439,11 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 */
 	public Vec calcVirtualPosition() {
 		return calcVirtualPosition(null, EventManager.getInstance()
-				.getCurrentLocationObject());
+				.getZeroPositionLocationObject());
 	}
 
 	/**
-	 * refresh the virtual position of the object (does only work if the robot
+	 * refresh the virtual position of the object (does only work if the object
 	 * has a {@link MeshComponent} jet)
 	 * 
 	 * @return true if it worked
