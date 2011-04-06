@@ -130,6 +130,12 @@ public abstract class Setup {
 		Thread.setDefaultUncaughtExceptionHandler(new ErrorHandler(
 				myTargetActivity));
 
+		doNormalSetupSteps();
+
+		debugLogDoSetupStep(STEP_DONE);
+	}
+
+	public void doNormalSetupSteps() {
 		/*
 		 * TODO move this to the end of the initialization method and use
 		 * myTargetActivity.setProgress to display the progress of the loading
@@ -250,8 +256,6 @@ public abstract class Setup {
 			_f_addInfoScreen(infoScreenData);
 			showInfoDialog(infoScreenData);
 		}
-
-		debugLogDoSetupStep(STEP_DONE);
 	}
 
 	private void resetAllSingletons() {
