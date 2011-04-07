@@ -47,7 +47,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * 6356800 meters and equatorial-radius is 6378100 meters
 	 */
 	public static final int EARTH_RADIUS = 6371000;
-	
+
 	// MeshComponent myMesh;
 	private double myLatitude = 0;
 	private double myLongitude = 0;
@@ -177,6 +177,10 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		this((l != null) ? l.getLatitude() : null, (l != null) ? l
 				.getLongitude() : null, (l != null) ? l.getAltitude() : null,
 				loadDefaultMesh(), false);
+	}
+
+	public GeoObj(double latitude, double longitude) {
+		this(latitude, longitude, 0);
 	}
 
 	/**
@@ -398,8 +402,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 				+ Math.cos(Math.toRadians(lat1))
 				* Math.cos(Math.toRadians(lat2)) * Math.sin(dLng / 2)
 				* Math.sin(dLng / 2);
-		return EARTH_RADIUS * 2
-				* Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		return EARTH_RADIUS * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 	}
 
 	public boolean hasSameCoordsAs(GeoObj o) {
@@ -426,6 +429,11 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	// }
 
 	public Vec calcVirtualPosition(Vec target, GeoObj relativeNullPoint) {
+		if (relativeNullPoint == null) {
+			Log.e(LOG_TAG, "Virtual position can't be calculated if the "
+					+ "relative zero position is not known!");
+			return null;
+		}
 		return calcVirtualPosition(target, relativeNullPoint.getLatitude(),
 				relativeNullPoint.getLongitude(),
 				relativeNullPoint.getAltitude());

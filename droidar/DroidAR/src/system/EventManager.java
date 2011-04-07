@@ -31,7 +31,7 @@ import commands.Command;
  * 
  * @author Spobo
  * 
- */ 
+ */
 
 public class EventManager implements LocationListener, SensorEventListener {
 
@@ -64,6 +64,8 @@ public class EventManager implements LocationListener, SensorEventListener {
 	private GeoObj currentLocation;
 
 	private Activity myTargetActivity;
+
+	private GeoObj zeroPos;
 
 	public static EventManager getInstance() {
 		return myInstance;
@@ -406,17 +408,17 @@ public class EventManager implements LocationListener, SensorEventListener {
 		return currentLocation;// TODO return null; instead?
 	}
 
-	/**
-	 * The Android system will be asked directly and if the external location
-	 * manager knows where the device is located at the moment, this location
-	 * will be returned
-	 * 
-	 * @return a new {@link GeoObj} or null if there could be no current
-	 *         location calculated
-	 */
-	public GeoObj getNewCurrentLocationObjectFromSystem() {
-		return getAutoupdatingCurrentLocationObjectFromSystem().copy();
-	}
+	// /**
+	// * The Android system will be asked directly and if the external location
+	// * manager knows where the device is located at the moment, this location
+	// * will be returned
+	// *
+	// * @return a new {@link GeoObj} or null if there could be no current
+	// * location calculated
+	// */
+	// public GeoObj getNewCurrentLocationObjectFromSystem() {
+	// return getAutoupdatingCurrentLocationObjectFromSystem().copy();
+	// }
 
 	private GeoObj assignLocationToGeoObj(Location l) {
 		if (currentLocation == null) {
@@ -446,15 +448,14 @@ public class EventManager implements LocationListener, SensorEventListener {
 	/**
 	 * This method differs from the normal
 	 * {@link EventManager#getCurrentLocationObject()} because it will return
-	 * the geoPos of the virtual (0,0,0) position. The other method would return the
-	 * current device position (and because of this also the current camera
+	 * the geoPos of the virtual (0,0,0) position. The other method would return
+	 * the current device position (and because of this also the current camera
 	 * position)
 	 * 
-	 * @return
+	 * @return the zero position. This will be not a copy so do not change it!
 	 */
 	public GeoObj getZeroPositionLocationObject() {
-		// TODO Auto-generated method stub
-		return null;
+		return zeroPos;
 	}
 
 }
