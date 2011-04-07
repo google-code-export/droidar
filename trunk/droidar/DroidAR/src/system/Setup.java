@@ -50,7 +50,7 @@ public abstract class Setup {
 	 * dynamical view inside a moving scollview or something..
 	 */
 	private static float screenWidth = 320;
-
+   
 	public static boolean isOldDeviceWhereNothingWorksAsExpected;
 
 	public static boolean displaySetupStepLogging = true;
