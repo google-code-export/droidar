@@ -73,8 +73,8 @@ public abstract class Setup {
 
 	public Activity myTargetActivity;
 	private CommandGroup myOptionsMenuCommands;
-	private CustomGLSurfaceView myGLSurfaceView;
-	private CameraView myCameraView;
+	public CustomGLSurfaceView myGLSurfaceView;
+	public CameraView myCameraView;
 	private FrameLayout myOverlayView;
 	private SetupListener mySetupListener;
 	private double lastTime;
@@ -130,20 +130,14 @@ public abstract class Setup {
 		Thread.setDefaultUncaughtExceptionHandler(new ErrorHandler(
 				myTargetActivity));
 
-		doNormalSetupSteps();
-
-		debugLogDoSetupStep(STEP_DONE);
-	}
-
-	public void doNormalSetupSteps() {
 		/*
 		 * TODO move this to the end of the initialization method and use
 		 * myTargetActivity.setProgress to display the progress of the loading
 		 * before. maybe also change the text in the activity title to the
 		 * current setup step in combination to the setProgress()
 		 */
-		// Fullscreen:
 
+		// Fullscreen:
 		if (myTargetActivity.requestWindowFeature(Window.FEATURE_NO_TITLE)) {
 			if (gotoFullScreenMode) {
 				debugLogDoSetupStep(STEP13);
@@ -171,6 +165,11 @@ public abstract class Setup {
 			 * screen!
 			 */
 		}
+
+		myTargetActivity.getWindow().setFlags(
+				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
 		// load device dependent settings:
 		debugLogDoSetupStep(STEP2);
 		loadDeviceDependentSettings();
@@ -195,18 +194,13 @@ public abstract class Setup {
 				this.useAccelAndMagnetoSensors);
 
 		debugLogDoSetupStep(STEP5);
-		initStuff();
+		_a_initFieldsIfNecessary();
 
 		debugLogDoSetupStep(STEP6);
 		_b_addWorldsToRenderer(glRenderer, GLFactory.getInstance(),
 				EventManager.getInstance().getCurrentLocationObject());
 
-		debugLogDoSetupStep(STEP7);
-		myCameraView = initCameraView(myTargetActivity);
-
-		// create the thierd view on top of cameraPreview and OpenGL view and
-		// init it:
-		myOverlayView = new FrameLayout(myTargetActivity);
+		doCameraStuff();
 
 		debugLogDoSetupStep(STEP8);
 		// set sensorinput actions:
@@ -223,6 +217,10 @@ public abstract class Setup {
 		worldThread.start();
 
 		debugLogDoSetupStep(STEP10);
+
+		// create the thierd view on top of cameraPreview and OpenGL view and
+		// init it:
+		myOverlayView = new FrameLayout(myTargetActivity);
 		/*
 		 * after everything is initialized add the guiElements to the screen.
 		 * this should be done last because the gui might need a initialized
@@ -232,6 +230,19 @@ public abstract class Setup {
 		// myTargetActivity.addContentView(myOverlayView, new LayoutParams(
 		// LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
+		addOverlaysAndShowInfoScreen();
+
+		debugLogDoSetupStep(STEP_DONE);
+	}
+
+	public void doCameraStuff() {
+
+		debugLogDoSetupStep(STEP7);
+		myCameraView = initCameraView(myTargetActivity);
+
+	}
+
+	public void addOverlaysAndShowInfoScreen() {
 		debugLogDoSetupStep(STEP11);
 		InfoScreenSettings infoScreenData = new InfoScreenSettings(
 				myTargetActivity);
@@ -272,10 +283,6 @@ public abstract class Setup {
 		CommandProcessor.resetInstance();
 		FeedbackReports.resetInstance(); // TODO really reset it?
 		EventManager.resetInstance();
-	}
-
-	protected void initStuff() {
-		_a_initFieldsIfNecessary();
 	}
 
 	protected CameraView initCameraView(Activity a) {
@@ -517,7 +524,7 @@ public abstract class Setup {
 	public abstract void _e2_addElementsToGuiSetup(GuiSetup guiSetup,
 			Activity activity);
 
-	private CustomGLSurfaceView createOpenGlView(GLRenderer renderer) {
+	public CustomGLSurfaceView createOpenGlView(GLRenderer renderer) {
 
 		CustomGLSurfaceView arView = new CustomGLSurfaceView(myTargetActivity);
 
