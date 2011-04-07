@@ -200,7 +200,7 @@ public abstract class Setup {
 		_b_addWorldsToRenderer(glRenderer, GLFactory.getInstance(),
 				EventManager.getInstance().getCurrentLocationObject());
 
-		doCameraStuff();
+		initializeCamera();
 
 		debugLogDoSetupStep(STEP8);
 		// set sensorinput actions:
@@ -235,14 +235,14 @@ public abstract class Setup {
 		debugLogDoSetupStep(STEP_DONE);
 	}
 
-	public void doCameraStuff() {
+	public void initializeCamera() {
 
 		debugLogDoSetupStep(STEP7);
 		myCameraView = initCameraView(myTargetActivity);
 
 	}
 
-	public void addOverlaysAndShowInfoScreen() {
+	private void addOverlaysAndShowInfoScreen() {
 		debugLogDoSetupStep(STEP11);
 		InfoScreenSettings infoScreenData = new InfoScreenSettings(
 				myTargetActivity);
@@ -325,12 +325,12 @@ public abstract class Setup {
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	}
 
-	private void addGLSurfaceOverlay() {
+	public void addGLSurfaceOverlay() {
 		myTargetActivity.addContentView(myGLSurfaceView, new LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	}
 
-	private void addCameraOverlay() {
+	public void addCameraOverlay() {
 		if (myCameraView != null) {
 			Log.d(LOG_TAG, "Camera preview added as view");
 			myTargetActivity.addContentView(myCameraView, new LayoutParams(
@@ -524,7 +524,7 @@ public abstract class Setup {
 	public abstract void _e2_addElementsToGuiSetup(GuiSetup guiSetup,
 			Activity activity);
 
-	public CustomGLSurfaceView createOpenGlView(GLRenderer renderer) {
+	private CustomGLSurfaceView createOpenGlView(GLRenderer renderer) {
 
 		CustomGLSurfaceView arView = new CustomGLSurfaceView(myTargetActivity);
 
@@ -553,7 +553,7 @@ public abstract class Setup {
 		}
 	}
 
-	public final void releaseCamera() {
+	public void releaseCamera() {
 		if (myCameraView != null) {
 			Log.d(LOG_TAG, "Releasing camera preview manually" + myCameraView);
 			myCameraView.releaseCamera();
@@ -579,6 +579,9 @@ public abstract class Setup {
 		return false;
 	}
 
+	/*
+	 * is used by the GuiSetup class to add elements to the options menu
+	 */
 	public void addItemToOptionsMenu(Command menuItem, String menuItemText) {
 		if (myOptionsMenuCommands == null)
 			myOptionsMenuCommands = new CommandGroup();
@@ -602,7 +605,8 @@ public abstract class Setup {
 		myGLSurfaceView.onPause();
 		worldUpdater.pauseUpdater();
 		worldUpdater.killUpdaterThread();
-		myCameraView.releaseCamera();
+		if (myCameraView != null)
+			myCameraView.releaseCamera();
 		// TODO check if all threads are killed correctly
 		// Log.d(LOG_TAG,
 		// "default onDestroy behavior (killing complete process)");
