@@ -30,12 +30,13 @@ public class TechDemoLauncher extends Activity {
 		setContentView(R.layout.demoselector);
 
 		//showSetup("With calibration dialogs", new CalibratorSetup());
-		showSetup("Position tests", new PositionTestsSetup());
+		
 		showSetup("Animation Demo", new DebugSetup());
 		showSetup("Collecting Items Demo", new CollectItemsSetup());
 		showSetup("Placing objects Demo", new PlaceObjectsSetup());
 		showSetup("AR Navigator", new ARNavigatorSetup());
 		showSetup("Sensor Processing Demo", new SensorTestSetup());
+		showSetup("Position tests", new PositionTestsSetup());
 
 		LinearLayout l = ((LinearLayout) findViewById(R.id.demoScreenLinView));
 

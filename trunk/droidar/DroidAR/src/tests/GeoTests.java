@@ -101,8 +101,7 @@ public class GeoTests extends SimpleTesting {
 
 		GeoObj bonn = new GeoObj(50.732979, 7.086181, 0);
 		GeoObj frankfurt = new GeoObj(50.113532, 8.679199, 0);
-		Vec result = new Vec();
-		bonn.calcVirtualPosition(result, frankfurt);
+		Vec result = bonn.getVirtualPosition(frankfurt);
 		// System.out.println("bonn frankfurt");
 		// System.out.println("x=" + result.x);
 		// System.out.println("y=" + result.y);
@@ -224,8 +223,7 @@ public class GeoTests extends SimpleTesting {
 		assertTrue(g.addEdge(GeoObj.iPark2, GeoObj.iPark3, null) != null);
 		assertTrue(g.addEdge(GeoObj.iPark3, GeoObj.iPark4, null) != null);
 
-		assertTrue(g.findPath(GeoObj.iPark4, GeoObj.iPark2)
-				.getMyItems().myLength == 3);
+		assertTrue(g.findPath(GeoObj.iPark4, GeoObj.iPark2).getMyItems().myLength == 3);
 
 	}
 
@@ -248,8 +246,7 @@ public class GeoTests extends SimpleTesting {
 		// g.addEdge(GeoObj.infZentPark, GeoObj.infZentPark4);
 
 		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark1).getMyItems().myLength == 2);
-		assertTrue(g.findPath(GeoObj.iPark1, GeoObj.iPark2)
-				.getMyItems().myLength == 2);
+		assertTrue(g.findPath(GeoObj.iPark1, GeoObj.iPark2).getMyItems().myLength == 2);
 		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark3).getMyItems().myLength == 2);
 
 		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4) != null);
