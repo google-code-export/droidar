@@ -498,12 +498,12 @@ public class GLFactory {
 
 	public MeshComponent newUndirectedPath(GeoObj from, GeoObj to, Color color) {
 		return GLFactory.getInstance().newUndirectedPath(
-				to.calcVirtualPosition(null, from), color);
+				to.getVirtualPosition(from), color);
 	}
 
 	public MeshComponent newDirectedPath(GeoObj from, GeoObj to, Color color) {
 		return GLFactory.getInstance().newDirectedPath(
-				to.calcVirtualPosition(null, from), color);
+				to.getVirtualPosition(from), color);
 	}
 
 	public Component newCube() {

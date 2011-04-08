@@ -18,7 +18,7 @@ public class GeoCalcer extends Visitor {
 	@Override
 	public boolean visit(GeoObj geoObj) {
 		Log.d("visitor.visit()", "Calcing pos for geoObj");
-		geoObj.calcVirtualPosition(geoObj.getMySurroundGroup().myPosition,
+		geoObj.getMySurroundGroup().myPosition = geoObj.getVirtualPosition(
 				nullLatitude, nullLongitude, nullAltitude);
 		return true;
 	}

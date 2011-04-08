@@ -22,7 +22,7 @@ import android.util.Log;
  */
 public class GLRenderer implements Renderer {
 
-	private static final float LENSE_ANGLE = 25.0f;
+	private static final float LENSE_ANGLE = 35.0f; //25 before, marker recog 39 TODO
 	private static final float MIN_VIEW_DISTANCE = 0.1f;
 	private static final float MAX_VIEW_DISTANCE = 700.0f;
 

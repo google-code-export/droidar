@@ -372,40 +372,31 @@ public class EventManager implements LocationListener, SensorEventListener {
 	/**
 	 * This is the default method to get the position of the device.
 	 * 
-	 * @return an {@link GeoObj} which will be always at the current location of
-	 *         the device. The virtual camera is using this object for example
-	 *         to always display the virtual overlay in a correct way.
-	 * 
-	 *         There are two other methods you might want to take a loog at
-	 *         {@link #getAutoupdatingCurrentLocationObjectFromSystem()} and
-	 *         {@link #getNewCurrentLocationObjectFromSystem()}
+	 * @return an {@link GeoObj} which will represent the current location of
+	 *         the device.
 	 */
 	public GeoObj getCurrentLocationObject() {
+
+		Location locaction = GeoUtils.getCurrentLocation(myTargetActivity);
+		if (locaction != null) {
+			if (currentLocation == null) {
+				currentLocation = new GeoObj(locaction, false);
+			} else {
+				currentLocation.setLocation(locaction);
+			}
+			return currentLocation;
+		} else {
+			Log.e(LOG_TAG,
+					"Couldn't receive Location object for current location");
+		}
+
+		// if its still null set it to a default geo-object:
 		if (currentLocation == null) {
-			return getAutoupdatingCurrentLocationObjectFromSystem();
-		}
-		return currentLocation;
-	}
-
-	/**
-	 * @return always the same (but updated) object which will always hold the
-	 *         current device location and which will auto-update itself
-	 */
-	private GeoObj getAutoupdatingCurrentLocationObjectFromSystem() {
-
-		// l1 will be the more accurate position so first try l1:
-		// TODO l1 might be much older then l2 maybe encapsulate this in an
-		// method and return the more up to date location??
-
-		Location l1 = GeoUtils.getCurrentLocation(myTargetActivity);
-		if (l1 != null) {
-			return assignLocationToGeoObj(l1);
-		}
-
-		Log.e(LOG_TAG, "Couldn't receive Location object for current location");
-		if (currentLocation == null)
+			Log.e(LOG_TAG, "Current position set to default 0,0 position");
 			currentLocation = new GeoObj(false);
-		return currentLocation;// TODO return null; instead?
+		}
+
+		return currentLocation;
 	}
 
 	// /**
@@ -420,15 +411,6 @@ public class EventManager implements LocationListener, SensorEventListener {
 	// return getAutoupdatingCurrentLocationObjectFromSystem().copy();
 	// }
 
-	private GeoObj assignLocationToGeoObj(Location l) {
-		if (currentLocation == null) {
-			currentLocation = new GeoObj(l, false);
-			// currentLocation.getMyInfoObject().setShortDescr(CURR_LOC_DESCR);
-		} else
-			currentLocation.setLocation(l);
-		return currentLocation;
-	}
-
 	public boolean onTrackballEvent(MotionEvent event) {
 		if (onTrackballEventAction != null) {
 			return onTrackballEventAction.onTrackballEvent(event.getX(),
@@ -437,6 +419,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 		return false;
 	}
 
+	@Deprecated
 	public void setCurrentLocation(Location location) {
 		currentLocation.setLocation(location);
 	}
@@ -455,7 +438,20 @@ public class EventManager implements LocationListener, SensorEventListener {
 	 * @return the zero position. This will be not a copy so do not change it!
 	 */
 	public GeoObj getZeroPositionLocationObject() {
+		if (zeroPos == null) {
+			Log.e(LOG_TAG, "Zero pos was not yet received! "
+					+ "The last known position of the device will be used "
+					+ "at the zero position.");
+			zeroPos = getCurrentLocationObject().copy();
+		}
 		return zeroPos;
+	}
+
+	public void setZeroLocation(Location location) {
+		if (zeroPos == null)
+			zeroPos = new GeoObj(location);
+		else
+			zeroPos.setLocation(location);
 	}
 
 }

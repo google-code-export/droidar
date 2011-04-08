@@ -98,7 +98,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	public MeshGroup getMySurroundGroup() {
 		if (mySurroundGroup == null)
 			if (autoCalcVirtualPos) {
-				mySurroundGroup = new MeshGroup(null, calcVirtualPosition());
+				mySurroundGroup = new MeshGroup(null, getVirtualPosition());
 			} else {
 				mySurroundGroup = new MeshGroup();
 			}
@@ -253,8 +253,8 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * @return the target Vec or a new Vec with the correct virtual position if
 	 *         target vec was null
 	 */
-	public Vec calcVirtualPosition(Vec target, double zeroLatitude,
-			double zeroLongitude, double zeroAltitude) {
+	public Vec getVirtualPosition(double zeroLatitude, double zeroLongitude,
+			double zeroAltitude) {
 		/*
 		 * The longitude calculation depends on current latitude: The
 		 * circumference of a circle at a given latitude is proportional to the
@@ -274,9 +274,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		 * never happen, but for people in englang eg it might be a problem when
 		 * living near the 0 latitude..
 		 */
-		Vec position = target;
-		if (target == null)
-			position = new Vec();
+		Vec position = new Vec();
 		position.x = (float) ((myLongitude - zeroLongitude) * 111319.4917 * Math
 				.cos(zeroLatitude * 0.0174532925));
 		position.y = (float) ((myLatitude - zeroLatitude) * 111133.3333);
@@ -323,7 +321,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 */
 	public boolean setVirtualPosition(Vec virtualPosition) {
 		return calcGPSPosition(virtualPosition, EventManager.getInstance()
-				.getCurrentLocationObject());
+				.getZeroPositionLocationObject());
 	}
 
 	/**
@@ -428,13 +426,13 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	// setMyAltitude(location.getAltitude());
 	// }
 
-	public Vec calcVirtualPosition(Vec target, GeoObj relativeNullPoint) {
+	public Vec getVirtualPosition(GeoObj relativeNullPoint) {
 		if (relativeNullPoint == null) {
 			Log.e(LOG_TAG, "Virtual position can't be calculated if the "
 					+ "relative zero position is not known!");
 			return null;
 		}
-		return calcVirtualPosition(target, relativeNullPoint.getLatitude(),
+		return getVirtualPosition(relativeNullPoint.getLatitude(),
 				relativeNullPoint.getLongitude(),
 				relativeNullPoint.getAltitude());
 	}
@@ -445,8 +443,8 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * 
 	 * @return the virtual position
 	 */
-	public Vec calcVirtualPosition() {
-		return calcVirtualPosition(null, EventManager.getInstance()
+	public Vec getVirtualPosition() {
+		return getVirtualPosition(EventManager.getInstance()
 				.getZeroPositionLocationObject());
 	}
 
@@ -457,7 +455,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * @return true if it worked
 	 */
 	private boolean refreshVirtualPosition() {
-		Vec pos = calcVirtualPosition();
+		Vec pos = getVirtualPosition();
 		if (pos != null) {
 			MeshComponent m = getGraphicsComponent();
 

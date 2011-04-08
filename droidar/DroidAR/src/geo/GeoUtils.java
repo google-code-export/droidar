@@ -129,8 +129,9 @@ public class GeoUtils {
 		Location l = getCurrentLocation(context, Criteria.ACCURACY_FINE);
 		if (l == null) {
 			Log.e(LOG_TAG, "Fine accuracy position could not be detected!");
-			l = GeoUtils
-					.getCurrentLocation(context, Criteria.ACCURACY_COARSE);
+			l = GeoUtils.getCurrentLocation(context, Criteria.ACCURACY_COARSE);
+			if (l != null)
+				Log.i(LOG_TAG, "Coarse accuracy position detected");
 		}
 		return l;
 	}

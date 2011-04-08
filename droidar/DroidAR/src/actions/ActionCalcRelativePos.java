@@ -1,5 +1,6 @@
 package actions;
 
+import system.EventManager;
 import geo.GeoCalcer;
 import gl.GLCamera;
 import worldData.World;
@@ -21,6 +22,11 @@ public class ActionCalcRelativePos extends Action {
 
 	private static final double MAX_METER_DISTANCE = 500; // 500 meter
 	private static final String LOG_TAG = "Action calc relative pos";
+	/**
+	 * this could be replaces by the
+	 * {@link EventManager#getZeroPositionLocationObject()} values. Should store
+	 * the same information. where is the better place to store the data TODO
+	 */
 	private double nullLongitude;
 	private double nullLatitude;
 
@@ -36,18 +42,14 @@ public class ActionCalcRelativePos extends Action {
 
 	@Override
 	public boolean onLocationChanged(Location location) {
-		Log.d(LOG_TAG, "new pos: lat=" + location.getLatitude() + " long="
-				+ location.getLongitude());
+
 		if (nullLatitude == 0 || nullLongitude == 0) {
-			setNewNullValues(location);
-			Log.d(LOG_TAG, "pos event: init nullLong and nullLat");
-			resetCameraToNullPosition();
-			calcNewWorldPositions();
+			resetWorldZeroPositions(location);
 		} else {
 			/*
 			 * the following calculations were extracted from
 			 * GeoObj.calcVirtualPosition() for further explanation how they
-			 * work read the GeoObj javadoc. the two calculations were extracted
+			 * work read the javadoc there. the two calculations were extracted
 			 * to increase performance because this method will be called every
 			 * time a new GPS-position arrives
 			 */
@@ -56,23 +58,15 @@ public class ActionCalcRelativePos extends Action {
 					* 111319.4917 * Math.cos(nullLatitude * 0.0174532925);
 			/*
 			 * The altitude should be set to a certain position too. This can be
-			 * done by using location.getAltitude() TODO first check side
-			 * effects
+			 * done by using location.getAltitude() TODO first think of all
+			 * consequences!
 			 */
 			final double altMet = 0;// location.getAltitude(); TODO
-			Log.d(LOG_TAG, "pos event: check new values:");
-			Log.d(LOG_TAG, "pos latitude dist.: " + latitudeDistInMeters
-					+ ", longitude dist.:" + longitudeDistInMeters);
+
 			if (worldShouldBeRecalced(latitudeDistInMeters,
 					longitudeDistInMeters, altMet)) {
-				Log.d(LOG_TAG, "pos event: pos values to far "
-						+ "away from origin so recalc");
-				setNewNullValues(location);
-				resetCameraToNullPosition();
-				calcNewWorldPositions();
+				resetWorldZeroPositions(location);
 			} else {
-				Log.d(LOG_TAG,
-						"pos event: pos values small, just camera update");
 				updateCamera(latitudeDistInMeters, longitudeDistInMeters,
 						altMet);
 			}
@@ -92,6 +86,7 @@ public class ActionCalcRelativePos extends Action {
 		nullLatitude = location.getLatitude();
 		nullLongitude = location.getLongitude();
 		nullAltitude = location.getAltitude();
+		EventManager.getInstance().setZeroLocation(location);
 	}
 
 	private void calcNewWorldPositions() {
@@ -112,6 +107,13 @@ public class ActionCalcRelativePos extends Action {
 		if (Math.abs(longDistMet) > MAX_METER_DISTANCE)
 			return true;
 		return false;
+	}
+
+	public void resetWorldZeroPositions(Location location) {
+		Log.d(LOG_TAG, "Reseting virtual world positions");
+		setNewNullValues(location);
+		resetCameraToNullPosition();
+		calcNewWorldPositions();
 	}
 
 }

@@ -518,10 +518,17 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	}
 
 	public Vec getMyNewPosition() {
-		
+
 		return myNewPosition;
 	}
 
+	/**
+	 * The resulting coordinates can differ from
+	 * {@link EventManager#getCurrentLocationObject()} if the camera was not
+	 * moved according to the GPS input (eg moved via trackball).
+	 * 
+	 * @return
+	 */
 	public Location getGPSLocation() {
 		Vec coords = getGPSPositionVec();
 		Location pos = new Location("customCreated");
@@ -532,16 +539,27 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	}
 
 	/**
+	 * The resulting coordinates can differ from
+	 * {@link EventManager#getCurrentLocationObject()} if the camera was not
+	 * moved according to the GPS input (eg moved via trackball).
+	 * 
 	 * @return a Vector with x=Longitude, y=Latitude, z=Altitude
 	 */
 	public Vec getGPSPositionVec() {
 		GeoObj devicePos = EventManager.getInstance()
-				.getCurrentLocationObject();
+				.getZeroPositionLocationObject();
 		return GeoObj.calcGPSPosition(this.getMyPosition(),
 				devicePos.getLatitude(), devicePos.getLongitude(),
 				devicePos.getAltitude());
 	}
 
+	/**
+	 * The resulting coordinates can differ from
+	 * {@link EventManager#getCurrentLocationObject()} if the camera was not
+	 * moved according to the GPS input (eg moved via trackball).
+	 * 
+	 * @return
+	 */
 	public GeoObj getGPSPositionAsGeoObj() {
 		Vec v = getGPSPositionVec();
 		return new GeoObj(v.y, v.x, v.z);

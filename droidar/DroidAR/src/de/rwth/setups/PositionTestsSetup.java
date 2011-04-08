@@ -22,6 +22,8 @@ import android.app.Activity;
 
 import commands.Command;
 import commands.geo.DebugCommandPositionEvent;
+import commands.ui.CommandInUiThread;
+import commands.ui.CommandShowToast;
 
 public class PositionTestsSetup extends Setup {
 
@@ -74,7 +76,7 @@ public class PositionTestsSetup extends Setup {
 						camera));
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera,
 				5, 25));
-		eventManager.addOnLocationChangedAction(gpsAction);
+		// eventManager.addOnLocationChangedAction(gpsAction);
 	}
 
 	@Override
@@ -103,6 +105,17 @@ public class PositionTestsSetup extends Setup {
 					}
 				});
 
+		
+
+		guiSetup.addButtonToBottomView(new Command() {
+
+			@Override
+			public boolean execute() {
+				gpsAction.resetWorldZeroPositions(camera.getGPSLocation());
+				return false;
+			}
+		}, "Reset world zero pos");
+
 		guiSetup.addButtonToBottomView(new DebugCommandPositionEvent(gpsAction,
 				posA), "Go to pos A");
 		guiSetup.addButtonToBottomView(new DebugCommandPositionEvent(gpsAction,
@@ -119,7 +132,46 @@ public class PositionTestsSetup extends Setup {
 		addSpawnButtonToUI(posC, "Spawn at posC", guiSetup);
 		addSpawnButtonToUI(posD, "Spawn at posD", guiSetup);
 		addSpawnButtonToUI(posE, "Spawn at posE", guiSetup);
+		
+		
+		addGpsPosOutputButtons(guiSetup);
 
+	}
+
+	private void addGpsPosOutputButtons(GuiSetup guiSetup) {
+		guiSetup.addButtonToBottomView(new CommandInUiThread() {
+
+			@Override
+			public void executeInUiThread() {
+				Vec pos = camera.getGPSPositionVec();
+				String text = "latitude=" + pos.y + ", longitude=" + pos.x;
+				CommandShowToast.show(myTargetActivity, text);
+			}
+		}, "Show Camera GPS pos");
+
+		guiSetup.addButtonToBottomView(new CommandInUiThread() {
+
+			@Override
+			public void executeInUiThread() {
+				GeoObj pos = EventManager.getInstance()
+						.getCurrentLocationObject();
+				String text = "latitude=" + pos.getLatitude() + ", longitude="
+						+ pos.getLongitude();
+				CommandShowToast.show(myTargetActivity, text);
+			}
+		}, "Show real GPS pos");
+
+		guiSetup.addButtonToBottomView(new CommandInUiThread() {
+
+			@Override
+			public void executeInUiThread() {
+				GeoObj pos = EventManager.getInstance()
+						.getZeroPositionLocationObject();
+				String text = "latitude=" + pos.getLatitude() + ", longitude="
+						+ pos.getLongitude();
+				CommandShowToast.show(myTargetActivity, text);
+			}
+		}, "Show zero GPS pos");
 	}
 
 	private void addSpawnButtonToUI(final GeoObj pos, String buttonText,
@@ -141,6 +193,8 @@ public class PositionTestsSetup extends Setup {
 
 		mesh.myPosition = Vec.getNewRandomPosInXYPlane(new Vec(), 0.1f, 1f);
 		x.setComp(mesh);
+		CommandShowToast.show(myTargetActivity,
+				"Object spawned at " + x.getMySurroundGroup().myPosition);
 		world.add(x);
 	}
 }
