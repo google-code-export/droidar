@@ -1,8 +1,5 @@
 package gui;
 
-import geo.CustomItemizedOverlay;
-import geo.GMap;
-import geo.GeoObjWrapper;
 import gl.Color;
 import gui.simpleUI.EditItem;
 import gui.simpleUI.ModifierGroup;

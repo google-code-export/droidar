@@ -31,7 +31,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import com.google.android.maps.MapActivity;
 import commands.Command;
 import commands.CommandGroup;
 import commands.undoable.CommandProcessor;
@@ -50,7 +49,7 @@ public abstract class Setup {
 	 * dynamical view inside a moving scollview or something..
 	 */
 	private static float screenWidth = 320;
-   
+
 	public static boolean isOldDeviceWhereNothingWorksAsExpected;
 
 	public static boolean displaySetupStepLogging = true;
@@ -615,16 +614,16 @@ public abstract class Setup {
 		// System.exit(1);
 	}
 
-	/**
-	 * to see what to return here, take a look at the description of
-	 * {@link MapActivity}.isRouteDisplayed()
-	 * 
-	 * @param a
-	 * @return default implementation is to return false
-	 */
-	public boolean isRouteDisplayed(MapActivity a) {
-		return false;
-	}
+	// /**
+	// * to see what to return here, take a look at the description of
+	// * {@link MapActivity#isRouteDisplayed}
+	// *
+	// * @param a
+	// * @return default implementation is to return false
+	// */
+	// public boolean isRouteDisplayed(MapActivity a) {
+	// return false;
+	// }
 
 	public void onPause(Activity a) {
 		Log.d(LOG_TAG, "main onPause");
