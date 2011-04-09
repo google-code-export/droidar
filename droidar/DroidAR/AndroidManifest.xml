@@ -15,9 +15,7 @@
 		<!-- IMPORTANT: The following activities have to be added to each project 
 			which imports the DroidAR Library -->
 
-		<!-- The maps library has to be added to use some location calculation 
-			methods! -->
-		<uses-library android:name="com.google.android.maps" />
+		
 
 		<activity android:label="@string/app_name"
 			android:screenOrientation="landscape" android:configChanges="keyboardHidden|orientation"
