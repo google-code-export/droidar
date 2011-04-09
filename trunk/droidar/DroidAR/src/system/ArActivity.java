@@ -9,9 +9,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.maps.MapActivity;
-
-public class ArActivity extends MapActivity {
+public class ArActivity extends Activity {
 
 	private static final String LOG_TAG = "ArActivity";
 
@@ -89,13 +87,6 @@ public class ArActivity extends MapActivity {
 		if (mySetupToUse != null)
 			mySetupToUse.onPause(this);
 		super.onPause();
-	}
-
-	@Override
-	protected boolean isRouteDisplayed() {
-		if (mySetupToUse != null)
-			return mySetupToUse.isRouteDisplayed(this);
-		return false;
 	}
 
 	@Override

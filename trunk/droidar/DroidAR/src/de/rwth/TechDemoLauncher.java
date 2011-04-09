@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 
 import commands.ui.CommandShowToast;
 
-import de.rwth.setups.ARNavigatorSetup;
 import de.rwth.setups.CollectItemsSetup;
 import de.rwth.setups.DebugSetup;
 import de.rwth.setups.IndoorSetup;
@@ -24,17 +23,14 @@ import de.rwth.setups.SensorTestSetup;
 public class TechDemoLauncher extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		 super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.demoselector);
 
-		//showSetup("With calibration dialogs", new CalibratorSetup());
-		
 		showSetup("Animation Demo", new DebugSetup());
 		showSetup("Collecting Items Demo", new CollectItemsSetup());
 		showSetup("Placing objects Demo", new PlaceObjectsSetup());
-		showSetup("AR Navigator", new ARNavigatorSetup());
 		showSetup("Sensor Processing Demo", new SensorTestSetup());
 		showSetup("Position tests", new PositionTestsSetup());
 
@@ -48,7 +44,7 @@ public class TechDemoLauncher extends Activity {
 
 		showSetup("Indoor Navigator (Needs special localization service!)",
 				new IndoorSetup());
-		
+
 	}
 
 	private void showSetup(String string, final Setup aSetupInstance) {

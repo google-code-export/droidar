@@ -1,9 +1,5 @@
 package de.rwth.setups;
 
-import geo.CustomItemizedOverlay;
-import geo.CustomPathOverlay;
-import geo.GMap;
-import geo.GeoGraph;
 import geo.GeoObj;
 import gl.Color;
 import gl.CustomGLSurfaceView;
@@ -33,9 +29,6 @@ import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
-import android.content.Context;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -43,17 +36,9 @@ import commands.CommandGroup;
 import commands.geo.DebugCommandPositionEvent;
 import commands.gl.CommandAddAnimation;
 import commands.gl.CommandCameraMoveAndLookAt;
-import commands.logic.CommandSetWrapperToValue;
 import commands.logic.CommandSetWrapperToValue2;
-import commands.logic.CommandWrapperEqualsCondition;
 import commands.system.CameraSetARInputCommand;
 import commands.system.CommandPlaySound;
-import commands.system.CommandShowCameraPreview;
-import commands.system.CommandShowRendering;
-import commands.system.CommandShowWorldAnimation;
-import commands.ui.CommandAnimateZoom;
-import commands.ui.CommandMapEnlargeToFullScreen;
-import commands.ui.CommandMinimizeMap;
 import commands.ui.CommandShowToast;
 
 import de.rwth.R;
@@ -298,7 +283,7 @@ public class DebugSetup extends Setup {
 		guiSetup.setBottomMinimumHeight(100);
 		guiSetup.setBottomViewCentered();
 
-		addMapView(activity, guiSetup);
+		// addMapView(activity, guiSetup);
 
 		AnimationRotate rotateAnimation = new AnimationRotate(10, new Vec(0, 0,
 				1));
@@ -396,66 +381,66 @@ public class DebugSetup extends Setup {
 		}
 	}
 
-	private void addMapView(Context context, GuiSetup guiSetup) {
-		GMap map = guiSetup.addMapToBottomRight(MAPS_KEY, 3, 100);
-		map.setClickable(true);
-		map.setZoomLevel(20);
-		// map.enableZoomButtons(true);
-		// EventManager.getInstance().addOnLocationChangedAction(new
-		// ActionUpdateMapCenter(map));
-		map.setCenterTo(GeoObj.rwthI9);
-
-		condMapState = new Wrapper(STATE_MAP_MINIMIZED);
-		CommandGroup maximizeMinimap = new CommandGroup();
-		maximizeMinimap
-				.add(new CommandAnimateZoom(guiSetup.getMainContainerView(),
-						new CommandMapEnlargeToFullScreen(map)));
-		maximizeMinimap.add(new CommandShowCameraPreview(this, false));
-		maximizeMinimap.add(new CommandShowWorldAnimation(theWorldUpdater,
-				false));
-		maximizeMinimap.add(new CommandShowRendering(renderer, false));
-		maximizeMinimap.add(new CommandSetWrapperToValue(condMapState,
-				STATE_MAP_MAXIMIZED));
-
-		map.setOnTabCommand(new CommandWrapperEqualsCondition(condMapState,
-				STATE_MAP_MINIMIZED, maximizeMinimap));
-
-		GeoGraph l = new GeoGraph();
-		l.setIsPath(true);
-		l.add(GeoObj.iPark1);
-		l.add(GeoObj.iPark2);
-		l.add(GeoObj.iPark3);
-		l.add(GeoObj.iPark4);
-		try {
-			CustomItemizedOverlay o = new CustomItemizedOverlay(l,
-					myTargetActivity.getResources()
-							.getDrawable(R.drawable.icon));
-			CustomPathOverlay o2 = new CustomPathOverlay(l, false);
-			map.addOverlay(o2);
-			map.addOverlay(o);
-		} catch (Exception e) {
-			Log.e("Gmaps", "An itemized overlay could be created but "
-					+ "not added to the Google-Maps view. A reason might "
-					+ "be that the mapview could not determine its "
-					+ "position. Check if the phone is in airplane-mode!");
-			e.printStackTrace();
-		}
-
-		CommandGroup minimizeMap = new CommandGroup();
-		minimizeMap.add(new CommandMinimizeMap(map, 2, 130));
-		minimizeMap.add(new CommandShowCameraPreview(this, true));
-		minimizeMap.add(new CommandShowWorldAnimation(theWorldUpdater, true));
-		minimizeMap.add(new CommandShowRendering(renderer, true));
-		minimizeMap.add(new CommandSetWrapperToValue(condMapState,
-				STATE_MAP_MINIMIZED));
-
-		// if the minimap is maximised and the user presses back then it will be
-		// minimized instead of exiting the app:
-		EventManager.getInstance().addOnKeyPressedCommand(
-				KeyEvent.KEYCODE_BACK,
-				new CommandWrapperEqualsCondition(condMapState,
-						STATE_MAP_MAXIMIZED, minimizeMap));
-
-	}
+	// private void addMapView(Context context, GuiSetup guiSetup) {
+	// GMap map = guiSetup.addMapToBottomRight(MAPS_KEY, 3, 100);
+	// map.setClickable(true);
+	// map.setZoomLevel(20);
+	// // map.enableZoomButtons(true);
+	// // EventManager.getInstance().addOnLocationChangedAction(new
+	// // ActionUpdateMapCenter(map));
+	// map.setCenterTo(GeoObj.rwthI9);
+	//
+	// condMapState = new Wrapper(STATE_MAP_MINIMIZED);
+	// CommandGroup maximizeMinimap = new CommandGroup();
+	// maximizeMinimap
+	// .add(new CommandAnimateZoom(guiSetup.getMainContainerView(),
+	// new CommandMapEnlargeToFullScreen(map)));
+	// maximizeMinimap.add(new CommandShowCameraPreview(this, false));
+	// maximizeMinimap.add(new CommandShowWorldAnimation(theWorldUpdater,
+	// false));
+	// maximizeMinimap.add(new CommandShowRendering(renderer, false));
+	// maximizeMinimap.add(new CommandSetWrapperToValue(condMapState,
+	// STATE_MAP_MAXIMIZED));
+	//
+	// map.setOnTabCommand(new CommandWrapperEqualsCondition(condMapState,
+	// STATE_MAP_MINIMIZED, maximizeMinimap));
+	//
+	// GeoGraph l = new GeoGraph();
+	// l.setIsPath(true);
+	// l.add(GeoObj.iPark1);
+	// l.add(GeoObj.iPark2);
+	// l.add(GeoObj.iPark3);
+	// l.add(GeoObj.iPark4);
+	// try {
+	// CustomItemizedOverlay o = new CustomItemizedOverlay(l,
+	// myTargetActivity.getResources()
+	// .getDrawable(R.drawable.icon));
+	// CustomPathOverlay o2 = new CustomPathOverlay(l, false);
+	// map.addOverlay(o2);
+	// map.addOverlay(o);
+	// } catch (Exception e) {
+	// Log.e("Gmaps", "An itemized overlay could be created but "
+	// + "not added to the Google-Maps view. A reason might "
+	// + "be that the mapview could not determine its "
+	// + "position. Check if the phone is in airplane-mode!");
+	// e.printStackTrace();
+	// }
+	//
+	// CommandGroup minimizeMap = new CommandGroup();
+	// minimizeMap.add(new CommandMinimizeMap(map, 2, 130));
+	// minimizeMap.add(new CommandShowCameraPreview(this, true));
+	// minimizeMap.add(new CommandShowWorldAnimation(theWorldUpdater, true));
+	// minimizeMap.add(new CommandShowRendering(renderer, true));
+	// minimizeMap.add(new CommandSetWrapperToValue(condMapState,
+	// STATE_MAP_MINIMIZED));
+	//
+	// // if the minimap is maximised and the user presses back then it will be
+	// // minimized instead of exiting the app:
+	// EventManager.getInstance().addOnKeyPressedCommand(
+	// KeyEvent.KEYCODE_BACK,
+	// new CommandWrapperEqualsCondition(condMapState,
+	// STATE_MAP_MAXIMIZED, minimizeMap));
+	//
+	// }
 
 }

@@ -2,6 +2,7 @@ package system;
 
 import geo.GeoObj;
 import geo.GeoUtils;
+import gl.GLCamera;
 
 import java.util.HashMap;
 import java.util.List;
@@ -370,10 +371,16 @@ public class EventManager implements LocationListener, SensorEventListener {
 	}
 
 	/**
-	 * This is the default method to get the position of the device.
+	 * This will return the current position of the device according to the
+	 * Android system values.
 	 * 
-	 * @return an {@link GeoObj} which will represent the current location of
-	 *         the device.
+	 * The resulting coordinates can differ from
+	 * {@link GLCamera#getGPSLocation()} if the camera was not moved according
+	 * to the GPS input (eg moved via trackball).
+	 * 
+	 * Also check the {@link EventManager#getZeroPositionLocationObject()}
+	 * method, if you want to know where the virtual zero position (of the
+	 * OpenGL world) is. 
 	 */
 	public GeoObj getCurrentLocationObject() {
 

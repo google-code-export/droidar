@@ -13,10 +13,15 @@ import android.location.Address;
 import android.location.Location;
 import android.util.Log;
 
-import com.google.android.maps.GeoPoint;
 import components.Component;
 
 public class GeoObj extends Obj implements HasDebugInformation {
+
+	public interface GeoObjUpdateListener {
+
+		void updateToNewPosition(int i, int j);
+
+	}
 
 	// TODO move somewhere else:
 	public static final GeoObj a1 = new GeoObj(50.769118, 6.097568, 0, "A1");
@@ -59,7 +64,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 */
 	public int dijkstraId;
 	private MeshGroup mySurroundGroup;
-	private GeoPoint myGeoPoint;
+	private GeoObjUpdateListener myUpdateListener;
 	/**
 	 * this flag is used in the {@link CustomItemizedOverlay}-class to
 	 * synchronize it with a parallel created {@link EfficientList} instance of
@@ -78,6 +83,10 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		autoCalcVirtualPos = calcVirtulPos;
 		setComp(meshToSurround);
 
+	}
+
+	public void setUpdateListener(GeoObjUpdateListener myUpdateListener) {
+		this.myUpdateListener = myUpdateListener;
 	}
 
 	public GeoObj() {
@@ -152,11 +161,6 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		getInfoObject().extractInfos(a);
 	}
 
-	public GeoObj(GeoPoint p) {
-		this(p.getLatitudeE6() / 1E6, p.getLongitudeE6() / 1E6, 0,
-				loadDefaultMesh());
-	}
-
 	public GeoObj(Location l) {
 		this(l.getLatitude(), l.getLongitude(), l.getAltitude(),
 				loadDefaultMesh());
@@ -193,15 +197,6 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		return null;
 	}
 
-	/**
-	 * turns a GeoObj into a GeoPoint (eg for google maps usefull)
-	 * 
-	 * @return
-	 */
-	public GeoPoint toGeoPoint() {
-		return myGeoPoint;
-	}
-
 	public Location toLocation() {
 		Location x = new Location("customCreated");
 		x.setLatitude(getLatitude());
@@ -224,23 +219,26 @@ public class GeoObj extends Obj implements HasDebugInformation {
 
 	public void setMyLatitude(double latitude) {
 		this.myLatitude = latitude;
-		// Log.d("GeoGraph", "setting latitude on "+this);
-		myGeoPoint = new GeoPoint((int) (getLatitude() * 1E6),
-				(int) (getLongitude() * 1E6));
+
+		if (myUpdateListener != null)
+			myUpdateListener.updateToNewPosition((int) (getLatitude() * 1E6),
+					(int) (getLongitude() * 1E6));
 	}
 
 	public void setMyLongitude(double longitude) {
 		this.myLongitude = longitude;
-		// Log.d("GeoGraph", "setting longitude on "+this);
-		myGeoPoint = new GeoPoint((int) (getLatitude() * 1E6),
-				(int) (getLongitude() * 1E6));
+
+		if (myUpdateListener != null)
+			myUpdateListener.updateToNewPosition((int) (getLatitude() * 1E6),
+					(int) (getLongitude() * 1E6));
 	}
 
 	public void setMyAltitude(double altitude) {
 		this.myAltitude = altitude;
-		// Log.d("GeoGraph", "setting altitude on "+this);
-		myGeoPoint = new GeoPoint((int) (getLatitude() * 1E6),
-				(int) (getLongitude() * 1E6));
+
+		if (myUpdateListener != null)
+			myUpdateListener.updateToNewPosition((int) (getLatitude() * 1E6),
+					(int) (getLongitude() * 1E6));
 	}
 
 	/**
@@ -358,10 +356,6 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		setMyLongitude(GPSPosition.x);
 		setMyLatitude(GPSPosition.y);
 		setMyAltitude(GPSPosition.z);
-	}
-
-	public GeoObjWrapper toOverlayItem() {
-		return new GeoObjWrapper(this);
 	}
 
 	public int matchesSearchTerm(String searchTerm) {

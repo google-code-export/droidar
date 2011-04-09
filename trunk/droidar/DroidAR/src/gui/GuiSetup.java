@@ -1,6 +1,5 @@
 package gui;
 
-import geo.GMap;
 import system.Setup;
 import system.TaskManager;
 import util.Wrapper;
@@ -21,7 +20,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.google.android.maps.MapActivity;
 import commands.Command;
 import commands.logic.CommandSetWrapperToValue;
 import commands.system.CommandDeviceVibrate;
@@ -32,7 +30,8 @@ public class GuiSetup {
 
 	private static final String LOG_TAG = "GuiSetup";
 	private static final long VIBRATION_DURATION_IN_MS = 20;
-	//private static final int BUTTON_BACKGROUND = android.R.drawable.alert_light_frame;
+	// private static final int BUTTON_BACKGROUND =
+	// android.R.drawable.alert_light_frame;
 	private LinearLayout topOuter;
 	private LinearLayout bottomOuter;
 	private LinearLayout leftOuter;
@@ -107,7 +106,7 @@ public class GuiSetup {
 			int imageId) {
 		if (target != null) {
 			ImageButton b = new ImageButton(target.getContext());
-			//b.setBackgroundResource(BUTTON_BACKGROUND);
+			// b.setBackgroundResource(BUTTON_BACKGROUND);
 			b.setImageResource(imageId);
 			b.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
@@ -133,8 +132,8 @@ public class GuiSetup {
 			final Command onClickCommand, String buttonText) {
 		if (target != null) {
 			Button b = new Button(target.getContext());
-			//b.setBackgroundResource(BUTTON_BACKGROUND);
-			//b.setTextColor(gl.Color.blackTransparent().toIntRGB());
+			// b.setBackgroundResource(BUTTON_BACKGROUND);
+			// b.setTextColor(gl.Color.blackTransparent().toIntRGB());
 			b.setText(buttonText);
 			b.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
@@ -192,8 +191,6 @@ public class GuiSetup {
 		v.addView(c);
 	}
 
-
-	
 	public void addCheckBoxToView(LinearLayout v, String string,
 			Wrapper wrapperWithTheBooleanToSwitchInside) {
 		CommandSetWrapperToValue setTrue = new CommandSetWrapperToValue(
@@ -206,25 +203,19 @@ public class GuiSetup {
 	}
 
 	/**
-	 * @param apiKey
+	 * @param map
 	 * @param weight
 	 *            2 or 3 is a good value
 	 * @param height
 	 *            <150
 	 * @return
 	 */
-	public GMap addMapToBottomRight(String apiKey, float weight, int height) {
-		if (!(bottomRightView.getContext() instanceof MapActivity)) {
-			Log.e(LOG_TAG,
-					"The Activity which created the Setup wasn't a MapActivity and thus no GMap can be added to it!");
-		}
-		GMap map = new GMap(bottomRightView, apiKey);
+	public void addMapToBottomRight(View map, float weight, int height) {
 		bottomRightView.addView(map);
 		LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
 				LayoutParams.FILL_PARENT, height);
 		p.weight = weight;
 		bottomRightView.setLayoutParams(p);
-		return map;
 	}
 
 	public EditText addSearchbarToView(LinearLayout v,
