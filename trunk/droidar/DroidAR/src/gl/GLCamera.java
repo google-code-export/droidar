@@ -70,6 +70,7 @@ public class GLCamera implements Updateable, HasDebugInformation {
 
 	private float[] unrotatedMatrix = createIdentityMatrix();
 	private float[] rotationMatrix = createIdentityMatrix();
+	private int matrixOffset = 0;
 
 	private MeshComponent myCameraObject;
 	private EventListener updateListener;
@@ -85,6 +86,8 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	 */
 	public float[] myAnglesInRadians = new float[3];
 	public boolean forceAngleCalculation = false;
+
+	private int markerSideAngle;
 
 	public GLCamera() {
 	}
@@ -219,6 +222,14 @@ public class GLCamera implements Updateable, HasDebugInformation {
 		glLoadPosition(gl, myPosition);
 	}
 
+	public void setRotationMatrixFromMarkerInput(float[] rotMatrix, int offset,
+			int sideAngle) {
+		rotationMatrix = rotMatrix;
+		matrixOffset = offset;
+		markerSideAngle = sideAngle;
+		System.out.println(markerSideAngle);
+	}
+
 	private synchronized void glLoadRotationMatrix(GL10 gl) {
 		if ((sensorInputEnabled) && (accelOrMagChanged)) {
 			SensorManager.getRotationMatrix(unrotatedMatrix, null,
@@ -237,7 +248,9 @@ public class GLCamera implements Updateable, HasDebugInformation {
 
 			accelOrMagChanged = false;
 		}
-		gl.glMultMatrixf(rotationMatrix, 0);
+		gl.glMultMatrixf(rotationMatrix, matrixOffset);
+		if (markerSideAngle != 0)
+			gl.glRotatef(markerSideAngle, 0, 0, 1);
 	}
 
 	public void setAngleUpdateListener(
