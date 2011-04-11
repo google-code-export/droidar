@@ -1,6 +1,7 @@
 package actions;
 
 import gl.GLCamera;
+import gl.GLCamera.CameraAngleUpdateListener;
 import util.Vec;
 
 /**
@@ -9,7 +10,8 @@ import util.Vec;
  * @author Spobo
  * 
  */
-public abstract class ActionUseCameraAngles extends Action {
+public abstract class ActionUseCameraAngles extends Action implements
+		CameraAngleUpdateListener {
 
 	private int accelCounter;
 	private int accelThreshold = 10;
@@ -52,8 +54,8 @@ public abstract class ActionUseCameraAngles extends Action {
 		accelCounter++;
 		if (accelCounter > accelThreshold) {
 			accelCounter = 0;
-			updatePitch((float) Math.toDegrees(Math.atan2(-target[1], Math
-					.sqrt(target[2] * target[2] + target[0] * target[0]))));
+			updatePitch((float) Math.toDegrees(Math.atan2(-target[1],
+					Math.sqrt(target[2] * target[2] + target[0] * target[0]))));
 			updateRoll(180 + (float) -Math.toDegrees(Math.atan2(target[0],
 					-target[2])));
 

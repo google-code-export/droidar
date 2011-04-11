@@ -22,7 +22,7 @@ import de.rwth.R;
  */
 public class InfoScreen extends Activity {
 
-	protected static final long AUTO_CLOSE_TIME = 1200;
+	protected static final long AUTO_CLOSE_TIME = 1400;
 	private InfoScreenSettings myInfos;
 
 	@Override

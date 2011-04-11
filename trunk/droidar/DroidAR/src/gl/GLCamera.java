@@ -27,6 +27,22 @@ import android.util.Log;
  */
 public class GLCamera implements Updateable, HasDebugInformation {
 
+	public interface CameraAngleUpdateListener {
+
+		/**
+		 * @param myAnglesInRadians
+		 *            These values are calculated with
+		 *            {@link SensorManager#getOrientation(float[], float[])} and
+		 *            they represent the rotation caused by the device sensors
+		 * @param myRotationVec
+		 *            These values are additional rotation values which might be
+		 *            set by the developer/user so they have to be considered
+		 *            even if they are normally 0.
+		 */
+		void updateAnglesByCamera(float[] myAnglesInRadians, Vec myRotationVec);
+
+	}
+
 	private static final String LOG_TAG = "GLCamera";
 
 	// private float mybufferValue = 1000;
@@ -69,6 +85,10 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	private float[] myNewMagnetValues;
 
 	private float[] unrotatedMatrix = createIdentityMatrix();
+
+	/**
+	 * http://www.songho.ca/opengl/gl_transform.html
+	 */
 	private float[] rotationMatrix = createIdentityMatrix();
 	private int matrixOffset = 0;
 
@@ -78,7 +98,7 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	/**
 	 * this can be used to to extract the angles how the camera is held
 	 */
-	private ActionUseCameraAngles myAngleUpdateListener;
+	private CameraAngleUpdateListener myAngleUpdateListener;
 	/**
 	 * the camera rotation angles extracted from the rotation matrix. These
 	 * values will only be calculated if an angleUpdateListener is set or
@@ -224,10 +244,23 @@ public class GLCamera implements Updateable, HasDebugInformation {
 
 	public void setRotationMatrixFromMarkerInput(float[] rotMatrix, int offset,
 			int sideAngle) {
-		rotationMatrix = rotMatrix;
-		matrixOffset = offset;
-		markerSideAngle = sideAngle;
-		System.out.println(markerSideAngle);
+		// rotationMatrix = rotMatrix;
+		// matrixOffset = offset;
+		// markerSideAngle = sideAngle;
+		if (myPosition == null)
+			myPosition = new Vec();
+		myPosition.x = rotMatrix[12 + offset];
+		myPosition.y = rotMatrix[13 + offset];
+		myPosition.z = rotMatrix[14 + offset];
+		System.out.println(toString(rotMatrix, offset, 16));
+	}
+
+	private static String toString(float[] rotMatrix, int offset, int length) {
+		String s = "";
+		for (int i = 0; i < length; i++) {
+			s += rotMatrix[i + offset] + "  ";
+		}
+		return s;
 	}
 
 	private synchronized void glLoadRotationMatrix(GL10 gl) {
@@ -247,6 +280,7 @@ public class GLCamera implements Updateable, HasDebugInformation {
 			}
 
 			accelOrMagChanged = false;
+			matrixOffset = 0;
 		}
 		gl.glMultMatrixf(rotationMatrix, matrixOffset);
 		if (markerSideAngle != 0)
@@ -254,7 +288,7 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	}
 
 	public void setAngleUpdateListener(
-			ActionUseCameraAngles myAngleUpdateListener) {
+			CameraAngleUpdateListener myAngleUpdateListener) {
 		this.myAngleUpdateListener = myAngleUpdateListener;
 	}
 
