@@ -1,5 +1,6 @@
 package listeners;
 
+import gl.GLCamera;
 import util.Vec;
 import android.location.Location;
 import android.view.MotionEvent;
@@ -41,8 +42,8 @@ public interface EventListener {
 			float timeDelta);
 
 	/**
-	 * is requested from the camera and here the update algo should be called if
-	 * there is one otherwise just set target to values
+	 * Is called by the {@link GLCamera} and here the update algo should be
+	 * called if there is one otherwise just set target to values
 	 * 
 	 * @param target
 	 * @param values

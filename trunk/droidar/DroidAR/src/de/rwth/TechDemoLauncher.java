@@ -17,6 +17,7 @@ import de.rwth.setups.CollectItemsSetup;
 import de.rwth.setups.DebugSetup;
 import de.rwth.setups.IndoorSetup;
 import de.rwth.setups.PlaceObjectsSetup;
+import de.rwth.setups.PlaceObjectsSetupTwo;
 import de.rwth.setups.PositionTestsSetup;
 import de.rwth.setups.SensorTestSetup;
 
@@ -31,6 +32,7 @@ public class TechDemoLauncher extends Activity {
 		showSetup("Animation Demo", new DebugSetup());
 		showSetup("Collecting Items Demo", new CollectItemsSetup());
 		showSetup("Placing objects Demo", new PlaceObjectsSetup());
+		showSetup("Placing objects Demo 2", new PlaceObjectsSetupTwo());
 		showSetup("Sensor Processing Demo", new SensorTestSetup());
 		showSetup("Position tests", new PositionTestsSetup());
 

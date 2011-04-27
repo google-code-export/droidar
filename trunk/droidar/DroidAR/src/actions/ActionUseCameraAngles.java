@@ -43,6 +43,11 @@ public abstract class ActionUseCameraAngles extends Action implements
 	}
 
 	@Override
+	public boolean onMagnetChanged(float[] values) {
+		return true;
+	}
+
+	@Override
 	public boolean onCamMagnetometerUpdate(float[] target, float[] values,
 			float timeDelta) {
 		return true;
@@ -54,6 +59,9 @@ public abstract class ActionUseCameraAngles extends Action implements
 		accelCounter++;
 		if (accelCounter > accelThreshold) {
 			accelCounter = 0;
+			/*
+			 * missing documentation for the following calculations.. TODO
+			 */
 			updatePitch((float) Math.toDegrees(Math.atan2(-target[1],
 					Math.sqrt(target[2] * target[2] + target[0] * target[0]))));
 			updateRoll(180 + (float) -Math.toDegrees(Math.atan2(target[0],
@@ -92,11 +100,6 @@ public abstract class ActionUseCameraAngles extends Action implements
 	public abstract void updateCompassAzimuth(float azimuth);
 
 	@Override
-	public boolean onMagnetChanged(float[] values) {
-		return true;
-	}
-
-	@Override
 	public boolean onOrientationChanged(float xAngle, float yAngle, float zAngle) {
 		/*
 		 * the use of the orientation sensor results in other values then the
@@ -116,9 +119,9 @@ public abstract class ActionUseCameraAngles extends Action implements
 
 		/*
 		 * this is used to extract the azimuth because it is the easiest way to
-		 * access it. The pitch and roll could be used to but they are different
-		 * values then the manually calculated values and because of this they
-		 * are not used for now.
+		 * access it. The pitch and roll wont be used because they are
+		 * calculated in a different way where the results are more accurate and
+		 * reliable
 		 */
 
 		// float pitch = anglesInRadians[1] * rad2deg;
