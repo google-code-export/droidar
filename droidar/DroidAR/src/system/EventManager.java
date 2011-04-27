@@ -176,8 +176,6 @@ public class EventManager implements LocationListener, SensorEventListener {
 	}
 
 	/*
-	 * // TODO test what happens when its a 3x3 matrix (better // performance?):
-	 * 
 	 * // load inR matrix from current sensor data:
 	 * SensorManager.getRotationMatrix(inR, null, gravityValues,
 	 * geomagneticValues);
@@ -380,7 +378,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 	 * 
 	 * Also check the {@link EventManager#getZeroPositionLocationObject()}
 	 * method, if you want to know where the virtual zero position (of the
-	 * OpenGL world) is. 
+	 * OpenGL world) is.
 	 */
 	public GeoObj getCurrentLocationObject() {
 

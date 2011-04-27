@@ -392,13 +392,11 @@ public class MetaInfos implements EditItem {
 	}
 
 	private void getUI(ModifierGroup group) {
-		ModifierGroup infosGroup = new ModifierGroup(
-				"Values from MetaInfo-object");
+		ModifierGroup infosGroup = new ModifierGroup();
 		group.addModifier(infosGroup);
-		infosGroup.addModifier(new Headline(shortDescr, myColor
-				.toIntARGB()));
+		infosGroup.addModifier(new Headline(shortDescr, myColor.toIntARGB()));
 
-		ModifierGroup g2 = new ModifierGroup("Details");
+		ModifierGroup g2 = new ModifierGroup();
 		infosGroup.addModifier(g2);
 		for (int i = 0; i < longDescr.myLength; i++) {
 			longDescr.get(i).generateEditView(g2);
@@ -407,8 +405,7 @@ public class MetaInfos implements EditItem {
 	}
 
 	private void getEditUI(ModifierGroup group) {
-		ModifierGroup infosGroup = new ModifierGroup(
-				"Values from MetaInfo-object");
+		ModifierGroup infosGroup = new ModifierGroup();
 		group.addModifier(infosGroup);
 		infosGroup.addModifier(new TextModifier() {
 			@Override
@@ -427,7 +424,7 @@ public class MetaInfos implements EditItem {
 				return SHORT_DISCR_NAME;
 			}
 		});
-		ModifierGroup g2 = new ModifierGroup("Details");
+		ModifierGroup g2 = new ModifierGroup();
 		infosGroup.addModifier(g2);
 		for (int i = 0; i < longDescr.myLength; i++) {
 			longDescr.get(i).generateEditView(g2);

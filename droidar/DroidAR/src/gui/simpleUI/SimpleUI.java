@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Window;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
 /**
@@ -77,8 +78,11 @@ public class SimpleUI extends Activity {
 		o.customizeScreen(group, optionalMessage);
 		group.addModifier(config.loadCloseButtonsFor(target, group));
 
-		LinearLayout containerForAllItems = new LinearLayout(target);
+		LayoutParams layParams = new LinearLayout.LayoutParams(
+				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT, 1);
 
+		LinearLayout containerForAllItems = new LinearLayout(target);
+		containerForAllItems.setLayoutParams(layParams);
 		containerForAllItems.setPadding(MOST_OUTER_PADDING, MOST_OUTER_PADDING,
 				MOST_OUTER_PADDING, MOST_OUTER_PADDING);
 		containerForAllItems.setOrientation(LinearLayout.VERTICAL);

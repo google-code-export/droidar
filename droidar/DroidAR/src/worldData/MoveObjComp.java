@@ -46,5 +46,4 @@ public class MoveObjComp implements Component {
 		}
 
 	}
-
 }

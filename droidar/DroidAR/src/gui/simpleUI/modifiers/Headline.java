@@ -20,7 +20,7 @@ public class Headline extends AbstractModifier {
 	public Headline(String text) {
 		this(null, text, -1);
 	}
- 
+
 	public Headline(String text, int backgroundColor) {
 		this(null, text, backgroundColor);
 	}
@@ -48,20 +48,24 @@ public class Headline extends AbstractModifier {
 
 	public View getView(Context myContext) {
 
+		int bottomAndTopPadding = 4;
+		int textPadding = 7;
+		int iconPadding = 10;
+
 		LinearLayout l = new LinearLayout(myContext);
 		l.setGravity(Gravity.CENTER_VERTICAL);
-		int spacerPadding = 10;
-		l.setPadding(0, spacerPadding, 0, spacerPadding);
+
+		l.setPadding(0, bottomAndTopPadding, 0, bottomAndTopPadding);
 
 		if (myIcon != null) {
 			ImageView i = new ImageView(myContext);
-			int iconPadding = 10;
+
 			i.setPadding(0, iconPadding, iconPadding, iconPadding);
 			i.setImageBitmap(myIcon);
 			l.addView(i);
 		} else if (myIconId != 0) {
 			ImageView i = new ImageView(myContext);
-			int iconPadding = 10;
+
 			i.setPadding(0, iconPadding, iconPadding, iconPadding);
 			i.setImageResource(myIconId);
 			l.addView(i);
@@ -69,13 +73,14 @@ public class Headline extends AbstractModifier {
 
 		TextView t = new TextView(myContext);
 		t.setText(myText);
+		t.setPadding(textPadding, textPadding, textPadding, textPadding);
 		if (myIconId == 0)
 			t.setGravity(Gravity.CENTER_HORIZONTAL);
 		l.addView(t);
 
 		if (getTheme() != null) {
 			getTheme().applyOuter1(l);
-			getTheme().applyOuter1(t);
+			// getTheme().applyOuter1(t);
 		}
 		if (myTextSize != 0)
 			t.setTextSize(myTextSize);

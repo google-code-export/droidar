@@ -10,10 +10,10 @@ import util.HasDebugInformation;
 import util.L;
 import util.Vec;
 import worldData.Updateable;
-import actions.ActionUseCameraAngles;
 import actions.DefaultUpdateListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.opengl.Matrix;
 import android.util.Log;
 
 /**
@@ -90,6 +90,8 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	 * http://www.songho.ca/opengl/gl_transform.html
 	 */
 	private float[] rotationMatrix = createIdentityMatrix();
+	private float[] invRotMatrix = createIdentityMatrix();
+
 	private int matrixOffset = 0;
 
 	private MeshComponent myCameraObject;
@@ -102,7 +104,8 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	/**
 	 * the camera rotation angles extracted from the rotation matrix. These
 	 * values will only be calculated if an angleUpdateListener is set or
-	 * GLCamera.forceAngleCalculation is set to true
+	 * {@link GLCamera#forceAngleCalculation} is set to true
+	 * 
 	 */
 	public float[] myAnglesInRadians = new float[3];
 	public boolean forceAngleCalculation = false;
@@ -124,7 +127,7 @@ public class GLCamera implements Updateable, HasDebugInformation {
 		return updateListener;
 	}
 
-	private float[] createIdentityMatrix() {
+	public static float[] createIdentityMatrix() {
 		float[] result = new float[16];
 		result[0] = 1;
 		result[5] = 1;
@@ -133,11 +136,6 @@ public class GLCamera implements Updateable, HasDebugInformation {
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gl.Updateable#update(float)
-	 */
 	public boolean update(float timeDelta) {
 
 		if (updateListener == null) {
@@ -220,6 +218,112 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	}
 
 	/**
+	 * @param rayPosition
+	 *            the vector where the ray pos will be stored in, so pass a
+	 *            vector here that can be overwritten. Normally this value will
+	 *            be the same as {@link GLCamera#myPosition} but if a marker is
+	 *            used to move the {@link GLCamera} the translation will be
+	 *            contained in the matrix as well and therefore the rayPosition
+	 *            will be this translation in relation to the marker
+	 * @param rayDirection
+	 *            the vector where the ray direction will be stored in, so pass
+	 *            a vector here that can be overwritten (don't pass null!)
+	 * @param x
+	 *            the horizontal screen-coordinates (from 0 to screen-width)
+	 * @param y
+	 *            the vertical screen-coordinates (from 0 to screen-height).
+	 *            Just pass the value you get from the Android onClick event
+	 */
+	public void getPickingRay(Vec rayPosition, Vec rayDirection, float x,
+			float y) {
+
+		if (rayDirection == null) {
+			Log.e(LOG_TAG, "Passed direction vector object was null");
+			return;
+		}
+
+		// convert to opengl screen coords:
+		x = (x - GLRenderer.halfWidth) / GLRenderer.halfWidth;
+		y = (GLRenderer.height - y - GLRenderer.halfHeight)
+				/ GLRenderer.halfHeight;
+
+		Matrix.invertM(invRotMatrix, 0, rotationMatrix, matrixOffset);
+
+		if (rayPosition != null) {
+			float[] rayPos = new float[4];
+			float[] initPos = { 0.0f, 0.0f, 0.0f, 1.0f };
+			Matrix.multiplyMV(rayPos, 0, invRotMatrix, 0, initPos, 0);
+			rayPosition.x = rayPos[0];
+			rayPosition.y = rayPos[1];
+			rayPosition.z = rayPos[2];
+			if (myPosition != null) {
+				rayPosition.add(myPosition);
+			}
+		}
+		float[] rayDir = new float[4];
+		float[] initDir = { x * GLRenderer.nearHeight * GLRenderer.aspectRatio,
+				y * GLRenderer.nearHeight, -GLRenderer.minViewDistance, 0.0f };
+		Matrix.multiplyMV(rayDir, 0, invRotMatrix, 0, initDir, 0);
+		rayDirection.x = rayDir[0];
+		rayDirection.y = rayDir[1];
+		rayDirection.z = rayDir[2];
+	}
+
+	public int getMatrixOffset() {
+		return matrixOffset;
+	}
+
+	/**
+	 * "Ground" means the plane where z is 0
+	 * 
+	 * Nearly the same code as
+	 * {@link GLCamera#getPickingRay(Vec, Vec, float, float)} just a little bit
+	 * optimized
+	 * 
+	 * @return
+	 */
+	public Vec getPositionOnGroundWhereTheCameraIsLookingAt() {
+		Matrix.invertM(invRotMatrix, 0, rotationMatrix, matrixOffset);
+
+		/*
+		 * This is an optimized version of the getPickingRay method. The good
+		 * readable code would look like this:
+		 * 
+		 * Vec pos = new Vec(); Vec dir = new Vec();
+		 * 
+		 * camera.getPickingRay(pos, dir, GLRenderer.halfWidth,
+		 * GLRenderer.halfHeight);
+		 * 
+		 * now the calculation where the direction vec hits the ground plane.
+		 * can be reduced to intersection of two lines where only the z values
+		 * of start and direction are different
+		 * 
+		 * when you break down the intersection of two lines with nearly the
+		 * same direction vectors and nearly the same start vectors then you get
+		 * this:
+		 * 
+		 * dir.mult(-pos.z / dir.z);
+		 * 
+		 * dir.add(pos);
+		 * 
+		 * dir is the position on the ground which then could be returned
+		 */
+
+		float[] rayPos = new float[4];
+		float[] initPos = { 0.0f, 0.0f, 0.0f, 1.0f };
+		Matrix.multiplyMV(rayPos, 0, invRotMatrix, 0, initPos, 0);
+
+		float[] rayDir = new float[4];
+		float[] initDir = { 0, 0, -GLRenderer.minViewDistance, 0.0f };
+		Matrix.multiplyMV(rayDir, 0, invRotMatrix, 0, initDir, 0);
+
+		float f = -(rayPos[2] + myPosition.z) / rayDir[2];
+		System.out.println(f);
+		return new Vec((f * rayDir[0]) + (rayPos[0] + myPosition.x),
+				(f * rayDir[1]) + (rayPos[1] + myPosition.y), 0);
+	}
+
+	/**
 	 * This method will be called by the virtual world to load the camera
 	 * parameters like the position and the rotation
 	 * 
@@ -244,49 +348,74 @@ public class GLCamera implements Updateable, HasDebugInformation {
 
 	public void setRotationMatrixFromMarkerInput(float[] rotMatrix, int offset,
 			int sideAngle) {
-		// rotationMatrix = rotMatrix;
-		// matrixOffset = offset;
-		// markerSideAngle = sideAngle;
-		if (myPosition == null)
-			myPosition = new Vec();
-		myPosition.x = rotMatrix[12 + offset];
-		myPosition.y = rotMatrix[13 + offset];
-		myPosition.z = rotMatrix[14 + offset];
-		System.out.println(toString(rotMatrix, offset, 16));
+		rotationMatrix = rotMatrix;
+		matrixOffset = offset;
+		markerSideAngle = sideAngle;
+		// if (myPosition == null)
+		// myPosition = new Vec();
+		// myPosition.x = rotMatrix[12 + offset];
+		// myPosition.y = rotMatrix[13 + offset];
+		// myPosition.z = rotMatrix[14 + offset];
+		// System.out.println(toString(rotMatrix, offset, 16));
 	}
 
-	private static String toString(float[] rotMatrix, int offset, int length) {
-		String s = "";
-		for (int i = 0; i < length; i++) {
-			s += rotMatrix[i + offset] + "  ";
-		}
-		return s;
-	}
+	// private static String toString(float[] rotMatrix, int offset, int length)
+	// {
+	// String s = "";
+	// for (int i = 0; i < length; i++) {
+	// s += rotMatrix[i + offset] + "  ";
+	// }
+	// return s;
+	// }
 
 	private synchronized void glLoadRotationMatrix(GL10 gl) {
 		if ((sensorInputEnabled) && (accelOrMagChanged)) {
-			SensorManager.getRotationMatrix(unrotatedMatrix, null,
-					myAccelValues, myMagnetValues);
-			SensorManager.remapCoordinateSystem(unrotatedMatrix,
-					SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X,
-					rotationMatrix);
-
-			if (myAngleUpdateListener != null) {
-				SensorManager.getOrientation(rotationMatrix, myAnglesInRadians);
-				myAngleUpdateListener.updateAnglesByCamera(myAnglesInRadians,
-						myRotationVec);
-			} else if (forceAngleCalculation) {
-				SensorManager.getOrientation(rotationMatrix, myAnglesInRadians);
-			}
-
-			accelOrMagChanged = false;
-			matrixOffset = 0;
+			udateRotationMatrixFromSensorValues();
 		}
+
 		gl.glMultMatrixf(rotationMatrix, matrixOffset);
+
+		/*
+		 * additionally if marker detection is used the current marker rotation
+		 * has to be added manually
+		 */
 		if (markerSideAngle != 0)
 			gl.glRotatef(markerSideAngle, 0, 0, 1);
 	}
 
+	private void udateRotationMatrixFromSensorValues() {
+		// first calc the unrotated matrix:
+		SensorManager.getRotationMatrix(unrotatedMatrix, null, myAccelValues,
+				myMagnetValues);
+		// then rotate it according to the screen rotation:
+		SensorManager.remapCoordinateSystem(unrotatedMatrix,
+				SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X,
+				rotationMatrix);
+
+		updateCameraAnglesIfNeeded();
+
+		accelOrMagChanged = false;
+		matrixOffset = 0;
+	}
+
+	private void updateCameraAnglesIfNeeded() {
+		if (myAngleUpdateListener != null) {
+			SensorManager.getOrientation(rotationMatrix, myAnglesInRadians);
+			myAngleUpdateListener.updateAnglesByCamera(myAnglesInRadians,
+					myRotationVec);
+		} else if (forceAngleCalculation) {
+			SensorManager.getOrientation(rotationMatrix, myAnglesInRadians);
+		}
+	}
+
+	/**
+	 * The alternative to this way of extracting the values is to use the view
+	 * matrix directly(via {@link GLCamera#getRotationMatrix()}. There are
+	 * several helper methods available to extract the rotation etc (eg
+	 * {@link GLCamera#getPickingRay(Vec, Vec, float, float)}
+	 * 
+	 * @param myAngleUpdateListener
+	 */
 	public void setAngleUpdateListener(
 			CameraAngleUpdateListener myAngleUpdateListener) {
 		this.myAngleUpdateListener = myAngleUpdateListener;

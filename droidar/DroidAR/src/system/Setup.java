@@ -33,6 +33,7 @@ import android.widget.FrameLayout;
 
 import commands.Command;
 import commands.CommandGroup;
+import commands.system.CommandDeviceVibrate;
 import commands.undoable.CommandProcessor;
 
 import de.rwth.R;
@@ -278,7 +279,8 @@ public abstract class Setup {
 		TextureManager.resetInstance();
 		TaskManager.resetInstance();
 		GLFactory.resetInstance();
-		ObjectPicker.resetInstance(); // TODO why is this a singleton?
+		ObjectPicker.resetInstance(new CommandDeviceVibrate(myTargetActivity,
+				30)); 
 		CommandProcessor.resetInstance();
 		FeedbackReports.resetInstance(); // TODO really reset it?
 		EventManager.resetInstance();
@@ -348,8 +350,8 @@ public abstract class Setup {
 			/*
 			 * Here is the problem: OpenGL seems to have rounding errors on
 			 * older devices (see ObjectPicker.floatToByteColorValue) Thus the
-			 * G1 need a different value than a Nexus 1 eg.. This is just a fix
-			 * TODO!!
+			 * G1 need a different value than a Nexus 1 eg.. TODO how to solve
+			 * this problem?
 			 */
 			isOldDeviceWhereNothingWorksAsExpected = true;
 		}

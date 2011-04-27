@@ -424,6 +424,7 @@ public class Vec {
 		return ((x == 0) && (y == 0) && (z == 0));
 	}
 
+	public static final float deg2rad = 0.01745329238474369f;
 	final public static float rad2deg = (float) (180.0f / Math.PI);
 
 	/**

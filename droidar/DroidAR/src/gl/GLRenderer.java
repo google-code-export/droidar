@@ -9,6 +9,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import util.EfficientList;
+import util.Vec;
 import worldData.Renderable;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
@@ -22,9 +23,14 @@ import android.util.Log;
  */
 public class GLRenderer implements Renderer {
 
-	private static final float LENSE_ANGLE = 35.0f; //25 before, marker recog 39 TODO
-	private static final float MIN_VIEW_DISTANCE = 0.1f;
-	private static final float MAX_VIEW_DISTANCE = 700.0f;
+	public static float LENSE_ANGLE = 35.0f; // 25 before, marker recog 39 TODO
+	public static float minViewDistance = 0.1f;
+	public static float maxViewDistance = 700.0f;
+	public static float halfWidth;
+	public static float halfHeight;
+	public static float height;
+	public static float nearHeight;
+	public static float aspectRatio;
 
 	/**
 	 * lightning wont work yet. the normals of all meshes are required to
@@ -44,6 +50,7 @@ public class GLRenderer implements Renderer {
 	private static final float FOG_START_DISTANCE = 2.0f;
 	private static final FloatBuffer FOG_COLOR = new Color(0, 0, 0, 0)
 			.toFloatBuffer();
+	private static final boolean FLASH_SCREEN = false;
 
 	/**
 	 * TODO change to something more abstract like a GlDrawable interface? would
@@ -64,22 +71,30 @@ public class GLRenderer implements Renderer {
 		}
 
 		// first check if there are new textures to load into openGL:
-		TextureManager.getInstance().updateTextures(gl); // TODO optimize? check boolean
-		// here not inside method
+		TextureManager.getInstance().updateTextures(gl); // TODO optimize? check
+															// boolean
+		boolean repeat;
+		do {
 
-		// Clears the screen and depth buffer.
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-		final int length = elementsToRender.myLength;
-		for (int i = 0; i < length; i++) {
-			// Reset the modelview matrix
-			gl.glLoadIdentity();
-			elementsToRender.get(i).draw(gl);
-		}
+			// Clears the screen and depth buffer.
+			gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+			final int length = elementsToRender.myLength;
+			for (int i = 0; i < length; i++) {
+				// Reset the modelview matrix
+				gl.glLoadIdentity();
+				elementsToRender.get(i).draw(gl);
+			}
 
-		if (readyToPickPixel) {
-			ObjectPicker.getInstance().pickObject(gl);
-			readyToPickPixel = false;
-		}
+			repeat = false;
+			if (readyToPickPixel) {
+				ObjectPicker.getInstance().pickObject(gl);
+				readyToPickPixel = false;
+				// first time in life i would like to have a goto in Java;)
+				if (!FLASH_SCREEN) {
+					repeat = true;
+				}
+			}
+		} while (repeat);
 
 	}
 
@@ -162,9 +177,15 @@ public class GLRenderer implements Renderer {
 		 * zNear and zFar - This specifies the near and far clipping planes as
 		 * normal.
 		 */
-		GLU.gluPerspective(gl, LENSE_ANGLE, (float) width / (float) height,
-				MIN_VIEW_DISTANCE, MAX_VIEW_DISTANCE); // TODO what is a good
-		// value??
+		GLRenderer.halfWidth = width / 2;
+		GLRenderer.halfHeight = height / 2;
+		GLRenderer.height = height;
+		GLRenderer.nearHeight = minViewDistance
+				* (float) Math.tan((GLRenderer.LENSE_ANGLE * Vec.deg2rad) / 2);
+		GLRenderer.aspectRatio = (float) width / (float) height;
+		GLU.gluPerspective(gl, LENSE_ANGLE, aspectRatio, minViewDistance,
+				maxViewDistance);
+		// TODO what is a good value??
 
 		/*
 		 * Select the modelview matrix which transforms a point from model space

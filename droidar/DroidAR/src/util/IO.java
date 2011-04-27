@@ -1,10 +1,12 @@
 package util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -33,6 +35,8 @@ import android.view.ViewGroup.LayoutParams;
 
 public class IO {
 
+	private static final String LOG_TAG = "IO";
+
 	public static Bitmap loadBitmapFromId(Context context, int bitmapId) {
 		if (context == null)
 			return null;
@@ -47,6 +51,29 @@ public class IO {
 		}
 	}
 
+	public static String convertInputStreamToString(InputStream stream) {
+		if (stream == null)
+			return null;
+
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					stream));
+			StringBuilder sb = new StringBuilder();
+
+			String line = null;
+
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			stream.close();
+			return sb.toString();
+
+		} catch (Exception e) {
+			Log.e(LOG_TAG, "Could not convert input stream to string");
+		}
+		return null;
+	}
+	
 	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
 		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
 				bitmap.getHeight(), Bitmap.Config.RGB_565);
@@ -70,7 +97,7 @@ public class IO {
 	 * any type of image can be imported this way
 	 * 
 	 * @param imagePath
-	 *            for example "/sdcard/er.PNG"
+	 *            for example "/sdcard/abc.PNG"
 	 * @return
 	 */
 	public static Bitmap loadBitmapFromFile(String imagePath) {
@@ -101,7 +128,7 @@ public class IO {
 						null, bitmapOptions);
 			}
 		} catch (Exception e) {
-			Log.e("IO", "Error while loading an image from an URL: " + e);
+			Log.e(LOG_TAG, "Error while loading an image from an URL: " + e);
 		}
 		return null;
 	}

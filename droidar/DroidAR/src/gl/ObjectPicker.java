@@ -9,9 +9,11 @@ import javax.microedition.khronos.opengles.GL10;
 import listeners.SelectionListener;
 import system.Setup;
 import util.Wrapper;
+import android.app.Activity;
 import android.util.Log;
 
 import commands.Command;
+import commands.system.CommandDeviceVibrate;
 
 public class ObjectPicker {
 
@@ -29,14 +31,19 @@ public class ObjectPicker {
 
 	/**
 	 * TODO solve problem with byte[] to string conversion for comparing. there
-	 * might also be a problem with this to string method because 0 15 10 will
-	 * be the same key as 0 151 0!
+	 * might also be a problem with this to string-key-concept because 0 15 10
+	 * will be the same key as 0 151 0!
 	 */
 	private HashMap<String, Wrapper> myObjectLookUpTable = new HashMap<String, Wrapper>();
 	public int x = 0;
 	public int y = 0;
 
 	private int clickType = 0;
+	private Command myFeedbackCommand;
+
+	public void setMyFeedbackCommand(Command myFeedbackCommand) {
+		this.myFeedbackCommand = myFeedbackCommand;
+	}
 
 	public void pickObject(GL10 gl) {
 		readyToDrawWithColor = false;
@@ -79,25 +86,36 @@ public class ObjectPicker {
 			switch (clickType) {
 			case TOUCH_TAB: {
 				Command c = s.getOnClickCommand();
-				if (c != null)
+				if (c != null) {
+					giveSelectFeedbackIfEnabled();
 					c.execute(wrapper);
+				}
 				break;
 			}
 			case TOUCH_DOUBLE_TAB: {
 				Command c = s.getOnDoubleClickCommand();
-				if (c != null)
+				if (c != null) {
+					giveSelectFeedbackIfEnabled();
 					c.execute(wrapper);
+				}
 				break;
 			}
 			case TOUCH_LONG_PRESS: {
 				Command c = s.getOnLongClickCommand();
-				if (c != null)
+				if (c != null) {
+					giveSelectFeedbackIfEnabled();
 					c.execute(wrapper);
+				}
 				break;
 			}
 			}
 			clickType = 0;
 		}
+	}
+
+	private void giveSelectFeedbackIfEnabled() {
+		if (myFeedbackCommand != null)
+			myFeedbackCommand.execute();
 	}
 
 	private Wrapper tryToFindCorrectObjectFor(byte[] b) {
@@ -296,8 +314,14 @@ public class ObjectPicker {
 		return (byte) (f * 255f);
 	}
 
-	public static void resetInstance() {
+	/**
+	 * @param feedbackCommand
+	 *            this command will be executed every time a successful click
+	 *            appeared. Use a {@link CommandDeviceVibrate} here e.g.
+	 */
+	public static void resetInstance(Command feedbackCommand) {
 		myInstance = new ObjectPicker();
+		myInstance.setMyFeedbackCommand(feedbackCommand);
 	}
 
 }

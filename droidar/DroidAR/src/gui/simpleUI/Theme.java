@@ -13,8 +13,6 @@ import android.widget.TextView;
 
 public class Theme implements EditItem {
 
-	// private Theme.ThemeBackground backgroundMainContainer;
-
 	private Theme.ThemeBackground background1;
 	private Theme.TextStyle headerText1;
 	private Theme.TextStyle normalText1;
@@ -140,22 +138,22 @@ public class Theme implements EditItem {
 	}
 
 	public static class ThemeColors {
-		private static final int TDEF = 230;
+		private static final int DEFAULT_ALPHA = 220;
 		public static final int[] Ggray = initGradientGray();
-		public static int whiteB = toARGB(TDEF, 255, 255, 255);
-		public static int whiteD = toARGB(TDEF, 220, 220, 220);
-		public static int redD = toARGB(TDEF, 100, 0, 0);
-		public static int redB = toARGB(TDEF, 240, 35, 13);
-		public static int greenD = toARGB(TDEF, 0, 100, 0);
-		public static int greenB = toARGB(TDEF, 0, 190, 0);
-		public static int blueD = toARGB(TDEF, 0, 0, 150);
-		public static int blueB = toARGB(TDEF, 32, 32, 255);
-		public static int orangeD = toARGB(TDEF, 255, 100, 0);
-		public static int orangeB = toARGB(TDEF, 255, 162, 21);
-		public static int grayD = toARGB(TDEF, 75, 75, 75);
-		public static int grayB = toARGB(TDEF, 150, 150, 150);
-		public static int blackD = toARGB(TDEF, 10, 10, 10);
-		public static int blackB = toARGB(TDEF, 50, 50, 50);
+		public static int whiteB = toARGB(DEFAULT_ALPHA, 255, 255, 255);
+		public static int whiteD = toARGB(DEFAULT_ALPHA, 200, 200, 200);
+		public static int redD = toARGB(DEFAULT_ALPHA, 100, 0, 0);
+		public static int redB = toARGB(DEFAULT_ALPHA, 240, 35, 13);
+		public static int greenD = toARGB(DEFAULT_ALPHA, 0, 80, 0);
+		public static int greenB = toARGB(DEFAULT_ALPHA, 0, 110, 0);
+		public static int blueD = toARGB(DEFAULT_ALPHA, 0, 0, 100);
+		public static int blueB = toARGB(DEFAULT_ALPHA, 32, 32, 150);
+		public static int orangeD = toARGB(DEFAULT_ALPHA, 255, 100, 0);
+		public static int orangeB = toARGB(DEFAULT_ALPHA, 255, 162, 21);
+		public static int grayD = toARGB(DEFAULT_ALPHA, 75, 75, 75);
+		public static int grayB = toARGB(DEFAULT_ALPHA, 150, 150, 150);
+		public static int blackD = toARGB(DEFAULT_ALPHA, 10, 10, 10);
+		public static int blackB = toARGB(DEFAULT_ALPHA, 50, 50, 50);
 		public static int blackT1 = toARGB(100, 0, 0, 0);
 		public static int blackT2 = toARGB(200, 0, 0, 0);
 
@@ -194,18 +192,19 @@ public class Theme implements EditItem {
 
 		private static int[] initGradientGray() {
 			int[] c = new int[3];
-			c[0] = toARGB(255, 90, 90, 90);
-			c[1] = toARGB(255, 85, 85, 85);
-			c[2] = toARGB(255, 80, 80, 80);
+			int f = -20;
+			c[0] = toARGB(255, 90 + f, 90 + f, 90 + f);
+			c[1] = toARGB(255, 85 + f, 85 + f, 85 + f);
+			c[2] = toARGB(255, 80 + f, 80 + f, 80 + f);
 			return c;
 		}
 
 		private static int[] initGradientGray2() {
 			int[] c = new int[3];
-			int x = -40;
-			c[0] = toARGB(255, 190 + x, 190 + x, 190 + x);
-			c[1] = toARGB(255, 185 + x, 185 + x, 185 + x);
-			c[2] = toARGB(255, 160 + x, 160 + x, 160 + x);
+			int f = -40;
+			c[0] = toARGB(255, 190 + f, 190 + f, 190 + f);
+			c[1] = toARGB(255, 185 + f, 185 + f, 185 + f);
+			c[2] = toARGB(255, 160 + f, 160 + f, 160 + f);
 			return c;
 		}
 
@@ -222,12 +221,16 @@ public class Theme implements EditItem {
 
 		public static Theme.ThemeColors initToGreen() {
 			Theme.ThemeColors c = new ThemeColors();
-			int[] colorArray = new int[2];
-			colorArray[0] = ThemeColors.greenD;
-			colorArray[1] = ThemeColors.greenB;
-			c.applyToAllTextColors(ThemeColors.blackT1);
+			int[] colorArray = new int[5];
+			int alpha = 160;
+			colorArray[0] = toARGB(alpha, 0, 95, 0);
+			colorArray[1] = toARGB(alpha, 0, 95, 0);
+			colorArray[2] = toARGB(alpha, 0, 110, 0);
+			colorArray[3] = toARGB(alpha, 0, 95, 0);
+			colorArray[4] = toARGB(alpha, 0, 95, 0);
+			c.applyToAllTextColors(ThemeColors.whiteB);
 			c.applyToImportantBackgrounds(colorArray);
-			c.applyToAllShadows(ThemeColors.whiteB);
+			c.applyToAllShadows(ThemeColors.blackB);
 			return c;
 		}
 
@@ -236,9 +239,9 @@ public class Theme implements EditItem {
 			int[] colorArray = new int[2];
 			colorArray[0] = ThemeColors.blueD;
 			colorArray[1] = ThemeColors.blueB;
-			c.applyToAllTextColors(ThemeColors.blackT1);
+			c.applyToAllTextColors(toARGB(255, 200, 200, 200));
 			c.applyToImportantBackgrounds(colorArray);
-			c.applyToAllShadows(ThemeColors.whiteB);
+			c.applyToAllShadows(toARGB(255, 0, 0, 0));
 			return c;
 		}
 
@@ -316,7 +319,7 @@ public class Theme implements EditItem {
 
 	public static class TextStyle {
 		private Typeface textTypeface;
-		private float textSize = 15;
+		private float textSize = 0;
 		private float shadowSize = 1;
 		private float shadowXPos = 1;
 		private float shadowYPos = 1;
@@ -437,10 +440,11 @@ public class Theme implements EditItem {
 		 * ColorTheme itself
 		 */
 		private float[] cornerRadii;
-		private int leftPadding = SimpleUI.DEFAULT_PADDING;
-		private int topPadding = SimpleUI.DEFAULT_PADDING;
-		private int rightPadding = SimpleUI.DEFAULT_PADDING;
-		private int bottomPadding = SimpleUI.DEFAULT_PADDING;
+
+		// private int leftPadding = SimpleUI.DEFAULT_PADDING;
+		// private int topPadding = SimpleUI.DEFAULT_PADDING;
+		// private int rightPadding = SimpleUI.DEFAULT_PADDING;
+		// private int bottomPadding = SimpleUI.DEFAULT_PADDING;
 
 		public static Theme.ThemeBackground B1() {
 			Theme.ThemeBackground b = new ThemeBackground();
@@ -472,7 +476,6 @@ public class Theme implements EditItem {
 				v.setBackgroundDrawable(s);
 			}
 
-			v.setPadding(leftPadding, topPadding, rightPadding, bottomPadding);
 		}
 
 		/**
