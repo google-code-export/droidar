@@ -20,8 +20,11 @@ public class RenderData {
 	 * @param shape
 	 */
 	public void updateShape(ArrayList<Vec> shape) {
-		vertexBuffer = GLUtilityClass
-				.createAndInitFloatBuffer(turnShapeToFloatArray(shape));
+		vertexBuffer = setVertexArray(turnShapeToFloatArray(shape));
+	}
+
+	public FloatBuffer setVertexArray(float[] turnShapeToFloatArray) {
+		return GLUtilityClass.createAndInitFloatBuffer(turnShapeToFloatArray);
 	}
 
 	protected RenderData() {
