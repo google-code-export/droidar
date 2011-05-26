@@ -1,9 +1,5 @@
 #IF this file is changed under windows use "tr -d '\r' < edited.sh > final.sh " to remove the bad line endings.
 
-#Insert the path to your android NDK here!
-NDKDIR=C:/Android/android-ndk-r4-crystax/
-
-
 #Get the base dir so we can change the directory to the base dir.
 BASEDIR=`dirname $0`
 
