@@ -49,7 +49,6 @@ public class GeneratorWindow extends Applet {
 
 		});
 		p.add(directoyButton);
-
 		minMarker = new TextField("0");
 		p.add(minMarker);
 		maxMarker = new TextField("0");
