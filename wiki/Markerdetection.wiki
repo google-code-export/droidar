@@ -6,7 +6,7 @@
 ==Requirements:==
   * [http://www.crystax.net/android/ndk-r4.php Crystax NDK r4] (Other versions might work on Linux, on windows this seems to be the only working NDK for this project.)
   * The DroidAR Project
-  * [http://www.cygwin.com/ Cygwin] (Download the Setup [http://cygwin.com/setup.exe here]
+  * [http://www.cygwin.com/ Cygwin] (Download the Setup [http://cygwin.com/setup.exe here])
 
 
 ==Getting Started:==
