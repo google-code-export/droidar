@@ -1,6 +1,8 @@
+import java.applet.Applet;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Graphics2D;
@@ -17,11 +19,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import sun.awt.VerticalBagLayout;
 
-public class GeneratorWindow extends Frame {
+public class GeneratorWindow extends Applet {
 
 	private TextField minMarker;
 	private TextField maxMarker;
@@ -29,9 +32,9 @@ public class GeneratorWindow extends Frame {
 	private File directory;
 
 	public GeneratorWindow() {
-		super("Marker generator");
-		setSize(450, 450);
-		addWindowListener(new BasicWindowMonitor());
+		// super("Marker generator");
+		// setSize(450, 450);
+		// addWindowListener(new BasicWindowMonitor());
 
 		outer = new Panel();
 
@@ -87,7 +90,10 @@ public class GeneratorWindow extends Frame {
 		ScrollPane s = new ScrollPane();
 		s.add(outer);
 
-		add(s, BorderLayout.CENTER);
+		s.setPreferredSize(new Dimension(500, 500));
+		this.setPreferredSize(new Dimension(500, 500));
+
+		add(s);
 
 	}
 
