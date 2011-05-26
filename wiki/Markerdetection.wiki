@@ -12,9 +12,9 @@ This page will give the basic steps on how to setup the projects in order to int
 ==Getting Started:==
   * Get the project files from http://droidar.googlecode.com/svn/trunk/ARMarker
 
-  * Get OpenCV project from https://github.com/billmccord/OpenCV-Android.
+  * Get the OpenCV project source code from https://github.com/billmccord/OpenCV-Android.
 
-  * Paste source folders _cv_ and _cxcore_ into the _jni_ folder of the ARMarker project.
+  * Paste source folders _cv_ and _cxcore_ into the _jni_ folder of the ARMarker project. (The other files are not needed. If you want to use other features from OpenCV you might need to edit the _Android.mk_ file in the jni and add other files too.) 
 
   * Load the external tool configuration "Build AR.launch" into eclipse and edit the environment variables to match your cygwin root folder and your NDK root folder.
 
