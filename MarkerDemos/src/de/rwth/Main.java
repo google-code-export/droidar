@@ -29,7 +29,7 @@ public class Main extends Activity {
 			@Override
 			public void onClick(View v) {
 				ArActivity.startWithSetup(Main.this,
-						new ExampleMarkerRenderSetup());
+						new MultiMarkerSetup());
 			}
 		});
 		setContentView(b);
