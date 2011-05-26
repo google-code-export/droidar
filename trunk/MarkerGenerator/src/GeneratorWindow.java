@@ -19,14 +19,14 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
-
 import sun.awt.VerticalBagLayout;
 
 public class GeneratorWindow extends Frame {
 
-	private TextField input;
+	private TextField minMarker;
+	private TextField maxMarker;
 	private Panel outer;
+	private File directory;
 
 	public GeneratorWindow() {
 		super("Marker generator");
@@ -38,22 +38,46 @@ public class GeneratorWindow extends Frame {
 		Panel p = new Panel();
 		p.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		input = new TextField("0");
-		p.add(input);
+		Button directoyButton = new Button("Choose target directory");
+		directoyButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				chooseFolder();
+			}
 
-		Button genButton = new Button("Generate Marker");
+		});
+		p.add(directoyButton);
+
+		minMarker = new TextField("0");
+		p.add(minMarker);
+		maxMarker = new TextField("0");
+		p.add(maxMarker);
+
+		Button genButton = new Button("Generate Marker(s)");
 		genButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Panel p = new Panel();
-				Image image = generateMarker(loadNumber());
-				p.add(new ImageContainer(image));
-				p.add(generateSaveButtonFor(image, loadNumber()));
-				outer.add(p);
+				for (int markerNr = loadNumber(minMarker); markerNr <= loadNumber(maxMarker); markerNr++) {
+					Panel p = new Panel();
+					Image image = generateMarker(markerNr);
+					p.add(new ImageContainer(image));
+					p.add(generateSaveButtonFor(image, markerNr));
+					outer.add(p);
+				}
 				validate();
 			}
 
 		});
 		p.add(genButton);
+
+		Button saveAllButton = new Button("Save all markers");
+		saveAllButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (int markerNr = loadNumber(minMarker); markerNr <= loadNumber(maxMarker); markerNr++) {
+					saveInChoosenDirectory(generateMarker(markerNr), markerNr);
+				}
+			}
+
+		});
+		p.add(saveAllButton);
 
 		outer.add(p);
 		outer.setLayout(new VerticalBagLayout());
@@ -65,31 +89,46 @@ public class GeneratorWindow extends Frame {
 
 	}
 
-	private Component generateSaveButtonFor(final Image i, int markerNumber) {
-		Button b = new Button("Save Marker " + markerNumber);
+	private void chooseFolder() {
+		JFileChooser chooser = new JFileChooser();
+
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+		int returnVal = chooser.showSaveDialog(GeneratorWindow.this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			directory = chooser.getSelectedFile();
+		}
+	}
+
+	private Component generateSaveButtonFor(final Image i,
+			final int markerNumber) {
+		Button b = new Button("Save " + markerNumber + ".jpg");
 		b.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 
-				JFileChooser chooser = new JFileChooser();
+				if (directory == null)
+					chooseFolder();
 
-				String[] a = { "jpg" };
-				FileNameExtensionFilter filter = new FileNameExtensionFilter(
-						"*.jpg", a);
-				chooser.setFileFilter(filter);
-
-				int returnVal = chooser.showSaveDialog(GeneratorWindow.this);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					try {
-						ImageIO.write(toBufferedImage(i), "jpg",
-								chooser.getSelectedFile());
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-				}
+				saveInChoosenDirectory(i, markerNumber);
 
 			}
+
 		});
 		return b;
+	}
+
+	private void saveInChoosenDirectory(final Image i, final int markerNumber) {
+		if (directory != null) {
+
+			File file = new File(directory, "" + markerNumber + ".jpg");
+
+			try {
+				ImageIO.write(toBufferedImage(i), "jpg", file);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 
 	private static BufferedImage toBufferedImage(Image src) {
@@ -103,8 +142,8 @@ public class GeneratorWindow extends Frame {
 		return dest;
 	}
 
-	private int loadNumber() {
-		String text = input.getText();
+	private int loadNumber(TextField tf) {
+		String text = tf.getText();
 		int number = 0;
 		try {
 			number = Integer.parseInt(text);
@@ -172,7 +211,7 @@ public class GeneratorWindow extends Frame {
 		int markerIndex = 0;
 
 		for (int x = 3; x < size - 3; x++) {
-			System.out.println(x);
+
 			result[2][x] = getColorFor(markerCode.charAt(markerIndex));
 			markerIndex++;
 		}
@@ -184,7 +223,7 @@ public class GeneratorWindow extends Frame {
 		}
 
 		for (int x = 3; x < size - 3; x++) {
-			System.out.println(x);
+
 			result[size - 3][x] = getColorFor(markerCode.charAt(markerIndex));
 			markerIndex++;
 		}
