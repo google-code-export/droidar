@@ -1,5 +1,6 @@
 package gl;
 
+import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 
@@ -12,15 +13,19 @@ public class TriangulatedRenderData extends RenderData {
 	protected ShortBuffer indexBuffer;
 	protected int indiceCount;
 
-	protected TriangulatedRenderData() {
+	public TriangulatedRenderData() {
 	}
 
 	@Override
 	public void updateShape(ArrayList<Vec> shapeArray) {
-		vertexBuffer = GLUtilityClass
-				.createAndInitFloatBuffer(turnShapeToFloatArray(shapeArray));
-		indexBuffer = GLUtilityClass
-				.createAndInitShortBuffer(triangulationOfShape(shapeArray));
+		vertexBuffer = setVertexArray(turnShapeToFloatArray(shapeArray));
+		indexBuffer = setIndeceArray(triangulationOfShape(shapeArray));
+	}
+
+	
+
+	public ShortBuffer setIndeceArray(short[] s) {
+		return GLUtilityClass.createAndInitShortBuffer(s);
 	}
 
 	/**

@@ -45,6 +45,10 @@ public class Shape extends MeshComponent {
 		}
 	}
 
+	public void setMyRenderData(RenderData myRenderData) {
+		this.myRenderData = myRenderData;
+	}
+
 	public void setTriangleDrawing() {
 		myRenderData.drawMode = GL10.GL_TRIANGLES;
 	}
