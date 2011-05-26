@@ -1,7 +1,7 @@
+#summary This page will give the basic steps on how to setup the projects in order to integrate marker detection in a project
 #labels Phase-Implementation,Phase-Deploy
-=Getting started with marker detection=
 
-#This page will give the basic steps on how to setup the projects in order to integrate marker detection in a project
+=Getting started with marker detection=
 
 ==Requirements:==
   * [http://www.crystax.net/android/ndk-r4.php Crystax NDK r4] (Other versions might work on Linux, on windows this seems to be the only working NDK for this project.)
