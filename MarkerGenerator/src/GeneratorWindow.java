@@ -71,9 +71,11 @@ public class GeneratorWindow extends Frame {
 		Button saveAllButton = new Button("Save all markers");
 		saveAllButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Starting export");
 				for (int markerNr = loadNumber(minMarker); markerNr <= loadNumber(maxMarker); markerNr++) {
 					saveInChoosenDirectory(generateMarker(markerNr), markerNr);
 				}
+				System.out.println("Export done");
 			}
 
 		});
@@ -106,12 +108,7 @@ public class GeneratorWindow extends Frame {
 		b.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-
-				if (directory == null)
-					chooseFolder();
-
 				saveInChoosenDirectory(i, markerNumber);
-
 			}
 
 		});
@@ -119,6 +116,8 @@ public class GeneratorWindow extends Frame {
 	}
 
 	private void saveInChoosenDirectory(final Image i, final int markerNumber) {
+		if (directory == null)
+			chooseFolder();
 		if (directory != null) {
 
 			File file = new File(directory, "" + markerNumber + ".jpg");
