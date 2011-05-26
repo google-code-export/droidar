@@ -1,4 +1,4 @@
-#summary This page will give the basic steps on how to setup the projects in order to integrate marker detection in a project
+#summary The basic steps on how to setup the projects in order to integrate marker detection in a DroidAR project
 #labels Phase-Implementation,Phase-Deploy
 
 =Getting started with marker detection=
