@@ -1,3 +1,4 @@
+#summary A short intro to the marker demos example application.
 #labels Phase-Implementation
 =The MarkerDemos project=
 
