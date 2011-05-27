@@ -7,6 +7,7 @@ import system.TouchEventInterface;
 import actions.Action;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -34,8 +35,17 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 
 	private GestureDetector myGestureDetector;
 
+	public CustomGLSurfaceView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		initGLSurfaceView(context);
+	}
+
 	public CustomGLSurfaceView(Context context) {
 		super(context);
+		initGLSurfaceView(context);
+	}
+
+	private void initGLSurfaceView(Context context) {
 		if (DEBUG_OUTPUT_ENABLED) {
 			// Turn on error-checking and logging
 			setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
@@ -44,7 +54,7 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 		myGestureDetector = new GestureDetector(context,
 				new CustomGestureListener(this));
 	}
-
+	
 	@Override
 	public boolean dispatchTrackballEvent(MotionEvent event) {
 		if (EventManager.getInstance().onTrackballEvent(event)) {
