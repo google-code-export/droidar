@@ -28,28 +28,23 @@ public class MultiMarkerSetup extends MarkerDetectionSetup {
 	private GLCamera camera;
 	private World world;
 	private MeshComponent mesh;
-	private float myAzi;
-	private float myRoll;
-	private float myPitch;
+
+	@Override
+	public void _a_initFieldsIfNecessary() {
+		camera = new GLCamera(new Vec(0, 0, 10));
+		world = new World(camera);
+		mesh = GLFactory.getInstance().newCircle(null);
+
+	}
 
 	@Override
 	public UnrecognizedMarkerListener _a2_getUnrecognizedMarkerListener() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void _a3_registerMarkerObjects(MarkerObjectMap markerObjectMap) {
-
 		markerObjectMap.put(new VirtualObjectMarker(mesh, camera));
-	}
-
-	@Override
-	public void _a_initFieldsIfNecessary() {
-		camera = new GLCamera(new Vec(0, 0, 0));
-		world = new World(camera);
-		mesh = GLFactory.getInstance().newCircle(null);
-
 	}
 
 	@Override
@@ -59,6 +54,9 @@ public class MultiMarkerSetup extends MarkerDetectionSetup {
 		Obj o = new Obj();
 		o.setComp(mesh);
 		world.add(o);
+
+		 world.add(objectFactory.newHexGroupTest(new Vec()));
+
 	}
 
 	@Override
@@ -70,25 +68,6 @@ public class MultiMarkerSetup extends MarkerDetectionSetup {
 						camera));
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera,
 				1, 25));
-
-		eventManager.addOnOrientationChangedAction(new ActionUseCameraAngles(
-				camera) {
-
-			@Override
-			public void updateRoll(float rollAngle) {
-				myRoll = rollAngle;
-			}
-
-			@Override
-			public void updatePitch(float pitchAngle) {
-				myPitch = pitchAngle;
-			}
-
-			@Override
-			public void updateCompassAzimuth(float azimuth) {
-				myAzi = azimuth;
-			}
-		});
 
 	}
 
