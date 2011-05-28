@@ -7,6 +7,7 @@ import gui.simpleUI.SimpleUI;
 import gui.simpleUI.modifiers.TextModifier;
 import system.ArActivity;
 import system.DefaultARSetup;
+import system.Setup;
 import worldData.World;
 import android.app.Activity;
 import android.os.Bundle;
@@ -22,16 +23,20 @@ public class Main extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Button b = generateStartButton(new ExampleMarkerRenderSetup());
+		setContentView(b);
+	}
+
+	private Button generateStartButton(final Setup setup) {
 		Button b = new Button(this);
-		b.setText("Load marker-setup");
+		b.setText("Load " + setup.getClass().getName());
 		b.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				ArActivity.startWithSetup(Main.this,
-						new ExampleMarkerRenderSetup());
+				ArActivity.startWithSetup(Main.this, setup);
 			}
 		});
-		setContentView(b);
+		return b;
 	}
 }
