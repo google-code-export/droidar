@@ -1,5 +1,6 @@
 package de.rwth;
 
+import gl.Color;
 import gl.MeshComponent;
 import gl.Shape;
 import gl.TriangulatedRenderData;
@@ -26,9 +27,11 @@ public class AndroidMeshData {
 	static MeshComponent getAndroidMesh() {
 		Shape mesh = new Shape();
 		TriangulatedRenderData r = new TriangulatedRenderData();
+		r.setDrawModeToLines();
 		r.setVertexArray(vertices);
 		r.setIndeceArray(indices);
 		mesh.setMyRenderData(r);
+		mesh.myColor = Color.green();
 		return mesh;
 	}
 
