@@ -18,14 +18,14 @@ public class TriangulatedRenderData extends RenderData {
 
 	@Override
 	public void updateShape(ArrayList<Vec> shapeArray) {
-		vertexBuffer = setVertexArray(turnShapeToFloatArray(shapeArray));
-		indexBuffer = setIndeceArray(triangulationOfShape(shapeArray));
+		 setVertexArray(turnShapeToFloatArray(shapeArray));
+		  setIndeceArray(triangulationOfShape(shapeArray));
 	}
 
 	
 
-	public ShortBuffer setIndeceArray(short[] s) {
-		return GLUtilityClass.createAndInitShortBuffer(s);
+	public void setIndeceArray(short[] s) {
+		indexBuffer= GLUtilityClass.createAndInitShortBuffer(s);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class TriangulatedRenderData extends RenderData {
 		// coordinates to use when rendering.
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 
-		gl.glDrawElements(drawMode, indiceCount, GL10.GL_UNSIGNED_SHORT,
+		gl.glDrawElements(drawMode, indexBuffer.limit(), GL10.GL_UNSIGNED_SHORT,
 				indexBuffer);
 
 		// Disable the vertices buffer.
