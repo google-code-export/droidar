@@ -20,11 +20,20 @@ public class RenderData {
 	 * @param shape
 	 */
 	public void updateShape(ArrayList<Vec> shape) {
-		vertexBuffer = setVertexArray(turnShapeToFloatArray(shape));
+		setVertexArray(turnShapeToFloatArray(shape));
 	}
 
-	public FloatBuffer setVertexArray(float[] turnShapeToFloatArray) {
-		return GLUtilityClass.createAndInitFloatBuffer(turnShapeToFloatArray);
+	public void setVertexArray(float[] turnShapeToFloatArray) {
+		vertexBuffer = GLUtilityClass
+				.createAndInitFloatBuffer(turnShapeToFloatArray);
+	}
+
+	public void setDrawModeToTriangles() {
+		drawMode = GL10.GL_TRIANGLES;
+	}
+
+	public void setDrawModeToLines() {
+		drawMode = GL10.GL_LINES;
 	}
 
 	protected RenderData() {
