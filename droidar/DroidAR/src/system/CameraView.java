@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -14,6 +15,16 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public CameraView(Context context) {
 		super(context);
+		intiCameraView(context);
+	}
+
+	public CameraView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		intiCameraView(context);
+
+	}
+	
+	private void intiCameraView(Context context) {
 		// Install a SurfaceHolder.Callback so we get notified when the
 		// underlying surface is created and destroyed.
 		mHolder = getHolder();
@@ -21,7 +32,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		mHolder.addCallback(this);
 		mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 	}
-
+	
 	public void surfaceCreated(SurfaceHolder holder) {
 		// The Surface has been created, acquire the camera and tell it
 		// where to draw.
