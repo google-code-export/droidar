@@ -78,8 +78,7 @@ public class GLRenderer implements Renderer {
 
 			// Clears the screen and depth buffer.
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-			final int length = elementsToRender.myLength;
-			for (int i = 0; i < length; i++) {
+			for (int i = 0; i < elementsToRender.myLength; i++) {
 				// Reset the modelview matrix
 				gl.glLoadIdentity();
 				elementsToRender.get(i).draw(gl);

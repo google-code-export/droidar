@@ -43,7 +43,7 @@ public abstract class DefaultARSetup extends Setup {
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
-		addObjectsTo(world, GLFactory.getInstance());
+
 	}
 
 	public World getWorld() {
@@ -54,11 +54,13 @@ public abstract class DefaultARSetup extends Setup {
 		return camera;
 	}
 
-	public abstract void addObjectsTo(World world, GLFactory objectFactory);
+	public abstract void addObjectsTo(GLRenderer renderer, World world,
+			GLFactory objectFactory);
 
 	@Override
 	public void _b_addWorldsToRenderer(GLRenderer renderer,
 			GLFactory objectFactory, GeoObj currentPosition) {
+		addObjectsTo(renderer, world, GLFactory.getInstance());
 		renderer.addRenderElement(world);
 	}
 
