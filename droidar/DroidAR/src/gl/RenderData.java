@@ -54,6 +54,12 @@ public class RenderData {
 		return vertices;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gl.Renderable#draw(javax.microedition.khronos.opengles.GL10)
+	 */
+
 	public void draw(GL10 gl) {
 		// Enabled the vertices buffer for writing and to be used during
 		// rendering.

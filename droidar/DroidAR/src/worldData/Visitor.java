@@ -6,7 +6,6 @@ import geo.GeoObj;
 import gl.MeshComponent;
 import gl.MeshGroup;
 import gl.Shape;
-import scripts.ScriptComponent;
 import util.EfficientList;
 import util.EfficientListQualified;
 import android.util.Log;
@@ -60,18 +59,6 @@ public abstract class Visitor {
 	public boolean visit(Obj x) {
 		Log.w("visitor.visit()", this.getClass().toString()
 				+ "Obj: no visit action defined for classtype " + x.getClass());
-		return false;
-	}
-
-	public boolean default_visit(ScriptComponent scriptComponent) {
-		return visit(scriptComponent);
-	}
-
-	public boolean visit(ScriptComponent x) {
-		Log.w("visitor.visit()",
-				this.getClass().toString()
-						+ "ScriptComponent: no visit action defined for classtype "
-						+ x.getClass());
 		return false;
 	}
 
