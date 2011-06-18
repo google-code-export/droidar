@@ -1,18 +1,19 @@
 package commands.geo;
 
+import android.util.Log;
 import geo.GeoObj;
+import listeners.EventListener;
 import system.EventManager;
-import actions.ActionCalcRelativePos;
 
 import commands.Command;
 
 public class DebugCommandPositionEvent extends Command {
 
-	private ActionCalcRelativePos myAction;
+	private static final String LOG_TAG = "DebugCommandPositionEvent";
+	private EventListener myAction;
 	private GeoObj myPos;
 
-	public DebugCommandPositionEvent(ActionCalcRelativePos action,
-			GeoObj posToSet) {
+	public DebugCommandPositionEvent(EventListener action, GeoObj posToSet) {
 		myAction = action;
 		myPos = posToSet;
 	}
@@ -24,4 +25,13 @@ public class DebugCommandPositionEvent extends Command {
 		return true;
 	}
 
+	public static void goToCoords(double latitude, double longitude) {
+		if (EventManager.getInstance().onLocationChangedAction != null)
+			new DebugCommandPositionEvent(
+					EventManager.getInstance().onLocationChangedAction,
+					new GeoObj(latitude, longitude)).execute();
+		else
+			Log.e(LOG_TAG,
+					"onLocationChangedAction was null so this debug command wont work");
+	}
 }

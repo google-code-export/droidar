@@ -140,11 +140,29 @@ public class GeoUtils {
 		Location l = GeoUtils.getCurrentLocation(myContext,
 				Criteria.ACCURACY_FINE);
 		if (l == null) {
-			Log.e(LOG_TAG, "Fine accuracy position could not be detected!");
+			Log.e(LOG_TAG,
+					"Fine accuracy position could not be detected! Will use coarse location.");
 			l = GeoUtils
 					.getCurrentLocation(myContext, Criteria.ACCURACY_COARSE);
+			if (l == null) {
+				Log.e(LOG_TAG,
+						"Coarse accuracy position could not be detected! Last try..");
+				try {
+					LocationManager lm = ((LocationManager) myContext
+							.getSystemService(Context.LOCATION_SERVICE));
+					Log.d(LOG_TAG, "Searching through "
+							+ lm.getAllProviders().size()
+							+ " location providers");
+					for (int i = lm.getAllProviders().size() - 1; i >= 0; i--) {
+						l = lm.getLastKnownLocation(lm.getAllProviders().get(i));
+						if (l != null)
+							break;
+					}
+				} catch (Exception e) {
+				}
+			}
 		}
-		Log.d(LOG_TAG, "current position=" + l.toString());
+		Log.d(LOG_TAG, "current position=" + l);
 		return l;
 	}
 
