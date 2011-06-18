@@ -394,12 +394,17 @@ public class MetaInfos implements EditItem {
 	private void getUI(ModifierGroup group) {
 		ModifierGroup infosGroup = new ModifierGroup();
 		group.addModifier(infosGroup);
-		infosGroup.addModifier(new Headline(shortDescr, myColor.toIntARGB()));
+		try {
+			infosGroup
+					.addModifier(new Headline(shortDescr, myColor.toIntARGB()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		ModifierGroup g2 = new ModifierGroup();
 		infosGroup.addModifier(g2);
 		for (int i = 0; i < longDescr.myLength; i++) {
-			longDescr.get(i).generateEditView(g2);
+			longDescr.get(i).generateView(g2);
 		}
 
 	}

@@ -8,6 +8,7 @@ import gl.GLRenderer;
 import gui.GuiSetup;
 import worldData.SystemUpdater;
 import worldData.World;
+import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
 import android.R;
@@ -73,6 +74,8 @@ public abstract class DefaultARSetup extends Setup {
 						camera));
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera,
 				5, 25));
+		eventManager.addOnLocationChangedAction(new ActionCalcRelativePos(
+				world, camera));
 	}
 
 	@Override
