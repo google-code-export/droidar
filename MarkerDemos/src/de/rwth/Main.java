@@ -23,7 +23,7 @@ public class Main extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Button b = generateStartButton(new ExampleMarkerRenderSetup());
+		Button b = generateStartButton(new MultiMarkerSetup());
 		setContentView(b);
 	}
 
