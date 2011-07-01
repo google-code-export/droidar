@@ -110,8 +110,6 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	public float[] myAnglesInRadians = new float[3];
 	public boolean forceAngleCalculation = false;
 
-	private int markerSideAngle;
-
 	public GLCamera() {
 	}
 
@@ -346,11 +344,10 @@ public class GLCamera implements Updateable, HasDebugInformation {
 		glLoadPosition(gl, myPosition);
 	}
 
-	public void setRotationMatrixFromMarkerInput(float[] rotMatrix, int offset,
-			int sideAngle) {
+	public void setRotationMatrixFromMarkerInput(float[] rotMatrix, int offset) {
 		rotationMatrix = rotMatrix;
 		matrixOffset = offset;
-		markerSideAngle = sideAngle;
+
 		// if (myPosition == null)
 		// myPosition = new Vec();
 		// myPosition.x = rotMatrix[12 + offset];
@@ -375,12 +372,6 @@ public class GLCamera implements Updateable, HasDebugInformation {
 
 		gl.glMultMatrixf(rotationMatrix, matrixOffset);
 
-		/*
-		 * additionally if marker detection is used the current marker rotation
-		 * has to be added manually
-		 */
-		if (markerSideAngle != 0)
-			gl.glRotatef(markerSideAngle, 0, 0, 1);
 	}
 
 	private void udateRotationMatrixFromSensorValues() {

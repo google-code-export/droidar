@@ -50,14 +50,20 @@ public abstract class MeshComponent implements Component, ParentMesh,
 	private Command myOnDoubleClickCommand;
 
 	private float[] markerRotationMatrix;
-	private float markerRot;
 
 	/**
 	 * for now only used for marker detection
 	 */
-	public void setRotationMatrix(float[] rotationMatrix, float markerRot) {
+	public void setRotationMatrix(float[] rotationMatrix) {
 		this.markerRotationMatrix = rotationMatrix;
-		this.markerRot = markerRot;
+	}
+
+	public Vec getWorldCoordsFromModelSpacePosition(Vec modelSpaceCoords) {
+		Vec pos=myPosition.copy();
+		
+		
+		
+		return pos;
 	}
 
 	protected MeshComponent(Color canBeNull) {
@@ -82,7 +88,6 @@ public abstract class MeshComponent implements Component, ParentMesh,
 
 		if (markerRotationMatrix != null) {
 			gl.glMultMatrixf(markerRotationMatrix, 0);
-			gl.glRotatef(markerRot, 0, 0, 1);
 		}
 
 		if (myRotation != null) {

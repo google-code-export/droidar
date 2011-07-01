@@ -44,6 +44,7 @@ public class MeshGroup extends MeshComponent {
 	}
 
 	public boolean remove(MeshComponent x) {
+		x.setMyParentMesh(null);
 		return myMeshes.remove(x);
 	}
 
@@ -86,6 +87,9 @@ public class MeshGroup extends MeshComponent {
 	}
 
 	public void clear() {
+		for (int i = 0; i < myMeshes.myLength; i++) {
+			myMeshes.get(i).setMyParentMesh(null);
+		}
 		myMeshes.clear();
 	}
 
