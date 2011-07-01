@@ -58,6 +58,12 @@ public class VirtualObjectMarker implements MarkerObject {
 
 		/*
 		 * alternative method which does not work for now:
+		 * 
+		 * its not so clear to me if it would be better to extract the rotation
+		 * angles and store them directly in the myRotation field. now its still
+		 * possible to rotate the mesh in addition to the rotation by the marker
+		 * matrix but its not possible to read the angle values and use them for
+		 * something else then this concrete scenario
 		 */
 
 		// float[] resultingAngles = { 0, 0, 0, 1 };
