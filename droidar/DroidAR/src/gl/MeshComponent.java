@@ -59,13 +59,24 @@ public abstract class MeshComponent implements Component, ParentMesh,
 		this.markerRotationMatrix = rotationMatrix;
 	}
 
+	/**
+	 * Example. An object at position 5,5,5 is rotated by an rotation matrix
+	 * (set via {@link MeshComponent#setRotationMatrix(float[])} and we want to
+	 * know there the point 0,0,1 (which normaly without rotation would be at
+	 * 5,5,6 ) is now. then we can use this method and pass 0,0,1 and we will
+	 * get the correct world coordinates
+	 * 
+	 * @param modelSpaceCoords
+	 * @return the coordinates in the world system
+	 */
 	public Vec getWorldCoordsFromModelSpacePosition(Vec modelSpaceCoords) {
 		float[] resultVec = new float[3];
 		float[] modelSpaceCoordsVec = { modelSpaceCoords.x, modelSpaceCoords.y,
 				modelSpaceCoords.z };
 		Matrix.multiplyMV(resultVec, 0, markerRotationMatrix, 0,
 				modelSpaceCoordsVec, 0);
-		return new Vec(resultVec[0], resultVec[1], resultVec[2]);
+		return new Vec(resultVec[0] + myPosition.x,
+				resultVec[1] + myPosition.y, resultVec[2] + myPosition.z);
 	}
 
 	protected MeshComponent(Color canBeNull) {
