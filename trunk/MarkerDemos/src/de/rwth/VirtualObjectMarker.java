@@ -67,13 +67,9 @@ public class VirtualObjectMarker implements MarkerObject {
 		 */
 
 		// float[] resultingAngles = { 0, 0, 0, 1 };
-		// float[] rotationMatrix = new float[16];
-		// Matrix.transposeM(antiCameraRotMatrix, 0, antiCameraRotMatrix, 0);
-		// getAngles(resultingAngles, antiCameraRotMatrix);
-
-		// Matrix.multiplyMV(resultingAngles, 0, invertedCameraMatrix, 0,
-		// resultingAngles, 0);
-
+		//
+		// getAngles(resultingAngles, antiCameraMarkerRotMatrix);
+		//
 		// if (myTargetMesh.myRotation == null)
 		// myTargetMesh.myRotation = new Vec(resultingAngles[0],
 		// resultingAngles[1], resultingAngles[2]);
@@ -85,15 +81,27 @@ public class VirtualObjectMarker implements MarkerObject {
 	}
 
 	// private void getAngles(float[] resultingAngles, float[] rotationMatrix) {
+	// //rotationMatrix = transpose(rotationMatrix);
 	//
-	// resultingAngles[2] = (float) (Math.asin(-rotationMatrix[8]));
+	// resultingAngles[2] = (float) (Math.asin(rotationMatrix[2]));
 	// final float cosB = (float) Math.cos(resultingAngles[2]);
 	// resultingAngles[2] = resultingAngles[2] * rad2deg;
-	// resultingAngles[1] = (float) (Math.acos(rotationMatrix[9] / cosB))
+	// resultingAngles[0] = -(float) (Math.acos(rotationMatrix[0] / cosB))
 	// * rad2deg;
-	// resultingAngles[0] = (float) (Math.asin(rotationMatrix[4] / cosB))
+	// resultingAngles[1] = (float) (Math.acos(rotationMatrix[10] / cosB))
 	// * rad2deg;
 	//
 	// }
-
+	//
+	// private float[] transpose(float[] source) {
+	// final float[] result = source.clone();
+	// result[1] = source[4];
+	// result[2] = source[8];
+	// result[4] = source[1];
+	// result[6] = source[9];
+	// result[8] = source[2];
+	// result[9] = source[6];
+	// // TODO can be optimized by changing the values in getAngles directly
+	// return result;
+	// }
 }
