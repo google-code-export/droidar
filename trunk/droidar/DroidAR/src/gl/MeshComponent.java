@@ -11,6 +11,7 @@ import util.Vec;
 import util.Wrapper;
 import worldData.AbstractObj;
 import worldData.Obj;
+import android.opengl.Matrix;
 import android.util.Log;
 
 import commands.Command;
@@ -59,11 +60,12 @@ public abstract class MeshComponent implements Component, ParentMesh,
 	}
 
 	public Vec getWorldCoordsFromModelSpacePosition(Vec modelSpaceCoords) {
-		Vec pos=myPosition.copy();
-		
-		
-		
-		return pos;
+		float[] resultVec = new float[3];
+		float[] modelSpaceCoordsVec = { modelSpaceCoords.x, modelSpaceCoords.y,
+				modelSpaceCoords.z };
+		Matrix.multiplyMV(resultVec, 0, markerRotationMatrix, 0,
+				modelSpaceCoordsVec, 0);
+		return new Vec(resultVec[0], resultVec[1], resultVec[2]);
 	}
 
 	protected MeshComponent(Color canBeNull) {
