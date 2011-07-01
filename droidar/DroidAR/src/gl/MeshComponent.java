@@ -49,6 +49,17 @@ public abstract class MeshComponent implements Component, ParentMesh,
 	private Command myOnMapClickCommand;
 	private Command myOnDoubleClickCommand;
 
+	private float[] markerRotationMatrix;
+	private float markerRot;
+
+	/**
+	 * for now only used for marker detection
+	 */
+	public void setRotationMatrix(float[] rotationMatrix, float markerRot) {
+		this.markerRotationMatrix = rotationMatrix;
+		this.markerRot = markerRot;
+	}
+
 	protected MeshComponent(Color canBeNull) {
 		this.myColor = canBeNull;
 	}
@@ -68,6 +79,12 @@ public abstract class MeshComponent implements Component, ParentMesh,
 	}
 
 	public void loadRotation(GL10 gl) {
+
+		if (markerRotationMatrix != null) {
+			gl.glMultMatrixf(markerRotationMatrix, 0);
+			gl.glRotatef(markerRot, 0, 0, 1);
+		}
+
 		if (myRotation != null) {
 			/*
 			 * this order is important. first rotate around the blue-z-axis
@@ -82,8 +99,8 @@ public abstract class MeshComponent implements Component, ParentMesh,
 			gl.glRotatef(myRotation.z, 0, 0, 1);
 			gl.glRotatef(myRotation.x, 1, 0, 0);
 			gl.glRotatef(myRotation.y, 0, 1, 0);
-
 		}
+
 	}
 
 	public void setScale(GL10 gl) {
@@ -187,7 +204,8 @@ public abstract class MeshComponent implements Component, ParentMesh,
 
 		Wrapper selectionsWrapper = new Wrapper(selectionInterface);
 
-		myPickColor = ObjectPicker.getInstance().registerMesh(selectionsWrapper, c);
+		myPickColor = ObjectPicker.getInstance().registerMesh(
+				selectionsWrapper, c);
 		Log.v(LOG_TAG, "   > myPickColor=" + myPickColor);
 	}
 

@@ -82,9 +82,9 @@ public class World extends EfficientList<AbstractObj> implements Updateable,
 		glLoadScale(gl);
 
 		// TODO remove the coordinate axes here:
-		gl.glScalef(2, 2, 2);
+		
 		CordinateAxis.draw(gl);
-		gl.glScalef(0.5f, 0.5f, 0.5f);
+		
 
 		for (int i = 0; i < this.myLength; i++) {
 			// try {
