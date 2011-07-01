@@ -6,9 +6,13 @@ import gl.animations.AnimationGroup;
 import gl.animations.AnimationRotate;
 import gl.textures.Textured2dShape;
 import gl.textures.TexturedShape;
+
+import javax.microedition.khronos.opengles.GL10;
+
 import util.IO;
 import util.Vec;
 import worldData.Obj;
+import worldData.Visitor;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
@@ -508,5 +512,20 @@ public class GLFactory {
 
 	public Component newCube() {
 		return newCube(null);
+	}
+
+	public MeshComponent newCoordinateSystem() {
+		return new MeshComponent(null) {
+
+			@Override
+			public boolean accept(Visitor visitor) {
+				return false;
+			}
+
+			@Override
+			public void draw(GL10 gl) {
+				CordinateAxis.draw(gl);
+			}
+		};
 	}
 }
