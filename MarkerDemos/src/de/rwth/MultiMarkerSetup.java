@@ -3,12 +3,14 @@ package de.rwth;
 import commands.Command;
 
 import geo.GeoObj;
+import gl.Color;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.MeshComponent;
 import gl.GLCamera.CameraAngleUpdateListener;
+import gl.MeshGroup;
 import gui.GuiSetup;
 import system.EventManager;
 import markerDetection.MarkerDetectionSetup;
@@ -27,13 +29,16 @@ public class MultiMarkerSetup extends MarkerDetectionSetup {
 
 	private GLCamera camera;
 	private World world;
-	private MeshComponent mesh;
+	private MeshGroup mesh;
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
 		camera = new GLCamera(new Vec(0, 0, 10));
 		world = new World(camera);
-		mesh = GLFactory.getInstance().newCircle(null);
+		mesh = new MeshGroup();
+
+		mesh.add(GLFactory.getInstance().newCoordinateSystem());
+		mesh.add(GLFactory.getInstance().newCircle(new Color(0, 0, 1, 0.6f)));
 
 	}
 
@@ -55,7 +60,7 @@ public class MultiMarkerSetup extends MarkerDetectionSetup {
 		o.setComp(mesh);
 		world.add(o);
 
-		 world.add(objectFactory.newHexGroupTest(new Vec()));
+		world.add(objectFactory.newHexGroupTest(new Vec()));
 
 	}
 
