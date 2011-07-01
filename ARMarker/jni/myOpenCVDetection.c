@@ -2,6 +2,12 @@
 #include <android/log.h>
 #include "cv.h"
 #include <stdio.h>
+#include <math.h>
+
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 //If this is defined a lot of information is printed into the log.
 #define LOG_OUTPUT_ON
@@ -65,7 +71,7 @@ CvMat K; //cvMat(3, 3, CV_64F, kMat);
 CvMat D; //cvMat(5, 1, CV_32F, l);
 
 /**
- * Loads the pixels from the fram array into an IplImage and calculates a
+ * Loads the pixels from the frame array into an IplImage and calculates a
  * threshold which is stored in the 'thresholdd'-variable or it used the
  * markerThreshold value instead of the newly calculated.
  */
@@ -160,7 +166,7 @@ JNIEXPORT jint JNICALL Java_nativeLib_NativeLib_detectMarkers(
 	int whiteCounter = 0;
 	int blackCounter = 0;
 
-	//rotation matrix and translation vektor.
+	//rotation matrix and translation vector.
 	float rotMat[9] = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
 	float tv[3] = { 0.0, 0.0, -5.0 };
 
@@ -210,7 +216,7 @@ JNIEXPORT jint JNICALL Java_nativeLib_NativeLib_detectMarkers(
 	//Counts the detected markers.
 	int counter = 0;
 
-	// test each contour as long as there are contours and not to many
+	// test each contour as long as there are contours and not too many
 	//markers have been detected already.
 	while (contours && (counter < MAX_DETECTED_MARKERS)) {
 		//Approximate contour with accuracy proportional
@@ -224,8 +230,8 @@ JNIEXPORT jint JNICALL Java_nativeLib_NativeLib_detectMarkers(
 		max = 0;
 		min = 9999;
 		//Only consider contours which enclose an area bigger
-		//than 1000 pixels and less than half of the image.
-		//Also check iv the areas are convex.
+		//than 500 pixels and less than half of the image.
+		//Also check if the areas are convex.
 		if (result->total == 4 && surface > 500 && surface < (imageSize >> 1)
 				&& cvCheckContourConvexity(result)) {
 
@@ -411,9 +417,7 @@ JNIEXPORT jint JNICALL Java_nativeLib_NativeLib_detectMarkers(
 				cvFindExtrinsicCameraParams2(OP, IP, &K, &D, &RV, &T);
 				cvRodrigues2(&RV, &R, 0);
 #ifdef LOG_OUTPUT_ON
-				double radians = sqrt(rv[0]*rv[0] + rv[1]*rv[1] +rv[2]*rv[2]);
-				double degrees = 180/(3.14*radians);
-				sprintf(tmp, "RV(x,y,z) : (%3.2f, %3.2f, %3.2f)", rv[0]*degrees , rv[1]*degrees, rv[2]*degrees);
+				sprintf(tmp, "RV(x,y,z) : (%3.2f, %3.2f, %3.2f)", rv[0], rv[1], rv[2]);
 				LOGD(tmp);
 				sprintf(tmp, "TV(x,y,z) : (%3.2f, %3.2f, %3.2f)", tv[0] , tv[1], tv[2]);
 				LOGD(tmp);
@@ -665,6 +669,20 @@ JNIEXPORT jint JNICALL Java_nativeLib_NativeLib_detectMarkers(
 
 						//Increase the detected marker count
 						returnVals[0]++;
+						orientationChange= M_PI*orientationChange/180;
+
+						rotMat[0]= cos(orientationChange)*rotMat[0] - sin(orientationChange)*rotMat[6];
+						rotMat[3]= cos(orientationChange)*rotMat[1] - sin(orientationChange)*rotMat[7];
+						rotMat[6]= cos(orientationChange)*rotMat[2] - sin(orientationChange)*rotMat[8];
+						//rotMat[1];
+						//rotMat[4];
+						//rotMat[7];
+						rotMat[2]= sin(orientationChange)*rotMat[0] - cos(orientationChange)*rotMat[6];
+						rotMat[5]= sin(orientationChange)*rotMat[1] - cos(orientationChange)*rotMat[7];
+						rotMat[8]= sin(orientationChange)*rotMat[2] - cos(orientationChange)*rotMat[8];
+
+						orientationChange=0;
+
 
 						//write the rotation matrix into the right part of the list.
 						returnVals[returnValPnt++] = rotMat[0];
