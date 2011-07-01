@@ -34,8 +34,8 @@ public class CameraMarker implements MarkerObject {
 
 	@Override
 	public void OnMarkerPositionRecognized(float[] rotMatrix, int start,
-			int end, int sideAngle) {
-		myCamera.setRotationMatrixFromMarkerInput(rotMatrix, start, sideAngle);
+			int end) {
+		myCamera.setRotationMatrixFromMarkerInput(rotMatrix, start);
 	}
 
 }
