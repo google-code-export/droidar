@@ -10,7 +10,7 @@
 #endif
 
 //If this is defined a lot of information is printed into the log.
-#define LOG_OUTPUT_ON
+//#define LOG_OUTPUT_ON
 
 //If this is on the image will be blurred with pyrdown and pyrup
 //before the processing is done. Only can be used with the newer OpenCV
@@ -538,7 +538,7 @@ JNIEXPORT jint JNICALL Java_nativeLib_NativeLib_detectMarkers(
 								-0.1667, -0.5000, -0.5000 };
 						//Store the orientation change caused by a semi-random
 						//detection order.
-						int orientationChange;
+						float orientationChange=0.0f;
 						//Stores the order in which the code should be read.
 						int* order;
 						//tttpoiaia := twoToThePowerOfInvertedArrayIndexArray
@@ -550,25 +550,25 @@ JNIEXPORT jint JNICALL Java_nativeLib_NativeLib_detectMarkers(
 							int order2[12] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 									10, 11 };
 							order = order2;
-							orientationChange = 0;
+							orientationChange = 0.0f;
 
 						} else if (orientation == 1) {
 							int order2[12] = { 5, 9, 1, 4, 8, 11, 0, 3, 7, 10,
 									2, 6 };
 							order = order2;
-							orientationChange = -270;
+							orientationChange = 90.0f;
 
 						} else if (orientation == 2) {
 							int order2[12] = { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2,
 									1, 0 };
 							order = order2;
-							orientationChange = -180;
+							orientationChange = 180.0f;
 
 						} else if (orientation == 3) {
 							int order2[12] = { 6, 2, 10, 7, 3, 0, 11, 8, 4, 1,
 									9, 5 };
 							order = order2;
-							orientationChange = -90;
+							orientationChange = 270.0f;
 
 						}
 
@@ -669,17 +669,30 @@ JNIEXPORT jint JNICALL Java_nativeLib_NativeLib_detectMarkers(
 
 						//Increase the detected marker count
 						returnVals[0]++;
-						orientationChange= M_PI*orientationChange/180;
 
-						rotMat[0]= cos(orientationChange)*rotMat[0] - sin(orientationChange)*rotMat[6];
-						rotMat[3]= cos(orientationChange)*rotMat[1] - sin(orientationChange)*rotMat[7];
-						rotMat[6]= cos(orientationChange)*rotMat[2] - sin(orientationChange)*rotMat[8];
-						//rotMat[1];
-						//rotMat[4];
-						//rotMat[7];
-						rotMat[2]= sin(orientationChange)*rotMat[0] - cos(orientationChange)*rotMat[6];
-						rotMat[5]= sin(orientationChange)*rotMat[1] - cos(orientationChange)*rotMat[7];
-						rotMat[8]= sin(orientationChange)*rotMat[2] - cos(orientationChange)*rotMat[8];
+						orientationChange = (orientationChange*M_PI)/180.0f;
+
+
+						float temp0;
+						float temp3;
+						float temp6;
+
+						temp0= cos(orientationChange)*rotMat[0] + sin(orientationChange)*rotMat[1];
+						temp3= cos(orientationChange)*rotMat[3] + sin(orientationChange)*rotMat[4];
+						temp6= cos(orientationChange)*rotMat[6] + sin(orientationChange)*rotMat[7];
+						rotMat[1]= -sin(orientationChange)*rotMat[0] + cos(orientationChange)*rotMat[1];
+						rotMat[4]= -sin(orientationChange)*rotMat[3] + cos(orientationChange)*rotMat[4];
+						rotMat[7]= -sin(orientationChange)*rotMat[6] + cos(orientationChange)*rotMat[7];
+
+						rotMat[0]= temp0;
+						rotMat[1]= -rotMat[1];
+						rotMat[2]= -rotMat[2];
+						rotMat[3]= temp3;
+						rotMat[4]= -rotMat[4];
+						rotMat[5]= -rotMat[5];
+						rotMat[6]= temp6;
+						rotMat[7]= -rotMat[7];
+						rotMat[8]= -rotMat[8];
 
 						orientationChange=0;
 
