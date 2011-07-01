@@ -11,6 +11,10 @@ public class VirtualObjectMarker implements MarkerObject {
 
 	final static float rad2deg = (float) (180.0f / Math.PI);
 
+	float[] invertedCameraMatrix = new float[16];
+	float[] resultPosVec = { 0, 0, 0, 1 };
+	float[] antiCameraMarkerRotMatrix = new float[16];
+
 	private MeshComponent myTargetMesh;
 	private GLCamera myCamera;
 
@@ -30,10 +34,8 @@ public class VirtualObjectMarker implements MarkerObject {
 	public void OnMarkerPositionRecognized(float[] markerRotMatrix,
 			int startOffset, int end, int sideAngle) {
 
-		float[] invertedCameraMatrix = new float[16];
 		Matrix.invertM(invertedCameraMatrix, 0, myCamera.getRotationMatrix(), 0);
 
-		float[] resultPosVec = { 0, 0, 0, 1 };
 		float[] markerCenterPosVec = { markerRotMatrix[startOffset + 12],
 				markerRotMatrix[startOffset + 13],
 				markerRotMatrix[startOffset + 14], 1 };
@@ -44,15 +46,19 @@ public class VirtualObjectMarker implements MarkerObject {
 		myTargetMesh.myPosition = new Vec(resultPosVec[0] + camPos.x,
 				resultPosVec[1] + camPos.y, resultPosVec[2] + camPos.z);
 
-		float[] antiCameraRotMatrix = new float[16];
-		Matrix.multiplyMM(antiCameraRotMatrix, 0, invertedCameraMatrix, 0,
-				markerRotMatrix, startOffset);
+		Matrix.multiplyMM(antiCameraMarkerRotMatrix, 0, invertedCameraMatrix,
+				0, markerRotMatrix, startOffset);
 
-		antiCameraRotMatrix[12] = 0;
-		antiCameraRotMatrix[13] = 0;
-		antiCameraRotMatrix[14] = 0;
+		// clear the translation values:
+		antiCameraMarkerRotMatrix[12] = 0;
+		antiCameraMarkerRotMatrix[13] = 0;
+		antiCameraMarkerRotMatrix[14] = 0;
 
-		myTargetMesh.setRotationMatrix(antiCameraRotMatrix, sideAngle);
+		myTargetMesh.setRotationMatrix(antiCameraMarkerRotMatrix, sideAngle);
+
+		/*
+		 * alternative method which does not work for now:
+		 */
 
 		// float[] resultingAngles = { 0, 0, 0, 1 };
 		// float[] rotationMatrix = new float[16];
@@ -72,16 +78,16 @@ public class VirtualObjectMarker implements MarkerObject {
 		// }
 	}
 
-	private void getAngles(float[] resultingAngles, float[] rotationMatrix) {
-
-		resultingAngles[2] = (float) (Math.asin(-rotationMatrix[8]));
-		final float cosB = (float) Math.cos(resultingAngles[2]);
-		resultingAngles[2] = resultingAngles[2] * rad2deg;
-		resultingAngles[1] = (float) (Math.acos(rotationMatrix[9] / cosB))
-				* rad2deg;
-		resultingAngles[0] = (float) (Math.asin(rotationMatrix[4] / cosB))
-				* rad2deg;
-
-	}
+	// private void getAngles(float[] resultingAngles, float[] rotationMatrix) {
+	//
+	// resultingAngles[2] = (float) (Math.asin(-rotationMatrix[8]));
+	// final float cosB = (float) Math.cos(resultingAngles[2]);
+	// resultingAngles[2] = resultingAngles[2] * rad2deg;
+	// resultingAngles[1] = (float) (Math.acos(rotationMatrix[9] / cosB))
+	// * rad2deg;
+	// resultingAngles[0] = (float) (Math.asin(rotationMatrix[4] / cosB))
+	// * rad2deg;
+	//
+	// }
 
 }
