@@ -27,9 +27,6 @@ public interface MarkerObject {
 	 * @param rotMatrix A big matrix which somewhere contains the linearized rotation/translation matrix for this marker.
 	 * @param start The first index of the linearized matrix.
 	 * @param end The last index of the linearized matrix.
-	 * @param sideAngle The angle at which the marker needs to be rotated for a correct result.
-	 *            0 90 180 or 270
 	 */
-	public void OnMarkerPositionRecognized(float[] rotMatrix, int start, int end,
-			int sideAngle);
+	public void OnMarkerPositionRecognized(float[] rotMatrix, int start, int end);
 }

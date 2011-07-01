@@ -98,7 +98,7 @@ public class DetectionThread extends Thread {
 
 					if (markerObj != null) {
 						markerObj.OnMarkerPositionRecognized(mat, startIdx,
-								endIdx, (int) mat[rotIdx]);
+								endIdx);
 					} else {
 						if (unrecognizedMarkerListener != null) {
 							unrecognizedMarkerListener
