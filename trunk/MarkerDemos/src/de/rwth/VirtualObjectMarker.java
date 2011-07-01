@@ -9,7 +9,7 @@ import gl.MarkerObject;
 
 public class VirtualObjectMarker implements MarkerObject {
 
-	final static float rad2deg = (float) (180.0f / Math.PI);
+	// final static float rad2deg = (float) (180.0f / Math.PI);
 
 	float[] invertedCameraMatrix = new float[16];
 	float[] resultPosVec = { 0, 0, 0, 1 };
@@ -32,7 +32,7 @@ public class VirtualObjectMarker implements MarkerObject {
 
 	@Override
 	public void OnMarkerPositionRecognized(float[] markerRotMatrix,
-			int startOffset, int end, int sideAngle) {
+			int startOffset, int end) {
 
 		Matrix.invertM(invertedCameraMatrix, 0, myCamera.getRotationMatrix(), 0);
 
@@ -53,8 +53,11 @@ public class VirtualObjectMarker implements MarkerObject {
 		antiCameraMarkerRotMatrix[12] = 0;
 		antiCameraMarkerRotMatrix[13] = 0;
 		antiCameraMarkerRotMatrix[14] = 0;
+ 
+		// addAngle(antiCameraMarkerRotMatrix, sideAngle);
+		// sideAngle = 0;
 
-		myTargetMesh.setRotationMatrix(antiCameraMarkerRotMatrix, sideAngle);
+		myTargetMesh.setRotationMatrix(antiCameraMarkerRotMatrix);
 
 		/*
 		 * alternative method which does not work for now:
