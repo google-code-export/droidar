@@ -1,0 +1,8 @@
+#labels setupclass,tutorial
+#How to work with the Setups class
+
+= Description =
+
+In this screen-cast i will explain all the details you should know about the Setup class to use it properly:
+
+<wiki:video url="http://www.youtube.com/watch?v=Bdxha0rwo4A"/>
