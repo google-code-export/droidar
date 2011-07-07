@@ -50,6 +50,11 @@ public class RenderData {
 			Vec v2 = Vec.sub(shape.get(i), shape.get(i + 2));
 			Vec normalVec = Vec.calcNormalVec(v1, v2).normalize();
 
+			/*
+			 * TODO implement Newell's Method to have a more general approach:
+			 * http://www.opengl.org/wiki/Calculating_a_Surface_Normal
+			 */
+
 			// Log.d(LOG_TAG, "     >" + i + " u=" + v1);
 			// Log.d(LOG_TAG, "     >" + i + " v=" + v2);
 			// Log.d(LOG_TAG, "     >" + i + " normal=" + normalVec);
