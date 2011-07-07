@@ -52,9 +52,9 @@ public class GLFactory {
 		s.add(new Vec(-1, -1, 0));
 		s.add(new Vec(1, -1, 0));
 
-		s.add(new Vec(-1, 1, 0));
-		s.add(new Vec(1, 1, 0));
 		s.add(new Vec(1, -1, 0));
+		s.add(new Vec(1, 1, 0));
+		s.add(new Vec(-1, 1, 0));
 
 		return s;
 	}
@@ -510,7 +510,7 @@ public class GLFactory {
 				to.getVirtualPosition(from), color);
 	}
 
-	public Component newCube() {
+	public MeshComponent newCube() {
 		return newCube(null);
 	}
 

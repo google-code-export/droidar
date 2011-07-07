@@ -6,13 +6,20 @@ import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
+import gl.LightSource;
 import gl.ObjectPicker;
 import gl.textures.TextureManager;
 import gui.GuiSetup;
 import gui.InfoScreen;
 import gui.InfoScreenSettings;
+
+import java.util.Date;
+
+import javax.microedition.khronos.opengles.GL10;
+
 import listeners.SetupListener;
 import util.EfficientList;
+import util.Vec;
 import worldData.SystemUpdater;
 import worldData.World;
 import actions.Action;
@@ -196,6 +203,8 @@ public abstract class Setup {
 		debugLogDoSetupStep(STEP5);
 		_a_initFieldsIfNecessary();
 
+		glRenderer.setUseLightning(_a2_initLightning(glRenderer.getMyLights()));
+
 		debugLogDoSetupStep(STEP6);
 		_b_addWorldsToRenderer(glRenderer, GLFactory.getInstance(),
 				EventManager.getInstance().getCurrentLocationObject());
@@ -233,6 +242,23 @@ public abstract class Setup {
 		addOverlaysAndShowInfoScreen();
 
 		debugLogDoSetupStep(STEP_DONE);
+	}
+
+	/**
+	 * If you don't override this method it will create 2 default
+	 * {@link LightSource}s
+	 * 
+	 * @param lights
+	 *            add all the {@link LightSource}s you want to use to this list
+	 * @return true if lightning should be enabled
+	 */
+	public boolean _a2_initLightning(EfficientList<LightSource> lights) {
+		lights.add(LightSource.newDefaultAmbientLight(GL10.GL_LIGHT0));
+		lights.add(LightSource.newDefaultSpotLight(GL10.GL_LIGHT1, new Vec(5,
+				5, 5), new Vec(0, 0, 0)));
+		// TODO lights.add(LightSource.newDefaultDayLight(GL10.GL_LIGHT1, new
+		// Date()));
+		return true;
 	}
 
 	public void initializeCamera() {
@@ -280,7 +306,7 @@ public abstract class Setup {
 		TaskManager.resetInstance();
 		GLFactory.resetInstance();
 		ObjectPicker.resetInstance(new CommandDeviceVibrate(myTargetActivity,
-				30)); 
+				30));
 		CommandProcessor.resetInstance();
 		FeedbackReports.resetInstance(); // TODO really reset it?
 		EventManager.resetInstance();
