@@ -4,13 +4,17 @@ import gl.MeshComponent;
 import gl.MeshGroup;
 import gl.Shape;
 import util.Calculus;
+import util.Vec;
 import util.Wrapper;
 import worldData.Obj;
+import android.util.Log;
 
 import components.Component;
 import components.ProximitySensor;
 
 public class SystemTests extends SimpleTesting {
+
+	private static final String LOG_TAG = "SystemTests";
 
 	@Override
 	public void run() throws Exception {
@@ -39,7 +43,18 @@ public class SystemTests extends SimpleTesting {
 	}
 
 	private void vecTests() throws Exception {
-		// TODO write tests for vec here
+		normalCalculationTest();
+	}
+
+	private void normalCalculationTest() throws Exception {
+		Vec a = new Vec(5, 0, 0);
+		Vec b = new Vec(0, 5, 0);
+		Vec c = new Vec(5, -5, 0);
+		Vec n1 = Vec.calcNormalVec(a, b).normalize();
+		Vec n2 = Vec.calcNormalVec(a, c).normalize();
+		Vec n3 = Vec.calcNormalVec(b, c).normalize();
+		assertTrue(n1.equals(n2) || n1.equals(Vec.mult(-1, n2)));
+		assertTrue(n2.equals(n3) || n2.equals(Vec.mult(-1, n3)));
 	}
 
 	private void wrapperTests() throws Exception {

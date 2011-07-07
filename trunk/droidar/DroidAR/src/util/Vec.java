@@ -51,6 +51,12 @@ public class Vec {
 		return this;
 	}
 
+	public void add(float x, float y, float z) {
+		this.x += x;
+		this.y += y;
+		this.z += z;
+	}
+
 	/**
 	 * returns the leght of a given vector
 	 * 
@@ -572,4 +578,21 @@ public class Vec {
 		rndPos.z += center.z;
 		return rndPos;
 	}
+
+	/**
+	 * Given 2 vectors this calculates the vector which is orthogonal to the
+	 * plane the two vectors create
+	 * 
+	 * @param v1
+	 * @param v2
+	 * @return the orthogonal vector
+	 */
+	public static Vec calcNormalVec(Vec uVec, Vec vVec) {
+		Vec ret = new Vec();
+		ret.x = (uVec.y * vVec.z) - (uVec.z * vVec.y);
+		ret.y = (uVec.z * vVec.x) - (uVec.x * vVec.z);
+		ret.z = (uVec.x * vVec.y) - (uVec.y * vVec.x);
+		return ret;
+	}
+
 }

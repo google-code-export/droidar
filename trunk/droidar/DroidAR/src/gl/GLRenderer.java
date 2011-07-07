@@ -3,7 +3,6 @@ package gl;
 import gl.textures.TextureManager;
 
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -32,18 +31,31 @@ public class GLRenderer implements Renderer {
 	public static float nearHeight;
 	public static float aspectRatio;
 
-	/**
-	 * lightning wont work yet. the normals of all meshes are required to
-	 * illuminate them correctly. this has to be implemented first! (relevance 4
-	 * of 10)
-	 */
-	private static final boolean USE_LIGHTS = false;
-	public EfficientList<LightSource> myLights; // =newEfficientList<LightSource>();
+	private boolean useLightning = true;
+
+	public void setUseLightning(boolean useLightning) {
+		this.useLightning = useLightning;
+	}
 
 	/**
-	 * TODO Fog isn't fully supported yet because the color picking mechanism
-	 * wont work with fog enabled. fog should be disabled for the picking
-	 * frames. this has to be implemented first
+	 * the light list should be contained in the {@link GLRenderer} because
+	 * there is a global maximum of 8 lights in the complete OpenGL ES
+	 * environment and not only per world
+	 */
+	private EfficientList<LightSource> myLights;
+
+	public EfficientList<LightSource> getMyLights() {
+		if (myLights == null)
+			myLights = new EfficientList<LightSource>();
+		return myLights;
+	}
+
+	/**
+	 * TODO move to extra object! And:
+	 * 
+	 * Fog isn't fully supported yet because the color picking mechanism wont
+	 * work with fog enabled. fog should be disabled for the picking frames.
+	 * this has to be implemented first
 	 */
 	private static final boolean USE_FOG = false;
 	private static final float FOG_END_DISTANCE = 25.0f;
@@ -68,6 +80,15 @@ public class GLRenderer implements Renderer {
 
 		if (ObjectPicker.readyToDrawWithColor) {
 			readyToPickPixel = true;
+			if (useLightning) {
+				/*
+				 * before the picking is executed lightning has to be disabled
+				 * for the picking frame because it affects the colors of the
+				 * objects and picking would not be possible with lightning
+				 * enabled
+				 */
+				gl.glDisable(GL10.GL_LIGHTING);
+			}
 		}
 
 		// first check if there are new textures to load into openGL:
@@ -92,6 +113,10 @@ public class GLRenderer implements Renderer {
 				if (!FLASH_SCREEN) {
 					repeat = true;
 				}
+				// switch lights back on if lightning is used:
+				if (useLightning) {
+					gl.glEnable(GL10.GL_LIGHTING);
+				}
 			}
 		} while (repeat);
 
@@ -115,32 +140,23 @@ public class GLRenderer implements Renderer {
 	}
 
 	/**
-	 * If lightning is enables this method will add the light-sources to the
-	 * scene.
+	 * This method will switch on all the defined light sources
 	 * 
 	 * @param gl
 	 */
-	private void addLights(GL10 gl) {
-		gl.glEnable(GL10.GL_LIGHTING);
-
-		ArrayList<Integer> indexList = new ArrayList<Integer>();
-		indexList.add(GL10.GL_LIGHT0);
-		indexList.add(GL10.GL_LIGHT1);
-		indexList.add(GL10.GL_LIGHT2);
-		indexList.add(GL10.GL_LIGHT3);
-		indexList.add(GL10.GL_LIGHT4);
-		indexList.add(GL10.GL_LIGHT5);
-		indexList.add(GL10.GL_LIGHT6);
-		indexList.add(GL10.GL_LIGHT7);
-
-		for (int i = 0; i < myLights.myLength; i++) {
-			if (i > 7) {
-				Log.e("OpenGL", "There were to many lights defined! "
-						+ "Only 8 lights allowed");
-				return;
+	public void enableLights(GL10 gl) {
+		if (myLights.myLength > 0) {
+			gl.glEnable(GL10.GL_LIGHTING);
+			for (int i = 0; i < myLights.myLength; i++) {
+				myLights.get(i).switchOn(gl);
 			}
-			myLights.get(i).switchOn(gl, indexList.get(0));
-			indexList.remove(0);
+		}
+	}
+
+	public void disableLights(GL10 gl) {
+		gl.glDisable(GL10.GL_LIGHTING);
+		for (int i = 0; i < myLights.myLength; i++) {
+			myLights.get(i).switchOff(gl);
 		}
 	}
 
@@ -193,8 +209,8 @@ public class GLRenderer implements Renderer {
 		 */
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 
-		if (USE_LIGHTS)
-			addLights(gl);
+		if (useLightning)
+			enableLights(gl);
 
 		if (USE_FOG)
 			addFog(gl);
@@ -229,6 +245,8 @@ public class GLRenderer implements Renderer {
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
+		// Enable smooth shading for nice light effects
+		gl.glShadeModel(GL10.GL_SMOOTH);
 	}
 
 	private void addFog(GL10 gl) {

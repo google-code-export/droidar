@@ -16,6 +16,7 @@ import commands.ui.CommandShowToast;
 import de.rwth.setups.CollectItemsSetup;
 import de.rwth.setups.DebugSetup;
 import de.rwth.setups.IndoorSetup;
+import de.rwth.setups.LightningSetup;
 import de.rwth.setups.PlaceObjectsSetup;
 import de.rwth.setups.PlaceObjectsSetupTwo;
 import de.rwth.setups.PositionTestsSetup;
@@ -30,6 +31,7 @@ public class TechDemoLauncher extends Activity {
 		setContentView(R.layout.demoselector);
 
 		showSetup("Animation Demo", new DebugSetup());
+		showSetup("Lightning Demo", new LightningSetup());
 		showSetup("Collecting Items Demo", new CollectItemsSetup());
 		showSetup("Placing objects Demo", new PlaceObjectsSetup());
 		showSetup("Placing objects Demo 2", new PlaceObjectsSetupTwo());
