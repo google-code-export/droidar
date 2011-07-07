@@ -11,8 +11,26 @@ import util.Vec;
 import android.util.Log;
 
 /**
+ * Great tutorials:
  * http://iphonedevelopment.blogspot.com/2009/05/opengl-es-from-ground-up-part-4
  * -let.html
+ * 
+ * http://www.sjbaker.org/steve/omniv/opengl_lighting.html
+ * 
+ * Some good hints (how to create flashlight effect, moving lights etc):
+ * http://www.opengl.org/resources/faq/technical/lights.htm
+ * 
+ * Basics plus code examples: http://glprogramming.com/red/chapter05.html
+ * 
+ * A lot of text, detailed information:
+ * http://www.falloutsoftware.com/tutorials/gl/gl8.htm
+ * 
+ * 
+ * 
+ * About light models:
+ * http://www.talisman.org/opengl-1.1/Reference/glLightModel.html
+ * 
+ * 
  * 
  * the current problem with lightning might be that the normals of every shape
  * have to be calculated to enable correct lightning and when working with
