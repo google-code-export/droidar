@@ -1,33 +1,34 @@
 package de.rwth;
 
 import gl.GLCamera;
+import gl.MarkerObject;
 import gl.MeshComponent;
 import util.Vec;
 import android.opengl.Matrix;
-import android.util.Log;
-import gl.MarkerObject;
 
 public class VirtualObjectMarker implements MarkerObject {
 
 	// final static float rad2deg = (float) (180.0f / Math.PI);
 
-	float[] invertedCameraMatrix = new float[16];
-	float[] resultPosVec = { 0, 0, 0, 1 };
-	float[] antiCameraMarkerRotMatrix = new float[16];
+	private float[] invertedCameraMatrix = new float[16];
+	private float[] resultPosVec = { 0, 0, 0, 1 };
+	private float[] antiCameraMarkerRotMatrix = new float[16];
 
 	private MeshComponent myTargetMesh;
 	private GLCamera myCamera;
+	private int myId;
 
 	// private float[] viewMatrix = null;
 
-	public VirtualObjectMarker(MeshComponent m, GLCamera camera) {
+	public VirtualObjectMarker(int id, MeshComponent m, GLCamera camera) {
 		myTargetMesh = m;
 		myCamera = camera;
+		myId = id;
 	}
 
 	@Override
 	public int getMyId() {
-		return 0;
+		return myId;
 	}
 
 	@Override
@@ -53,7 +54,7 @@ public class VirtualObjectMarker implements MarkerObject {
 		antiCameraMarkerRotMatrix[12] = 0;
 		antiCameraMarkerRotMatrix[13] = 0;
 		antiCameraMarkerRotMatrix[14] = 0;
- 
+
 		// addAngle(antiCameraMarkerRotMatrix, sideAngle);
 		// sideAngle = 0;
 
