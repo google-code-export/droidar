@@ -29,27 +29,44 @@ public class MultiMarkerSetup extends MarkerDetectionSetup {
 
 	private GLCamera camera;
 	private World world;
-	private MeshGroup mesh;
+	private MeshGroup mesh1;
+	private MeshGroup mesh2;
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
 		camera = new GLCamera(new Vec(0, 0, 10));
 		world = new World(camera);
-		mesh = new MeshGroup();
+		mesh1 = new MeshGroup();
 
-		mesh.add(GLFactory.getInstance().newCoordinateSystem());
-		mesh.add(GLFactory.getInstance().newCircle(new Color(0, 0, 1, 0.6f)));
+		mesh1.add(GLFactory.getInstance().newCoordinateSystem());
+		// mesh.add(GLFactory.getInstance().newCircle(new Color(0, 0, 1,
+		// 0.6f)));
+		mesh1.add(GLFactory.getInstance().newCube());
+
+		mesh2 = new MeshGroup();
+		mesh2.add(GLFactory.getInstance().newCoordinateSystem());
+		mesh2.add(GLFactory.getInstance().newCircle(new Color(0, 0, 1, 0.6f)));
+		// mesh1.add(GLFactory.getInstance().newCube());
 
 	}
 
 	@Override
 	public UnrecognizedMarkerListener _a2_getUnrecognizedMarkerListener() {
-		return null;
+		return new UnrecognizedMarkerListener() {
+
+			@Override
+			public void onUnrecognizedMarkerDetected(int markerCode,
+					float[] mat, int startIdx, int endIdx, int rotationValue) {
+				System.out.println("unrecognized markerCode=" + markerCode);
+			}
+		};
+
 	}
 
 	@Override
 	public void _a3_registerMarkerObjects(MarkerObjectMap markerObjectMap) {
-		markerObjectMap.put(new VirtualObjectMarker(mesh, camera));
+		markerObjectMap.put(new VirtualObjectMarker(0, mesh1, camera));
+		markerObjectMap.put(new VirtualObjectMarker(1, mesh2, camera));
 	}
 
 	@Override
@@ -57,9 +74,13 @@ public class MultiMarkerSetup extends MarkerDetectionSetup {
 			GLFactory objectFactory, GeoObj currentPosition) {
 		renderer.addRenderElement(world);
 		Obj o = new Obj();
-		o.setComp(mesh);
+		o.setComp(mesh1);
 		world.add(o);
 
+		Obj o2 = new Obj();
+		o2.setComp(mesh2);
+		world.add(o2);
+		
 		world.add(objectFactory.newHexGroupTest(new Vec()));
 
 	}
@@ -99,7 +120,7 @@ public class MultiMarkerSetup extends MarkerDetectionSetup {
 
 				rayDirection.setLength(5);
 
-				mesh.myPosition = rayPosition.add(rayDirection);
+				mesh1.myPosition = rayPosition.add(rayDirection);
 
 				return false;
 			}
