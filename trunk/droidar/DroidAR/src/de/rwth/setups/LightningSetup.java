@@ -1,21 +1,18 @@
 package de.rwth.setups;
 
-import javax.microedition.khronos.opengles.GL10;
-
-import commands.Command;
-import components.Component;
-
-import actions.ActionMoveObject;
-import android.app.Activity;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.LightSource;
 import gl.MeshComponent;
+import gl.MeshGroup;
 import gl.Shape;
 import gl.animations.AnimationRotate;
 import gui.GuiSetup;
+
+import javax.microedition.khronos.opengles.GL10;
+
 import system.DefaultARSetup;
 import system.EventManager;
 import util.EfficientList;
@@ -23,28 +20,58 @@ import util.Vec;
 import worldData.MoveObjComp;
 import worldData.Obj;
 import worldData.World;
+import actions.ActionMoveObject;
+import android.app.Activity;
+
+import commands.Command;
+import components.Component;
 
 public class LightningSetup extends DefaultARSetup {
 
 	private static float zMoveFactor = 1f;
 
-	private Obj o;
+	private Obj lightObject;
 	private GLCamera myCamera;
+
+	private LightSource spotLight;
+
+	@Override
+	public boolean _a2_initLightning(EfficientList<LightSource> lights) {
+		// lights.add(LightSource.newDefaultAmbientLight(GL10.GL_LIGHT0));
+		spotLight = LightSource.newDefaultSpotLight(GL10.GL_LIGHT1, new Vec(0,
+				0, 0), new Vec());
+		lights.add(spotLight);
+		return true;
+	}
 
 	@Override
 	public void addObjectsTo(GLRenderer renderer, World world,
 			GLFactory objectFactory) {
-		o = new Obj();
+		Obj o4 = new Obj();
 
 		MeshComponent mesh = objectFactory.newCube();
 		// mesh = newCube();
 
-		mesh.addAnimation(new AnimationRotate(30, new Vec(0, 0.85f, 0.9f)));
+		// mesh.addAnimation(new AnimationRotate(30, new Vec(0, 0.85f, 0.9f)));
 
-		o.setComp(mesh);
-		o.setComp(new MoveObjComp(1));
-		world.add(o);
+		o4.setComp(mesh);
+		o4.setComp(new MoveObjComp(1));
+		world.add(o4);
+
 		myCamera = world.getMyCamera();
+
+		world.add(o4);
+
+		lightObject = new Obj();
+
+		spotLight.myPosition = new Vec(1, 1, 1);
+		spotLight.add(objectFactory.newCircle(null));
+		// lightMesh.addAnimation(new AnimationRotate(30, new Vec(1, 1, 1)));
+
+		lightObject.setComp(spotLight);
+		lightObject.setComp(new MoveObjComp(1));
+		world.add(lightObject);
+
 	}
 
 	private Component newCube() {
@@ -61,14 +88,6 @@ public class LightningSetup extends DefaultARSetup {
 	}
 
 	@Override
-	public boolean _a2_initLightning(EfficientList<LightSource> lights) {
-		lights.add(LightSource.newDefaultAmbientLight(GL10.GL_LIGHT0));
-		lights.add(LightSource.newDefaultSpotLight(GL10.GL_LIGHT1, new Vec(0,
-				0, 5), new Vec()));
-		return true;
-	}
-
-	@Override
 	public void _c_addActionsToEvents(EventManager eventManager,
 			CustomGLSurfaceView arView) {
 		super._c_addActionsToEvents(eventManager, arView);
@@ -77,8 +96,8 @@ public class LightningSetup extends DefaultARSetup {
 		eventManager.onLocationChangedAction = null;
 		eventManager.onTrackballEventAction = null;
 
-		eventManager.addOnTrackballAction(new ActionMoveObject(o, myCamera, 10,
-				100));
+		eventManager.addOnTrackballAction(new ActionMoveObject(lightObject,
+				myCamera, 10, 100));
 	}
 
 	@Override
@@ -88,7 +107,7 @@ public class LightningSetup extends DefaultARSetup {
 
 			@Override
 			public boolean execute() {
-				o.getComp(MoveObjComp.class).myTargetPos.z -= zMoveFactor;
+				lightObject.getComp(MoveObjComp.class).myTargetPos.z -= zMoveFactor;
 				return false;
 			}
 		}, "Obj Down");
@@ -96,7 +115,7 @@ public class LightningSetup extends DefaultARSetup {
 
 			@Override
 			public boolean execute() {
-				o.getComp(MoveObjComp.class).myTargetPos.z += zMoveFactor;
+				lightObject.getComp(MoveObjComp.class).myTargetPos.z += zMoveFactor;
 				return false;
 			}
 		}, "Obj up");
