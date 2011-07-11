@@ -194,7 +194,7 @@ public class LightSource extends MeshGroup {
 	public static LightSource newDefaultDefuseLight(int lightId,
 			Vec lightPosition) {
 		LightSource l = new LightSource(lightId);
-		float b = 0.6f;
+		float b = 0.3f;
 		float[] color = { b, b, b, 1 };
 		l.diffuseLightColor = color;
 		l.myPosition = lightPosition.copy();
@@ -205,7 +205,7 @@ public class LightSource extends MeshGroup {
 			Vec lightPosition, Vec lightTargetPosition) {
 		LightSource l = new LightSource(lightId);
 		float b = 0.2f;
-		float[] color = { 0, 0, b, 1 };
+		float[] color = { b, b, b, 1 };
 		l.specularLightColor = color;
 		// l.ambientLightColor = Color.red().toFloatArray();
 		l.myPosition = lightPosition.copy();
@@ -235,7 +235,7 @@ public class LightSource extends MeshGroup {
 	 */
 	public static LightSource newDefaultDayLight(int lightId, Date currentDate) {
 		LightSource l = new LightSource(lightId);
-		float b = 0.6f;
+		float b = 0.4f;
 		float[] color = { b, b, b, 1 };
 		l.specularLightColor = color;
 		Vec lightPosition = new Vec(100, 100, 100);
@@ -251,7 +251,7 @@ public class LightSource extends MeshGroup {
 		super.draw(gl);
 		/*
 		 * the lightsource can be added as a normal mesh to the world to allow
-		 * movements and other animations
+		 * movements
 		 * 
 		 * read the part about moving lightsources
 		 * http://www.opengl.org/resources/faq/technical/lights.htm
