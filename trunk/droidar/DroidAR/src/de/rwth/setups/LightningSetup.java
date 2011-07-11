@@ -38,8 +38,8 @@ public class LightningSetup extends DefaultARSetup {
 	@Override
 	public boolean _a2_initLightning(EfficientList<LightSource> lights) {
 		// lights.add(LightSource.newDefaultAmbientLight(GL10.GL_LIGHT0));
-		spotLight = LightSource.newDefaultSpotLight(GL10.GL_LIGHT1, new Vec(0,
-				0, 0), new Vec());
+		spotLight = LightSource.newDefaultDefuseLight(GL10.GL_LIGHT1, new Vec(
+				0, 0, 0));
 		lights.add(spotLight);
 		return true;
 	}
@@ -52,7 +52,7 @@ public class LightningSetup extends DefaultARSetup {
 		MeshComponent mesh = objectFactory.newCube();
 		// mesh = newCube();
 
-		// mesh.addAnimation(new AnimationRotate(30, new Vec(0, 0.85f, 0.9f)));
+		mesh.addAnimation(new AnimationRotate(10, new Vec(0, 0.80f, 0.9f)));
 
 		o4.setComp(mesh);
 		o4.setComp(new MoveObjComp(1));
