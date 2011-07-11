@@ -50,6 +50,11 @@ public abstract class MeshComponent implements Component, ParentMesh,
 	private Command myOnMapClickCommand;
 	private Command myOnDoubleClickCommand;
 
+	/**
+	 * how to extract euler angles from a rotation matrix
+	 * http://paulbourke.net/geometry/eulerangle/ TODO provide a method for this
+	 * extraction
+	 */
 	private float[] markerRotationMatrix;
 
 	/**

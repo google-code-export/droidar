@@ -12,6 +12,7 @@ public class Vec {
 	 *            value on blue axis (sky direction)
 	 */
 	public float x, y, z = 0;
+	private float[] myArray;
 
 	/**
 	 * @param x
@@ -595,4 +596,14 @@ public class Vec {
 		return ret;
 	}
 
+	public float[] getArrayVersion() {
+		if (myArray == null) {
+			myArray = new float[4];
+		}
+		myArray[0] = x;
+		myArray[1] = y;
+		myArray[2] = z;
+
+		return myArray;
+	}
 }

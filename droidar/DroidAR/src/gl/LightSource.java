@@ -1,13 +1,11 @@
 package gl;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 import java.util.Date;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import util.Vec;
+import worldData.Visitor;
 import android.util.Log;
 
 /**
@@ -40,7 +38,7 @@ import android.util.Log;
  * @author Spobo
  * 
  */
-public class LightSource {
+public class LightSource extends MeshGroup {
 
 	private static final String LOG_TAG = "LightSource";
 
@@ -66,9 +64,9 @@ public class LightSource {
 	 * value on one light source and to { 0, 0, 0, 1 } on all other
 	 * light-sources!
 	 */
-	private float[] ambientLightColor = { 0, 0, 0, 1 };
+	private float[] ambientLightColor;// = { 0, 0, 0, 1 };
 
-	private float[] myPosition = { 0, 0, 10, 0 };
+	// private float[] myPosition = { 0, 0, 10, 0 };
 
 	/**
 	 * it this is null the light source will not be interpreted as a spot light.
@@ -87,6 +85,7 @@ public class LightSource {
 	 *            light-sources maximum)
 	 */
 	public LightSource(int glLightId) {
+		super(null);
 		this.myLightId = glLightId;
 	}
 
@@ -107,7 +106,8 @@ public class LightSource {
 			gl.glLightfv(myLightId, GL10.GL_SPECULAR, specularLightColor, 0);
 
 		if (myPosition != null)
-			gl.glLightfv(myLightId, GL10.GL_POSITION, myPosition, 0);
+			gl.glLightfv(myLightId, GL10.GL_POSITION,
+					myPosition.getArrayVersion(), 0);
 
 		// if it is a spotlight:
 		if (mySpotDirection != null) {
@@ -153,31 +153,31 @@ public class LightSource {
 
 	}
 
-	private FloatBuffer mab;
-
-	private FloatBuffer mdb;
-
-	private FloatBuffer msb;
-
-	private void otherMaterialStuffThatDoesNotWork(GL10 gl) {
-		mab = ByteBuffer.allocateDirect(4 * 4).order(ByteOrder.nativeOrder())
-				.asFloatBuffer();
-		mab.put(new float[] { 1.0f, 0.0f, 0.0f, 1.0f });
-		mab.position(0);
-		mdb = ByteBuffer.allocateDirect(4 * 4).order(ByteOrder.nativeOrder())
-				.asFloatBuffer();
-		mdb.put(new float[] { 0.0f, 1.0f, 0.0f, 1.0f });
-		mdb.position(0);
-		msb = ByteBuffer.allocateDirect(4 * 4).order(ByteOrder.nativeOrder())
-				.asFloatBuffer();
-		msb.put(new float[] { 0.0f, 0.0f, 1.0f, 1.0f });
-		msb.position(0);
-
-		gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, mab);
-		gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, mdb);
-		gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, msb);
-		gl.glMaterialf(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS, 128.0f);
-	}
+	// private FloatBuffer mab;
+	//
+	// private FloatBuffer mdb;
+	//
+	// private FloatBuffer msb;
+	//
+	// private void otherMaterialStuffThatDoesNotWork(GL10 gl) {
+	// mab = ByteBuffer.allocateDirect(4 * 4).order(ByteOrder.nativeOrder())
+	// .asFloatBuffer();
+	// mab.put(new float[] { 1.0f, 0.0f, 0.0f, 1.0f });
+	// mab.position(0);
+	// mdb = ByteBuffer.allocateDirect(4 * 4).order(ByteOrder.nativeOrder())
+	// .asFloatBuffer();
+	// mdb.put(new float[] { 0.0f, 1.0f, 0.0f, 1.0f });
+	// mdb.position(0);
+	// msb = ByteBuffer.allocateDirect(4 * 4).order(ByteOrder.nativeOrder())
+	// .asFloatBuffer();
+	// msb.put(new float[] { 0.0f, 0.0f, 1.0f, 1.0f });
+	// msb.position(0);
+	//
+	// gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, mab);
+	// gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, mdb);
+	// gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, msb);
+	// gl.glMaterialf(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS, 128.0f);
+	// }
 
 	public void switchOff(GL10 gl) {
 		gl.glDisable(myLightId);
@@ -197,19 +197,18 @@ public class LightSource {
 		float b = 0.6f;
 		float[] color = { b, b, b, 1 };
 		l.diffuseLightColor = color;
-		float[] pos = { lightPosition.x, lightPosition.y, lightPosition.z };
-		l.myPosition = pos;
+		l.myPosition = lightPosition.copy();
 		return l;
 	}
 
 	public static LightSource newDefaultSpotLight(int lightId,
 			Vec lightPosition, Vec lightTargetPosition) {
 		LightSource l = new LightSource(lightId);
-		float b = 0.6f;
+		float b = 0.2f;
 		float[] color = { 0, 0, b, 1 };
 		l.specularLightColor = color;
-		float[] pos = { lightPosition.x, lightPosition.y, lightPosition.z };
-		l.myPosition = pos;
+		// l.ambientLightColor = Color.red().toFloatArray();
+		l.myPosition = lightPosition.copy();
 		if (lightTargetPosition != null) {
 			Vec directionVec = Vec.sub(lightTargetPosition, lightPosition)
 					.normalize();
@@ -224,6 +223,12 @@ public class LightSource {
 	 * // TODO calculate the position of the sun to set the sun light-source at
 	 * the correct place
 	 * 
+	 * http://www.srrb.noaa.gov/highlights/sunrise/calcdetails.html
+	 * 
+	 * and
+	 * 
+	 * http://www.srrb.noaa.gov/highlights/sunrise/program.txt
+	 * 
 	 * @param lightId
 	 * @param currentDate
 	 * @return
@@ -234,12 +239,29 @@ public class LightSource {
 		float[] color = { b, b, b, 1 };
 		l.specularLightColor = color;
 		Vec lightPosition = new Vec(100, 100, 100);
-		float[] pos = { lightPosition.x, lightPosition.y, lightPosition.z };
-		l.myPosition = pos;
+		l.myPosition = lightPosition;
 		Vec directionVec = Vec.sub(new Vec(), lightPosition).normalize();
 		float[] direction = { directionVec.x, directionVec.y, directionVec.z };
 		l.mySpotDirection = direction;
 		return l;
+	}
+
+	@Override
+	public void draw(GL10 gl) {
+		super.draw(gl);
+		/*
+		 * the lightsource can be added as a normal mesh to the world to allow
+		 * movements and other animations
+		 * 
+		 * read the part about moving lightsources
+		 * http://www.opengl.org/resources/faq/technical/lights.htm
+		 */
+		if (myPosition == null) {
+			myPosition = new Vec();
+		}
+
+		gl.glLightfv(myLightId, GL10.GL_POSITION, myPosition.getArrayVersion(),
+				0);
 	}
 
 }

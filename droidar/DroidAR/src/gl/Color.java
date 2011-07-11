@@ -97,7 +97,7 @@ public class Color {
 	public static Color greenTransparent() {
 		return new Color(0f, 1f, 0f, 0.6f);
 	}
-	
+
 	public FloatBuffer toFloatBuffer() {
 		float[] values = new float[4];
 		values[0] = red;
@@ -195,6 +195,9 @@ public class Color {
 		return new Color("#808080");
 	}
 
-	
+	public float[] toFloatArray() {
+		float[] c = { red, green, blue, alpha };
+		return c;
+	}
 
 }

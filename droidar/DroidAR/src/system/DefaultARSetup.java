@@ -1,5 +1,7 @@
 package system;
 
+import java.util.Set;
+
 import geo.GeoObj;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
@@ -55,6 +57,12 @@ public abstract class DefaultARSetup extends Setup {
 		return camera;
 	}
 
+/**
+	 * This will be called by {@link Setup#_b_addWorldsToRenderer(GLRenderer, GLFactory, GeoObj)
+	 * @param renderer
+	 * @param world
+	 * @param objectFactory
+	 */
 	public abstract void addObjectsTo(GLRenderer renderer, World world,
 			GLFactory objectFactory);
 

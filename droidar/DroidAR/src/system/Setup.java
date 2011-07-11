@@ -13,8 +13,6 @@ import gui.GuiSetup;
 import gui.InfoScreen;
 import gui.InfoScreenSettings;
 
-import java.util.Date;
-
 import javax.microedition.khronos.opengles.GL10;
 
 import listeners.SetupListener;
