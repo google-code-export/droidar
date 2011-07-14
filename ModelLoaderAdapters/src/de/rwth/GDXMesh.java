@@ -1,6 +1,7 @@
 package de.rwth;
 
 import gl.MeshComponent;
+import gl.ObjectPicker;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -45,7 +46,7 @@ public class GDXMesh extends MeshComponent {
 		gl.glEnable(GL10.GL_CULL_FACE);
 
 		if (model != null) {
-			if (texture != null) {
+			if (!ObjectPicker.readyToDrawWithColor && texture != null) {
 				gl.glEnable(GL10.GL_TEXTURE_2D);
 				// Gdx.gl.glEnable(GL10.GL_BLEND);
 				// Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA,
