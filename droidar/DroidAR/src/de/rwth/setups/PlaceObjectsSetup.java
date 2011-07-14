@@ -8,6 +8,10 @@ import gl.GLFactory;
 import gl.GLRenderer;
 import gl.MeshComponent;
 import gui.GuiSetup;
+import gui.simpleUI.EditItem;
+import gui.simpleUI.ModifierGroup;
+import gui.simpleUI.modifiers.InfoText;
+import gui.simpleUI.modifiers.TextModifier;
 import listeners.ObjectCreateListener;
 import system.ErrorHandler;
 import system.EventManager;
@@ -23,9 +27,11 @@ import actions.ActionMoveCameraBuffered;
 import actions.ActionPlaceObject;
 import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
+import android.view.Gravity;
 
 import commands.Command;
 import commands.obj.CommandCreateObjectInWrapper;
+import commands.ui.CommandShowInfoScreen;
 
 public class PlaceObjectsSetup extends Setup {
 
@@ -33,8 +39,6 @@ public class PlaceObjectsSetup extends Setup {
 	private World world;
 
 	private Wrapper placeObjectWrapper;
-
-
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
@@ -92,8 +96,9 @@ public class PlaceObjectsSetup extends Setup {
 					public boolean setWrapperToObject(Wrapper targetWrapper) {
 						final Obj placerContainer = new Obj();
 						Color c = Color.getRandomRGBColor();
-						c.alpha = 0.5f;
-						MeshComponent arrow = GLFactory.getInstance().newDiamond(c);
+						c.alpha = 0.7f;
+						MeshComponent arrow = GLFactory.getInstance()
+								.newDiamond(c);
 						arrow.setOnClickCommand(new Command() {
 							@Override
 							public boolean execute() {

@@ -1,5 +1,6 @@
 package de.rwth.setups;
 
+import gl.Color;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
@@ -17,6 +18,7 @@ import system.DefaultARSetup;
 import system.EventManager;
 import util.EfficientList;
 import util.Vec;
+import util.Wrapper;
 import worldData.MoveObjComp;
 import worldData.Obj;
 import worldData.World;
@@ -30,14 +32,14 @@ public class LightningSetup extends DefaultARSetup {
 
 	private static float zMoveFactor = 1f;
 
-	private Obj lightObject;
+	private Wrapper targetMoveWrapper;
 	private GLCamera myCamera;
 
 	private LightSource spotLight;
 
 	@Override
 	public boolean _a2_initLightning(EfficientList<LightSource> lights) {
-		// lights.add(LightSource.newDefaultAmbientLight(GL10.GL_LIGHT0));
+		lights.add(LightSource.newDefaultAmbientLight(GL10.GL_LIGHT0));
 		spotLight = LightSource.newDefaultDefuseLight(GL10.GL_LIGHT1, new Vec(
 				0, 0, 0));
 		lights.add(spotLight);
@@ -47,31 +49,61 @@ public class LightningSetup extends DefaultARSetup {
 	@Override
 	public void addObjectsTo(GLRenderer renderer, World world,
 			GLFactory objectFactory) {
-		Obj o4 = new Obj();
 
-		MeshComponent mesh = objectFactory.newCube();
-		// mesh = newCube();
-
-		mesh.addAnimation(new AnimationRotate(10, new Vec(0, 0.80f, 0.9f)));
-
-		o4.setComp(mesh);
-		o4.setComp(new MoveObjComp(1));
-		world.add(o4);
+		addNewObjToWorld(world, objectFactory);
 
 		myCamera = world.getMyCamera();
+		final Obj lightObject = new Obj();
 
-		world.add(o4);
+		MeshGroup innerGroup = new MeshGroup();
+		innerGroup.add(spotLight);
+		innerGroup.add(objectFactory.newCircle(Color.red()));
+		innerGroup.myPosition = new Vec(0, 3, 0);
 
-		lightObject = new Obj();
+		MeshGroup outerGroup = new MeshGroup();
+		outerGroup.add(innerGroup);
+		outerGroup.add(objectFactory.newCircle(Color.blue()));
+		outerGroup.addAnimation(new AnimationRotate(30, new Vec(0, 0, 1)));
 
-		spotLight.myPosition = new Vec(1, 1, 1);
-		spotLight.add(objectFactory.newCircle(null));
-		// lightMesh.addAnimation(new AnimationRotate(30, new Vec(1, 1, 1)));
+		spotLight.setOnClickCommand(new Command() {
 
-		lightObject.setComp(spotLight);
+			@Override
+			public boolean execute() {
+				targetMoveWrapper.setTo(lightObject);
+				return true;
+			}
+		});
+
+		lightObject.setComp(outerGroup);
 		lightObject.setComp(new MoveObjComp(1));
 		world.add(lightObject);
 
+		targetMoveWrapper = new Wrapper(lightObject);
+
+	}
+
+	private void addNewObjToWorld(World world, GLFactory objectFactory) {
+		final Obj o = new Obj();
+
+		MeshComponent mesh = objectFactory.newCube();
+		// mesh = newCube();
+		mesh = objectFactory.newDiamond(Color.red());
+		mesh.myScale = new Vec(2, 3, 1);
+		mesh.addAnimation(new AnimationRotate(30, new Vec(0, 0, -1)));
+
+		o.setComp(mesh);
+		o.setOnClickCommand(new Command() {
+
+			@Override
+			public boolean execute() {
+				targetMoveWrapper.setTo(o);
+				return true;
+			}
+		});
+		o.setComp(new MoveObjComp(1));
+		world.add(o);
+
+		world.add(o);
 	}
 
 	private Component newCube() {
@@ -96,8 +128,8 @@ public class LightningSetup extends DefaultARSetup {
 		eventManager.onLocationChangedAction = null;
 		eventManager.onTrackballEventAction = null;
 
-		eventManager.addOnTrackballAction(new ActionMoveObject(lightObject,
-				myCamera, 10, 100));
+		eventManager.addOnTrackballAction(new ActionMoveObject(
+				targetMoveWrapper, myCamera, 10, 100));
 	}
 
 	@Override
@@ -107,7 +139,11 @@ public class LightningSetup extends DefaultARSetup {
 
 			@Override
 			public boolean execute() {
-				lightObject.getComp(MoveObjComp.class).myTargetPos.z -= zMoveFactor;
+				if (targetMoveWrapper.getObject() instanceof Obj) {
+					((Obj) targetMoveWrapper.getObject())
+							.getComp(MoveObjComp.class).myTargetPos.z -= zMoveFactor;
+					return true;
+				}
 				return false;
 			}
 		}, "Obj Down");
@@ -115,7 +151,11 @@ public class LightningSetup extends DefaultARSetup {
 
 			@Override
 			public boolean execute() {
-				lightObject.getComp(MoveObjComp.class).myTargetPos.z += zMoveFactor;
+				if (targetMoveWrapper.getObject() instanceof Obj) {
+					((Obj) targetMoveWrapper.getObject())
+							.getComp(MoveObjComp.class).myTargetPos.z += zMoveFactor;
+					return true;
+				}
 				return false;
 			}
 		}, "Obj up");

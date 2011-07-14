@@ -3,16 +3,18 @@ package actions;
 import gl.GLCamera;
 import gl.MeshComponent;
 import util.Vec;
+import util.Wrapper;
 import worldData.MoveObjComp;
 import worldData.Obj;
+import android.R.integer;
 import android.view.MotionEvent;
 
 public class ActionMoveObject extends ActionDoAlongAxis {
 
-	private Obj targetObj;
+	private Wrapper target;
 
 	/**
-	 * @param o
+	 * @param wrapper
 	 * @param camera
 	 * @param trackballFactor
 	 *            should be around 2-15
@@ -20,16 +22,21 @@ public class ActionMoveObject extends ActionDoAlongAxis {
 	 *            25 would be good value to start.The higher the value the
 	 *            slower the movement
 	 */
-	public ActionMoveObject(Obj o, GLCamera camera, float trackballFactor,
-			float touchscreenFactor) {
+	public ActionMoveObject(Wrapper wrapper, GLCamera camera,
+			float trackballFactor, float touchscreenFactor) {
 		super(camera, trackballFactor, touchscreenFactor);
-		targetObj = o;
+		target = wrapper;
 	}
 
 	@Override
 	public void doAlongViewAxis(float x, float y) {
-		MoveObjComp mc = targetObj.getComp(MoveObjComp.class);
-		MeshComponent m = targetObj.getComp(MeshComponent.class);
+		if (target != null && target.getObject() instanceof Obj)
+			foundObj((Obj) target.getObject(), x, y);
+	}
+
+	private void foundObj(Obj obj, float x, float y) {
+		MoveObjComp mc = obj.getComp(MoveObjComp.class);
+		MeshComponent m = obj.getComp(MeshComponent.class);
 		if (mc != null) {
 			if (mc.myTargetPos == null && m != null && m.myPosition != null) {
 				mc.myTargetPos = m.myPosition.copy();

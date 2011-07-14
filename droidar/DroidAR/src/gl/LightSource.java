@@ -38,7 +38,7 @@ import android.util.Log;
  * @author Spobo
  * 
  */
-public class LightSource extends MeshGroup {
+public class LightSource extends MeshComponent {
 
 	private static final String LOG_TAG = "LightSource";
 
@@ -185,7 +185,7 @@ public class LightSource extends MeshGroup {
 
 	public static LightSource newDefaultAmbientLight(int lightId) {
 		LightSource l = new LightSource(lightId);
-		float b = 0.05f;
+		float b = 0.01f;
 		float[] color = { b, b, b, 1 };
 		l.ambientLightColor = color;
 		return l;
@@ -194,7 +194,7 @@ public class LightSource extends MeshGroup {
 	public static LightSource newDefaultDefuseLight(int lightId,
 			Vec lightPosition) {
 		LightSource l = new LightSource(lightId);
-		float b = 0.3f;
+		float b = 0.7f;
 		float[] color = { b, b, b, 1 };
 		l.diffuseLightColor = color;
 		l.myPosition = lightPosition.copy();
@@ -207,7 +207,6 @@ public class LightSource extends MeshGroup {
 		float b = 0.2f;
 		float[] color = { b, b, b, 1 };
 		l.specularLightColor = color;
-		// l.ambientLightColor = Color.red().toFloatArray();
 		l.myPosition = lightPosition.copy();
 		if (lightTargetPosition != null) {
 			Vec directionVec = Vec.sub(lightTargetPosition, lightPosition)
@@ -247,19 +246,25 @@ public class LightSource extends MeshGroup {
 	}
 
 	@Override
+	public boolean accept(Visitor visitor) {
+		return true;
+	}
+
+	@Override
 	public void draw(GL10 gl) {
-		super.draw(gl);
 		/*
 		 * the lightsource can be added as a normal mesh to the world to allow
 		 * movements
 		 * 
 		 * read the part about moving lightsources
 		 * http://www.opengl.org/resources/faq/technical/lights.htm
+		 * 
+		 * also read "Position and Attenuation" in
+		 * http://fly.cc.fer.hr/~unreal/theredbook/chapter06.html
 		 */
 		if (myPosition == null) {
 			myPosition = new Vec();
 		}
-
 		gl.glLightfv(myLightId, GL10.GL_POSITION, myPosition.getArrayVersion(),
 				0);
 	}
