@@ -599,6 +599,17 @@ public class Vec {
 	public float[] getArrayVersion() {
 		if (myArray == null) {
 			myArray = new float[4];
+			/*
+			 * set the last of the 4 values to 1 on default. This is important
+			 * for light-positioning eg, there it is used as a flag to indicate
+			 * that the light should be a positional light source. See the
+			 * LightSource class and
+			 * http://fly.cc.fer.hr/~unreal/theredbook/chapter06.html for more
+			 * details
+			 * 
+			 * TODO so is this the right place to do this?
+			 */
+			myArray[3] = 1;
 		}
 		myArray[0] = x;
 		myArray[1] = y;

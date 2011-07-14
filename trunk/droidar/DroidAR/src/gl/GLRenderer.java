@@ -31,9 +31,11 @@ public class GLRenderer implements Renderer {
 	public static float nearHeight;
 	public static float aspectRatio;
 
-	private boolean useLightning = true;
+	private boolean useLightning = false;
+	private boolean switchLightning = false;
 
 	public void setUseLightning(boolean useLightning) {
+		this.switchLightning = true;
 		this.useLightning = useLightning;
 	}
 
@@ -77,6 +79,16 @@ public class GLRenderer implements Renderer {
 
 		if (pauseRenderer)
 			startPauseLoop();
+
+		// if the lightning was recently enabled/disabled
+		if (switchLightning) {
+			switchLightning = false;
+			if (useLightning) {
+				gl.glEnable(GL10.GL_LIGHTING);
+			} else {
+				gl.glDisable(GL10.GL_LIGHTING);
+			}
+		}
 
 		if (ObjectPicker.readyToDrawWithColor) {
 			readyToPickPixel = true;
