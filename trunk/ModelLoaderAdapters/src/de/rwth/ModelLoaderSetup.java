@@ -19,19 +19,20 @@ import system.DefaultARSetup;
 import system.EventManager;
 import util.EfficientList;
 import util.Vec;
+import util.Wrapper;
 import worldData.MoveObjComp;
 import worldData.Obj;
 import worldData.World;
 
 public class ModelLoaderSetup extends DefaultARSetup {
 
-	private boolean lightsOnOff = false;
+	private boolean lightsOnOff = true;
 	protected static final float zMoveFactor = 1.4f;
 	private String fileName;
 	private String textureName;
 	private LightSource spotLight;
 	private GLCamera cam;
-	private Obj lightObject;
+	private Wrapper targetMoveWrapper;
 	private GLRenderer renderer;
 
 	public ModelLoaderSetup(String fileName, String textureName) {
@@ -52,23 +53,44 @@ public class ModelLoaderSetup extends DefaultARSetup {
 			GLFactory objectFactory) {
 		this.renderer = renderer;
 		cam = world.getMyCamera();
-		lightObject = new Obj();
+		final Obj lightObject = new Obj();
 		spotLight.myPosition = new Vec(1, 1, 1);
 		MeshComponent circle = objectFactory.newCircle(null);
-		circle.myScale = new Vec(0.2f, 0.2f, 0.2f);
-		spotLight.add(circle);
-		lightObject.setComp(spotLight);
+		circle.myRotation = new Vec(0.2f, 0.2f, 0.2f);
+		MeshGroup lightGroup = new MeshGroup();
+		lightGroup.add(spotLight);
+		lightGroup.add(circle);
+		lightObject.setComp(lightGroup);
 		lightObject.setComp(new MoveObjComp(1));
+		lightObject.setOnClickCommand(new Command() {
+
+			@Override
+			public boolean execute() {
+				targetMoveWrapper.setTo(lightObject);
+				return true;
+			}
+		});
 		world.add(lightObject);
+
+		targetMoveWrapper = new Wrapper(lightObject);
 
 		GDXConnection.init(myTargetActivity, renderer);
 
 		new ModelLoader(renderer, fileName, textureName) {
 			@Override
 			public void modelLoaded(MeshComponent gdxMesh) {
-				Obj o = new Obj();
+				final Obj o = new Obj();
 				o.setComp(gdxMesh);
 				world.add(o);
+				o.setComp(new MoveObjComp(1));
+				o.setOnClickCommand(new Command() {
+
+					@Override
+					public boolean execute() {
+						targetMoveWrapper.setTo(o);
+						return true;
+					}
+				});
 			}
 		};
 
@@ -83,8 +105,8 @@ public class ModelLoaderSetup extends DefaultARSetup {
 		eventManager.onLocationChangedAction = null;
 		eventManager.onTrackballEventAction = null;
 
-		eventManager.addOnTrackballAction(new ActionMoveObject(lightObject,
-				cam, 10, 200));
+		eventManager.addOnTrackballAction(new ActionMoveObject(
+				targetMoveWrapper, cam, 10, 200));
 	}
 
 	@Override
@@ -94,7 +116,11 @@ public class ModelLoaderSetup extends DefaultARSetup {
 
 			@Override
 			public boolean execute() {
-				lightObject.getComp(MoveObjComp.class).myTargetPos.z -= zMoveFactor;
+				if (targetMoveWrapper.getObject() instanceof Obj) {
+					((Obj) targetMoveWrapper.getObject())
+							.getComp(MoveObjComp.class).myTargetPos.z -= zMoveFactor;
+					return true;
+				}
 				return false;
 			}
 		}, "Obj Down");
@@ -102,10 +128,15 @@ public class ModelLoaderSetup extends DefaultARSetup {
 
 			@Override
 			public boolean execute() {
-				lightObject.getComp(MoveObjComp.class).myTargetPos.z += zMoveFactor;
+				if (targetMoveWrapper.getObject() instanceof Obj) {
+					((Obj) targetMoveWrapper.getObject())
+							.getComp(MoveObjComp.class).myTargetPos.z += zMoveFactor;
+					return true;
+				}
 				return false;
 			}
 		}, "Obj up");
+
 		guiSetup.addButtonToBottomView(new Command() {
 
 			@Override
@@ -114,6 +145,7 @@ public class ModelLoaderSetup extends DefaultARSetup {
 				renderer.setUseLightning(lightsOnOff);
 				return true;
 			}
-		}, "Light on/off");
+		}, "Lights on/of");
+
 	}
 }
