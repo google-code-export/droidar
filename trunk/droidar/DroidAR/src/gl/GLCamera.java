@@ -10,6 +10,7 @@ import util.HasDebugInformation;
 import util.L;
 import util.Vec;
 import worldData.Updateable;
+import actions.ActionRotateCameraBuffered;
 import actions.DefaultUpdateListener;
 import android.hardware.SensorManager;
 import android.location.Location;
@@ -78,11 +79,18 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	 * acceleration or magnetometer values have changed
 	 */
 	private boolean accelOrMagChanged = false;
+	/**
+	 * same as for {@link GLCamera#accelOrMagChanged} only for the orientation
+	 * values
+	 */
+	private boolean orientationValuesChanged = false;
 
 	private float[] myAccelValues = new float[3];
 	private float[] myMagnetValues = new float[3];
+	private float[] myOrientValues;
 	private float[] myNewAccelValues;
 	private float[] myNewMagnetValues;
+	// private float[] myNewOrientValues;
 
 	private float[] unrotatedMatrix = createIdentityMatrix();
 
@@ -161,6 +169,11 @@ public class GLCamera implements Updateable, HasDebugInformation {
 			accelOrMagChanged |= updateListener.onCamMagnetometerUpdate(
 					myMagnetValues, myNewMagnetValues, timeDelta);
 		}
+
+		// if (myNewOrientValues != null) {
+		// orientationValuesChanged = updateListener.onCamOrientationUpdate(
+		// myOrientValues, myNewOrientValues, timeDelta);
+		// }
 
 		if ((myOffset != null) && (myNewOffset != null)) {
 			updateListener.onCamOffsetVecUpdate(myOffset, myNewOffset,
@@ -366,18 +379,25 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	// }
 
 	private synchronized void glLoadRotationMatrix(GL10 gl) {
-		if ((sensorInputEnabled) && (accelOrMagChanged)) {
-			udateRotationMatrixFromSensorValues();
+		if (sensorInputEnabled) {
+			if (accelOrMagChanged) {
+				udateRotationMatrixFromAccelAndMagnetSensorValues();
+			} else if (orientationValuesChanged) {
+				udateRotationMatrixFromOrientationSensorValues();
+			}
 		}
 
 		gl.glMultMatrixf(rotationMatrix, matrixOffset);
 
 	}
 
-	private void udateRotationMatrixFromSensorValues() {
+	private void udateRotationMatrixFromAccelAndMagnetSensorValues() {
 		// first calc the unrotated matrix:
 		SensorManager.getRotationMatrix(unrotatedMatrix, null, myAccelValues,
 				myMagnetValues);
+
+		// showMatrix("magAccel", unrotatedMatrix);
+
 		// then rotate it according to the screen rotation:
 		SensorManager.remapCoordinateSystem(unrotatedMatrix,
 				SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X,
@@ -387,6 +407,38 @@ public class GLCamera implements Updateable, HasDebugInformation {
 
 		accelOrMagChanged = false;
 		matrixOffset = 0;
+	}
+
+	private void udateRotationMatrixFromOrientationSensorValues() {
+
+		// first calc the unrotated matrix:
+		GLUtilityClass.getRotationMatrixFromVector(unrotatedMatrix,
+				myOrientValues);
+
+		// showMatrix("orientData", unrotatedMatrix);
+
+		// then rotate it according to the screen rotation:
+		SensorManager.remapCoordinateSystem(unrotatedMatrix,
+				SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X,
+				rotationMatrix);
+
+		updateCameraAnglesIfNeeded();
+
+		orientationValuesChanged = false;
+		matrixOffset = 0;
+	}
+
+	private void showMatrix(String string, float[] m) {
+		System.out.println(string);
+		System.out.println("" + m[0] + ", >" + m[1] + ", >" + m[2] + ", >"
+				+ m[3]);
+		System.out.println("" + m[4] + ", >" + m[5] + ", >" + m[6] + ", >"
+				+ m[7]);
+		System.out.println("" + m[8] + ", >" + m[9] + ", >" + m[10] + ", >"
+				+ m[11]);
+		System.out.println("" + m[12] + ", >" + m[13] + ", >" + m[14] + ", >"
+				+ m[15]);
+
 	}
 
 	private void updateCameraAnglesIfNeeded() {
@@ -451,13 +503,6 @@ public class GLCamera implements Updateable, HasDebugInformation {
 			gl.glRotatef(vec.x, 1, 0, 0);
 			gl.glRotatef(vec.z, 0, 0, 1);
 		}
-	}
-
-	public synchronized void setNewRotation(float xAngle, float yAngle,
-			float zAngle) {
-		myNewRotationVec.x = xAngle;
-		myNewRotationVec.y = yAngle;
-		myNewRotationVec.z = zAngle;
 	}
 
 	public synchronized void setAccelValuesBuffered(float[] newValues) {
@@ -562,6 +607,20 @@ public class GLCamera implements Updateable, HasDebugInformation {
 		myMagnetValues[1] = values[1];
 		myMagnetValues[2] = values[2];
 		accelOrMagChanged = true;
+		return true;
+	}
+
+	public synchronized boolean setOrientationValues(float[] values) {
+		if (values == null)
+			return false;
+
+		if (myOrientValues == null)
+			myOrientValues = new float[3];
+
+		myOrientValues[0] = values[0];
+		myOrientValues[1] = values[1];
+		myOrientValues[2] = values[2];
+		orientationValuesChanged = true;
 		return true;
 	}
 

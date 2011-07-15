@@ -10,8 +10,8 @@ public class ActionRotateCameraUnbuffered extends Action {
 	}
 
 	@Override
-	public boolean onOrientationChanged(float xAngle, float yAngle, float zAngle) {
-		myTargetCamera.setRotation(xAngle, yAngle, zAngle);
+	public boolean onOrientationChanged(float[] newValues) {
+		myTargetCamera.setOrientationValues(newValues);
 		return true;
 	}
 

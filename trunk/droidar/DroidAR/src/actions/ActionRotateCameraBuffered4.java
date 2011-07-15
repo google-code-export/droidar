@@ -2,6 +2,7 @@ package actions;
 
 import gl.GLCamera;
 import actions.algos.Algo;
+import actions.algos.BufferAlgo1;
 import actions.algos.BufferAlgo2;
 import actions.algos.SensorAlgo1;
 
@@ -11,6 +12,9 @@ public class ActionRotateCameraBuffered4 extends Action {
 
 	private Algo magnetAlgo;
 	private Algo accelAlgo;
+
+	private Algo orientAlgo;
+	private Algo orientationBufferAlgo;
 
 	private Algo accelBufferAlgo;
 	private Algo magnetBufferAlgo;
@@ -23,12 +27,21 @@ public class ActionRotateCameraBuffered4 extends Action {
 		magnetAlgo = new SensorAlgo1(0.8f);
 		accelBufferAlgo = new BufferAlgo2(0.2f);
 		magnetBufferAlgo = new BufferAlgo2(0.2f);
+
+		orientAlgo = new SensorAlgo1(0.5f);// TODO
+		orientationBufferAlgo = new BufferAlgo2(0.2f); // TODO
 	}
 
 	@Override
-	public boolean onOrientationChanged(float xAngle, float yAngle, float zAngle) {
-		myTargetCamera.setNewRotation(xAngle, yAngle, zAngle);
+	public boolean onOrientationChanged(float[] values) {
+		myTargetCamera.setOrientationValues(orientAlgo.execute(values));
 		return true;
+	}
+
+	@Override
+	public boolean onCamOrientationUpdate(float[] target, float[] newValues,
+			float timeDelta) {
+		return orientationBufferAlgo.execute(target, newValues, timeDelta);
 	}
 
 	@Override

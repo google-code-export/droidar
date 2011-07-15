@@ -103,8 +103,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 					SensorManager.SENSOR_DELAY_GAME);
 		} else {
 			// Register orientation Sensor Listener:
-			Sensor orientationSensor = sensorManager
-					.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+			Sensor orientationSensor = sensorManager.getDefaultSensor(11);// Sensor.TYPE_ROTATION_VECTOR);
 			sensorManager.registerListener(this, orientationSensor,
 					SensorManager.SENSOR_DELAY_GAME);
 		}
@@ -168,9 +167,8 @@ public class EventManager implements LocationListener, SensorEventListener {
 			}
 
 			// else sensor input is set to orientation mode
-			if (event.sensor.getType() == Sensor.TYPE_ORIENTATION) {
-				onOrientationChangedAction.onOrientationChanged(
-						event.values[1], event.values[2], event.values[0]);
+			if (event.sensor.getType() == 11) {// Sensor.TYPE_ROTATION_VECTOR) {
+				onOrientationChangedAction.onOrientationChanged(event.values);
 			}
 		}
 	}

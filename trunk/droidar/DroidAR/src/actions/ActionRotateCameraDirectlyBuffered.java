@@ -59,14 +59,4 @@ public class ActionRotateCameraDirectlyBuffered extends Action {
 		return oldV;
 	}
 
-	@Override
-	public boolean onOrientationChanged(float xAngle, float yAngle, float zAngle) {
-
-		float pitch = -xAngle;
-		float roll = -yAngle;
-		float yaw = -zAngle;
-		System.out.println("error 1337");
-		return true;
-	}
-
 }

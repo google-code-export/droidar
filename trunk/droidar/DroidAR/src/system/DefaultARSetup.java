@@ -1,7 +1,5 @@
 package system;
 
-import java.util.Set;
-
 import geo.GeoObj;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;

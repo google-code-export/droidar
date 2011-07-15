@@ -14,6 +14,7 @@ public abstract class Action implements EventListener {
 
 	protected static final float SMOOTH_ROTATION_SPEED = 2;
 	protected static final float SMOOTH_MOTION_SPEED = 3;
+	private static final String LOG_TAG = "action event";
 
 	private boolean accelNotCatchedOutputFlag;
 	private boolean magnetNotCatchedOutputFlag;
@@ -33,7 +34,7 @@ public abstract class Action implements EventListener {
 	}
 
 	@Override
-	public boolean onOrientationChanged(float xAngle, float yAngle, float zAngle) {
+	public boolean onOrientationChanged(float[] values) {
 		Log.e("action event",
 				"onOrientationChanged not catched by defined action: "
 						+ this.getClass());
@@ -95,26 +96,32 @@ public abstract class Action implements EventListener {
 
 	@Override
 	public boolean onTrackballEvent(float x, float y, MotionEvent event) {
-		Log.e("action event",
-				"onTrackballEvent not catched by defined action: "
-						+ this.getClass());
+		Log.e(LOG_TAG, "onTrackballEvent not catched by defined action: "
+				+ this.getClass());
 		return false;
 	}
 
 	@Override
 	public boolean onCamAccelerationUpdate(float[] target, float[] values,
 			float timeDelta) {
-		Log.e("action event",
-				"onAccelerationUpdate thrown by glCamera not catched by defined action: "
-						+ this.getClass());
+		Log.e(LOG_TAG, "onAccelerationUpdate requested by glCamera not "
+				+ "catched by defined action: " + this.getClass());
 		return false;
 	}
 
 	@Override
 	public boolean onCamMagnetometerUpdate(float[] target, float[] values,
 			float timeDelta) {
-		Log.e("action event",
-				"onMagnetometerUpdate thrown by glCamera not catched by defined action: ");
+		Log.e(LOG_TAG, "onMagnetometerUpdate requested by glCamera not "
+				+ "catched by defined action: ");
+		return false;
+	}
+
+	@Override
+	public boolean onCamOrientationUpdate(float[] myOrientValues,
+			float[] myNewOrientValues, float timeDelta) {
+		Log.e(LOG_TAG, "onCamOrientationUpdate requested by glCamera not "
+				+ "catched by defined action: ");
 		return false;
 	}
 
