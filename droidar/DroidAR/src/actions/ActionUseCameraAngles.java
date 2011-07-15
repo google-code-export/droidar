@@ -100,7 +100,7 @@ public abstract class ActionUseCameraAngles extends Action implements
 	public abstract void updateCompassAzimuth(float azimuth);
 
 	@Override
-	public boolean onOrientationChanged(float xAngle, float yAngle, float zAngle) {
+	public boolean onOrientationChanged(float[] values) {
 		/*
 		 * the use of the orientation sensor results in other values then the
 		 * normal magnetometer and accelerometer values. Therefore it was

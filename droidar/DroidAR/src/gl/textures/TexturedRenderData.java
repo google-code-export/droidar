@@ -76,6 +76,12 @@ public class TexturedRenderData extends RenderData {
 			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
 
+			if (normalsBuffer != null) {
+				// Enable normals array (for lightning):
+				gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
+				gl.glNormalPointer(GL10.GL_FLOAT, 0, normalsBuffer);
+			}
+			
 			gl.glDrawArrays(drawMode, 0, verticesCount);
 
 			gl.glDisable(GL10.GL_TEXTURE_2D);

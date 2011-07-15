@@ -7,8 +7,7 @@ import android.view.MotionEvent;
 
 public interface EventListener {
 
-	public abstract boolean onOrientationChanged(float xAngle, float yAngle,
-			float zAngle);
+	public abstract boolean onOrientationChanged(float[] values);
 
 	public abstract boolean onLocationChanged(Location location);
 
@@ -34,11 +33,11 @@ public interface EventListener {
 	 * there is one otherwise just set target to values
 	 * 
 	 * @param target
-	 * @param values
+	 * @param newValues
 	 * @param timeDelta
 	 * @return true if target has been changed
 	 */
-	public boolean onCamAccelerationUpdate(float[] target, float[] values,
+	public boolean onCamAccelerationUpdate(float[] target, float[] newValues,
 			float timeDelta);
 
 	/**
@@ -58,5 +57,8 @@ public interface EventListener {
 	public void onCamOffsetVecUpdate(Vec target, Vec values, float timeDelta);
 
 	public void onCamPositionVecUpdate(Vec target, Vec values, float timeDelta);
+
+	public abstract boolean onCamOrientationUpdate(float[] myOrientValues,
+			float[] myNewOrientValues, float timeDelta);
 
 }

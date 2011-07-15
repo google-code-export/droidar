@@ -11,9 +11,20 @@ public class EventListenerGroup extends Action implements ListInterface {
 
 	EfficientList<EventListener> myActions = new EfficientList<EventListener>();
 
-	public boolean onOrientationChanged(float xAngle, float yAngle, float zAngle) {
+	@Override
+	public boolean onOrientationChanged(float[] values) {
 		for (int i = 0; i < myActions.myLength; i++) {
-			myActions.get(i).onOrientationChanged(xAngle, yAngle, zAngle);
+			myActions.get(i).onOrientationChanged(values);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean onCamOrientationUpdate(float[] myOrientValues,
+			float[] myNewOrientValues, float timeDelta) {
+		for (int i = 0; i < myActions.myLength; i++) {
+			myActions.get(i).onCamOrientationUpdate(myOrientValues,
+					myNewOrientValues, timeDelta);
 		}
 		return true;
 	}

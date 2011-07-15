@@ -23,8 +23,8 @@ public class ActionRotateCameraBufferedDebug extends Action {
 	@Override
 	public boolean onAccelChanged(float[] values) {
 
-		float pitch = (float) +Math.toDegrees(Math.atan2(-values[1], Math
-				.sqrt(values[2] * values[2] + values[0] * values[0])));
+		float pitch = (float) +Math.toDegrees(Math.atan2(-values[1],
+				Math.sqrt(values[2] * values[2] + values[0] * values[0])));
 		float roll = (float) -Math.toDegrees(Math.atan2(values[0], -values[2]));
 
 		return true;
@@ -33,8 +33,8 @@ public class ActionRotateCameraBufferedDebug extends Action {
 	@Override
 	public boolean onMagnetChanged(float[] values) {
 
-		float yaw = (float) -Math.toDegrees(Math.atan2(-values[0], Math
-				.sqrt(values[1] * values[1] + values[2] * values[2])));
+		float yaw = (float) -Math.toDegrees(Math.atan2(-values[0],
+				Math.sqrt(values[1] * values[1] + values[2] * values[2])));
 		float pitch = (float) -Math
 				.toDegrees(Math.atan2(-values[2], values[1]));
 
@@ -42,12 +42,11 @@ public class ActionRotateCameraBufferedDebug extends Action {
 	}
 
 	@Override
-	public boolean onOrientationChanged(float xAngle, float yAngle, float zAngle) {
-
-		float pitch = -xAngle;
-		float roll = -yAngle;
-		float yaw = -zAngle;
-
+	public boolean onOrientationChanged(float[] values) {
+		// TODO find right order:
+		float yaw = values[0];
+		float pitch = values[1];
+		float roll = values[2];
 		return true;
 	}
 

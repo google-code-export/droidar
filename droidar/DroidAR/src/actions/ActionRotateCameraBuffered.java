@@ -12,6 +12,9 @@ public class ActionRotateCameraBuffered extends Action {
 	private Algo magnetAlgo;
 	private Algo accelAlgo;
 
+	private Algo orientAlgo;
+	//private Algo orientationBufferAlgo;
+
 	private Algo accelBufferAlgo;
 	private Algo magnetBufferAlgo;
 
@@ -19,16 +22,15 @@ public class ActionRotateCameraBuffered extends Action {
 		myTargetCamera = targetCamera;
 		// myTargetCamera.setUpdateListener(this);
 		registerAtCamera(targetCamera);
-		accelAlgo = new SensorAlgo1(0.5f);
-		magnetAlgo = new SensorAlgo1(0.9f);
-		accelBufferAlgo = new BufferAlgo1(0.1f, 4);
-		magnetBufferAlgo = new BufferAlgo1(0.1f, 4);
-	}
+		accelAlgo = new SensorAlgo1(0.1f);
+		magnetAlgo = new SensorAlgo1(1.4f);
 
-	@Override
-	public boolean onOrientationChanged(float xAngle, float yAngle, float zAngle) {
-		myTargetCamera.setNewRotation(xAngle, yAngle, zAngle);
-		return true;
+		orientAlgo = new SensorAlgo1(0.005f);// TODO
+		//orientationBufferAlgo = new BufferAlgo1(0.01f, 0.02f); // TODO
+
+		accelBufferAlgo = new BufferAlgo1(0.1f, 4f);
+		magnetBufferAlgo = new BufferAlgo1(0.1f, 4f);
+
 	}
 
 	@Override
@@ -60,6 +62,22 @@ public class ActionRotateCameraBuffered extends Action {
 			float[] values, float timeDelta) {
 		return magnetBufferAlgo.execute(target, values, timeDelta);
 	}
+
+	@Override
+	public boolean onOrientationChanged(float[] values) {
+		myTargetCamera.setOrientationValues(orientAlgo.execute(values));
+		return true;
+	}
+
+	// @Override
+	// public boolean onCamOrientationUpdate(float[] target, float[] newValues,
+	// float timeDelta) {
+	// // target[0] = newValues[0];
+	// // target[1] = newValues[1];
+	// // target[2] = newValues[2];
+	// return orientationBufferAlgo.execute(target, newValues,
+	// timeDelta);
+	// }
 
 	@Override
 	public boolean onReleaseTouchMove() {

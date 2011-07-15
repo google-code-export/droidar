@@ -71,6 +71,12 @@ public class TriangulatedRenderData extends RenderData {
 		// coordinates to use when rendering.
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 
+		if (normalsBuffer != null) {
+			// Enable normals array (for lightning):
+			gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
+			gl.glNormalPointer(GL10.GL_FLOAT, 0, normalsBuffer);
+		}
+		
 		gl.glDrawElements(drawMode, indexBuffer.limit(), GL10.GL_UNSIGNED_SHORT,
 				indexBuffer);
 

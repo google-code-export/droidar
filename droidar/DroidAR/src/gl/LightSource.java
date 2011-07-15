@@ -185,7 +185,7 @@ public class LightSource extends MeshComponent {
 
 	public static LightSource newDefaultAmbientLight(int lightId) {
 		LightSource l = new LightSource(lightId);
-		float b = 0.01f;
+		float b = 0.05f;
 		float[] color = { b, b, b, 1 };
 		l.ambientLightColor = color;
 		return l;

@@ -4,9 +4,9 @@ package actions.algos;
  * implementation of the function <br>
  * 
  * <pre>
- *       /              0  for       |x| <  a   
- *  f(x)=|  |x|/(b-a)-a/b  for  a <  |x| <= b  
- *       \              1  for  b <= |x|
+ *       /              0  		for       |x| < a   
+ *  f(x)=| 1/(b-a)*|x|+a/(a-b)	for  a <= |x| < b  
+ *       \              1  		for  b <= |x|
  *  
  *  graph of f(x):
  *  
@@ -27,14 +27,14 @@ public class BufferAlgo1 extends Algo {
 
 	private final float a;
 	private final float b;
-	private final float aDIVb;
-	private final float bMINUSa;
+	private final float m;
+	private final float n;
 
 	public BufferAlgo1(float a, float b) {
 		this.a = a;
 		this.b = b;
-		aDIVb = a / b;
-		bMINUSa = b - a;
+		m = 1f / (b - a);
+		n = a / (a - b);
 	}
 
 	@Override
@@ -46,24 +46,24 @@ public class BufferAlgo1 extends Algo {
 	}
 
 	/**
-	 * @param t
 	 * @param v
+	 * @param newV
 	 * @return newT=t+f(|v-t|)
 	 */
-	private float morph(float t, float v) {
-		float x = v - t;
+	private float morph(float v, float newV) {
+		float x = newV - v;
 		if (x >= 0) {
 			if (x < a)
-				return t;
+				return v; // v+0*x
 			if (b <= x)
-				return v;
-			return t + ((x) / bMINUSa - aDIVb);
+				return newV; // v+1*x
+			return v + x * m + n;
 		} else {
 			if (-x < a)
-				return t;
-			if (b <= -x)
 				return v;
-			return t - ((-x) / bMINUSa - aDIVb);
+			if (b <= -x)
+				return newV;
+			return v - (-x) * m + n;
 		}
 	}
 

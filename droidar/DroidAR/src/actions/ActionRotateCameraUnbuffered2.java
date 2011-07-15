@@ -8,6 +8,8 @@ public class ActionRotateCameraUnbuffered2 extends Action {
 
 	private Algo magnetAlgo;
 	private Algo accelAlgo;
+	private Algo orientAlgo;
+
 	private GLCamera myTargetCamera;
 
 	public ActionRotateCameraUnbuffered2(GLCamera targetCamera) {
@@ -16,12 +18,8 @@ public class ActionRotateCameraUnbuffered2 extends Action {
 		registerAtCamera(targetCamera);
 		accelAlgo = new SensorAlgo1(0.5f);
 		magnetAlgo = new SensorAlgo1(0.8f);
-	}
 
-	@Override
-	public boolean onOrientationChanged(float xAngle, float yAngle, float zAngle) {
-		myTargetCamera.setNewRotation(xAngle, yAngle, zAngle);
-		return true;
+		orientAlgo = new SensorAlgo1(0.5f);// TODO
 	}
 
 	@Override
@@ -36,22 +34,14 @@ public class ActionRotateCameraUnbuffered2 extends Action {
 	}
 
 	@Override
+	public boolean onOrientationChanged(float[] values) {
+		myTargetCamera.setOrientationValues(orientAlgo.execute(values));
+		return true;
+	}
+
+	@Override
 	public boolean onMagnetChanged(float[] values) {
 		return myTargetCamera.setMagnetValues(magnetAlgo.execute(values));
-	}
-
-	@Override
-	public boolean onCamAccelerationUpdate(float[] target, float[] values,
-			float timeDelta) {
-		System.out.println("accelUpdate");
-		return super.onCamAccelerationUpdate(target, values, timeDelta);
-	}
-
-	@Override
-	public boolean onCamMagnetometerUpdate(float[] target, float[] values,
-			float timeDelta) {
-		System.out.println("magnetoUpdate");
-		return super.onCamMagnetometerUpdate(target, values, timeDelta);
 	}
 
 	@Override

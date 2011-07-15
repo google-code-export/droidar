@@ -54,6 +54,9 @@ public class MultiColorRenderData extends RenderData {
 			gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 			// Specifies the location and data format of an array of vertex
 			// coordinates to use when rendering.
+			
+			
+			
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 
 			// Enable the color array buffer to be used during rendering.
@@ -61,6 +64,12 @@ public class MultiColorRenderData extends RenderData {
 			// Point out the where the color buffer is.
 			gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer); // 4 for RGBA
 
+			if (normalsBuffer != null) {
+				// Enable normals array (for lightning):
+				gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
+				gl.glNormalPointer(GL10.GL_FLOAT, 0, normalsBuffer);
+			}
+			
 			gl.glDrawArrays(drawMode, 0, verticesCount);
 
 			gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
