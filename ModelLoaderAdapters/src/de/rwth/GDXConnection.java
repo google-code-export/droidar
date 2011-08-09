@@ -169,6 +169,11 @@ public class GDXConnection implements Renderable {
 
 				return false;
 			}
+
+			@Override
+			public float getDensity() {
+				return 1;
+			}
 		};
 		if (gl instanceof javax.microedition.khronos.opengles.GL11) {
 			String renderer = gl.glGetString(GL10.GL_RENDERER);
