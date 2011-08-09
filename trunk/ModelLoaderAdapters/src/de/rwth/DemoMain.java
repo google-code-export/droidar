@@ -14,7 +14,7 @@ public class DemoMain extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		LinearLayout l = new LinearLayout(this);
-		l.addView(newButton("jaiqua-mesh.xml", "nskingr.jpg"));
+		l.addView(newButton("jaiqua-mesh.xml iii", "nskingr.jpg"));
 		l.addView(newButton("robot-mesh.xml", "r2skin.jpg"));
 		l.addView(newButton("boy_low.g3dt", "boy_lowpoly_color.png"));
 		l.addView(newButton("blobbie_world_test.dae",
