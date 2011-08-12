@@ -21,7 +21,8 @@ import android.util.Log;
 public class ActionCalcRelativePos extends Action {
 
 	private static final double MAX_METER_DISTANCE = 500; // 500 meter
-	private static final String LOG_TAG = "Action calc relative pos";
+	private static final String LOG_TAG = "ActionCalcRelativePos";
+	private static final boolean LOG_SHOW_POSITION = true;
 	/**
 	 * this could be replaces by the
 	 * {@link EventManager#getZeroPositionLocationObject()} values. Should store
@@ -56,6 +57,12 @@ public class ActionCalcRelativePos extends Action {
 			final double latitudeDistInMeters = (location.getLatitude() - nullLatitude) * 111133.3333;
 			final double longitudeDistInMeters = (location.getLongitude() - nullLongitude)
 					* 111319.4917 * Math.cos(nullLatitude * 0.0174532925);
+
+			if (LOG_SHOW_POSITION) {
+				Log.v(LOG_TAG, "latitudeDistInMeters=" + latitudeDistInMeters);
+				Log.v(LOG_TAG, "longitudeDistInMeters=" + longitudeDistInMeters);
+			}
+
 			/*
 			 * The altitude should be set to a certain position too. This can be
 			 * done by using location.getAltitude() TODO first think of all
