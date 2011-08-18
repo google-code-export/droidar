@@ -17,8 +17,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import components.Component;
-
 /**
  * Use this factory to understand how to create 3D objects with {@link Shape}s
  * and {@link MeshGroup}s. Often it is more efficient to create the objects you

@@ -73,7 +73,7 @@ public class IO {
 		}
 		return null;
 	}
-	
+
 	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
 		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
 				bitmap.getHeight(), Bitmap.Config.RGB_565);
@@ -287,5 +287,19 @@ public class IO {
 	 */
 	public static boolean createFolder(String newDirectory) {
 		return new File(newDirectory).mkdirs();
+	}
+
+	public static Bitmap loadBitmapFromAssetsFolder(Context context,
+			String fileName) {
+		try {
+			BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+			bitmapOptions.inPreferredConfig = Bitmap.Config.RGB_565;
+			return BitmapFactory.decodeStream(context.getAssets()
+					.open(fileName), null, bitmapOptions);
+		} catch (Exception e) {
+			Log.e(LOG_TAG, "Could not load " + fileName
+					+ " from assets folder!");
+		}
+		return null;
 	}
 }
