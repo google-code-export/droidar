@@ -585,8 +585,12 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 		 */
 	}
 
-	@Override
 	public boolean isEmpty() {
+		return getMyItems().myLength == 0;
+	}
+
+	@Override
+	public boolean isCleared() {
 		if (getMyItems().myLength == 0 && isClearedAtLeastOneTime) {
 			return true;
 		}
@@ -624,4 +628,30 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 		return false;
 	}
 
+	public EfficientList<GeoObj> getConnectedNodesOf(GeoObj obj) {
+		EfficientList<GeoObj> result = new EfficientList<GeoObj>();
+		for (int i = 0; i < myEdges.myLength; i++) {
+			if (myEdges.get(i).from.equals(obj)) {
+				result.add(myEdges.get(i).to);
+			} else if (myEdges.get(i).to.equals(obj)) {
+				result.add(myEdges.get(i).from);
+			}
+		}
+		return result;
+	}
+
+	public EfficientList<GeoObj> getFollowingNodesOf(GeoObj obj) {
+
+		if (isNonDirectional()) {
+			return getConnectedNodesOf(obj);
+		}
+
+		EfficientList<GeoObj> result = new EfficientList<GeoObj>();
+		for (int i = 0; i < myEdges.myLength; i++) {
+			if (myEdges.get(i).from.equals(obj)) {
+				result.add(myEdges.get(i).to);
+			}
+		}
+		return result;
+	}
 }

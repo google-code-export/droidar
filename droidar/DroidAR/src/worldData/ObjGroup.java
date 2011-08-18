@@ -25,7 +25,7 @@ public class ObjGroup extends AbstractObj implements ListInterface {
 		for (int i = 0; i < l; i++) {
 			AbstractObj a = myItems.get(i);
 			if (a instanceof ListInterface) {
-				if (((ListInterface) a).isEmpty()) {
+				if (((ListInterface) a).isCleared()) {
 					myItems.remove(a);
 				}
 			}
@@ -51,7 +51,7 @@ public class ObjGroup extends AbstractObj implements ListInterface {
 	}
 
 	@Override
-	public boolean isEmpty() {
+	public boolean isCleared() {
 		if (getMyItems().myLength == 0) {
 			return true;
 		}

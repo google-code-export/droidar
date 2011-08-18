@@ -2,6 +2,7 @@ package geo;
 
 import geo.EdgeListener.DefaultEdgeListener;
 import geo.NodeListener.DefaultNodeListener;
+import gl.GLCamera;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -34,13 +35,17 @@ public class GeoUtils {
 	private Geocoder myGeoCoder;
 	private Context myContext;
 
-	private NodeListener defaultNodeListener = new DefaultNodeListener();
-	private EdgeListener defaultEdgeListener = new DefaultEdgeListener();
+	private NodeListener defaultNodeListener;
+	private EdgeListener defaultEdgeListener;
 
-	public GeoUtils(Context context) {
+	public GeoUtils(Context context, GLCamera glCamera) {
 		myContext = context;
 		myGeoCoder = new Geocoder(context, Locale.getDefault());
+		defaultNodeListener = new DefaultNodeListener(glCamera);
+		defaultEdgeListener = new DefaultEdgeListener();
 	}
+	
+	
 
 	/**
 	 * This method returns the best match for a specified position. It could for
@@ -254,7 +259,12 @@ public class GeoUtils {
 						"Resulting graph for "
 								+ destPos.getInfoObject().getShortDescr());
 				result.setIsPath(true);
-				result.add(startPos);
+
+				if (nodeListener != null) {
+					nodeListener.addNodeToGraph(result, startPos);
+				} else {
+					defaultNodeListener.addNodeToGraph(result, startPos);
+				}
 
 				GeoObj lastPoint = startPos;
 				for (int i = 1; i < pairs.length; i++) {

@@ -32,7 +32,7 @@ public abstract class GameElementList<T> implements ListInterface<T> {
 	}
 
 	@Override
-	public boolean isEmpty() {
+	public boolean isCleared() {
 		return myList.myLength == 0;
 	}
 

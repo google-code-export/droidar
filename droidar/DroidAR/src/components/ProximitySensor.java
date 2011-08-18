@@ -9,24 +9,17 @@ import worldData.Visitor;
 
 import commands.Command;
 
-public class ProximitySensor implements Component {
+public abstract class ProximitySensor implements Component {
 
 	private static final float DEFAULT_UPDATE_TIME = 1;
 	private GLCamera myCamera;
 	private float myDistance;
-	private Command myCommand;
 	private UpdateTimer myTimer;
 
-	public ProximitySensor(GLCamera camera, float distance,
-			Command commandToExecuteWhenProximityReached) {
+	public ProximitySensor(GLCamera camera, float distance) {
 		myCamera = camera;
 		myDistance = distance;
-		myCommand = commandToExecuteWhenProximityReached;
 		myTimer = new UpdateTimer(DEFAULT_UPDATE_TIME, null);
-	}
-
-	public void setMyCommand(Command myCommand) {
-		this.myCommand = myCommand;
 	}
 
 	public void setMyCamera(GLCamera myCamera) {
@@ -50,10 +43,23 @@ public class ProximitySensor implements Component {
 				float currentDistance = Vec.distance(m.myPosition,
 						myCamera.getMyPosition());
 				if (0 <= currentDistance && currentDistance < myDistance) {
-					myCommand.execute(currentDistance);
+					onObjectIsCloseToCamera(myCamera, obj, m, currentDistance);
 				}
 			}
 		}
 	}
+
+	/**
+	 * @param glCamera
+	 *            the camera (which should be the users position)
+	 * @param obj
+	 *            the obj where the {@link ProximitySensor} is contained in
+	 * @param meshComp
+	 *            the {@link MeshComponent} of the obj
+	 * @param currentDistance
+	 *            the distance of the camera to the obj
+	 */
+	public abstract void onObjectIsCloseToCamera(GLCamera glCamera, Obj obj,
+			MeshComponent meshComp, float currentDistance);
 
 }

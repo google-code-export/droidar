@@ -52,7 +52,8 @@ public class CollectItemsSetup extends Setup {
 		MeshComponent arrow = GLFactory.getInstance().newArrow();
 		arrow.myPosition = new Vec(0, 0, 4);
 
-		MeshComponent circle = GLFactory.getInstance().newCircle(Color.redTransparent());
+		MeshComponent circle = GLFactory.getInstance().newCircle(
+				Color.redTransparent());
 		circle.myScale = new Vec(4, 4, 4);
 		// circle.myAnimation = new AnimationPulse(2, new Vec(0, 0, 0), new
 		// Vec(4, 4, 4), 0.2f);
@@ -64,17 +65,17 @@ public class CollectItemsSetup extends Setup {
 				camera.getMyPosition(), 5, 10);
 
 		Obj itemToCollect = new Obj();
-		itemToCollect.setComp(new ProximitySensor(camera, 3, new Command() {
+		itemToCollect.setComp(new ProximitySensor(camera, 3f) {
 			@Override
-			public boolean execute() {
+			public void onObjectIsCloseToCamera(GLCamera myCamera2, Obj obj,
+					MeshComponent m, float currentDistance) {
 				catchedNumber++;
 				new CommandShowToast(myTargetActivity, "You got me "
 						+ catchedNumber + " times").execute();
 				itemMesh.myPosition = Vec.getNewRandomPosInXYPlane(
 						camera.getMyPosition(), 5, 20);
-				return true;
 			}
-		}));
+		});
 
 		itemToCollect.setComp(itemMesh);
 		world.add(itemToCollect);
