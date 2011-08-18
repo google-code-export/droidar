@@ -1,5 +1,8 @@
 package geo;
 
+import geo.EdgeListener.DefaultEdgeListener;
+import geo.NodeListener.DefaultNodeListener;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -30,6 +33,9 @@ public class GeoUtils {
 	private static final String LOG_TAG = "Geo Utils";
 	private Geocoder myGeoCoder;
 	private Context myContext;
+
+	private NodeListener defaultNodeListener = new DefaultNodeListener();
+	private EdgeListener defaultEdgeListener = new DefaultEdgeListener();
 
 	public GeoUtils(Context context) {
 		myContext = context;
@@ -185,6 +191,14 @@ public class GeoUtils {
 		return null;
 	}
 
+	/**
+	 * @param startPos
+	 * @param destPos
+	 * @param myResultingPath
+	 *            in this Wrapper the resulting path will be stored
+	 * @param byWalk
+	 * @return
+	 */
 	public boolean getPathFromAtoB(GeoObj startPos, GeoObj destPos,
 			Wrapper myResultingPath, boolean byWalk) {
 		GeoGraph result = getPathFromAtoB(startPos, destPos, byWalk);
@@ -201,18 +215,6 @@ public class GeoUtils {
 	public GeoGraph getPathFromAtoB(GeoObj startPos, GeoObj destPos,
 			boolean byWalk) {
 		return getPathFromAtoB(startPos, destPos, byWalk, null, null);
-	}
-
-	public interface NodeListener {
-
-		void addNodeToGraph(GeoGraph graph, GeoObj objectToAdd);
-
-	}
-
-	public interface EdgeListener {
-
-		void addEdgeToGraph(GeoGraph graph, GeoObj startPoint, GeoObj endPoint);
-
 	}
 
 	/**
@@ -265,15 +267,13 @@ public class GeoUtils {
 					if (nodeListener != null) {
 						nodeListener.addNodeToGraph(result, geoObj);
 					} else {
-						result.add(geoObj);
+						defaultNodeListener.addNodeToGraph(result, geoObj);
 					}
 					if (edgeListener != null) {
 						edgeListener.addEdgeToGraph(result, lastPoint, geoObj);
 					} else {
-						// add an edge:
-						if (lastPoint != null) {
-							result.addEdge(lastPoint, geoObj, null);
-						}
+						defaultEdgeListener.addEdgeToGraph(result, lastPoint,
+								geoObj);
 					}
 					lastPoint = geoObj;
 
