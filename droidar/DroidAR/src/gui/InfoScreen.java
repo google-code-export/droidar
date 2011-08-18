@@ -34,10 +34,11 @@ public class InfoScreen extends Activity {
 		Object infos = ActivityConnector.getInstance()
 				.loadObjFromNewlyCreatedActivity(this);
 
-		if (infos instanceof InfoScreenSettings)
+		if (infos instanceof InfoScreenSettings) {
 			myInfos = (InfoScreenSettings) infos;
-		addContent(myInfos,
-				(ScrollView) findViewById(R.id.infoScreenScrollview));
+			addContent(myInfos,
+					(ScrollView) findViewById(R.id.infoScreenScrollview));
+		}
 
 	}
 

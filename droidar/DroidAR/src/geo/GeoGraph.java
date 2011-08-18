@@ -1,6 +1,5 @@
 package geo;
 
-import geo.GeoUtils.EdgeListener;
 import gl.MeshComponent;
 
 import java.util.Arrays;

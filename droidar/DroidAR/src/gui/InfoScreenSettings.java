@@ -8,6 +8,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/**
+ * You can use {@link InfoScreenSettings#addText(String)} and
+ * {@link InfoScreenSettings#addTextWithIcon(int, String)} to display some
+ * custom information to the user
+ * 
+ * @author Spobo
+ * 
+ */
 public class InfoScreenSettings {
 
 	private LinearLayout myLinLayout;
