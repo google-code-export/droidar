@@ -19,7 +19,10 @@ public interface ListInterface<T> {
 
 	public void removeEmptyItems();
 
-	public boolean isEmpty();
+	/**
+	 * @return true if this object was cleared at least once
+	 */
+	public boolean isCleared();
 
 	public int length();
 

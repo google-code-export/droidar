@@ -134,7 +134,7 @@ public class EventListenerGroup extends Action implements ListInterface {
 	}
 
 	@Override
-	public boolean isEmpty() {
+	public boolean isCleared() {
 		return (myActions.myLength == 0);
 	}
 

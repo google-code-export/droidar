@@ -106,7 +106,7 @@ public class CommandGroup extends UndoableCommand implements ListInterface {
 	}
 
 	@Override
-	public boolean isEmpty() {
+	public boolean isCleared() {
 		return getMyItems().myLength == 0;
 	}
 

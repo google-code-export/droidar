@@ -292,6 +292,8 @@ public class IO {
 	public static Bitmap loadBitmapFromAssetsFolder(Context context,
 			String fileName) {
 		try {
+			Log.e(LOG_TAG, "Trying to load " + fileName
+					+ " from assets folder!");
 			BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
 			bitmapOptions.inPreferredConfig = Bitmap.Config.RGB_565;
 			return BitmapFactory.decodeStream(context.getAssets()

@@ -9,14 +9,14 @@ import worldData.World;
 
 import commands.Command;
 
-public class ProximitySensorForObjects implements Component {
+public class ProximitySensorForOtherObjects implements Component {
 	private static final float DEFAULT_UPDATE_TIME = 1;
 	private World myWorld;
 	private float myDistance;
 	private Command myCommand;
 	private UpdateTimer myTimer;
 
-	public ProximitySensorForObjects(World world, float distance,
+	public ProximitySensorForOtherObjects(World world, float distance,
 			Command commandToExecuteWhenProximityReached) {
 		myWorld = world;
 		myDistance = distance;
