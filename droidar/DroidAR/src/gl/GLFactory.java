@@ -145,9 +145,9 @@ public class GLFactory {
 		Log.v(LOG_TAG, "   > bitmap.getHeight()=" + bitmap.getHeight());
 		Log.v(LOG_TAG, "   > bitmap.getWidth()=" + bitmap.getWidth());
 		Log.v(LOG_TAG, "   > height/width factor=" + f);
-		Log.v(LOG_TAG, "   > w2="+w2);
-		Log.v(LOG_TAG, "   > h2="+h2);
-		
+		Log.v(LOG_TAG, "   > w2=" + w2);
+		Log.v(LOG_TAG, "   > h2=" + h2);
+
 		s.add(new Vec(-w2, 0, -h2), 0, 0);
 		s.add(new Vec(-w2, 0, h2), 0, 1);
 		s.add(new Vec(w2, 0, -h2), 1, 0);
@@ -393,6 +393,7 @@ public class GLFactory {
 		Shape s = new Shape(c);
 		Vec orth = Vec.getOrthogonalHorizontal(lineEndPos).normalize()
 				.mult(0.7f);
+
 		s.add(orth);
 		s.add(orth.getNegativeClone());
 		s.add(lineEndPos);

@@ -9,7 +9,7 @@ import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.MeshComponent;
-import gl.animations.AnimationColorMorph;
+import gl.animations.AnimationColorBounce;
 import gl.animations.AnimationPulse;
 import gui.GuiSetup;
 import gui.MetaInfos;
@@ -219,12 +219,12 @@ public class IndoorSetup extends Setup {
 
 	private void markGeoObjAsSearchPath(EfficientList<GeoObj> geoObjs) {
 		// unselectCurrentSelectedWaypoint();
-		setAnimToGeoObjList(geoObjs, new AnimationColorMorph(2, Color.green(),
+		setAnimToGeoObjList(geoObjs, new AnimationColorBounce(2, Color.green(),
 				Color.red(), 0.2f));
 	}
 
 	private void setAnimToGeoObjList(EfficientList<GeoObj> geoObjs,
-			AnimationColorMorph a) {
+			AnimationColorBounce a) {
 		for (int i = 0; i < geoObjs.myLength; i++) {
 			GeoObj g = geoObjs.get(i);
 			MeshComponent gf = g.getGraphicsComponent();

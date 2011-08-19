@@ -15,6 +15,7 @@ import commands.ui.CommandShowToast;
 
 import de.rwth.setups.CollectItemsSetup;
 import de.rwth.setups.DebugSetup;
+import de.rwth.setups.GraphMovementTestSetup;
 import de.rwth.setups.IndoorSetup;
 import de.rwth.setups.LightningSetup;
 import de.rwth.setups.PlaceObjectsSetup;
@@ -30,6 +31,7 @@ public class TechDemoLauncher extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.demoselector);
 
+		showSetup("Graph Movement Test", new GraphMovementTestSetup());
 		showSetup("Animation Demo", new DebugSetup());
 		showSetup("Lightning Demo", new LightningSetup());
 		showSetup("Collecting Items Demo", new CollectItemsSetup());

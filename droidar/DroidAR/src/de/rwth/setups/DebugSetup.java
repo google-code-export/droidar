@@ -9,7 +9,7 @@ import gl.GLRenderer;
 import gl.MeshComponent;
 import gl.Shape;
 import gl.animations.AnimationBounce;
-import gl.animations.AnimationColorMorph;
+import gl.animations.AnimationColorBounce;
 import gl.animations.AnimationFaceToCamera;
 import gl.animations.AnimationPulse;
 import gl.animations.AnimationRotate;
@@ -290,7 +290,7 @@ public class DebugSetup extends Setup {
 		guiSetup.addButtonToBottomView(new CommandAddAnimation(selection,
 				rotateAnimation), "Add RotateAnim");
 		guiSetup.addButtonToBottomView(new CommandAddAnimation(selection,
-				new AnimationColorMorph(2, Color.blue(), Color.green(), 0.2f)),
+				new AnimationColorBounce(2, Color.blue(), Color.green(), 0.2f)),
 				"Add ColorAnim");
 		AnimationPulse pAnimation = new AnimationPulse(2, new Vec(1, 1, 1),
 				new Vec(2, 2, 2), 0.2f);

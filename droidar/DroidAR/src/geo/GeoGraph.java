@@ -1,5 +1,6 @@
 package geo;
 
+import gl.GLCamera;
 import gl.MeshComponent;
 
 import java.util.Arrays;
@@ -27,6 +28,7 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 
 	private static final boolean DEBUG1 = false;
 	private static final boolean DEBUG2 = false;
+	private static final String LOG_TAG = "GeoGraph";
 
 	private EfficientListQualified<GeoObj> myNodes;
 	private EfficientList<Edge> myEdges;
@@ -451,6 +453,9 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 			Edge e = new Edge(from, to, edgeMeshComp);
 			myEdges.add(e);
 			return e;
+		} else {
+			Log.e(LOG_TAG, "Tried to add new edge but edge from " + from
+					+ " to " + to + " already existed!");
 		}
 		return null;
 	}
@@ -652,6 +657,25 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 				result.add(myEdges.get(i).to);
 			}
 		}
+		return result;
+	}
+
+	public static GeoGraph convertToGeoGraph(EfficientList<GeoObj> list,
+			boolean directional, GLCamera camera) {
+		return convertToGeoGraph(list, directional,
+				new NodeListener.DefaultNodeListener(camera),
+				new EdgeListener.DefaultEdgeListener());
+	}
+
+	public static GeoGraph convertToGeoGraph(EfficientList<GeoObj> list,
+			boolean directional, NodeListener nl, EdgeListener el) {
+		GeoGraph result = new GeoGraph();
+		result.setNonDirectional(!directional);
+		for (int i = 0; i < list.myLength - 1; i++) {
+			nl.addNodeToGraph(result, list.get(i));
+			el.addEdgeToGraph(result, list.get(i), list.get(i + 1));
+		}
+		nl.addNodeToGraph(result, list.get(list.myLength - 1));
 		return result;
 	}
 }
