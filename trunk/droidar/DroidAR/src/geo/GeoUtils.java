@@ -44,8 +44,6 @@ public class GeoUtils {
 		defaultNodeListener = new DefaultNodeListener(glCamera);
 		defaultEdgeListener = new DefaultEdgeListener();
 	}
-	
-	
 
 	/**
 	 * This method returns the best match for a specified position. It could for
@@ -259,6 +257,7 @@ public class GeoUtils {
 						"Resulting graph for "
 								+ destPos.getInfoObject().getShortDescr());
 				result.setIsPath(true);
+				result.setNonDirectional(false);
 
 				if (nodeListener != null) {
 					nodeListener.addNodeToGraph(result, startPos);

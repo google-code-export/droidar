@@ -265,6 +265,7 @@ public class Vec {
 		 * => a*orthogonal=0 <=> a.x*orthogonal.x+a.y*orthogonal.y=0 //set
 		 * orthogonal.y=-1 => orthogonal.x=a.y/a.x
 		 */
+		if (a.x==0) return new Vec(1,0,0);
 		return new Vec(a.y / a.x, -1, 0);
 	}
 
