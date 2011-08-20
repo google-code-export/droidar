@@ -1,7 +1,5 @@
 package geo;
 
-import geo.EdgeListener.DefaultEdgeListener;
-import geo.NodeListener.DefaultNodeListener;
 import gl.GLCamera;
 
 import java.io.IOException;
@@ -35,14 +33,12 @@ public class GeoUtils {
 	private Geocoder myGeoCoder;
 	private Context myContext;
 
-	private NodeListener defaultNodeListener;
-	private EdgeListener defaultEdgeListener;
+	private DefaultNodeEdgeListener defaultNodeListener;
 
 	public GeoUtils(Context context, GLCamera glCamera) {
 		myContext = context;
 		myGeoCoder = new Geocoder(context, Locale.getDefault());
-		defaultNodeListener = new DefaultNodeListener(glCamera);
-		defaultEdgeListener = new DefaultEdgeListener();
+		defaultNodeListener = new DefaultNodeEdgeListener(glCamera);
 	}
 
 	/**
@@ -281,7 +277,7 @@ public class GeoUtils {
 					if (edgeListener != null) {
 						edgeListener.addEdgeToGraph(result, lastPoint, geoObj);
 					} else {
-						defaultEdgeListener.addEdgeToGraph(result, lastPoint,
+						defaultNodeListener.addEdgeToGraph(result, lastPoint,
 								geoObj);
 					}
 					lastPoint = geoObj;

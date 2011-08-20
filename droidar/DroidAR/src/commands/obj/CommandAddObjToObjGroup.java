@@ -33,7 +33,7 @@ public class CommandAddObjToObjGroup extends UndoableCommand {
 	@Override
 	public boolean override_undo() {
 		if (backup != null && backupObj != null) {
-			return backup.getMyItems().remove(backupObj);
+			return backup.getNodes().remove(backupObj);
 		}
 		return false;
 	}

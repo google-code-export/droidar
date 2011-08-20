@@ -126,16 +126,16 @@ public abstract class Visitor {
 
 	public boolean default_visit(GeoGraph geoGraph) {
 		{
-			EfficientListQualified<GeoObj> geoObj = geoGraph.getMyItems();
-			final int l = geoGraph.getMyItems().myLength;
+			EfficientListQualified<GeoObj> geoObj = geoGraph.getNodes();
+			final int l = geoGraph.getNodes().myLength;
 			for (int i = 0; i < l; i++) {
 				geoObj.get(i).accept(this);
 			}
 		}
 		{
 			if (geoGraph.hasEdges()) {
-				EfficientList<Edge> e = geoGraph.getMyEdges();
-				final int l = geoGraph.getMyEdges().myLength;
+				EfficientList<Edge> e = geoGraph.getEdges();
+				final int l = geoGraph.getEdges().myLength;
 				for (int i = 0; i < l; i++) {
 					e.get(i).accept(this);
 				}

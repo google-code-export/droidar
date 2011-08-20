@@ -6,6 +6,7 @@ import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gui.GuiSetup;
+import util.Vec;
 import worldData.SystemUpdater;
 import worldData.World;
 import actions.ActionCalcRelativePos;
@@ -38,7 +39,7 @@ public abstract class DefaultARSetup extends Setup {
 	private World world;
 
 	public DefaultARSetup() {
-		camera = new GLCamera();
+		camera = new GLCamera(new Vec(0, 0, 2));
 		world = new World(camera);
 	}
 

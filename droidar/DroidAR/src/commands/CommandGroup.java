@@ -89,7 +89,7 @@ public class CommandGroup extends UndoableCommand implements ListInterface {
 	}
 
 	@Override
-	public EfficientList<Command> getMyItems() {
+	public EfficientList<Command> getNodes() {
 		if (myList == null)
 			myList = new EfficientList<Command>();
 		return myList;
@@ -102,12 +102,12 @@ public class CommandGroup extends UndoableCommand implements ListInterface {
 
 	@Override
 	public int length() {
-		return getMyItems().myLength;
+		return getNodes().myLength;
 	}
 
 	@Override
 	public boolean isCleared() {
-		return getMyItems().myLength == 0;
+		return getNodes().myLength == 0;
 	}
 
 	@Override

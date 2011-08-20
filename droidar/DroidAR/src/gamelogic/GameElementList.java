@@ -27,7 +27,7 @@ public abstract class GameElementList<T> implements ListInterface<T> {
 	}
 
 	@Override
-	public EfficientList<T> getMyItems() {
+	public EfficientList<T> getNodes() {
 		return myList;
 	}
 

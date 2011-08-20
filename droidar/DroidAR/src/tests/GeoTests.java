@@ -64,23 +64,23 @@ public class GeoTests extends SimpleTesting {
 		assertTrue(g.addEdge(pL2, pU1, null) != null);
 		assertTrue(g.addEdge(pU1, pU2, null) != null);
 		// System.out.println("geotest " + g.findPath(gL1, gL2).getMyItems());
-		assertTrue(g.findPath(pL1, pL2).getMyItems().myLength == 2);
-		assertTrue(g.findPath(pL1, pR1).getMyItems().myLength == 3);
-		assertTrue(g.findPath(pL1, pR2).getMyItems().myLength == 4);
-		assertTrue(g.findPath(pL2, pR2).getMyItems().myLength == 3);
-		assertTrue(g.findPath(pL2, pU2).getMyItems().myLength == 3);
-		assertTrue(g.findPath(g.getClosesedObjTo(s1), pL1).getMyItems().myLength == 4);
-		assertTrue(g.findPath(g.getClosesedObjTo(s1), pL2).getMyItems().myLength == 3);
-		assertTrue(g.findPath(g.getClosesedObjTo(s1), pR2).getMyItems().myLength == 5);
-		assertTrue(g.findPath(g.getClosesedObjTo(s2), pU2).getMyItems().myLength == 4);
+		assertTrue(g.findPath(pL1, pL2).getNodes().myLength == 2);
+		assertTrue(g.findPath(pL1, pR1).getNodes().myLength == 3);
+		assertTrue(g.findPath(pL1, pR2).getNodes().myLength == 4);
+		assertTrue(g.findPath(pL2, pR2).getNodes().myLength == 3);
+		assertTrue(g.findPath(pL2, pU2).getNodes().myLength == 3);
+		assertTrue(g.findPath(g.getClosesedObjTo(s1), pL1).getNodes().myLength == 4);
+		assertTrue(g.findPath(g.getClosesedObjTo(s1), pL2).getNodes().myLength == 3);
+		assertTrue(g.findPath(g.getClosesedObjTo(s1), pR2).getNodes().myLength == 5);
+		assertTrue(g.findPath(g.getClosesedObjTo(s2), pU2).getNodes().myLength == 4);
 		assertTrue(pL2.matchesSearchTerm("test") == 1);
 		assertEquals(g.findBestPointFor("test"), pL2);
 		assertTrue(g.findPath(g.getClosesedObjTo(s1),
-				g.findBestPointFor("test")).getMyItems().myLength == 3);
+				g.findBestPointFor("test")).getNodes().myLength == 3);
 		assertTrue(g.findPath(g.getClosesedObjTo(s2),
-				g.findBestPointFor("test")).getMyItems().myLength == 2);
+				g.findBestPointFor("test")).getNodes().myLength == 2);
 		assertTrue(g.findPath(g.getClosesedObjTo(s3),
-				g.findBestPointFor("test")).getMyItems().myLength == 2);
+				g.findBestPointFor("test")).getNodes().myLength == 2);
 	}
 
 	private void distanceCalcTest() throws Exception {
@@ -186,7 +186,7 @@ public class GeoTests extends SimpleTesting {
 		assertTrue(g.addEdge(GeoObj.a1, GeoObj.n1, null) != null);
 		assertTrue(g.addEdge(GeoObj.n1, GeoObj.n2, null) != null);
 		assertTrue(g.addEdge(GeoObj.n2, GeoObj.n3, null) != null);
-		assertTrue(g.findPath(GeoObj.a3, GeoObj.a3).getMyItems().myLength == 1);
+		assertTrue(g.findPath(GeoObj.a3, GeoObj.a3).getNodes().myLength == 1);
 	}
 
 	private void t5() throws Exception {
@@ -204,7 +204,7 @@ public class GeoTests extends SimpleTesting {
 		assertTrue(g.addEdge(GeoObj.iPark3, GeoObj.iPark4, null) != null);
 		assertTrue(g.addEdge(GeoObj.iPark1, GeoObj.iPark4, null) != null);
 
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4).getMyItems().myLength == 3);
+		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4).getNodes().myLength == 3);
 
 	}
 
@@ -217,13 +217,13 @@ public class GeoTests extends SimpleTesting {
 		assertTrue(g.add(GeoObj.iPark4));
 
 		assertTrue(g.addEdge(GeoObj.rwthI9, GeoObj.iPark1, null) != null);
-		assertTrue(g.findPath(GeoObj.iPark1, GeoObj.rwthI9).getMyItems().myLength == 2);
+		assertTrue(g.findPath(GeoObj.iPark1, GeoObj.rwthI9).getNodes().myLength == 2);
 
 		assertTrue(g.addEdge(GeoObj.iPark1, GeoObj.iPark2, null) != null);
 		assertTrue(g.addEdge(GeoObj.iPark2, GeoObj.iPark3, null) != null);
 		assertTrue(g.addEdge(GeoObj.iPark3, GeoObj.iPark4, null) != null);
 
-		assertTrue(g.findPath(GeoObj.iPark4, GeoObj.iPark2).getMyItems().myLength == 3);
+		assertTrue(g.findPath(GeoObj.iPark4, GeoObj.iPark2).getNodes().myLength == 3);
 
 	}
 
@@ -235,7 +235,7 @@ public class GeoTests extends SimpleTesting {
 		assertTrue(g.add(GeoObj.iPark3));
 		assertTrue(g.add(GeoObj.iPark4));
 		assertTrue(!g.add(GeoObj.iPark4));
-		assertTrue(g.getMyItems().myLength == 5);
+		assertTrue(g.getNodes().myLength == 5);
 
 		assertTrue(g.addEdge(GeoObj.rwthI9, GeoObj.iPark1, null) != null);
 		assertTrue(g.addEdge(GeoObj.iPark1, GeoObj.iPark2, null) != null);
@@ -245,13 +245,13 @@ public class GeoTests extends SimpleTesting {
 		assertTrue(g.addEdge(GeoObj.iPark1, GeoObj.iPark4, null) != null);
 		// g.addEdge(GeoObj.infZentPark, GeoObj.infZentPark4);
 
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark1).getMyItems().myLength == 2);
-		assertTrue(g.findPath(GeoObj.iPark1, GeoObj.iPark2).getMyItems().myLength == 2);
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark3).getMyItems().myLength == 2);
+		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark1).getNodes().myLength == 2);
+		assertTrue(g.findPath(GeoObj.iPark1, GeoObj.iPark2).getNodes().myLength == 2);
+		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark3).getNodes().myLength == 2);
 
 		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4) != null);
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4).getMyItems() != null);
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4).getMyItems().myLength == 3);
+		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4).getNodes() != null);
+		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4).getNodes().myLength == 3);
 	}
 
 	private void t3() throws Exception {
@@ -269,8 +269,8 @@ public class GeoTests extends SimpleTesting {
 		assertTrue(g.addEdge(GeoObj.iPark3, GeoObj.iPark4, null) != null);
 
 		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4) != null);
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4).getMyItems() != null);
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4).getMyItems().myLength == 5);
+		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4).getNodes() != null);
+		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4).getNodes().myLength == 5);
 	}
 
 	private void t2() throws Exception {
@@ -285,8 +285,8 @@ public class GeoTests extends SimpleTesting {
 
 		GeoGraph path = g.findPath(GeoObj.iPark2, GeoObj.iPark4);
 		assertTrue(path != null);
-		assertTrue(path.getMyItems() != null);
-		assertTrue(path.getMyItems().myLength == 3);
+		assertTrue(path.getNodes() != null);
+		assertTrue(path.getNodes().myLength == 3);
 	}
 
 }

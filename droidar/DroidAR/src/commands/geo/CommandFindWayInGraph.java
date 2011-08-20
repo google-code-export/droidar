@@ -65,8 +65,8 @@ public class CommandFindWayInGraph extends Command {
 		}
 		if (mySource.getObject() instanceof ObjGroup) {
 			EfficientList<AbstractObj> a = ((ObjGroup) mySource.getObject())
-					.getMyItems();
-			final int l = ((ObjGroup) mySource.getObject()).getMyItems().myLength;
+					.getNodes();
+			final int l = ((ObjGroup) mySource.getObject()).getNodes().myLength;
 			for (int i = 0; i < l; i++) {
 				if (a.get(i) instanceof GeoGraph) {
 					GeoObj target = ((GeoGraph) a.get(i))

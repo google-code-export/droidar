@@ -365,7 +365,7 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 			return null;
 		}
 		Log.d("GeoGraph", "  -> Found item that matches");
-		return (GeoObj) searchResults.getMyItems().get(0);
+		return (GeoObj) searchResults.getNodes().get(0);
 	}
 
 	/**
@@ -449,7 +449,8 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 			myEdges = new EfficientList<Edge>();
 		if (hasEdge(from, to) == -1) {
 			if (edgeMeshComp == null)
-				edgeMeshComp = Edge.getDefaultMesh(this, from, to);
+				edgeMeshComp = Edge.getDefaultMesh(this, from, to, this
+						.getInfoObject().getColor());
 			Edge e = new Edge(from, to, edgeMeshComp);
 			myEdges.add(e);
 			return e;
@@ -533,8 +534,10 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 				myNodes.get(i).update(timeDelta);
 			}
 		}
-		{
-			// TODO edges need updates too??
+		if (useEdges && myEdges != null) {
+			for (int i = 0; i < myEdges.myLength; i++) {
+				myEdges.get(i).update(timeDelta);
+			}
 		}
 		return true;
 	}
@@ -560,7 +563,7 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 		return false;
 	}
 
-	public EfficientList<Edge> getMyEdges() {
+	public EfficientList<Edge> getEdges() {
 		if (myEdges == null)
 			myEdges = new EfficientList<Edge>();
 		return myEdges;
@@ -591,19 +594,19 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 	}
 
 	public boolean isEmpty() {
-		return getMyItems().myLength == 0;
+		return getNodes().myLength == 0;
 	}
 
 	@Override
 	public boolean isCleared() {
-		if (getMyItems().myLength == 0 && isClearedAtLeastOneTime) {
+		if (getNodes().myLength == 0 && isClearedAtLeastOneTime) {
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public EfficientListQualified<GeoObj> getMyItems() {
+	public EfficientListQualified<GeoObj> getNodes() {
 		if (myNodes == null)
 			myNodes = new EfficientListQualified<GeoObj>();
 		return myNodes;
@@ -611,7 +614,7 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 
 	@Override
 	public int length() {
-		return getMyItems().myLength;
+		return getNodes().myLength;
 	}
 
 	/**
@@ -662,9 +665,8 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 
 	public static GeoGraph convertToGeoGraph(EfficientList<GeoObj> list,
 			boolean directional, GLCamera camera) {
-		return convertToGeoGraph(list, directional,
-				new NodeListener.DefaultNodeListener(camera),
-				new EdgeListener.DefaultEdgeListener());
+		DefaultNodeEdgeListener l = new DefaultNodeEdgeListener(camera);
+		return convertToGeoGraph(list, directional, l, l);
 	}
 
 	public static GeoGraph convertToGeoGraph(EfficientList<GeoObj> list,
@@ -677,5 +679,17 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 		}
 		nl.addNodeToGraph(result, list.get(list.myLength - 1));
 		return result;
+	}
+
+	/**
+	 * @param from
+	 * @param to
+	 * @return null of there is no edge for these nodes
+	 */
+	public Edge getEdge(GeoObj from, GeoObj to) {
+		int pos = hasEdge(from, to);
+		if (pos == -1)
+			return null;
+		return getEdges().get(pos);
 	}
 }
