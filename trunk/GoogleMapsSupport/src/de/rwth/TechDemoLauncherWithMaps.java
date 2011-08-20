@@ -1,6 +1,5 @@
 package de.rwth;
 
-import system.ArActivity;
 import system.ErrorHandler;
 import system.Setup;
 import tests.SimpleTesting;
@@ -31,12 +30,13 @@ public class TechDemoLauncherWithMaps extends Activity {
 
 		// showSetup("With calibration dialogs", new CalibratorSetup());
 
-		showSetup("Animation Demo", new DebugSetup());
-		showSetup("Collecting Items Demo", new CollectItemsSetup());
-		showSetup("Placing objects Demo", new PlaceObjectsSetup());
 		showSetup("AR Navigator", new ARNavigatorSetup());
-		showSetup("Sensor Processing Demo", new SensorTestSetup());
-		showSetup("Position tests", new PositionTestsSetup());
+
+		// showSetup("Animation Demo", new DebugSetup());
+		// showSetup("Collecting Items Demo", new CollectItemsSetup());
+		// showSetup("Placing objects Demo", new PlaceObjectsSetup());
+		// showSetup("Sensor Processing Demo", new SensorTestSetup());
+		// showSetup("Position tests", new PositionTestsSetup());
 
 		LinearLayout l = ((LinearLayout) findViewById(R.id.demoScreenLinView));
 
@@ -46,8 +46,8 @@ public class TechDemoLauncherWithMaps extends Activity {
 			}
 		});
 
-		showSetup("Indoor Navigator (Needs special localization service!)",
-				new IndoorSetup());
+		// showSetup("Indoor Navigator (Needs special localization service!)",
+		// new IndoorSetup());
 
 	}
 

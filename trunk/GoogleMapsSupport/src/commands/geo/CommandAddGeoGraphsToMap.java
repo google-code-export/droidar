@@ -41,11 +41,10 @@ public class CommandAddGeoGraphsToMap extends UndoableCommand {
 		}
 		if (myGeoGraphWrapper.getObject() instanceof ObjGroup) {
 			ObjGroup group = (ObjGroup) myGeoGraphWrapper.getObject();
-			EfficientList<AbstractObj> a = group.getMyItems();
-			int l = group.getMyItems().myLength;
-			for (int i = 0; i < l; i++) {
-				if (a.get(i) instanceof GeoGraph) {
-					addGraphToMap((GeoGraph) a.get(i));
+			EfficientList<AbstractObj> nodes = group.getNodes();
+			for (int i = 0; i < nodes.myLength; i++) {
+				if (nodes.get(i) instanceof GeoGraph) {
+					addGraphToMap((GeoGraph) nodes.get(i));
 				}
 			}
 		}

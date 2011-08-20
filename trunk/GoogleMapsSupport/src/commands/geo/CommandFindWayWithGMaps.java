@@ -2,6 +2,7 @@ package commands.geo;
 
 import geo.GMap;
 import geo.GeoObj;
+import geo.GeoUtils;
 import system.EventManager;
 import util.Wrapper;
 import android.util.Log;
@@ -10,7 +11,7 @@ import commands.Command;
 
 public class CommandFindWayWithGMaps extends Command {
 
-	private GMap myMap;
+	private GeoUtils myGeoUtils;
 	private Wrapper mySearchTextWrapper;
 	private Wrapper myResultingPath;
 	private GeoObj myStartPos;
@@ -24,16 +25,16 @@ public class CommandFindWayWithGMaps extends Command {
 	 * @param searchTextWrapper
 	 * @param sresults
 	 */
-	public CommandFindWayWithGMaps(GMap map, GeoObj startPos,
+	public CommandFindWayWithGMaps(GeoUtils map, GeoObj startPos,
 			Wrapper searchTextWrapper, Wrapper sresults, Wrapper byWalk) {
-		myMap = map;
+		myGeoUtils = map;
 		mySearchTextWrapper = searchTextWrapper;
 		myResultingPath = sresults;
 		myStartPos = startPos;
 		this.byWalk = byWalk;
 	}
 
-	public CommandFindWayWithGMaps(GMap map, Wrapper searchTextWrapper,
+	public CommandFindWayWithGMaps(GeoUtils map, Wrapper searchTextWrapper,
 			Wrapper sresults, Wrapper byWalk) {
 		this(map, null, searchTextWrapper, sresults, byWalk);
 	}
@@ -44,7 +45,7 @@ public class CommandFindWayWithGMaps extends Command {
 		if (text == "")
 			return false;
 		Log.d("Gmaps", "Searching point near " + text);
-		GeoObj target = myMap.getGeoUtils().getBestLocationForAddress(text);
+		GeoObj target = myGeoUtils.getBestLocationForAddress(text);
 		if (target == null) {
 			Log.d("Gmaps", "   -> No point for search string found..");
 			return false;
@@ -52,12 +53,12 @@ public class CommandFindWayWithGMaps extends Command {
 		Log.d("Gmaps", "Found point: " + target.toString());
 		if (myStartPos == null) {
 			Log.d("Gmaps", "Searching way from current location to " + target);
-			return myMap.getGeoUtils().getPathFromAtoB(EventManager.getInstance()
+			return myGeoUtils.getPathFromAtoB(EventManager.getInstance()
 					.getCurrentLocationObject(), target,
 					myResultingPath, byWalk.getBooleanValue());
 		}
 		Log.d("Gmaps", "Searching way from " + myStartPos + " to " + target);
-		return myMap.getGeoUtils().getPathFromAtoB(myStartPos, target, myResultingPath, byWalk
+		return myGeoUtils.getPathFromAtoB(myStartPos, target, myResultingPath, byWalk
 				.getBooleanValue());
 	}
 

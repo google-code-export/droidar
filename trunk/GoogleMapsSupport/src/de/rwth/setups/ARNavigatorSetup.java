@@ -4,6 +4,7 @@ import geo.CustomItemizedOverlay;
 import geo.GMap;
 import geo.GeoGraph;
 import geo.GeoObj;
+import geo.GeoUtils;
 import gl.Color;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
@@ -96,8 +97,8 @@ public class ARNavigatorSetup extends Setup {
 
 	private Wrapper minimizedFlag;
 
-	private MetaInfos selItemInfo;
-	private MetaInfos notSelItemInfo;
+	//private MetaInfos selItemInfo;
+	//private MetaInfos notSelItemInfo;
 	private MetaInfos selGraphInfo;
 	private MetaInfos notSelGraphInfo;
 
@@ -117,10 +118,10 @@ public class ARNavigatorSetup extends Setup {
 				"Error in DroidAR App");
 
 		// Define how selected items will look like:
-		selItemInfo = new MetaInfos();
-		selItemInfo.setColor(new Color(1, 0, 0.2f, 0.8f));
-		notSelItemInfo = new MetaInfos();
-		notSelItemInfo.setColor(new Color(0.8f, 0.8f, 0.8f, 0.8f));
+		// selItemInfo = new MetaInfos();
+		// selItemInfo.setColor(new Color(1, 0, 0.2f, 0.8f));
+		// notSelItemInfo = new MetaInfos();
+		// notSelItemInfo.setColor(new Color(0.8f, 0.8f, 0.8f, 0.8f));
 
 		// Define how selected graphs will look like:
 		selGraphInfo = new MetaInfos();
@@ -197,7 +198,7 @@ public class ARNavigatorSetup extends Setup {
 					Object passedObject) {
 				if (wrapper.getObject() instanceof GeoGraph) {
 					EfficientListQualified<GeoObj> geoObjs = ((GeoGraph) wrapper
-							.getObject()).getMyItems();
+							.getObject()).getNodes();
 					for (int i = 0; i < geoObjs.myLength; i++) {
 						GeoObj o = geoObjs.get(i);
 						o.setComp(GLFactory.getInstance().newDiamond(
@@ -500,8 +501,9 @@ public class ARNavigatorSetup extends Setup {
 		Wrapper sresults = new Wrapper();
 		Wrapper searchTextWrapper = new Wrapper();
 
-		CommandFindWayWithGMaps mapsearch = new CommandFindWayWithGMaps(map,
-				searchTextWrapper, sresults, walkWrapper);
+		CommandFindWayWithGMaps mapsearch = new CommandFindWayWithGMaps(
+				new GeoUtils(myTargetActivity, camera), searchTextWrapper,
+				sresults, walkWrapper);
 
 		CommandGroup addGraphCommand = commandAddGraphToObjectGroup(sresults,
 				searchesW);

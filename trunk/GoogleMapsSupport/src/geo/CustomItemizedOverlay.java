@@ -1,6 +1,7 @@
 package geo;
 
 import util.EfficientList;
+import util.EfficientListQualified;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
@@ -62,9 +63,9 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 		 * your datastructure here and access the OverlayItems directly in the
 		 * createItem method. that way it will work as fast as possible
 		 */
-		int l = graph.getMyItems().myLength;
-		for (int i = 0; i < l; i++) {
-			myItemList.add(new GeoObjWrapper(graph.getMyItems().get(i)));
+		EfficientListQualified<GeoObj> nodes = graph.getNodes();
+		for (int i = 0; i < nodes.myLength; i++) {
+			myItemList.add(new GeoObjWrapper(nodes.get(i)));
 		}
 	}
 
