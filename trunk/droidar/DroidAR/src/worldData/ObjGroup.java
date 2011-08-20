@@ -52,14 +52,14 @@ public class ObjGroup extends AbstractObj implements ListInterface {
 
 	@Override
 	public boolean isCleared() {
-		if (getMyItems().myLength == 0) {
+		if (getNodes().myLength == 0) {
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public EfficientList<AbstractObj> getMyItems() {
+	public EfficientList<AbstractObj> getNodes() {
 		if (myItems == null)
 			myItems = new EfficientList<AbstractObj>();
 		return myItems;
@@ -67,7 +67,7 @@ public class ObjGroup extends AbstractObj implements ListInterface {
 
 	@Override
 	public int length() {
-		return getMyItems().myLength;
+		return getNodes().myLength;
 	}
 
 }

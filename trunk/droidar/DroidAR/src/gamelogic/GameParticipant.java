@@ -80,8 +80,8 @@ public abstract class GameParticipant implements Component, EditItem {
 
 	public void generateEditGUI(ModifierGroup s) {
 		if (myStatList != null) {
-			EfficientList<Stat> statList = myStatList.getMyItems();
-			int l = myStatList.getMyItems().myLength;
+			EfficientList<Stat> statList = myStatList.getNodes();
+			int l = myStatList.getNodes().myLength;
 			for (int i = 0; i < l; i++) {
 				Stat o = statList.get(i);
 				o.generateEditGUI(s);

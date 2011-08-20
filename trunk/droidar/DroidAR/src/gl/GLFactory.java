@@ -332,9 +332,9 @@ public class GLFactory {
 
 	public MeshComponent newDiamond(Color canBeNull) {
 		Shape s = new Shape(canBeNull);
-		float width = 1;
-		float heigth = 2.5f;
-		float c = -0.1f;
+		float width = 0.7f;
+		float heigth = 2f;
+		float c = -0.1f; // a factor for asymmetric shaping in x direction
 
 		Vec top = new Vec(0, 0, heigth);
 		Vec bottom = new Vec(0, 0, -heigth);

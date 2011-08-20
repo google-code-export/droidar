@@ -26,6 +26,6 @@ public interface ListInterface<T> {
 
 	public int length();
 
-	public EfficientList<T> getMyItems();
+	public EfficientList<T> getNodes();
 
 }

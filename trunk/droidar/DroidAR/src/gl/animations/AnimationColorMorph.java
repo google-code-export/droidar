@@ -5,16 +5,20 @@ import gl.MeshComponent;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.util.Log;
+
+import util.Vec;
 import worldData.Obj;
 
 public class AnimationColorMorph implements Animation {
 
-	private float myDurationInSec;
+	private static final float MIN_DISTANCE = 0.001f;
+	private float myDurationInMS;
 	private Color myTargetColor;
 
-	public AnimationColorMorph(float durationInSec, Color targetColor) {
-		myDurationInSec=durationInSec;
-		myTargetColor=targetColor;
+	public AnimationColorMorph(float durationInMS, Color targetColor) {
+		myDurationInMS = durationInMS;
+		myTargetColor = targetColor;
 	}
 
 	@Override
@@ -25,8 +29,12 @@ public class AnimationColorMorph implements Animation {
 
 	@Override
 	public boolean update(float timeDelta, Obj obj, MeshComponent mesh) {
-		// TODO Auto-generated method stub
-		return false;
+		Vec colorDistance = Color.morphToNewColor(mesh.myColor, myTargetColor,
+				timeDelta / myDurationInMS);
+		if (!(colorDistance.getLength() > MIN_DISTANCE)) {
+			Log.d("NodeListener", "color morph finnished for " + mesh);
+		}
+		return (colorDistance.getLength() > MIN_DISTANCE);
 	}
 
 	@Override

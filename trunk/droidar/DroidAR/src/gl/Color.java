@@ -111,6 +111,13 @@ public class Color {
 		return new Color(red, green, blue, alpha);
 	}
 
+	/**
+	 * @param target
+	 * @param values
+	 * @param speed
+	 * @return the remaining distances between the two colors (channels
+	 *         seperated, use {@link Vec#getLength()} eg)
+	 */
 	public static Vec morphToNewColor(Color target, Color values, float speed) {
 		Vec d = new Vec();
 

@@ -1,5 +1,6 @@
 package geo;
 
+import gl.Color;
 import gl.GLFactory;
 import gl.MeshComponent;
 
@@ -23,14 +24,11 @@ public class Edge extends GeoObj implements Comparable<Edge> {
 	}
 
 	public static MeshComponent getDefaultMesh(GeoGraph geoGraph, GeoObj from,
-			GeoObj to) {
-
+			GeoObj to, Color color) {
 		if (geoGraph.isNonDirectional())
-			return GLFactory.getInstance().newUndirectedPath(from, to,
-					geoGraph.getInfoObject().getColor());
-
-		return GLFactory.getInstance().newDirectedPath(from,to,
-				geoGraph.getInfoObject().getColor());
+			return GLFactory.getInstance().newUndirectedPath(from, to, color);
+		// else..
+		return GLFactory.getInstance().newDirectedPath(from, to, color);
 
 	}
 

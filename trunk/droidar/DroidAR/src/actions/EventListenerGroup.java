@@ -129,7 +129,7 @@ public class EventListenerGroup extends Action implements ListInterface {
 	}
 
 	@Override
-	public EfficientList<EventListener> getMyItems() {
+	public EfficientList<EventListener> getNodes() {
 		return myActions;
 	}
 

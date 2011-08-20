@@ -83,7 +83,7 @@ public class MeshGroup extends MeshComponent {
 	public String toString() {
 		if (myMeshes == null)
 			return "Meshgroup (emtpy) " + super.toString();
-		return "Meshgroup (size=" + myMeshes.myLength + ") " + super.toString();
+		return super.toString()+"(size=" + myMeshes.myLength + ") " ;
 	}
 
 	public void clear() {

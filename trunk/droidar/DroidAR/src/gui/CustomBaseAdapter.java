@@ -18,17 +18,17 @@ public class CustomBaseAdapter extends BaseAdapter {
 	@Override
 	public int getCount() {
 		Log.d("GUI", "CustomBaseAdapter list has length="
-				+ myList.getMyItems().myLength);
-		return myList.getMyItems().myLength;
+				+ myList.getNodes().myLength);
+		return myList.getNodes().myLength;
 	}
 
 	// stelle finden wieso der geograph nicht aus dem baseaddapter rausfliegt??
 
 	@Override
 	public ListItem getItem(int pos) {
-		if (pos >= myList.getMyItems().myLength)
+		if (pos >= myList.getNodes().myLength)
 			return null;
-		return (ListItem) myList.getMyItems().get(pos);
+		return (ListItem) myList.getNodes().get(pos);
 	}
 
 	@Override
