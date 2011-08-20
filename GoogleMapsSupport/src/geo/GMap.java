@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.widget.LinearLayout;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
@@ -53,8 +52,6 @@ public class GMap extends MapView implements TouchEventInterface {
 	private Command myOnLongPressCommand;
 	private Command myOnTabCommand;
 
-	private GeoUtils myGeoUtils;
-
 	// private MotionEvent currentEvent;
 
 	public GMap(Context c, String apiKey) {
@@ -85,8 +82,6 @@ public class GMap extends MapView implements TouchEventInterface {
 
 		setLayoutParams(new android.view.ViewGroup.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-
-		myGeoUtils = new GeoUtils(c);
 
 		// create a GestureDetector:
 		myGestureDetector = new GestureDetector(c, new CustomGestureListener(
@@ -153,7 +148,7 @@ public class GMap extends MapView implements TouchEventInterface {
 	public void onDoubleTap(MotionEvent e) {
 		Command c = getOnDoubleTabCommand();
 		if (c != null) {
-			GeoObj p = newGeoObj(getProjection().fromPixels((int) e.getX(),
+			GeoObj p = toGeoObj(getProjection().fromPixels((int) e.getX(),
 					(int) e.getY()));
 			c.execute(p);
 		}
@@ -163,7 +158,7 @@ public class GMap extends MapView implements TouchEventInterface {
 	public void onLongPress(MotionEvent e) {
 		Command c = getOnLongPressCommand();
 		if (c != null) {
-			GeoObj p = newGeoObj(getProjection().fromPixels((int) e.getX(),
+			GeoObj p = toGeoObj(getProjection().fromPixels((int) e.getX(),
 					(int) e.getY()));
 			c.execute(p);
 		}
@@ -173,14 +168,10 @@ public class GMap extends MapView implements TouchEventInterface {
 	public void onSingleTab(MotionEvent e) {
 		Command c = getOnTabCommand();
 		if (c != null) {
-			GeoObj p = newGeoObj(getProjection().fromPixels((int) e.getX(),
+			GeoObj p = toGeoObj(getProjection().fromPixels((int) e.getX(),
 					(int) e.getY()));
 			c.execute(p);
 		}
-	}
-
-	private GeoObj newGeoObj(GeoPoint gp) {
-		return new GeoObj(gp.getLatitudeE6() / 1E6, gp.getLongitudeE6() / 1E6);
 	}
 
 	@Override
@@ -234,14 +225,14 @@ public class GMap extends MapView implements TouchEventInterface {
 		// do nothing, because scrolling already done by the map
 	}
 
-	@Deprecated
-	public GeoUtils getGeoUtils() {
-		return myGeoUtils;
-	}
-
 	public static GeoPoint toGeoPoint(GeoObj x) {
 		return new GeoPoint((int) (x.getLatitude() * 1E6),
 				(int) (x.getLongitude() * 1E6));
+	}
+
+	public static GeoObj toGeoObj(GeoPoint point) {
+		return new GeoObj(point.getLatitudeE6() / 1E6,
+				point.getLongitudeE6() / 1E6);
 	}
 
 }

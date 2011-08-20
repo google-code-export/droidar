@@ -37,9 +37,9 @@ public class CommandMapCenter extends Command {
 			// .println("((GeoGraph) myGeoWrapper.getObject()).getMyItems()="
 			// + ((GeoGraph) myGeoWrapper.getObject())
 			// .getMyItems());
-			if (((GeoGraph) myGeoWrapper.getObject()).getMyItems().get(0) != null) {
+			if (((GeoGraph) myGeoWrapper.getObject()).getNodes().get(0) != null) {
 				final GeoObj fistPointInGraph = (GeoObj) ((GeoGraph) myGeoWrapper
-						.getObject()).getMyItems().get(0);
+						.getObject()).getNodes().get(0);
 
 				// migth not be called from main thread so use handler
 				mHandler.post(new Runnable() {
