@@ -18,7 +18,7 @@ import components.ProximitySensor;
 public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 
 	private static final String LOG_TAG = "NodeListener";
-	private static final float MIN_DISTANCE = 9;
+	private static final float MIN_DISTANCE = 20;
 	private static final float BLENDING_TIME = 4;
 	private static final float MOVEMENT_TIME = 3;
 	private GLCamera camera;
