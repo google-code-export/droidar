@@ -155,6 +155,8 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 				setHighlightEdgeTransformation(graph.getEdge(justCheckedNode,
 						followingNode));
 			}
+		} else {
+			Log.d(LOG_TAG, justCheckedNode + " has no following nodes");
 		}
 
 	}

@@ -265,7 +265,8 @@ public class GeoUtils {
 				for (int i = 1; i < pairs.length; i++) {
 					String[] geoCords = pairs[i].split(",");
 
-					GeoObj currentPoint = new GeoObj(Double.parseDouble(geoCords[1]),
+					GeoObj currentPoint = new GeoObj(
+							Double.parseDouble(geoCords[1]),
 							Double.parseDouble(geoCords[0]),
 							Double.parseDouble(geoCords[2]));
 
@@ -283,10 +284,10 @@ public class GeoUtils {
 							defaultNEListener.addEdgeToGraph(result, lastPoint,
 									currentPoint);
 						}
+						Log.d(LOG_TAG, "     + adding Waypoint:" + pairs[i]);
+						lastPoint = currentPoint;
 					}
-					lastPoint = currentPoint;
 
-					Log.d(LOG_TAG, "     + adding Waypoint:" + pairs[i]);
 				}
 				if (lastPoint != null && !lastPoint.hasSameCoordsAs(destPos)) {
 
