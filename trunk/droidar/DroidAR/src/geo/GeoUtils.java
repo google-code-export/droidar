@@ -33,12 +33,12 @@ public class GeoUtils {
 	private Geocoder myGeoCoder;
 	private Context myContext;
 
-	private DefaultNodeEdgeListener defaultNodeListener;
+	private DefaultNodeEdgeListener defaultNEListener;
 
 	public GeoUtils(Context context, GLCamera glCamera) {
 		myContext = context;
 		myGeoCoder = new Geocoder(context, Locale.getDefault());
-		defaultNodeListener = new DefaultNodeEdgeListener(glCamera);
+		defaultNEListener = new DefaultNodeEdgeListener(glCamera);
 	}
 
 	/**
@@ -256,38 +256,57 @@ public class GeoUtils {
 				result.setNonDirectional(false);
 
 				if (nodeListener != null) {
-					nodeListener.addNodeToGraph(result, startPos);
+					nodeListener.addFirstNodeToGraph(result, startPos);
 				} else {
-					defaultNodeListener.addNodeToGraph(result, startPos);
+					defaultNEListener.addFirstNodeToGraph(result, startPos);
 				}
 
 				GeoObj lastPoint = startPos;
 				for (int i = 1; i < pairs.length; i++) {
 					String[] geoCords = pairs[i].split(",");
 
-					GeoObj geoObj = new GeoObj(Double.parseDouble(geoCords[1]),
+					GeoObj currentPoint = new GeoObj(Double.parseDouble(geoCords[1]),
 							Double.parseDouble(geoCords[0]),
 							Double.parseDouble(geoCords[2]));
 
-					if (nodeListener != null) {
-						nodeListener.addNodeToGraph(result, geoObj);
-					} else {
-						defaultNodeListener.addNodeToGraph(result, geoObj);
+					if (!currentPoint.hasSameCoordsAs(lastPoint)) {
+						if (nodeListener != null) {
+							nodeListener.addNodeToGraph(result, currentPoint);
+						} else {
+							defaultNEListener.addNodeToGraph(result,
+									currentPoint);
+						}
+						if (edgeListener != null) {
+							edgeListener.addEdgeToGraph(result, lastPoint,
+									currentPoint);
+						} else {
+							defaultNEListener.addEdgeToGraph(result, lastPoint,
+									currentPoint);
+						}
 					}
-					if (edgeListener != null) {
-						edgeListener.addEdgeToGraph(result, lastPoint, geoObj);
-					} else {
-						defaultNodeListener.addEdgeToGraph(result, lastPoint,
-								geoObj);
-					}
-					lastPoint = geoObj;
+					lastPoint = currentPoint;
 
 					Log.d(LOG_TAG, "     + adding Waypoint:" + pairs[i]);
 				}
 				if (lastPoint != null && !lastPoint.hasSameCoordsAs(destPos)) {
-					result.addEdge(lastPoint, destPos, null);
+
+					/*
+					 * add the egde to the past point:
+					 */
+					if (edgeListener != null) {
+						edgeListener.addEdgeToGraph(result, lastPoint, destPos);
+					} else {
+						defaultNEListener.addEdgeToGraph(result, lastPoint,
+								destPos);
+					}
+
 				}
-				result.add(destPos);
+
+				if (nodeListener != null) {
+					nodeListener.addNodeToGraph(result, destPos);
+				} else {
+					defaultNEListener.addNodeToGraph(result, destPos);
+				}
 
 				/*
 				 * an alternative for adding the edges would be to call

@@ -121,33 +121,31 @@ public class Color {
 	public static Vec morphToNewColor(Color target, Color values, float speed) {
 		Vec d = new Vec();
 
-		d.x = values.red - target.red;
-		target.red = target.red + d.x * speed;
-		if (target.red < 0)
-			target.red = 0;
-		if (target.red > 1)
-			target.red = 1;
-
-		d.y = values.green - target.green;
-		target.green = target.green + d.y * speed;
-		if (target.green < 0)
-			target.green = 0;
-		if (target.green > 1)
-			target.green = 1;
-
-		d.z = values.blue - target.blue;
-		target.blue = target.blue + d.z * speed;
-		if (target.blue < 0)
-			target.blue = 0;
-		if (target.blue > 1)
-			target.blue = 1;
-
-		target.alpha = target.alpha + (values.alpha - target.alpha) * speed;
-		if (target.alpha < 0)
-			target.alpha = 0;
-		if (target.alpha > 1)
-			target.alpha = 1;
-
+		if (target != null && values != null) {
+			d.x = values.red - target.red;
+			target.red = target.red + d.x * speed;
+			if (target.red < 0)
+				target.red = 0;
+			if (target.red > 1)
+				target.red = 1;
+			d.y = values.green - target.green;
+			target.green = target.green + d.y * speed;
+			if (target.green < 0)
+				target.green = 0;
+			if (target.green > 1)
+				target.green = 1;
+			d.z = values.blue - target.blue;
+			target.blue = target.blue + d.z * speed;
+			if (target.blue < 0)
+				target.blue = 0;
+			if (target.blue > 1)
+				target.blue = 1;
+			target.alpha = target.alpha + (values.alpha - target.alpha) * speed;
+			if (target.alpha < 0)
+				target.alpha = 0;
+			if (target.alpha > 1)
+				target.alpha = 1;
+		}
 		return d;
 	}
 
