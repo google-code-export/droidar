@@ -50,6 +50,23 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 	}
 
 	@Override
+	public void addFirstNodeToGraph(final GeoGraph targetGraph, GeoObj newNode) {
+		newNode.setComp(newNodeMesh());
+		setNormalTransformations(newNode.getGraphicsComponent());
+
+		Log.d(LOG_TAG, "Adding obj " + newNode
+				+ " to graph with number of nodes="
+				+ targetGraph.getNodes().myLength);
+
+		Log.d(LOG_TAG, "Setting special props for first node.");
+		setHighlightNodeTransformations(newNode.getGraphicsComponent());
+		newNode.setComp(newProxiSensor(targetGraph));
+
+		targetGraph.add(newNode);
+
+	}
+
+	@Override
 	public void addNodeToGraph(final GeoGraph targetGraph, GeoObj newNode) {
 		newNode.setComp(newNodeMesh());
 
@@ -59,15 +76,16 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 		 */
 		setNormalTransformations(newNode.getGraphicsComponent());
 
-		Log.d(LOG_TAG, "Adding obj to graph with number of nodes="
+		Log.d(LOG_TAG, "Adding obj " + newNode
+				+ " to graph with number of nodes="
 				+ targetGraph.getNodes().myLength);
-		if (targetGraph.isEmpty()) {
-			Log.d(LOG_TAG, "Setting special props for first node.");
-			setHighlightNodeTransformations(newNode.getGraphicsComponent());
 
-			newNode.setComp(newProxiSensor(targetGraph));
-		}
 		targetGraph.add(newNode);
+	}
+
+	@Override
+	public void addLastNodeToGraph(GeoGraph graph, GeoObj objectToAdd) {
+		addNodeToGraph(graph, objectToAdd);
 	}
 
 	private Component newNodeMesh() {
@@ -147,6 +165,7 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 
 		// add an edge:
 		if (startPoint != null) {
+			Log.d(LOG_TAG, "Adding edge from " + startPoint + " to " + endPoint);
 			GeoObj edge = targetGraph.addEdge(startPoint, endPoint, Edge
 					.getDefaultMesh(targetGraph, startPoint, endPoint, null));
 			edge.getGraphicsComponent().myColor = newNotJetWalkedColor();
