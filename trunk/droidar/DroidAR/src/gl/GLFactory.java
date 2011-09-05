@@ -2,6 +2,7 @@ package gl;
 
 import geo.GeoObj;
 import gl.animations.Animation;
+import gl.animations.AnimationFaceToCamera;
 import gl.animations.AnimationGroup;
 import gl.animations.AnimationRotate;
 import gl.textures.Textured2dShape;
@@ -15,7 +16,9 @@ import worldData.Obj;
 import worldData.Visitor;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.util.Log;
+import android.widget.TextView;
 
 /**
  * Use this factory to understand how to create 3D objects with {@link Shape}s
@@ -528,5 +531,35 @@ public class GLFactory {
 				CordinateAxis.draw(gl);
 			}
 		};
+	}
+
+	/**
+	 * will face to the camera
+	 * 
+	 * @param textToDisplay
+	 * @param textPosition
+	 * @param textSize
+	 * @param context
+	 * @param glCamera
+	 * @return
+	 */
+	public Obj newTextObject(String textToDisplay, Vec textPosition,
+			Context context, GLCamera glCamera) {
+
+		float textSize=1;
+		
+		TextView v = new TextView(context);
+		v.setTypeface(null, Typeface.BOLD);
+		// Set textcolor to black:
+		// v.setTextColor(new Color(0, 0, 0, 1).toIntARGB());
+		v.setText(textToDisplay);
+
+		Obj o = new Obj();
+		MeshComponent mesh = this.newTexturedSquare("textBitmap" + textToDisplay,
+				util.IO.loadBitmapFromView(v),textSize);
+		mesh.myPosition = textPosition.copy();
+		mesh.addAnimation(new AnimationFaceToCamera(glCamera));
+		o.setComp(mesh);
+		return o;
 	}
 }

@@ -31,12 +31,13 @@ public class TechDemoLauncher extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.demoselector);
 
-		showSetup("Graph Movement Test", new GraphMovementTestSetup());
+		
 		showSetup("Animation Demo", new DebugSetup());
 		showSetup("Lightning Demo", new LightningSetup());
 		showSetup("Collecting Items Demo", new CollectItemsSetup());
 		showSetup("Placing objects Demo", new PlaceObjectsSetup());
 		showSetup("Placing objects Demo 2", new PlaceObjectsSetupTwo());
+		showSetup("Graph Movement Test", new GraphMovementTestSetup());
 		showSetup("Sensor Processing Demo", new SensorTestSetup());
 		showSetup("Position tests", new PositionTestsSetup());
 

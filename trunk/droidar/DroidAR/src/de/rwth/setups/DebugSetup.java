@@ -52,20 +52,13 @@ import de.rwth.R;
  */
 public class DebugSetup extends Setup {
 
-	private static final String STATE_MAP_MAXIMIZED = "mimimap maximized";
-	private static final String STATE_MAP_MINIMIZED = "mimimap minimized";
-	private static final String MAPS_KEY = "";
-
 	// World radar;
 	World world;
 	GLCamera camera;
 
 	private Wrapper selection;
 
-	private SystemUpdater theWorldUpdater;
-	private Wrapper condMapState;
 	private ActionCalcRelativePos geoupdater;
-	private GLRenderer renderer;
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
@@ -84,12 +77,16 @@ public class DebugSetup extends Setup {
 
 		camera = new GLCamera(new Vec(0, 0, 1));
 		world = new World(camera);
+
+		
+
 		initWorld(world);
 		initI9Tests(world);
+		
+		world.add(objectFactory.newTextObject("text Input", new Vec(10, 1, 1),
+				 myTargetActivity, camera));
+		
 		renderer.addRenderElement(world);
-
-		// the renderer is needed by a ui element so store it:
-		this.renderer = renderer;
 
 	}
 
@@ -269,8 +266,6 @@ public class DebugSetup extends Setup {
 
 	@Override
 	public void _d_addElementsToUpdateThread(SystemUpdater worldUpdater) {
-		theWorldUpdater = worldUpdater;
-
 		// add the created world to be updated:
 		worldUpdater.addObjectToUpdateCycle(world);
 	}
@@ -289,9 +284,9 @@ public class DebugSetup extends Setup {
 				1));
 		guiSetup.addButtonToBottomView(new CommandAddAnimation(selection,
 				rotateAnimation), "Add RotateAnim");
-		guiSetup.addButtonToBottomView(new CommandAddAnimation(selection,
-				new AnimationColorBounce(2, Color.blue(), Color.green(), 0.2f)),
-				"Add ColorAnim");
+		guiSetup.addButtonToBottomView(
+				new CommandAddAnimation(selection, new AnimationColorBounce(2,
+						Color.blue(), Color.green(), 0.2f)), "Add ColorAnim");
 		AnimationPulse pAnimation = new AnimationPulse(2, new Vec(1, 1, 1),
 				new Vec(2, 2, 2), 0.2f);
 		guiSetup.addButtonToBottomView(new CommandAddAnimation(selection,
