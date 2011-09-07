@@ -76,6 +76,10 @@ public abstract class Setup {
 	private static final String STEP13 = "Entering fullscreen mode";
 	private static final String STEP_DONE = "All Setup-steps done!";
 
+	/**
+	 * This is the activity which is created to display the AR content (camera
+	 * preview, opengl-layer and UI-layer)
+	 */
 	public Activity myTargetActivity;
 	private CommandGroup myOptionsMenuCommands;
 	public CustomGLSurfaceView myGLSurfaceView;
@@ -108,6 +112,14 @@ public abstract class Setup {
 	// TODO remove boolean here and add to EventManager.setListeners..!
 	public Setup(boolean useAccelAndMagnetoSensors) {
 		this.useAccelAndMagnetoSensors = useAccelAndMagnetoSensors;
+	}
+
+	/**
+	 * @return This will just return {@link Setup#myTargetActivity}. Direct
+	 *         access to this field is also possible
+	 */
+	public Activity getActivity() {
+		return myTargetActivity;
 	}
 
 	/**
