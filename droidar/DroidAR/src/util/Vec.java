@@ -93,20 +93,22 @@ public class Vec {
 	}
 
 	/**
-	 * rotates the vector COUNTERCLOCKWISE around the z axis
+	 * rotates the vector CLOCKWISE around the z axis
 	 * 
 	 * <br>
 	 * <br>
 	 * 
 	 * if you want to rotate according to the current camera rotation you have
-	 * to calculate 360-angle first because this values will be given ClOCKWISE
+	 * to calculate 360-angle first because this values (e.g.
+	 * {@link GLCamera#myAnglesInRadians} or the values passed to the
+	 * {@link CameraAngleUpdateListener}) will be given COUNTERClOCKWISE
 	 * 
 	 * <br>
 	 * <br>
 	 * 
 	 * example: vector (0,10,0) should point in same direction as the camera is
-	 * looking and camera looks east (90 degree) then calculate 360-90(=270). so
-	 * rotate the (0,10,0) vector counterclockwise for 270 degree
+	 * looking and camera looks east (90 degree) then rotate the (0,10,0) vector
+	 * clockwise by 90 degree
 	 * 
 	 * @param angleInDegree
 	 */
@@ -126,6 +128,22 @@ public class Vec {
 		float x2 = cos * x - sin * y;
 		y = sin * x + cos * y;
 		x = x2;
+	}
+
+	/**
+	 * To get the point 10 meters away 30 degree clockwise from north you just
+	 * have to pass (10, 30) as parameters
+	 * 
+	 * @param distanceInMeters
+	 * @param angleInDegree
+	 *            CLOCKWISE rotation angle
+	 * @return
+	 */
+	public static Vec rotatedVecInXYPlane(float distanceInMeters,
+			double angleInDegree) {
+		Vec v = new Vec(distanceInMeters, 0, 0);
+		v.rotateAroundZAxis(angleInDegree);
+		return v;
 	}
 
 	/**
@@ -234,10 +252,38 @@ public class Vec {
 		return false;
 	}
 
-	public boolean equals(Vec vec) {
+	/**
+	 * @param vec
+	 * @param factor
+	 *            the same factor as in {@link Vec#round(float)}
+	 * @return
+	 */
+	public boolean equals(Vec vec, float factor) {
+
+		this.round(factor);
+		vec.round(factor);
+
 		if ((x == vec.x) && (y == vec.y) && (z == vec.z))
 			return true;
 		return false;
+	}
+
+	/**
+	 * @param factor
+	 *            pass 100 if you want to cut 0.12345678 to 0.12 and 1000 to cut
+	 *            it to 0.123
+	 */
+	public void round(float factor) {
+		x = Math.round(x * factor) / factor;
+		y = Math.round(y * factor) / factor;
+		z = Math.round(z * factor) / factor;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Vec)
+			return equals((Vec) o, 1000000f);
+		return super.equals(o);
 	}
 
 	public static Vec add(Vec a, Vec b) {
@@ -265,7 +311,8 @@ public class Vec {
 		 * => a*orthogonal=0 <=> a.x*orthogonal.x+a.y*orthogonal.y=0 //set
 		 * orthogonal.y=-1 => orthogonal.x=a.y/a.x
 		 */
-		if (a.x==0) return new Vec(1,0,0);
+		if (a.x == 0)
+			return new Vec(1, 0, 0);
 		return new Vec(a.y / a.x, -1, 0);
 	}
 
@@ -311,14 +358,6 @@ public class Vec {
 
 	public Vec setLength(float length) {
 		return mult(length / vectorLength(this));
-	}
-
-	public static boolean equal(Vec a, Vec b, float tolerance) {
-		if (!parallelVecs(a, b))
-			return false;
-		if (abs(vectorLength(a) - vectorLength(b)) > tolerance)
-			return false;
-		return true;
 	}
 
 	public float getLength() {

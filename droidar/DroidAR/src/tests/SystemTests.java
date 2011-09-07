@@ -44,6 +44,14 @@ public class SystemTests extends SimpleTesting {
 
 	private void vecTests() throws Exception {
 		normalCalculationTest();
+		assertEquals(Vec.rotatedVecInXYPlane(10, 90), new Vec(0, 10, 0));
+		vecRoundingTest();
+	}
+
+	private void vecRoundingTest() throws Exception {
+		Vec v = new Vec(0.12345678f, 0.12345678f, 0.12345678f);
+		v.round(100);
+		assertTrue(v.x == 0.12f);
 	}
 
 	private void normalCalculationTest() throws Exception {
