@@ -36,9 +36,10 @@ public class GLCamera implements Updateable, HasDebugInformation {
 		 *            {@link SensorManager#getOrientation(float[], float[])} and
 		 *            they represent the rotation caused by the device sensors
 		 * @param myRotationVec
-		 *            These values are additional rotation values which might be
-		 *            set by the developer/user so they have to be considered
-		 *            even if they are normally 0.
+		 *            These values (in radians, positive and COUNTERCLOCKWISE)
+		 *            are additional rotation values which might be set by the
+		 *            developer/user so they have to be considered even if they
+		 *            are normally 0.
 		 */
 		void updateAnglesByCamera(float[] myAnglesInRadians, Vec myRotationVec);
 
@@ -110,10 +111,10 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	 */
 	private CameraAngleUpdateListener myAngleUpdateListener;
 	/**
-	 * the camera rotation angles extracted from the rotation matrix. These
-	 * values will only be calculated if an angleUpdateListener is set or
+	 * the camera rotation angles (in radians, positive and COUNTERCLOCKWISE !!)
+	 * extracted from the rotation matrix. These values will only be calculated
+	 * if an angleUpdateListener is set or
 	 * {@link GLCamera#forceAngleCalculation} is set to true
-	 * 
 	 */
 	public float[] myAnglesInRadians = new float[3];
 	public boolean forceAngleCalculation = false;
@@ -443,6 +444,9 @@ public class GLCamera implements Updateable, HasDebugInformation {
 
 	private void updateCameraAnglesIfNeeded() {
 		if (myAngleUpdateListener != null) {
+			/*
+			 * 
+			 */
 			SensorManager.getOrientation(rotationMatrix, myAnglesInRadians);
 			myAngleUpdateListener.updateAnglesByCamera(myAnglesInRadians,
 					myRotationVec);
