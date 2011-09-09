@@ -281,6 +281,22 @@ public class GLCamera implements Updateable, HasDebugInformation {
 		rayDirection.z = rayDir[2];
 	}
 
+	/**
+	 * not jet ready for use
+	 * 
+	 * @param virtualWorldPosition
+	 * @return
+	 */
+	@Deprecated
+	public float[] getScreenCoordinatesFor(Vec virtualWorldPosition) {
+		float[] rayPos = new float[4];
+		float[] initPos = { virtualWorldPosition.x, virtualWorldPosition.y,
+				virtualWorldPosition.z, 1.0f };
+		Matrix.multiplyMV(rayPos, 0, rotationMatrix, matrixOffset, initPos, 0);
+		// TODO
+		return rayPos;
+	}
+
 	public int getMatrixOffset() {
 		return matrixOffset;
 	}
@@ -292,7 +308,8 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	 * {@link GLCamera#getPickingRay(Vec, Vec, float, float)} just a little bit
 	 * optimized
 	 * 
-	 * @return
+	 * @return the position in the virtual world in the xy plane (so z is 0)
+	 *         where the camera is looking at
 	 */
 	public Vec getPositionOnGroundWhereTheCameraIsLookingAt() {
 		Matrix.invertM(invRotMatrix, 0, rotationMatrix, matrixOffset);
@@ -318,7 +335,7 @@ public class GLCamera implements Updateable, HasDebugInformation {
 		 * 
 		 * dir.add(pos);
 		 * 
-		 * dir is the position on the ground which then could be returned
+		 * dir is the position on the ground which then can be returned
 		 */
 
 		float[] rayPos = new float[4];
@@ -330,7 +347,7 @@ public class GLCamera implements Updateable, HasDebugInformation {
 		Matrix.multiplyMV(rayDir, 0, invRotMatrix, 0, initDir, 0);
 
 		float f = -(rayPos[2] + myPosition.z) / rayDir[2];
-		System.out.println(f);
+		// System.out.println(f);
 		return new Vec((f * rayDir[0]) + (rayPos[0] + myPosition.x),
 				(f * rayDir[1]) + (rayPos[1] + myPosition.y), 0);
 	}
