@@ -19,12 +19,13 @@ import de.rwth.R;
  * Thread.setDefaultUncaughtExceptionHandler(new ErrorHandler(currentActivity));
  * </br></br>
  * 
- * or use the {@link ErrorHandler#registerNewErrorHandler(Activity)} </br></br>
+ * Or use the {@link ErrorHandler#registerNewErrorHandler(Activity)} method.</br></br>
  * 
  * To add email support, call
  * {@link ErrorHandler#enableEmailReports(String, String)} </br></br>
  * 
- * 
+ * And dont forget to add the ErrorReports.xml Layout file to your res/layout
+ * folder!</br></br>
  * 
  * The ErrorHandler has to be registered in the AndroidManifest.xml like this:
  * 
@@ -152,7 +153,7 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 	 * see {@link ErrorHandler} to understand where this is defined in the
 	 * manifest
 	 */
-	private static final String DEFINED_TYPE = "errors/myUnhandleCatcher";
+	public static final String DEFINED_TYPE = "errors/myUnhandleCatcher";
 
 	private static Activity myCurrentActivity;
 	private static UncaughtExceptionHandler defaultHandler;
@@ -163,10 +164,6 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 	private static final String DEV_MAIL = "dev mail";
 	private static final String TITLE_MAIL = "title mail";
 
-	/*
-	 * Dont forget to add the ErrorReports xml Layout file to your res/layout
-	 * folder
-	 */
 	private static final int ERROR_WINDOW_ID = R.layout.errorreports;
 	private static final int ERROR_TEXT_VIEW_ID = R.id.errorText;
 	private static final int ERROR_MAIL_BUTTON_ID = R.id.errorMailButton;
