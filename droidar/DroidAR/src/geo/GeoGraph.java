@@ -673,11 +673,12 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 			boolean directional, NodeListener nl, EdgeListener el) {
 		GeoGraph result = new GeoGraph();
 		result.setNonDirectional(!directional);
-		for (int i = 0; i < list.myLength - 1; i++) {
+		nl.addFirstNodeToGraph(result, list.get(0));
+		for (int i = 1; i < list.myLength - 1; i++) {
 			nl.addNodeToGraph(result, list.get(i));
 			el.addEdgeToGraph(result, list.get(i), list.get(i + 1));
 		}
-		nl.addNodeToGraph(result, list.get(list.myLength - 1));
+		nl.addLastNodeToGraph(result, list.get(list.myLength - 1));
 		return result;
 	}
 
