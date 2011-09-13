@@ -50,7 +50,8 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 	}
 
 	@Override
-	public void addFirstNodeToGraph(final GeoGraph targetGraph, GeoObj newNode) {
+	public boolean addFirstNodeToGraph(final GeoGraph targetGraph,
+			GeoObj newNode) {
 		newNode.setComp(newNodeMesh());
 		setNormalTransformations(newNode.getGraphicsComponent());
 
@@ -62,12 +63,12 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 		setHighlightNodeTransformations(newNode.getGraphicsComponent());
 		newNode.setComp(newProxiSensor(targetGraph));
 
-		targetGraph.add(newNode);
+		return targetGraph.add(newNode);
 
 	}
 
 	@Override
-	public void addNodeToGraph(final GeoGraph targetGraph, GeoObj newNode) {
+	public boolean addNodeToGraph(final GeoGraph targetGraph, GeoObj newNode) {
 		newNode.setComp(newNodeMesh());
 
 		/*
@@ -80,12 +81,12 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 				+ " to graph with number of nodes="
 				+ targetGraph.getNodes().myLength);
 
-		targetGraph.add(newNode);
+		return targetGraph.add(newNode);
 	}
 
 	@Override
-	public void addLastNodeToGraph(GeoGraph graph, GeoObj objectToAdd) {
-		addNodeToGraph(graph, objectToAdd);
+	public boolean addLastNodeToGraph(GeoGraph graph, GeoObj objectToAdd) {
+		return addNodeToGraph(graph, objectToAdd);
 	}
 
 	private Component newNodeMesh() {

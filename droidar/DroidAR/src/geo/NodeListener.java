@@ -2,9 +2,9 @@ package geo;
 
 public interface NodeListener {
 
-	void addFirstNodeToGraph(GeoGraph graph, GeoObj objectToAdd);
+	boolean addFirstNodeToGraph(GeoGraph graph, GeoObj objectToAdd);
 
-	void addNodeToGraph(GeoGraph graph, GeoObj objectToAdd);
+	boolean addNodeToGraph(GeoGraph graph, GeoObj objectToAdd);
 
-	void addLastNodeToGraph(GeoGraph graph, GeoObj objectToAdd);
+	boolean addLastNodeToGraph(GeoGraph graph, GeoObj objectToAdd);
 }
