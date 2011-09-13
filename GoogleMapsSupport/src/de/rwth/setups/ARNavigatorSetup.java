@@ -97,8 +97,8 @@ public class ARNavigatorSetup extends Setup {
 
 	private Wrapper minimizedFlag;
 
-	//private MetaInfos selItemInfo;
-	//private MetaInfos notSelItemInfo;
+	// private MetaInfos selItemInfo;
+	// private MetaInfos notSelItemInfo;
 	private MetaInfos selGraphInfo;
 	private MetaInfos notSelGraphInfo;
 
@@ -246,7 +246,7 @@ public class ARNavigatorSetup extends Setup {
 	public void _b_addWorldsToRenderer(GLRenderer renderer,
 			GLFactory objectFactory, GeoObj currentPosition) {
 		myRenderer = renderer;
-		camera = new GLCamera();
+		camera = new GLCamera(new Vec(0, 0, 1.5f));
 		world = new World(camera);
 
 		world.add(customGraphs); // to display all custom graphs
