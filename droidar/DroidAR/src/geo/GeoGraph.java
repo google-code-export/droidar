@@ -655,9 +655,11 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 		}
 
 		EfficientList<GeoObj> result = new EfficientList<GeoObj>();
-		for (int i = 0; i < myEdges.myLength; i++) {
-			if (myEdges.get(i).from.equals(obj)) {
-				result.add(myEdges.get(i).to);
+		if (myEdges != null) {
+			for (int i = 0; i < myEdges.myLength; i++) {
+				if (myEdges.get(i).from.equals(obj)) {
+					result.add(myEdges.get(i).to);
+				}
 			}
 		}
 		return result;
@@ -673,12 +675,20 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 			boolean directional, NodeListener nl, EdgeListener el) {
 		GeoGraph result = new GeoGraph();
 		result.setNonDirectional(!directional);
-		nl.addFirstNodeToGraph(result, list.get(0));
-		for (int i = 1; i < list.myLength - 1; i++) {
-			nl.addNodeToGraph(result, list.get(i));
-			el.addEdgeToGraph(result, list.get(i), list.get(i + 1));
+
+		for (int i = 0; i < list.myLength; i++) {
+			if (i == 0) {
+				nl.addFirstNodeToGraph(result, list.get(0));
+			} else if (i == list.myLength - 1) {
+				nl.addLastNodeToGraph(result, list.get(list.myLength - 1));
+			} else {
+				nl.addNodeToGraph(result, list.get(i));
+			}
+			if (i < list.myLength - 1) {
+				el.addEdgeToGraph(result, list.get(i), list.get(i + 1));
+			}
 		}
-		nl.addLastNodeToGraph(result, list.get(list.myLength - 1));
+
 		return result;
 	}
 
