@@ -21,7 +21,7 @@ import android.R;
 import android.app.Activity;
 
 import commands.Command;
-import commands.geo.DebugCommandPositionEvent;
+import commands.DebugCommandPositionEvent;
 import commands.ui.CommandInUiThread;
 import commands.ui.CommandShowToast;
 
