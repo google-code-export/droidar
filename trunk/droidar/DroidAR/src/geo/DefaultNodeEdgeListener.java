@@ -55,6 +55,8 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 		newNode.setComp(newNodeMesh());
 		setNormalTransformations(newNode.getGraphicsComponent());
 
+		Log.d(LOG_TAG, "First node will be added now..");
+
 		Log.d(LOG_TAG, "Adding obj " + newNode
 				+ " to graph with number of nodes="
 				+ targetGraph.getNodes().myLength);
