@@ -2,7 +2,7 @@ package commands.geo;
 
 import geo.GeoGraph;
 import geo.GeoObj;
-import listeners.ListenerAddGeoObjToGeoGraph;
+import geo.NodeListener;
 import util.Wrapper;
 
 import commands.undoable.UndoableCommand;
@@ -13,7 +13,7 @@ public class CommandAddGeoObjToGeoGraph extends UndoableCommand {
 	private Wrapper myTarget;
 	private GeoGraph backupGraph;
 	private GeoObj backupObj;
-	private ListenerAddGeoObjToGeoGraph myListener;
+	private NodeListener myListener;
 
 	/**
 	 * @param sourceW
@@ -24,7 +24,7 @@ public class CommandAddGeoObjToGeoGraph extends UndoableCommand {
 	 *            {@link GeoGraph}
 	 */
 	public CommandAddGeoObjToGeoGraph(Wrapper sourceW, Wrapper targetW,
-			ListenerAddGeoObjToGeoGraph listener) {
+			NodeListener listener) {
 		mySource = sourceW;
 		myTarget = targetW;
 		myListener = listener;
@@ -39,7 +39,7 @@ public class CommandAddGeoObjToGeoGraph extends UndoableCommand {
 			if (myListener == null) {
 				return backupGraph.add(backupObj);
 			} else {
-				return myListener.onAddToGraphEvent(backupGraph, backupObj);
+				return myListener.addNodeToGraph(backupGraph, backupObj);
 			}
 		}
 		return false;
