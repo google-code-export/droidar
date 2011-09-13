@@ -15,7 +15,16 @@ import android.widget.EditText;
 import de.rwth.R;
 
 /**
- * must be the same "x/y" string as in the AndroidManifest. </br>
+ * Register the {@link ErrorHandler} like this: </br>
+ * Thread.setDefaultUncaughtExceptionHandler(new ErrorHandler(currentActivity));
+ * </br></br>
+ * 
+ * or use the {@link ErrorHandler#registerNewErrorHandler(Activity)} </br></br>
+ * 
+ * To add email support, call
+ * {@link ErrorHandler#enableEmailReports(String, String)} </br></br>
+ * 
+ * 
  * 
  * The ErrorHandler has to be registered in the AndroidManifest.xml like this:
  * 
@@ -136,6 +145,15 @@ import de.rwth.R;
  */
 public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 
+	/**
+	 * must be the same "x/y" string as in the AndroidManifest. </br></br>
+	 * 
+	 * 
+	 * see {@link ErrorHandler} to understand where this is defined in the
+	 * manifest
+	 */
+	private static final String DEFINED_TYPE = "errors/myUnhandleCatcher";
+
 	private static Activity myCurrentActivity;
 	private static UncaughtExceptionHandler defaultHandler;
 	private static String myDeveloperMailAdress;
@@ -144,11 +162,6 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 	private static final CharSequence ERROR_ACTIVITY_TITLE = "Error :(";
 	private static final String DEV_MAIL = "dev mail";
 	private static final String TITLE_MAIL = "title mail";
-
-	/**
-	 * see {@link ErrorHandler}
-	 */
-	private static final String DEFINED_TYPE = "errors/myUnhandleCatcher";
 
 	/*
 	 * Dont forget to add the ErrorReports xml Layout file to your res/layout
@@ -160,13 +173,10 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 	private static final String LOG_TAG = "ErrorHandler";
 
 	/**
-	 * don't forget to set the current activity if you use this constructor!
+	 * See {@link ErrorHandler} for details
+	 * 
+	 * @param a
 	 */
-	public ErrorHandler() {
-		if (defaultHandler == null)
-			defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
-	}
-
 	public ErrorHandler(Activity a) {
 		setCurrentActivity(a);
 		if (defaultHandler == null)
@@ -307,4 +317,8 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 		myCurrentActivity = a;
 	}
 
+	public static void registerNewErrorHandler(Activity currentActivity) {
+		Thread.setDefaultUncaughtExceptionHandler(new ErrorHandler(
+				currentActivity));
+	}
 }
