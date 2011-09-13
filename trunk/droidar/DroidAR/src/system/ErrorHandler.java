@@ -19,7 +19,8 @@ import de.rwth.R;
  * Thread.setDefaultUncaughtExceptionHandler(new ErrorHandler(currentActivity));
  * </br></br>
  * 
- * Or use the {@link ErrorHandler#registerNewErrorHandler(Activity)} method.</br></br>
+ * Or use the {@link ErrorHandler#registerNewErrorHandler(Activity)}
+ * method.</br></br>
  * 
  * To add email support, call
  * {@link ErrorHandler#enableEmailReports(String, String)} </br></br>
@@ -168,6 +169,19 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 	private static final int ERROR_TEXT_VIEW_ID = R.id.errorText;
 	private static final int ERROR_MAIL_BUTTON_ID = R.id.errorMailButton;
 	private static final String LOG_TAG = "ErrorHandler";
+
+	/**
+	 * use the {@link ErrorHandler#ErrorHandler(Activity) constructor instead}.
+	 * This constructor is required by the Android system and the
+	 * {@link ErrorHandler} can only work properly if a activity is provided, so
+	 * only use this constructor if you call
+	 * {@link ErrorHandler#setCurrentActivity(Activity)} later!
+	 */
+	@Deprecated
+	public ErrorHandler() {
+		if (defaultHandler == null)
+			defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+	}
 
 	/**
 	 * See {@link ErrorHandler} for details
