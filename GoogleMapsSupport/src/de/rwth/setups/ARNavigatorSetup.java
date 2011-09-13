@@ -5,6 +5,7 @@ import geo.GMap;
 import geo.GeoGraph;
 import geo.GeoObj;
 import geo.GeoUtils;
+import geo.NodeListener;
 import gl.Color;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
@@ -16,7 +17,6 @@ import gui.GuiSetup;
 import gui.InfoScreenSettings;
 import gui.MetaInfos;
 import listeners.ItemSelectedListener;
-import listeners.ListenerAddGeoObjToGeoGraph;
 import listeners.ObjectCreateListener;
 import listeners.ObjectEditListener;
 import system.ErrorHandler;
@@ -107,7 +107,7 @@ public class ARNavigatorSetup extends Setup {
 	private ItemSelectedListener myItemSelected;
 	private ObjectCreateListener newCustomGraphListener;
 	private int graphCounter;
-	private ListenerAddGeoObjToGeoGraph addNewGeoObjToCustomGraphListener;
+	private NodeListener addNewGeoObjToCustomGraphListener;
 	private ObjectEditListener listenerSetEventsToClicksForSearchGraph;
 
 	@Override
@@ -180,15 +180,27 @@ public class ARNavigatorSetup extends Setup {
 			}
 		};
 
-		addNewGeoObjToCustomGraphListener = new ListenerAddGeoObjToGeoGraph() {
+		addNewGeoObjToCustomGraphListener = new NodeListener() {
+
 			@Override
-			public boolean onAddToGraphEvent(GeoGraph graph, GeoObj obj) {
+			public boolean addNodeToGraph(GeoGraph graph, GeoObj obj) {
 				obj.setComp(GLFactory.getInstance().newDiamond(
 						graph.getInfoObject().getColor()));
 				obj.getGraphicsComponent().enableMeshPicking(obj);
 				Command clickCommand = setSelectedGraphTo(new Wrapper(graph));
 				obj.setOnClickCommand(clickCommand);
 				return graph.add(obj);
+			}
+
+			@Override
+			public boolean addLastNodeToGraph(GeoGraph graph, GeoObj objectToAdd) {
+				return addNodeToGraph(graph, objectToAdd);
+			}
+
+			@Override
+			public boolean addFirstNodeToGraph(GeoGraph graph,
+					GeoObj objectToAdd) {
+				return addNodeToGraph(graph, objectToAdd);
 			}
 		};
 

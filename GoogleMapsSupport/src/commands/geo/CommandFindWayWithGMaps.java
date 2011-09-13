@@ -13,7 +13,7 @@ public class CommandFindWayWithGMaps extends Command {
 
 	private GeoUtils myGeoUtils;
 	private Wrapper mySearchTextWrapper;
-	private Wrapper myResultingPath;
+	private Wrapper myResultingPathWrapper;
 	private GeoObj myStartPos;
 	private Wrapper byWalk;
 
@@ -29,7 +29,7 @@ public class CommandFindWayWithGMaps extends Command {
 			Wrapper searchTextWrapper, Wrapper sresults, Wrapper byWalk) {
 		myGeoUtils = map;
 		mySearchTextWrapper = searchTextWrapper;
-		myResultingPath = sresults;
+		myResultingPathWrapper = sresults;
 		myStartPos = startPos;
 		this.byWalk = byWalk;
 	}
@@ -55,10 +55,10 @@ public class CommandFindWayWithGMaps extends Command {
 			Log.d("Gmaps", "Searching way from current location to " + target);
 			return myGeoUtils.getPathFromAtoB(EventManager.getInstance()
 					.getCurrentLocationObject(), target,
-					myResultingPath, byWalk.getBooleanValue());
+					myResultingPathWrapper, byWalk.getBooleanValue());
 		}
 		Log.d("Gmaps", "Searching way from " + myStartPos + " to " + target);
-		return myGeoUtils.getPathFromAtoB(myStartPos, target, myResultingPath, byWalk
+		return myGeoUtils.getPathFromAtoB(myStartPos, target, myResultingPathWrapper, byWalk
 				.getBooleanValue());
 	}
 
