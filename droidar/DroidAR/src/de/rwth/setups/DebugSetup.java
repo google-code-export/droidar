@@ -33,7 +33,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import commands.CommandGroup;
-import commands.geo.DebugCommandPositionEvent;
+import commands.DebugCommandPositionEvent;
 import commands.gl.CommandAddAnimation;
 import commands.gl.CommandCameraMoveAndLookAt;
 import commands.logic.CommandSetWrapperToValue2;
