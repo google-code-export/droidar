@@ -24,10 +24,12 @@ import util.Wrapper;
 import worldData.Obj;
 import worldData.SystemUpdater;
 import worldData.World;
+import actions.Action;
 import actions.ActionBufferedCameraAR;
 import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
+import actions.ActionWASDMovement;
 import android.app.Activity;
 import android.widget.Button;
 import android.widget.TextView;
@@ -59,6 +61,7 @@ public class DebugSetup extends Setup {
 	private Wrapper selection;
 
 	private ActionCalcRelativePos geoupdater;
+	private ActionWASDMovement wasdAction;
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
@@ -78,14 +81,14 @@ public class DebugSetup extends Setup {
 		camera = new GLCamera(new Vec(0, 0, 1));
 		world = new World(camera);
 
-		
+		wasdAction = new ActionWASDMovement(camera, 25f, 50f, 70f);
 
 		initWorld(world);
 		initI9Tests(world);
-		
+
 		world.add(objectFactory.newTextObject("text Input", new Vec(10, 1, 1),
-				 myTargetActivity, camera));
-		
+				myTargetActivity, camera));
+
 		renderer.addRenderElement(world);
 
 	}
@@ -252,7 +255,7 @@ public class DebugSetup extends Setup {
 	public void _c_addActionsToEvents(EventManager eventManager,
 			CustomGLSurfaceView arView) {
 
-		arView.addOnTouchMoveAction(new ActionBufferedCameraAR(camera));
+		arView.addOnTouchMoveAction(wasdAction);
 		eventManager
 				.addOnOrientationChangedAction(new ActionRotateCameraBuffered(
 						camera));
@@ -261,13 +264,14 @@ public class DebugSetup extends Setup {
 				5, 25));
 
 		geoupdater = new ActionCalcRelativePos(world, camera);
-		eventManager.addOnLocationChangedAction(geoupdater);
+		// eventManager.addOnLocationChangedAction(geoupdater);
 	}
 
 	@Override
 	public void _d_addElementsToUpdateThread(SystemUpdater worldUpdater) {
 		// add the created world to be updated:
 		worldUpdater.addObjectToUpdateCycle(world);
+		worldUpdater.addObjectToUpdateCycle(wasdAction);
 	}
 
 	@Override

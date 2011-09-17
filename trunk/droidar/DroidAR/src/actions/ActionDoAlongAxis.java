@@ -47,7 +47,8 @@ public abstract class ActionDoAlongAxis extends Action {
 	final float rad2deg = (float) (180.0f / Math.PI);
 
 	@Override
-	public boolean onTouchMove(float screenDeltaX, float screenDeltaY) {
+	public boolean onTouchMove(MotionEvent e1, MotionEvent e2,
+			float screenDeltaX, float screenDeltaY) {
 
 		AlignAcordingToViewAxes(screenDeltaX / myTouchscreenReductionFactor,
 				-screenDeltaY / myTouchscreenReductionFactor);

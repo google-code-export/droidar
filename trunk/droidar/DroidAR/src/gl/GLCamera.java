@@ -111,7 +111,9 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	 */
 	private CameraAngleUpdateListener myAngleUpdateListener;
 	/**
-	 * the camera rotation angles (in radians, positive and COUNTERCLOCKWISE !!)
+	 * The order is z,x,y achses.
+	 * 
+	 * The camera rotation angles (in radians, positive and COUNTERCLOCKWISE !!)
 	 * extracted from the rotation matrix. These values will only be calculated
 	 * if an angleUpdateListener is set or
 	 * {@link GLCamera#forceAngleCalculation} is set to true
@@ -312,9 +314,7 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	 *         where the camera is looking at
 	 */
 	public Vec getPositionOnGroundWhereTheCameraIsLookingAt() {
-		Matrix.invertM(invRotMatrix, 0, rotationMatrix, matrixOffset);
-
-		/*
+				/*
 		 * This is an optimized version of the getPickingRay method. The good
 		 * readable code would look like this:
 		 * 
@@ -339,17 +339,40 @@ public class GLCamera implements Updateable, HasDebugInformation {
 		 */
 
 		float[] rayPos = new float[4];
-		float[] initPos = { 0.0f, 0.0f, 0.0f, 1.0f };
-		Matrix.multiplyMV(rayPos, 0, invRotMatrix, 0, initPos, 0);
-
 		float[] rayDir = new float[4];
+		getCameraViewDirectionRay(rayPos, rayDir);
+
+		/*
+		 * then calc intersection with ground
+		 */
+		float f = -rayPos[2] / rayDir[2];
+		return new Vec(f * rayDir[0] + rayPos[0], f * rayDir[1] + rayPos[1], 0);
+	}
+
+	/**
+	 * This will return a starting-point and direction of the line which comes
+	 * out of the camera.
+	 * 
+	 * @param rayPos
+	 *            here the rayPos will be stored, pass a new float[4]. The
+	 *            result will contain {@link GLCamera#myPosition} so you dont
+	 *            need to add it manually! Can be NULL if you only need the
+	 *            ray-direction
+	 * @param rayDir
+	 *            here the rayDir will be stored, pass a new float[4]
+	 * @return
+	 */
+	public void getCameraViewDirectionRay(float[] rayPos, float[] rayDir) {
+		Matrix.invertM(invRotMatrix, 0, rotationMatrix, matrixOffset);
+		if (rayPos != null) {
+			float[] initPos = { 0.0f, 0.0f, 0.0f, 1.0f };
+			Matrix.multiplyMV(rayPos, 0, invRotMatrix, 0, initPos, 0);
+			rayPos[0] += myPosition.x;
+			rayPos[1] += myPosition.y;
+			rayPos[2] += myPosition.z;
+		}
 		float[] initDir = { 0, 0, -GLRenderer.minViewDistance, 0.0f };
 		Matrix.multiplyMV(rayDir, 0, invRotMatrix, 0, initDir, 0);
-
-		float f = -(rayPos[2] + myPosition.z) / rayDir[2];
-		// System.out.println(f);
-		return new Vec((f * rayDir[0]) + (rayPos[0] + myPosition.x),
-				(f * rayDir[1]) + (rayPos[1] + myPosition.y), 0);
 	}
 
 	/**
@@ -737,15 +760,21 @@ public class GLCamera implements Updateable, HasDebugInformation {
 		resetPosition(true);
 	}
 
+	public void changeNewPosition(float deltaX, float deltaY, float deltaZ) {
+		myNewPosition.x += deltaX;
+		myNewPosition.y += deltaY;
+		myNewPosition.z += deltaZ;
+	}
+
 	public void setNewPosition(float x, float y, float z) {
-		myNewPosition.x = y;
-		myNewPosition.y = x;
+		myNewPosition.x = x;
+		myNewPosition.y = y;
 		myNewPosition.z = z;
 	}
 
 	public void setNewPosition(float x, float y) {
-		myNewPosition.x = y;
-		myNewPosition.y = x;
+		myNewPosition.x = x;
+		myNewPosition.y = y;
 	}
 
 	public Vec getNewCameraOffset() {

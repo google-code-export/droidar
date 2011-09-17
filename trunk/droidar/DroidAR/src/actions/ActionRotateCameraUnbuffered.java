@@ -1,5 +1,6 @@
 package actions;
 
+import android.view.MotionEvent;
 import gl.GLCamera;
 
 public class ActionRotateCameraUnbuffered extends Action {
@@ -16,7 +17,8 @@ public class ActionRotateCameraUnbuffered extends Action {
 	}
 
 	@Override
-	public boolean onTouchMove(float screenDeltaX, float screenDeltaY) {
+	public boolean onTouchMove(MotionEvent e1, MotionEvent e2,
+			float screenDeltaX, float screenDeltaY) {
 		myTargetCamera.changeZAngleUnbuffered(screenDeltaY);
 		return true;
 	}

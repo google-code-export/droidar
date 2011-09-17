@@ -40,10 +40,8 @@ public interface TouchEventInterface {
 	public void setOnDoubleTabCommand(Command c);
 
 	/**
-	 * @param e1
-	 * @param e2
-	 * @param distanceX
-	 * @param distanceY
+	 * see
+	 * {@link CustomGestureListener#onScroll(MotionEvent, MotionEvent, float, float)}
 	 */
 	void onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY);

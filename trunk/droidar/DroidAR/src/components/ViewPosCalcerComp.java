@@ -1,4 +1,4 @@
-package de.rwth.setups;
+package components;
 
 import android.opengl.GLSurfaceView.Renderer;
 import gl.GLCamera;
@@ -8,7 +8,6 @@ import worldData.MoveObjComp;
 import worldData.Obj;
 import worldData.UpdateTimer;
 import worldData.Visitor;
-import components.Component;
 
 public class ViewPosCalcerComp implements Component {
 

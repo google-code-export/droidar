@@ -308,8 +308,9 @@ public class Vec {
 	 */
 	public static Vec getOrthogonalHorizontal(Vec a) {
 		/*
-		 * => a*orthogonal=0 <=> a.x*orthogonal.x+a.y*orthogonal.y=0 //set
-		 * orthogonal.y=-1 => orthogonal.x=a.y/a.x
+		 * => a*orthogonal=0 <=> a.x*orthogonal.x+a.y*orthogonal.y=0
+		 * 
+		 * set orthogonal.y=-1 => orthogonal.x=a.y/a.x
 		 */
 		if (a.x == 0)
 			return new Vec(1, 0, 0);
@@ -656,5 +657,9 @@ public class Vec {
 		myArray[2] = z;
 
 		return myArray;
+	}
+
+	public float scalarMult(Vec b) {
+		return x * b.x + y * b.y + z * b.z;
 	}
 }
