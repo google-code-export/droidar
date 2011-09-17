@@ -107,9 +107,10 @@ public class EventListenerGroup extends Action implements ListInterface {
 		return true;
 	}
 
-	public boolean onTouchMove(float deltaX, float deltaY) {
+	public boolean onTouchMove(MotionEvent e1, MotionEvent e2, float deltaX,
+			float deltaY) {
 		for (int i = 0; i < myActions.myLength; i++) {
-			myActions.get(i).onTouchMove(deltaX, deltaY);
+			myActions.get(i).onTouchMove(e1, e2, deltaX, deltaY);
 		}
 		return true;
 	}

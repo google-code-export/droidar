@@ -137,7 +137,7 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 	public void onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
 		if (onTouchMoveAction != null) {
-			onTouchMoveAction.onTouchMove(distanceX, distanceY);
+			onTouchMoveAction.onTouchMove(e1,e2,distanceX, distanceY);
 		}
 	}
 

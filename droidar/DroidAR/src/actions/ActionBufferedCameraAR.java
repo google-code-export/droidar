@@ -1,5 +1,6 @@
 package actions;
 
+import android.view.MotionEvent;
 import gl.GLCamera;
 
 /**
@@ -43,7 +44,8 @@ public class ActionBufferedCameraAR extends Action {
 	}
 
 	@Override
-	public boolean onTouchMove(float screenDeltaX, float screenDeltaY) {
+	public boolean onTouchMove(MotionEvent e1, MotionEvent e2,
+			float screenDeltaX, float screenDeltaY) {
 		screenDeltaX = screenDeltaX / TOUCH_SENSITY_X;
 		screenDeltaY = -screenDeltaY / TOUCH_SENSITY_Y;
 		myTargetCamera.changeZAngleBuffered(screenDeltaX);
@@ -56,7 +58,5 @@ public class ActionBufferedCameraAR extends Action {
 		myTargetCamera.resetBufferedAngle();
 		return true;
 	}
-	
-	
-	
+
 }

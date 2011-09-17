@@ -1,6 +1,7 @@
 package listeners;
 
 import gl.GLCamera;
+import gui.CustomGestureListener;
 import util.Vec;
 import android.location.Location;
 import android.view.MotionEvent;
@@ -11,7 +12,13 @@ public interface EventListener {
 
 	public abstract boolean onLocationChanged(Location location);
 
-	public abstract boolean onTouchMove(float screenDeltaX, float screenDeltaY);
+	/**
+	 * see
+	 * {@link CustomGestureListener#onScroll(MotionEvent, MotionEvent, float, float)}
+	 * 
+	 */
+	public abstract boolean onTouchMove(MotionEvent e1, MotionEvent e2,
+			float screenDeltaX, float screenDeltaY);
 
 	public abstract boolean onAccelChanged(float[] values);
 

@@ -4,6 +4,7 @@ import gl.GLCamera;
 import actions.algos.Algo;
 import actions.algos.BufferAlgo1;
 import actions.algos.SensorAlgo1;
+import android.view.MotionEvent;
 
 public class ActionRotateCameraBuffered extends Action {
 
@@ -13,7 +14,7 @@ public class ActionRotateCameraBuffered extends Action {
 	private Algo accelAlgo;
 
 	private Algo orientAlgo;
-	//private Algo orientationBufferAlgo;
+	// private Algo orientationBufferAlgo;
 
 	private Algo accelBufferAlgo;
 	private Algo magnetBufferAlgo;
@@ -26,7 +27,7 @@ public class ActionRotateCameraBuffered extends Action {
 		magnetAlgo = new SensorAlgo1(1.4f);
 
 		orientAlgo = new SensorAlgo1(0.005f);// TODO
-		//orientationBufferAlgo = new BufferAlgo1(0.01f, 0.02f); // TODO
+		// orientationBufferAlgo = new BufferAlgo1(0.01f, 0.02f); // TODO
 
 		accelBufferAlgo = new BufferAlgo1(0.1f, 4f);
 		magnetBufferAlgo = new BufferAlgo1(0.1f, 4f);
@@ -34,7 +35,8 @@ public class ActionRotateCameraBuffered extends Action {
 	}
 
 	@Override
-	public boolean onTouchMove(float screenDeltaX, float screenDeltaY) {
+	public boolean onTouchMove(MotionEvent e1, MotionEvent e2,
+			float screenDeltaX, float screenDeltaY) {
 		myTargetCamera.changeZAngleBuffered(screenDeltaY);
 		return true;
 	}

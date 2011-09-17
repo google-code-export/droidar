@@ -3,6 +3,7 @@ package actions;
 import gl.GLCamera;
 import actions.algos.Algo;
 import actions.algos.SensorAlgo1;
+import android.view.MotionEvent;
 
 public class ActionRotateCameraUnbuffered2 extends Action {
 
@@ -23,7 +24,8 @@ public class ActionRotateCameraUnbuffered2 extends Action {
 	}
 
 	@Override
-	public boolean onTouchMove(float screenDeltaX, float screenDeltaY) {
+	public boolean onTouchMove(MotionEvent e1, MotionEvent e2,
+			float screenDeltaX, float screenDeltaY) {
 		myTargetCamera.changeZAngleBuffered(screenDeltaY);
 		return true;
 	}

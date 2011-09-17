@@ -58,7 +58,8 @@ public abstract class Action implements EventListener {
 	}
 
 	@Override
-	public boolean onTouchMove(float screenDeltaX, float screenDeltaY) {
+	public boolean onTouchMove(MotionEvent e1, MotionEvent e2,
+			float screenDeltaX, float screenDeltaY) {
 		Log.e("action event",
 				"onTouch not catched by defined action: " + this.getClass());
 		return false;
@@ -89,7 +90,7 @@ public abstract class Action implements EventListener {
 	@Override
 	public boolean onReleaseTouchMove() {
 		Log.e("action event",
-				"MegnetometerValuesChanged not catched by defined action: "
+				"onReleaseTouchMove not catched by defined action: "
 						+ this.getClass());
 		return false;
 	}

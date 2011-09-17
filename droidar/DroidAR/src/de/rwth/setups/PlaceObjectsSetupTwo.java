@@ -23,6 +23,7 @@ import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
 
 import commands.Command;
+import components.ViewPosCalcerComp;
 
 public class PlaceObjectsSetupTwo extends Setup {
 
