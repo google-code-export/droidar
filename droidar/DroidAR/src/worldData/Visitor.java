@@ -32,9 +32,11 @@ import components.ProximitySensor;
 public abstract class Visitor {
 
 	public boolean default_visit(World world) {
-		final int lenght = world.myLength;
+
+		EfficientList<AbstractObj> list = world.getAllItems();
+		final int lenght = list.myLength;
 		for (int i = 0; i < lenght; i++) {
-			world.get(i).accept(this);
+			list.get(i).accept(this);
 		}
 		return visit(world);
 	}
