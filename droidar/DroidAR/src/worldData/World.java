@@ -32,13 +32,14 @@ public class World implements Updateable, Renderable {
 
 	public World(GLCamera glCamera) {
 		myCamera = glCamera;
-		container = new EfficientList<AbstractObj>();
 	}
 
 	public boolean add(AbstractObj x) {
 		if (x == null) {
 			return false;
 		}
+		if (container == null)
+			container = new EfficientList<AbstractObj>();
 		/*
 		 * check if obj already added before adding it to the world!
 		 */
@@ -86,17 +87,25 @@ public class World implements Updateable, Renderable {
 
 		CordinateAxis.draw(gl);
 
-		for (int i = 0; i < container.myLength; i++) {
-			if (container.get(i) != null)
-				container.get(i).draw(gl);
-		}
+		drawElements(gl);
 
+	}
+
+	private void drawElements(GL10 gl) {
+		if (container != null) {
+			for (int i = 0; i < container.myLength; i++) {
+				if (container.get(i) != null)
+					container.get(i).draw(gl);
+			}
+		}
 	}
 
 	public boolean update(float timeDelta) {
 		myCamera.update(timeDelta);
-		for (int i = 0; i < container.myLength; i++) {
-			container.get(i).update(timeDelta);
+		if (container != null) {
+			for (int i = 0; i < container.myLength; i++) {
+				container.get(i).update(timeDelta);
+			}
 		}
 		return true;
 	}
