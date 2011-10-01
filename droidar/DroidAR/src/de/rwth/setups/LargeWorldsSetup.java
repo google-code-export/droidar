@@ -19,6 +19,7 @@ import worldData.LargeWorld;
 import worldData.Obj;
 import worldData.SystemUpdater;
 import worldData.World;
+import actions.Action;
 import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
@@ -36,6 +37,7 @@ public class LargeWorldsSetup extends Setup {
 	private static final int NUMBER_OF_OBJECTS = 1000;
 	private GLCamera camera;
 	private World world;
+	private ActionWASDMovement wasdAction;
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
@@ -50,7 +52,9 @@ public class LargeWorldsSetup extends Setup {
 			GLFactory objectFactory, GeoObj currentPosition) {
 
 		camera = new GLCamera(new Vec(0, 0, 1));
-		world = new LargeWorld(camera, 80f, 5f);// new World(camera);
+		world = new LargeWorld(camera, 60f, 5f);// new World(camera);
+
+		wasdAction = new ActionWASDMovement(camera, 25f, 50f, 20f);
 
 		for (int x = (int) Math.sqrt(NUMBER_OF_OBJECTS); x >= 0; x--) {
 			for (int y = (int) Math.sqrt(NUMBER_OF_OBJECTS); y >= 0; y--) {
@@ -71,8 +75,7 @@ public class LargeWorldsSetup extends Setup {
 	public void _c_addActionsToEvents(EventManager eventManager,
 			CustomGLSurfaceView arView) {
 
-		arView.addOnTouchMoveAction(new ActionWASDMovement(camera, 25f, 50f,
-				20f));
+		arView.addOnTouchMoveAction(wasdAction);
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera,
 				5, 25));
 		eventManager
@@ -86,7 +89,7 @@ public class LargeWorldsSetup extends Setup {
 	public void _d_addElementsToUpdateThread(SystemUpdater worldUpdater) {
 
 		worldUpdater.addObjectToUpdateCycle(world);
-
+		worldUpdater.addObjectToUpdateCycle(wasdAction);
 	}
 
 	@Override

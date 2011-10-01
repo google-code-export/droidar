@@ -10,7 +10,9 @@ import android.view.MotionEvent;
  * the trackball etc and do something along the virtual camera axes (eg camera
  * movement or object movement or anything else). without mapping it to the
  * current camera rotation, a x+10 movement would always be along the virtual x
- * axis and not along the current camera x axis.
+ * axis and not along the current camera x axis. <br>
+ * 
+ * Dont forget to register it at the worldUpdater!
  * 
  * @author Spobo
  * 
