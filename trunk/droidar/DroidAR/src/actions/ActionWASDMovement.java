@@ -29,8 +29,13 @@ public class ActionWASDMovement extends Action implements Updateable {
 	/**
 	 * @param camera
 	 * @param xReduction
+	 *            redutcion in x (W or S key) direction. Higher means slower.
+	 *            Try 25f
 	 * @param yReduction
+	 *            redutcion in y (A or D key) direction. Higher means slower.
+	 *            Try 50f
 	 * @param maxSpeed
+	 *            maximum movementSpeed. Try 20f
 	 */
 	public ActionWASDMovement(GLCamera camera, float xReduction,
 			float yReduction, float maxSpeed) {

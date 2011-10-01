@@ -4,6 +4,7 @@ import system.ArActivity;
 import system.ErrorHandler;
 import system.Setup;
 import tests.SimpleTesting;
+import worldData.LargeWorld;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import de.rwth.setups.CollectItemsSetup;
 import de.rwth.setups.DebugSetup;
 import de.rwth.setups.GraphMovementTestSetup;
 import de.rwth.setups.IndoorSetup;
+import de.rwth.setups.LargeWorldsSetup;
 import de.rwth.setups.LightningSetup;
 import de.rwth.setups.PlaceObjectsSetup;
 import de.rwth.setups.PlaceObjectsSetupTwo;
@@ -33,6 +35,7 @@ public class TechDemoLauncher extends Activity {
 
 		
 		showSetup("Animation Demo", new DebugSetup());
+		showSetup("Large worlds", new LargeWorldsSetup());
 		showSetup("Lightning Demo", new LightningSetup());
 		showSetup("Collecting Items Demo", new CollectItemsSetup());
 		showSetup("Placing objects Demo", new PlaceObjectsSetup());

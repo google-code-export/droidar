@@ -1,6 +1,8 @@
 package geo;
 
+import worldData.LargeWorld;
 import worldData.Visitor;
+import worldData.World;
 import android.util.Log;
 
 public class GeoCalcer extends Visitor {
@@ -13,6 +15,14 @@ public class GeoCalcer extends Visitor {
 		nullLatitude = latitude;
 		nullLongitude = longitude;
 		nullAltitude = altitude;
+	}
+
+	@Override
+	public boolean visit(World x) {
+		if (x instanceof LargeWorld) {
+			((LargeWorld) x).rebuildTree();
+		}
+		return true;
 	}
 
 	@Override

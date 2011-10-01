@@ -87,11 +87,11 @@ public class World implements Updateable, Renderable {
 
 		CordinateAxis.draw(gl);
 
-		drawElements(gl);
+		drawElements(myCamera, gl);
 
 	}
 
-	private void drawElements(GL10 gl) {
+	public void drawElements(GLCamera camera, GL10 gl) {
 		if (container != null) {
 			for (int i = 0; i < container.myLength; i++) {
 				if (container.get(i) != null)

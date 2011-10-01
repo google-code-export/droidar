@@ -20,6 +20,7 @@ import android.util.Log;
  * 
  * http://local.wasp.uwa.edu.au/~pbourke/dataformats/obj/
  */
+@Deprecated
 public class ObjParser {
 	private static final String LOG_TAG = "Obj-Parser";
 

@@ -81,7 +81,7 @@ public class DebugSetup extends Setup {
 		camera = new GLCamera(new Vec(0, 0, 1));
 		world = new World(camera);
 
-		wasdAction = new ActionWASDMovement(camera, 25f, 50f, 70f);
+		wasdAction = new ActionWASDMovement(camera, 25f, 50f, 20f);
 
 		initWorld(world);
 		initI9Tests(world);
