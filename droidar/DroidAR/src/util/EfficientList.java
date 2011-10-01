@@ -1,5 +1,6 @@
 package util;
 
+import worldData.AbstractObj;
 import android.util.Log;
 
 /**
@@ -25,13 +26,21 @@ public class EfficientList<T> {
 	/**
 	 * is accessible to increase performance in loops
 	 */
-	protected Object[] myArray = new Object[INIT_SIZE];
+	protected Object[] myArray;
 
 	/**
 	 * the lenght of the {@link EfficientList}, should be used in any kind of
 	 * loop
 	 */
 	public int myLength = 0;
+
+	public EfficientList() {
+		myArray = new Object[INIT_SIZE];
+	}
+
+	private EfficientList(int initSize) {
+		myArray = new Object[initSize];
+	}
 
 	public synchronized boolean add(T x) {
 		if (x == null) {
@@ -214,5 +223,13 @@ public class EfficientList<T> {
 	public static String arrayToString(Object[] o) {
 		// TODO Auto-generated method stub
 		return arrayToString(o, o.length);
+	}
+
+	public EfficientList<T> copy() {
+		EfficientList<T> result = new EfficientList<T>(myLength);
+		for (int i = 0; i < this.myLength; i++) {
+			result.add(this.get(i));
+		}
+		return result;
 	}
 }

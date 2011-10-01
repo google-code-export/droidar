@@ -34,9 +34,11 @@ public abstract class Visitor {
 	public boolean default_visit(World world) {
 
 		EfficientList<AbstractObj> list = world.getAllItems();
-		final int lenght = list.myLength;
-		for (int i = 0; i < lenght; i++) {
-			list.get(i).accept(this);
+		if (list != null) {
+			final int lenght = list.myLength;
+			for (int i = 0; i < lenght; i++) {
+				list.get(i).accept(this);
+			}
 		}
 		return visit(world);
 	}
