@@ -17,6 +17,8 @@ public class TextureManager implements HasDebugInformation {
 
 	private static final String LOG_TAG = "Texture Manager";
 
+	private static final int INIT_TEXTURE_MAP_SIZE = 40;
+
 	private static TextureManager instance = new TextureManager();
 
 	/**
@@ -24,7 +26,7 @@ public class TextureManager implements HasDebugInformation {
 	 */
 	private ArrayList<Texture> newTexturesToLoad;
 	private int textureArrayOffset = 0;
-	private int[] textureArray = new int[40];
+	private int[] textureArray = new int[INIT_TEXTURE_MAP_SIZE];
 	private HashMap<String, Texture> myTextureMap;
 
 	// TODO reuse of same texture not possible this way
@@ -61,6 +63,12 @@ public class TextureManager implements HasDebugInformation {
 	public void updateTextures(GL10 gl) {
 		if (newTexturesToLoad != null && newTexturesToLoad.size() > 0) {
 			try {
+				if (textureArray.length - textureArrayOffset < newTexturesToLoad
+						.size()) {
+					Log.d(LOG_TAG, "Resizing textureArray!");
+					textureArray = doubleTheArraySize(textureArray);
+				}
+
 				// generate and store id numbers in textureArray:
 				gl.glGenTextures(newTexturesToLoad.size(), textureArray,
 						textureArrayOffset);
@@ -119,6 +127,15 @@ public class TextureManager implements HasDebugInformation {
 		}
 	}
 
+	private int[] doubleTheArraySize(int[] a) {
+		int[] b = new int[a.length * 2];
+		// copy old values:
+		for (int i = 0; i < a.length; i++) {
+			b[i] = a[i];
+		}
+		return b;
+	}
+
 	private void addTextureToMap(Texture t) {
 		if (myTextureMap == null)
 			myTextureMap = new HashMap<String, Texture>();
@@ -175,10 +192,17 @@ public class TextureManager implements HasDebugInformation {
 	@Override
 	public void showDebugInformation() {
 		Log.i(LOG_TAG, "Debug infos about the Texture Manager:");
-		Log.i(LOG_TAG, "   > newTexturesToLoad" + newTexturesToLoad);
-		Log.i(LOG_TAG, "   > textureArray.length" + textureArray.length);
-		Log.i(LOG_TAG, "   > textureArrayOffset" + textureArrayOffset);
-		Log.i(LOG_TAG, "   > myTextureMap" + myTextureMap);
+		Log.i(LOG_TAG, "   > newTexturesToLoad=" + newTexturesToLoad);
+
+		Log.i(LOG_TAG, "   > textureArray.length=" + textureArray.length);
+		Log.i(LOG_TAG, "   > textureArrayOffset=" + textureArrayOffset);
+
+		Log.i(LOG_TAG, "   > length-offset="
+				+ (textureArray.length - textureArrayOffset));
+		Log.i(LOG_TAG,
+				"   > newTexturesToLoad.size()=" + newTexturesToLoad.size());
+
+		Log.i(LOG_TAG, "   > myTextureMap=" + myTextureMap);
 	}
 
 	public static void resetInstance() {
