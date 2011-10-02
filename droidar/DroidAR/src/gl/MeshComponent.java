@@ -13,15 +13,16 @@ import util.Wrapper;
 import worldData.AbstractObj;
 import worldData.Obj;
 import worldData.Updateable;
+import worldData.RenderableEntity;
 import android.opengl.Matrix;
 import android.util.Log;
 
 import commands.Command;
 import commands.undoable.UndoableCommand;
-import components.Component;
+import components.Entity;
 
-public abstract class MeshComponent implements Component, ParentMesh,
-		SelectionListener, Renderable {
+public abstract class MeshComponent implements RenderableEntity, Entity, ParentMesh,
+		SelectionListener {
 
 	private static final String LOG_TAG = "MeshComp";
 	/**

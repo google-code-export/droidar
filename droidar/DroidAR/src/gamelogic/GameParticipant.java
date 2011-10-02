@@ -8,9 +8,9 @@ import java.util.Arrays;
 import util.EfficientList;
 import android.util.Log;
 
-import components.Component;
+import components.Entity;
 
-public abstract class GameParticipant implements Component, EditItem {
+public abstract class GameParticipant implements Entity, EditItem {
 
 	private static final String LOG_TAG = "GameParticipant";
 	private StatList myStatList;

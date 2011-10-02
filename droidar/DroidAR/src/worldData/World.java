@@ -25,7 +25,7 @@ public class World implements Updateable, Renderable {
 	 */
 	private Vec myScale;
 
-	EfficientList<AbstractObj> container;
+	EfficientList<RenderableEntity> container;
 
 	/**
 	 * the camera which is responsible to display the world correctly
@@ -41,7 +41,7 @@ public class World implements Updateable, Renderable {
 			return false;
 		}
 		if (container == null)
-			container = new EfficientList<AbstractObj>();
+			container = new EfficientList<RenderableEntity>();
 		/*
 		 * check if obj already added before adding it to the world!
 		 */
@@ -142,7 +142,7 @@ public class World implements Updateable, Renderable {
 		this.myCamera = myCamera;
 	}
 
-	public EfficientList<AbstractObj> getAllItems() {
+	public EfficientList<RenderableEntity> getAllItems() {
 		return container;
 	}
 

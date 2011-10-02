@@ -13,10 +13,11 @@ import worldData.UpdateTimer;
 import worldData.Updateable;
 import worldData.Visitor;
 import worldData.World;
+import worldData.RenderableEntity;
 
 import commands.Command;
 
-public class ProximitySensorForOtherObjects implements Component {
+public class ProximitySensorForOtherObjects implements Entity {
 	private static final float DEFAULT_UPDATE_TIME = 1;
 	private static final String LOG_TAG = "ProximitySensorForOtherObjects";
 	private World myWorld;
@@ -72,7 +73,7 @@ public class ProximitySensorForOtherObjects implements Component {
 	}
 
 	private void findObjectsCloseTo(Obj obj, MeshComponent myMesh,
-			EfficientList<AbstractObj> list) {
+			EfficientList<RenderableEntity> list) {
 		if (list != null) {
 			for (int i = 0; i < list.myLength; i++) {
 				if (list.get(i) != obj && list.get(i) instanceof Obj) {
