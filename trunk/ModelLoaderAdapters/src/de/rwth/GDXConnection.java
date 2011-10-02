@@ -1,11 +1,11 @@
 package de.rwth;
 
 import gl.GLRenderer;
+import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import worldData.Renderable;
-
+import system.RenderStack;
 import android.app.Activity;
 
 import com.badlogic.gdx.Gdx;
@@ -20,7 +20,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GLCommon;
 import com.badlogic.gdx.graphics.GLU;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.utils.GdxNativesLoader;
 
 public class GDXConnection implements Renderable {
 	private static boolean initGLStuff;
@@ -194,7 +193,8 @@ public class GDXConnection implements Renderable {
 	}
 
 	@Override
-	public void draw(GL10 gl) {
+	public void render(javax.microedition.khronos.opengles.GL10 gl,
+			gl.Renderable parent, RenderStack stack) {
 		if (!initGLStuff) {
 			setupGL(gl);
 			initGLStuff = true;

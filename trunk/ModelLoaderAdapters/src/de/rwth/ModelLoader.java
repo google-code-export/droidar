@@ -2,8 +2,9 @@ package de.rwth;
 
 import gl.GLRenderer;
 import gl.MeshComponent;
+import gl.Renderable;
+import system.RenderStack;
 import system.Setup;
-import worldData.Renderable;
 import worldData.World;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
@@ -36,7 +37,7 @@ import com.badlogic.gdx.graphics.g3d.model.still.StillModel;
  * @author Spobo
  * 
  */
-public abstract class ModelLoader implements Renderable {
+public abstract class ModelLoader implements gl.Renderable {
 
 	private static final String LOGTAG = "ModelCreator";
 
@@ -117,7 +118,8 @@ public abstract class ModelLoader implements Renderable {
 	}
 
 	@Override
-	public void draw(javax.microedition.khronos.opengles.GL10 gl) {
+	public void render(javax.microedition.khronos.opengles.GL10 gl,
+			gl.Renderable parent, RenderStack stack) {
 
 		Log.d(LOGTAG, "Trying to load " + fileName);
 
