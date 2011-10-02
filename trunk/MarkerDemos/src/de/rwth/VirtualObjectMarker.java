@@ -43,7 +43,7 @@ public class VirtualObjectMarker implements MarkerObject {
 		Matrix.multiplyMV(resultPosVec, 0, invertedCameraMatrix, 0,
 				markerCenterPosVec, 0);
 
-		Vec camPos = myCamera.getMyPosition();
+		Vec camPos = myCamera.getPosition();
 		myTargetMesh.myPosition = new Vec(resultPosVec[0] + camPos.x,
 				resultPosVec[1] + camPos.y, resultPosVec[2] + camPos.z);
 
