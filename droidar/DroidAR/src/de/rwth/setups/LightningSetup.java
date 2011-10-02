@@ -19,6 +19,7 @@ import system.EventManager;
 import util.EfficientList;
 import util.Vec;
 import util.Wrapper;
+import worldData.Entity;
 import worldData.MoveObjComp;
 import worldData.Obj;
 import worldData.World;
@@ -26,7 +27,6 @@ import actions.ActionMoveObject;
 import android.app.Activity;
 
 import commands.Command;
-import components.Entity;
 
 public class LightningSetup extends DefaultARSetup {
 

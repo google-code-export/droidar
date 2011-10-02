@@ -1,7 +1,7 @@
 package commands;
 
 import listeners.ProcessListener;
-import system.ListInterface;
+import system.Container;
 import util.EfficientList;
 import android.util.Log;
 
@@ -14,7 +14,7 @@ import commands.undoable.UndoableCommand;
  * @author Spobo
  * 
  */
-public class CommandGroup extends UndoableCommand implements ListInterface {
+public class CommandGroup extends UndoableCommand implements Container<Command> {
 
 	public CommandGroup() {
 	}
@@ -69,6 +69,11 @@ public class CommandGroup extends UndoableCommand implements ListInterface {
 	}
 
 	@Override
+	public boolean remove(Command x) {
+		return myList.remove(x);
+	}
+
+	@Override
 	public boolean override_undo() {
 		if (myList.myLength > 0) {
 			Log.i("Commands", "Undoing (without parameter) Command-Group '"
@@ -84,12 +89,13 @@ public class CommandGroup extends UndoableCommand implements ListInterface {
 		return false;
 	}
 
-	public void add(Command c) {
-		myList.add(c);
+	@Override
+	public boolean add(Command c) {
+		return myList.add(c);
 	}
 
 	@Override
-	public EfficientList<Command> getNodes() {
+	public EfficientList<Command> getAllItems() {
 		if (myList == null)
 			myList = new EfficientList<Command>();
 		return myList;
@@ -102,12 +108,12 @@ public class CommandGroup extends UndoableCommand implements ListInterface {
 
 	@Override
 	public int length() {
-		return getNodes().myLength;
+		return getAllItems().myLength;
 	}
 
 	@Override
 	public boolean isCleared() {
-		return getNodes().myLength == 0;
+		return getAllItems().myLength == 0;
 	}
 
 	@Override

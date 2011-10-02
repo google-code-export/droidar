@@ -328,8 +328,8 @@ public class GLFactory {
 
 		g4.add(this.newHexagon(null));
 
-		Vec v = g4.getAbsolutePosition();
-		System.out.println("absolut Pos: " + v);
+		// Vec v = g4.getAbsolutePosition();
+		// System.out.println("absolut Pos: " + v);
 
 		return hex;
 	}

@@ -2,7 +2,7 @@ package commands.obj;
 
 import util.Wrapper;
 import worldData.AbstractObj;
-import worldData.ObjGroup;
+import worldData.EntityContainer;
 
 import commands.undoable.UndoableCommand;
 
@@ -10,7 +10,7 @@ public class CommandAddObjToObjGroup extends UndoableCommand {
 
 	private Wrapper mySourceW;
 	private Wrapper myTargetW;
-	private ObjGroup backup;
+	private EntityContainer backup;
 	private AbstractObj backupObj;
 
 	public CommandAddObjToObjGroup(Wrapper sourceW, Wrapper targetW) {
@@ -20,9 +20,9 @@ public class CommandAddObjToObjGroup extends UndoableCommand {
 
 	@Override
 	public boolean override_do() {
-		if (myTargetW.getObject() instanceof ObjGroup
+		if (myTargetW.getObject() instanceof EntityContainer
 				&& mySourceW.getObject() instanceof AbstractObj) {
-			backup = (ObjGroup) myTargetW.getObject();
+			backup = (EntityContainer) myTargetW.getObject();
 			backupObj = (AbstractObj) mySourceW.getObject();
 			backup.add(backupObj);
 			return true;
@@ -33,7 +33,7 @@ public class CommandAddObjToObjGroup extends UndoableCommand {
 	@Override
 	public boolean override_undo() {
 		if (backup != null && backupObj != null) {
-			return backup.getNodes().remove(backupObj);
+			return backup.getAllItems().remove(backupObj);
 		}
 		return false;
 	}

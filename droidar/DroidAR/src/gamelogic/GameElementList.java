@@ -4,10 +4,10 @@ import gui.simpleUI.ModifierGroup;
 
 import java.util.HashMap;
 
-import system.ListInterface;
+import system.Container;
 import util.EfficientList;
 
-public abstract class GameElementList<T> implements ListInterface<T> {
+public abstract class GameElementList<T> implements Container<T> {
 
 	private EfficientList<T> myList = new EfficientList<T>();
 	/**
@@ -27,7 +27,7 @@ public abstract class GameElementList<T> implements ListInterface<T> {
 	}
 
 	@Override
-	public EfficientList<T> getNodes() {
+	public EfficientList<T> getAllItems() {
 		return myList;
 	}
 

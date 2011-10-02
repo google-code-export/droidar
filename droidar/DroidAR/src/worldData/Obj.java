@@ -12,7 +12,6 @@ import util.EfficientList;
 import util.Vec;
 
 import commands.Command;
-import components.Entity;
 
 public class Obj extends AbstractObj implements HasPosition {
 
@@ -155,6 +154,11 @@ public class Obj extends AbstractObj implements HasPosition {
 		if (myGraphicsComponent != null)
 			return myGraphicsComponent.myPosition;
 		return null;
+	}
+
+	@Override
+	public boolean accept(Visitor visitor) {
+		return visitor.default_visit(this);
 	}
 
 	// public String getDebugInfos() {

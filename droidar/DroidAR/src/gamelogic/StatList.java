@@ -20,7 +20,7 @@ public class StatList extends GameElementList<Stat> {
 	 */
 	public boolean applyBoosterList(BoosterList boosterList) {
 		int size=boosterList.length();
-		EfficientList<Booster> items = boosterList.getNodes();
+		EfficientList<Booster> items = boosterList.getAllItems();
 		boolean result=true;
 		for (int i = 0; i < size; i++) {
 			result&=applyBooster(items.get(i));

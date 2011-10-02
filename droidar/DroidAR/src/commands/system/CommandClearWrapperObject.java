@@ -1,13 +1,13 @@
 package commands.system;
 
-import system.ListInterface;
+import system.Container;
 import util.Wrapper;
 
 import commands.Command;
 
 /**
  * calls the clear metho on the object inside the {@link Wrapper} if it has the
- * type {@link ListInterface}
+ * type {@link Container}
  * 
  * @author Spobo
  * 
@@ -34,8 +34,8 @@ public class CommandClearWrapperObject extends Command {
 
 	@Override
 	public boolean execute() {
-		if (myWrapper.getObject() instanceof ListInterface) {
-			((ListInterface) myWrapper.getObject()).clear();
+		if (myWrapper.getObject() instanceof Container) {
+			((Container) myWrapper.getObject()).clear();
 			return true;
 		}
 		return false;
@@ -44,8 +44,8 @@ public class CommandClearWrapperObject extends Command {
 	@Override
 	public boolean execute(Object transfairObject) {
 		if (usePassedObjectIfThereIsOne
-				&& transfairObject instanceof ListInterface) {
-			((ListInterface) transfairObject).clear();
+				&& transfairObject instanceof Container) {
+			((Container) transfairObject).clear();
 			return true;
 		}
 		return false;

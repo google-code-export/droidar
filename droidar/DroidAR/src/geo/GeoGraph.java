@@ -9,7 +9,7 @@ import java.util.Arrays;
 import javax.microedition.khronos.opengles.GL10;
 
 import system.EventManager;
-import system.ListInterface;
+import system.Container;
 import system.ParentStack;
 import util.EfficientList;
 import util.EfficientListQualified;
@@ -27,7 +27,7 @@ import android.util.Log;
  * @author Spobo
  * 
  */
-public class GeoGraph extends AbstractObj implements ListInterface {
+public class GeoGraph extends AbstractObj implements Container<GeoObj> {
 
 	private static final boolean DEBUG1 = false;
 	private static final boolean DEBUG2 = false;
@@ -299,6 +299,7 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 	 * @return true if the {@link GeoObj} was added and false if it already
 	 *         existed or was NULL
 	 */
+	@Override
 	public boolean add(GeoObj geoObj) {
 		if (myNodes == null)
 			myNodes = new EfficientListQualified<GeoObj>();
@@ -368,7 +369,7 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 			return null;
 		}
 		Log.d("GeoGraph", "  -> Found item that matches");
-		return (GeoObj) searchResults.getNodes().get(0);
+		return (GeoObj) searchResults.getAllItems().get(0);
 	}
 
 	/**
@@ -557,6 +558,7 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 	 * @param x
 	 * @return
 	 */
+	@Override
 	public boolean remove(GeoObj x) {
 		// first try to remove item from the nodes
 		if (myNodes.remove(x)) {
@@ -602,19 +604,19 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 	}
 
 	public boolean isEmpty() {
-		return getNodes().myLength == 0;
+		return getAllItems().myLength == 0;
 	}
 
 	@Override
 	public boolean isCleared() {
-		if (getNodes().myLength == 0 && isClearedAtLeastOneTime) {
+		if (getAllItems().myLength == 0 && isClearedAtLeastOneTime) {
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public EfficientListQualified<GeoObj> getNodes() {
+	public EfficientListQualified<GeoObj> getAllItems() {
 		if (myNodes == null)
 			myNodes = new EfficientListQualified<GeoObj>();
 		return myNodes;
@@ -622,7 +624,7 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 
 	@Override
 	public int length() {
-		return getNodes().myLength;
+		return getAllItems().myLength;
 	}
 
 	/**

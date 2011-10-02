@@ -5,7 +5,6 @@ import gl.MeshComponent;
 import system.ParentStack;
 import util.Vec;
 
-import components.Entity;
 
 /**
  * This class can be used to move an object which has a meshcompnent in a smooth

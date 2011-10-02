@@ -7,13 +7,12 @@ import system.EventManager;
 import util.EfficientList;
 import util.HasDebugInformation;
 import util.Vec;
+import worldData.Entity;
 import worldData.Obj;
 import worldData.Visitor;
 import android.location.Address;
 import android.location.Location;
 import android.util.Log;
-
-import components.Entity;
 
 public class GeoObj extends Obj implements HasDebugInformation {
 
@@ -511,15 +510,8 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		Log.d(LOG_TAG, "mySurroundGroup.myScale=" + mySurroundGroup.myScale);
 		Log.d(LOG_TAG, "mySurroundGroup.myRotation="
 				+ mySurroundGroup.myRotation);
-		Log.d(LOG_TAG, "mesh inside=" + mySurroundGroup.myMeshes.get(0));
-		Log.d(LOG_TAG,
-				"mesh inside myPosition="
-						+ mySurroundGroup.myMeshes.get(0).myPosition);
-		Log.d(LOG_TAG, "mesh inside myScale="
-				+ mySurroundGroup.myMeshes.get(0).myScale);
-		Log.d(LOG_TAG,
-				"mesh inside myRotation="
-						+ mySurroundGroup.myMeshes.get(0).myRotation);
+		Log.d(LOG_TAG, "mesh inside=" + mySurroundGroup.getAllItems().get(0));
+
 	}
 
 }

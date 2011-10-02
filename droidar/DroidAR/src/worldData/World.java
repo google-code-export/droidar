@@ -6,13 +6,14 @@ import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import system.Container;
 import system.ParentStack;
 import util.EfficientList;
 import util.Vec;
 import android.util.Log;
 
 //TODO not the best way to extend ArrayList here..
-public class World implements Updateable, Renderable {
+public class World implements RenderableEntity, Container<RenderableEntity> {
 
 	private static final String LTAG = "World";
 	/**
@@ -31,12 +32,14 @@ public class World implements Updateable, Renderable {
 	 * the camera which is responsible to display the world correctly
 	 */
 	private GLCamera myCamera;
+	private boolean wasBeenClearedAtLeastOnce;
 
 	public World(GLCamera glCamera) {
 		myCamera = glCamera;
 	}
 
-	public boolean add(AbstractObj x) {
+	@Override
+	public boolean add(RenderableEntity x) {
 		if (x == null) {
 			return false;
 		}
@@ -69,6 +72,7 @@ public class World implements Updateable, Renderable {
 	// }
 	// }
 
+	@Override
 	public boolean accept(Visitor v) {
 		return v.default_visit(this);
 	}
@@ -78,6 +82,7 @@ public class World implements Updateable, Renderable {
 			gl.glScalef(myScale.x, myScale.y, myScale.z);
 	}
 
+	@Override
 	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
 		// TODO reconstruct why this order is important! or wrong..
 		glLoadScreenPosition(gl);
@@ -103,6 +108,7 @@ public class World implements Updateable, Renderable {
 		}
 	}
 
+	@Override
 	public boolean update(float timeDelta, Updateable parent,
 			ParentStack<Updateable> stack) {
 		myCamera.update(timeDelta, this, stack);
@@ -142,6 +148,39 @@ public class World implements Updateable, Renderable {
 		this.myCamera = myCamera;
 	}
 
+	@Override
+	public void clear() {
+		container.clear();
+		wasBeenClearedAtLeastOnce = true;
+	}
+
+	@Override
+	public boolean isCleared() {
+		return wasBeenClearedAtLeastOnce;
+	}
+
+	@Override
+	public int length() {
+		return container.myLength;
+	}
+
+	@Override
+	public boolean remove(RenderableEntity x) {
+		return container.remove(x);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void removeEmptyItems() {
+		for (int i = 0; i < container.myLength; i++) {
+			if (container.get(i) instanceof Container) {
+				if (((Container) container.get(i)).isCleared())
+					container.remove(container.get(i));
+			}
+		}
+	}
+
+	@Override
 	public EfficientList<RenderableEntity> getAllItems() {
 		return container;
 	}

@@ -189,9 +189,9 @@ public class IndoorSetup extends Setup {
 							currentClosestElement, targetElement);
 					if (searchresultGraph != null) {
 						if (mySearchresultGraph != null)
-							unmarkGeoGraphAsSearchPath(myGraph.getNodes());
+							unmarkGeoGraphAsSearchPath(myGraph.getAllItems());
 						mySearchresultGraph = searchresultGraph;
-						markGeoObjAsSearchPath(mySearchresultGraph.getNodes());
+						markGeoObjAsSearchPath(mySearchresultGraph.getAllItems());
 					}
 
 					return true;

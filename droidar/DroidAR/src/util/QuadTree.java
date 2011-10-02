@@ -64,6 +64,10 @@ public class QuadTree<T> {
 
 	}
 
+	/**
+	 * @param value
+	 * @return true if item was found and removed
+	 */
 	public boolean remove(T value) {
 		return findValueEntry(myRootNode, value, true);
 	}
