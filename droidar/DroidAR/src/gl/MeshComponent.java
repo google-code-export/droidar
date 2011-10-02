@@ -22,7 +22,7 @@ import commands.Command;
 import commands.undoable.UndoableCommand;
 
 public abstract class MeshComponent implements RenderableEntity, Entity,
-		ParentMesh, SelectionListener {
+		ParentMesh, SelectionListener, HasPosition {
 
 	private static final String LOG_TAG = "MeshComp";
 	/**
@@ -86,6 +86,11 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 				modelSpaceCoordsVec, 0);
 		return new Vec(resultVec[0] + myPosition.x,
 				resultVec[1] + myPosition.y, resultVec[2] + myPosition.z);
+	}
+
+	@Override
+	public Vec getPosition() {
+		return myPosition;
 	}
 
 	protected MeshComponent(Color canBeNull) {
@@ -246,6 +251,7 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 		Log.v(LOG_TAG, "   > myPickColor=" + myPickColor);
 	}
 
+	@Deprecated
 	public ParentMesh getMyParentMesh() {
 		return myParentMesh;
 	}
@@ -269,7 +275,7 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 		myParentMesh = parent;
 	}
 
-	//TODO dont remove, just reimplement with parameter ParentStack
+	// TODO dont remove, just reimplement with parameter ParentStack
 	public Vec getAbsolutePosition() {
 		Vec pos;
 		if (myPosition != null) {
