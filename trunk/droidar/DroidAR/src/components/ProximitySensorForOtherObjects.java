@@ -1,6 +1,8 @@
 package components;
 
+import android.util.Log;
 import gl.MeshComponent;
+import system.ParentStack;
 import util.EfficientList;
 import util.QuadTree;
 import util.Vec;
@@ -8,6 +10,7 @@ import worldData.AbstractObj;
 import worldData.LargeWorld;
 import worldData.Obj;
 import worldData.UpdateTimer;
+import worldData.Updateable;
 import worldData.Visitor;
 import worldData.World;
 
@@ -15,6 +18,7 @@ import commands.Command;
 
 public class ProximitySensorForOtherObjects implements Component {
 	private static final float DEFAULT_UPDATE_TIME = 1;
+	private static final String LOG_TAG = "ProximitySensorForOtherObjects";
 	private World myWorld;
 	private float myMaxDistance;
 	private Command myCommand;
@@ -29,16 +33,25 @@ public class ProximitySensorForOtherObjects implements Component {
 	}
 
 	@Override
-	public void update(float timeDelta, Obj obj) {
-		if (myTimer.update(timeDelta)) {
-			MeshComponent myMesh = obj.getGraphicsComponent();
-			if (myMesh != null) {
-				if (myWorld instanceof LargeWorld)
-					findObjectsCloseTo(obj, myMesh, (LargeWorld) myWorld);
-				else
-					findObjectsCloseTo(obj, myMesh, myWorld.getAllItems());
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
+
+		if (myTimer.update(timeDelta, this, stack)) {
+			if (parent instanceof Obj) {
+				Obj obj = (Obj) parent;
+				MeshComponent myMesh = obj.getGraphicsComponent();
+				if (myMesh != null) {
+					if (myWorld instanceof LargeWorld)
+						findObjectsCloseTo(obj, myMesh, (LargeWorld) myWorld);
+					else
+						findObjectsCloseTo(obj, myMesh, myWorld.getAllItems());
+				}
+			} else {
+				Log.w(LOG_TAG,
+						"Sensor is not child of a Obj and therefor cant run!");
 			}
 		}
+		return true;
 	}
 
 	/**

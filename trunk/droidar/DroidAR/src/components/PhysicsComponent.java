@@ -1,8 +1,10 @@
 package components;
 
 import gl.MeshComponent;
+import system.ParentStack;
 import util.Vec;
 import worldData.Obj;
+import worldData.Updateable;
 import worldData.Visitor;
 
 /**
@@ -26,17 +28,18 @@ public class PhysicsComponent implements Component {
 		return visitor.default_visit(this);
 	}
 
-	public void update(float timeDelta, Obj obj) {
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
 		if (physicsActive) {
-
+			Obj obj = (Obj) parent;
 			final MeshComponent v = obj.getGraphicsComponent();
 
 			updateAccel(timeDelta);
 			velocityVerletIntegration(timeDelta, v.myPosition);
 			updateSpeed(timeDelta);
 			iterateCollisions(timeDelta, obj);
-
 		}
+		return true;
 	}
 
 	private void updateSpeed(float td) {

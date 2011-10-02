@@ -44,7 +44,7 @@ public class SystemUpdater implements Runnable {
 				lastTimeInMs = currentTime;
 				// final int lenght = myObjectsToUpdate.myLength;
 				for (int i = 0; i < myObjectsToUpdate.myLength; i++) {
-					if (!myObjectsToUpdate.get(i).update(timeDelta)) {
+					if (!myObjectsToUpdate.get(i).update(timeDelta, null, null)) {
 						Log.e(LOG_TAG, "Update on " + myObjectsToUpdate.get(i)
 								+ " returned false! Remove from update cycle?");
 					}

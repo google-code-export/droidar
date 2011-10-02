@@ -1,7 +1,9 @@
 package gamelogic;
 
+import system.ParentStack;
 import tests.SimpleTesting;
 import worldData.Obj;
+import worldData.Updateable;
 import worldData.Visitor;
 import de.rwth.R;
 
@@ -16,7 +18,9 @@ public class GameLogicTests extends SimpleTesting {
 		GameParticipant p = new GameParticipant("Player", "P A", 0) {
 
 			@Override
-			public void update(float timeDelta, Obj obj) {
+			public boolean update(float timeDelta, Updateable parent,
+					ParentStack<Updateable> stack) {
+				return true;
 			}
 
 			@Override
@@ -26,9 +30,10 @@ public class GameLogicTests extends SimpleTesting {
 		};
 
 		GameParticipant enemy = new GameParticipant("Player", "P Enemy", 0) {
-
 			@Override
-			public void update(float timeDelta, Obj obj) {
+			public boolean update(float timeDelta, Updateable parent,
+					ParentStack<Updateable> stack) {
+				return true;
 			}
 
 			@Override

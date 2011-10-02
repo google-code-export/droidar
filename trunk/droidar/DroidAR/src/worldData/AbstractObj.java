@@ -1,5 +1,6 @@
 package worldData;
 
+import gl.Renderable;
 import gui.ListItem;
 import gui.MetaInfos;
 import gui.simpleUI.EditItem;
@@ -16,7 +17,7 @@ import android.view.ViewGroup;
 import commands.Command;
 
 public abstract class AbstractObj implements HasInfosInterface, ListItem,
-		SelectionListener, EditItem, Updateable {
+		SelectionListener, EditItem, Updateable, Renderable {
 
 	private MetaInfos myInfoObj;
 	private Command myListClickCommand;
@@ -27,6 +28,8 @@ public abstract class AbstractObj implements HasInfosInterface, ListItem,
 	private Command myOnLongClickCommand;
 	private Command myOnMapClickCommand;
 
+	
+	
 	@Override
 	public MetaInfos getInfoObject() {
 		if (myInfoObj == null)
@@ -40,9 +43,6 @@ public abstract class AbstractObj implements HasInfosInterface, ListItem,
 			return true;
 		return false;
 	}
-
-	// TODO move draw into interface
-	public abstract void draw(GL10 gl);
 
 	public boolean accept(Visitor visitor) {
 		return visitor.default_visit(this);

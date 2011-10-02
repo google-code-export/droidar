@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import system.ParentStack;
 import util.Vec;
 import worldData.Visitor;
 
@@ -27,7 +28,7 @@ public class Shape extends MeshComponent {
 	}
 
 	@Override
-	public void draw(GL10 gl) {
+	public void draw(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
 		if (singeSide) {
 			// which is the front? the one which is drawn counter clockwise
 			gl.glFrontFace(GL10.GL_CCW);

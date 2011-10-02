@@ -1,16 +1,20 @@
 package worldData;
 
+import gl.HasPosition;
 import gl.MeshComponent;
 import gl.ObjectPicker;
+import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import system.ParentStack;
 import util.EfficientList;
+import util.Vec;
 
 import commands.Command;
 import components.Component;
 
-public class Obj extends AbstractObj {
+public class Obj extends AbstractObj implements HasPosition {
 
 	private static final String LOG_TAG = "Obj";
 	EfficientList<Component> myComponents = new EfficientList<Component>();
@@ -35,11 +39,12 @@ public class Obj extends AbstractObj {
 	 * @param timeDelta
 	 *            how many ms have passed since last update
 	 */
-	public boolean update(float timeDelta) {
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
 		final int lenght = myComponents.myLength;
 		for (int i = 0; i < lenght; i++) {
 			if (myComponents.get(i) != null)
-				myComponents.get(i).update(timeDelta, this);
+				myComponents.get(i).update(timeDelta, this, stack);
 		}
 		return true;
 	}
@@ -69,7 +74,8 @@ public class Obj extends AbstractObj {
 		return myComponents;
 	}
 
-	public void draw(GL10 gl) {
+	@Override
+	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
 		// final Component myGraphicsComponent = myComponents
 		// .get(Consts.COMP_GRAPHICS);
 		if (myGraphicsComponent == null)
@@ -95,7 +101,7 @@ public class Obj extends AbstractObj {
 			gl.glColor4f(1, 1, 1, 1);
 		}
 
-		myGraphicsComponent.setMatrixAndDraw(gl);
+		myGraphicsComponent.render(gl, this, stack);
 	}
 
 	@Override
@@ -141,6 +147,13 @@ public class Obj extends AbstractObj {
 			if (componentSubclass.isAssignableFrom(a.getClass()))
 				return (T) a;
 		}
+		return null;
+	}
+
+	@Override
+	public Vec getPosition() {
+		if (myGraphicsComponent != null)
+			return myGraphicsComponent.myPosition;
 		return null;
 	}
 

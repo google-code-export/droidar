@@ -1,5 +1,6 @@
 package worldData;
 
+import system.ParentStack;
 import commands.Command;
 
 public class UpdateTimer implements Updateable {
@@ -9,7 +10,6 @@ public class UpdateTimer implements Updateable {
 	private Command myCommand;
 	private float time = 0;
 	private float myRetryTime = DEF_RETRY_TIME;
-	
 
 	/**
 	 * @param timeTrigger
@@ -56,7 +56,8 @@ public class UpdateTimer implements Updateable {
 	}
 
 	@Override
-	public boolean update(float timeDelta) {
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
 		time += timeDelta;
 		if (time > myTriggerValue) {
 
