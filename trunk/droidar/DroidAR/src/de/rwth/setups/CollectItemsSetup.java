@@ -62,7 +62,7 @@ public class CollectItemsSetup extends Setup {
 		itemMesh.add(arrow);
 		itemMesh.add(circle);
 		itemMesh.myPosition = Vec.getNewRandomPosInXYPlane(
-				camera.getMyPosition(), 5, 10);
+				camera.getPosition(), 5, 10);
 
 		Obj itemToCollect = new Obj();
 		itemToCollect.setComp(new ProximitySensor(camera, 3f) {
@@ -73,7 +73,7 @@ public class CollectItemsSetup extends Setup {
 				new CommandShowToast(myTargetActivity, "You got me "
 						+ catchedNumber + " times").execute();
 				itemMesh.myPosition = Vec.getNewRandomPosInXYPlane(
-						camera.getMyPosition(), 5, 20);
+						camera.getPosition(), 5, 20);
 			}
 		});
 

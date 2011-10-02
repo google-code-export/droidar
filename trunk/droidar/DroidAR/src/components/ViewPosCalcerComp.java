@@ -28,7 +28,7 @@ public class ViewPosCalcerComp implements Component {
 			if (m != null) {
 				Vec targetVec = myCamera
 						.getPositionOnGroundWhereTheCameraIsLookingAt();
-				targetVec.sub(myCamera.getMyPosition());
+				targetVec.sub(myCamera.getPosition());
 				if (targetVec.getLength() > myMaxDistance) {
 					targetVec.setLength(myMaxDistance);
 				}

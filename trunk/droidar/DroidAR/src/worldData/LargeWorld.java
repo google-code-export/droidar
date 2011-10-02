@@ -106,8 +106,8 @@ public class LargeWorld extends World {
 	@Override
 	public void drawElements(GLCamera camera, GL10 gl) {
 
-		EfficientList<Obj> list = getList(camera.getMyPosition().x,
-				camera.getMyPosition().y);
+		EfficientList<Obj> list = getList(camera.getPosition().x,
+				camera.getPosition().y);
 		for (int i = 0; i < list.myLength; i++) {
 			Obj obj = list.get(i);
 			if (obj != null)
@@ -118,8 +118,8 @@ public class LargeWorld extends World {
 
 	@Override
 	public boolean update(float timeDelta) {
-		EfficientList<Obj> list = getList(getMyCamera().getMyPosition().x,
-				getMyCamera().getMyPosition().y);
+		EfficientList<Obj> list = getList(getMyCamera().getPosition().x,
+				getMyCamera().getPosition().y);
 		for (int i = 0; i < list.myLength; i++) {
 			Obj obj = list.get(i);
 			if (obj != null)
