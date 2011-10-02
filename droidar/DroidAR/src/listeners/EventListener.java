@@ -61,9 +61,11 @@ public interface EventListener {
 
 	public void onCamRotationVecUpdate(Vec target, Vec values, float timeDelta);
 
-	public void onCamOffsetVecUpdate(Vec target, Vec values, float timeDelta);
+	// public void onCamOffsetVecUpdate(Vec target, Vec values, float
+	// timeDelta);
 
-	public void onCamPositionVecUpdate(Vec target, Vec values, float timeDelta);
+	// public void onCamPositionVecUpdate(Vec target, Vec values, float
+	// timeDelta);
 
 	public abstract boolean onCamOrientationUpdate(float[] myOrientValues,
 			float[] myNewOrientValues, float timeDelta);

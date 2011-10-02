@@ -9,7 +9,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 import util.EfficientList;
 import util.Vec;
-import worldData.Renderable;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.util.Log;
@@ -114,7 +113,7 @@ public class GLRenderer implements Renderer {
 			for (int i = 0; i < elementsToRender.myLength; i++) {
 				// Reset the modelview matrix
 				gl.glLoadIdentity();
-				elementsToRender.get(i).draw(gl);
+				elementsToRender.get(i).render(gl, null, null);
 			}
 
 			repeat = false;

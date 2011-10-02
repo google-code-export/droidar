@@ -48,20 +48,6 @@ public class EventListenerGroup extends Action implements ListInterface {
 	}
 
 	@Override
-	public void onCamOffsetVecUpdate(Vec target, Vec values, float timeDelta) {
-		for (int i = 0; i < myActions.myLength; i++) {
-			myActions.get(i).onCamOffsetVecUpdate(target, values, timeDelta);
-		}
-	}
-
-	@Override
-	public void onCamPositionVecUpdate(Vec target, Vec values, float timeDelta) {
-		for (int i = 0; i < myActions.myLength; i++) {
-			myActions.get(i).onCamPositionVecUpdate(target, values, timeDelta);
-		}
-	}
-
-	@Override
 	public void onCamRotationVecUpdate(Vec target, Vec values, float timeDelta) {
 		for (int i = 0; i < myActions.myLength; i++) {
 			myActions.get(i).onCamRotationVecUpdate(target, values, timeDelta);

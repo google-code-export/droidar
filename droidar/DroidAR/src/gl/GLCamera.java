@@ -6,11 +6,11 @@ import javax.microedition.khronos.opengles.GL10;
 
 import listeners.EventListener;
 import system.EventManager;
+import system.RenderStack;
 import util.HasDebugInformation;
 import util.L;
 import util.Vec;
 import worldData.Updateable;
-import actions.ActionRotateCameraBuffered;
 import actions.DefaultUpdateListener;
 import android.hardware.SensorManager;
 import android.location.Location;
@@ -26,7 +26,7 @@ import android.util.Log;
  * @author Spobo
  * 
  */
-public class GLCamera implements Updateable, HasDebugInformation {
+public class GLCamera implements Updateable, HasDebugInformation, Renderable {
 
 	public interface CameraAngleUpdateListener {
 
@@ -99,11 +99,13 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	 * http://www.songho.ca/opengl/gl_transform.html
 	 */
 	private float[] rotationMatrix = createIdentityMatrix();
+	private int matrixOffset = 0;
 	private float[] invRotMatrix = createIdentityMatrix();
 
-	private int matrixOffset = 0;
-
-	private MeshComponent myCameraObject;
+	/**
+	 * The update listener is used to do all the buffered rotation caused by the
+	 * sensor data (magentometer,..) eg
+	 */
 	private EventListener updateListener;
 
 	/**
@@ -179,14 +181,12 @@ public class GLCamera implements Updateable, HasDebugInformation {
 		// }
 
 		if ((myOffset != null) && (myNewOffset != null)) {
-			updateListener.onCamOffsetVecUpdate(myOffset, myNewOffset,
-					timeDelta);
+			Vec.morphToNewVec(myOffset, myNewOffset, timeDelta);
 
 		}
 
 		if ((myPosition != null) && (myNewPosition != null)) {
-			updateListener.onCamPositionVecUpdate(myPosition, myNewPosition,
-					timeDelta);
+			Vec.morphToNewVec(myPosition, myNewPosition, timeDelta * 3);
 
 			// TODO check if myPosition and myNewPosition are nearly the
 			// same
@@ -314,7 +314,7 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	 *         where the camera is looking at
 	 */
 	public Vec getPositionOnGroundWhereTheCameraIsLookingAt() {
-				/*
+		/*
 		 * This is an optimized version of the getPickingRay method. The good
 		 * readable code would look like this:
 		 * 
@@ -380,8 +380,10 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	 * parameters like the position and the rotation
 	 * 
 	 * @param gl
+	 * @param
+	 * @param parent
 	 */
-	public synchronized void glLoadCamera(GL10 gl) {
+	public synchronized void render(GL10 gl, Renderable parent, RenderStack stack) {
 		// a camera object could be a curser or something like this: TODO use?
 		// if (myCameraObject!=null) loadCameraObject(gl);
 
@@ -506,18 +508,6 @@ public class GLCamera implements Updateable, HasDebugInformation {
 	public void setAngleUpdateListener(
 			CameraAngleUpdateListener myAngleUpdateListener) {
 		this.myAngleUpdateListener = myAngleUpdateListener;
-	}
-
-	/**
-	 * TODO the Camera object will be drawn before any transformations are
-	 * applied. Because of this it will always be at a fixed position on the
-	 * screen. Can be used for UI elements eg. or to simulate something like a
-	 * cockpit.
-	 * 
-	 * @param gl
-	 */
-	private void loadCameraObject(GL10 gl) {
-		myCameraObject.setMatrixAndDraw(gl);
 	}
 
 	private void glLoadPosition(GL10 gl, Vec vec) {
@@ -772,11 +762,6 @@ public class GLCamera implements Updateable, HasDebugInformation {
 		myNewPosition.z = z;
 	}
 
-	public void setNewPosition(float x, float y) {
-		myNewPosition.x = x;
-		myNewPosition.y = y;
-	}
-
 	public Vec getNewCameraOffset() {
 		return myNewOffset;
 	}
@@ -793,6 +778,10 @@ public class GLCamera implements Updateable, HasDebugInformation {
 		return myPosition;
 	}
 
+	/**
+	 * @return The position where the camera moves to. Will be NULL if new
+	 *         position never set before!
+	 */
 	public Vec getMyNewPosition() {
 
 		return myNewPosition;
