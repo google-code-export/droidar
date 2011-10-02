@@ -5,8 +5,6 @@ import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.util.Log;
-
 import util.Vec;
 
 public class RenderData {
@@ -41,7 +39,7 @@ public class RenderData {
 		 */
 
 		float[] normalsArray = new float[shape.size() * 3];
-		int j = 0;
+		int currentNormalsIndex = 0;
 
 		// Log.d(LOG_TAG, "shape.size()=" + shape.size());
 
@@ -62,9 +60,12 @@ public class RenderData {
 			/*
 			 * each vertex neads an own normal vector!
 			 */
-			j = addNormalVectorForVertex(normalsArray, j, normalVec);
-			j = addNormalVectorForVertex(normalsArray, j, normalVec);
-			j = addNormalVectorForVertex(normalsArray, j, normalVec);
+			currentNormalsIndex = addNormalVectorForVertex(normalsArray,
+					currentNormalsIndex, normalVec);
+			currentNormalsIndex = addNormalVectorForVertex(normalsArray,
+					currentNormalsIndex, normalVec);
+			currentNormalsIndex = addNormalVectorForVertex(normalsArray,
+					currentNormalsIndex, normalVec);
 
 		}
 

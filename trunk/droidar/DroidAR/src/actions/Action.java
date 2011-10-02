@@ -135,20 +135,4 @@ public abstract class Action implements EventListener {
 				* SMOOTH_ROTATION_SPEED);
 	}
 
-	/**
-	 * default implementation done here (Vec.morphToNewVec())
-	 */
-	@Override
-	public void onCamOffsetVecUpdate(Vec target, Vec values, float timeDelta) {
-		Vec.morphToNewVec(target, values, timeDelta * SMOOTH_MOTION_SPEED);
-	}
-
-	/**
-	 * default implementation done here (Vec.morphToNewVec())
-	 */
-	@Override
-	public void onCamPositionVecUpdate(Vec target, Vec values, float timeDelta) {
-		Vec.morphToNewVec(target, values, timeDelta * SMOOTH_MOTION_SPEED);
-	}
-
 }

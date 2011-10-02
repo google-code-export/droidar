@@ -2,9 +2,11 @@ package worldData;
 
 import gl.CordinateAxis;
 import gl.GLCamera;
+import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import system.RenderStack;
 import util.EfficientList;
 import util.Vec;
 import android.util.Log;
@@ -76,10 +78,10 @@ public class World implements Updateable, Renderable {
 			gl.glScalef(myScale.x, myScale.y, myScale.z);
 	}
 
-	public void draw(GL10 gl) {
+	public void render(GL10 gl, Renderable parent, RenderStack stack) {
 		// TODO reconstruct why this order is important! or wrong..
 		glLoadScreenPosition(gl);
-		myCamera.glLoadCamera(gl);
+		myCamera.render(gl, this, null);
 		// glLoadRotation(gl);
 		glLoadScale(gl);
 
