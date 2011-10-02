@@ -12,7 +12,7 @@ import worldData.UpdateTimer;
 import worldData.Updateable;
 import worldData.Visitor;
 
-public class ViewPosCalcerComp implements Component {
+public class ViewPosCalcerComp implements Entity {
 
 	private static final String LOG_TAG = "ViewPosCalcerComp";
 	private GLCamera myCamera;

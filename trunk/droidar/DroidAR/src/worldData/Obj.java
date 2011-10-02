@@ -12,14 +12,14 @@ import util.EfficientList;
 import util.Vec;
 
 import commands.Command;
-import components.Component;
+import components.Entity;
 
 public class Obj extends AbstractObj implements HasPosition {
 
 	private static final String LOG_TAG = "Obj";
-	EfficientList<Component> myComponents = new EfficientList<Component>();
+	EfficientList<Entity> myComponents = new EfficientList<Entity>();
 
-	public void setMyComponents(EfficientList<Component> myComponents) {
+	public void setMyComponents(EfficientList<Entity> myComponents) {
 		this.myComponents = myComponents;
 	}
 
@@ -55,7 +55,7 @@ public class Obj extends AbstractObj implements HasPosition {
 	 *            component types
 	 * @param comp
 	 */
-	public void setComp(Component comp) {
+	public void setComp(Entity comp) {
 		// TODO rename to add.. and return boolean if could be added
 		// TODO put the String info in the comp itself or remove it, its crap
 		if (comp instanceof MeshComponent) {
@@ -70,7 +70,7 @@ public class Obj extends AbstractObj implements HasPosition {
 		myGraphicsComponent.setMyParentObj(this);
 	}
 
-	public EfficientList<Component> getMyComponents() {
+	public EfficientList<Entity> getMyComponents() {
 		return myComponents;
 	}
 
@@ -113,7 +113,7 @@ public class Obj extends AbstractObj implements HasPosition {
 		}
 	}
 
-	public boolean remove(Component compToRemove) {
+	public boolean remove(Entity compToRemove) {
 		return myComponents.remove(compToRemove);
 	}
 
@@ -123,7 +123,7 @@ public class Obj extends AbstractObj implements HasPosition {
 
 	/**
 	 * @param componentSubclass
-	 * @return true if any of the {@link Obj} {@link Component}s is a of the
+	 * @return true if any of the {@link Obj} {@link Entity}s is a of the
 	 *         specified class
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -143,7 +143,7 @@ public class Obj extends AbstractObj implements HasPosition {
 		}
 
 		for (int i = 0; i < myComponents.myLength; i++) {
-			Component a = myComponents.get(i);
+			Entity a = myComponents.get(i);
 			if (componentSubclass.isAssignableFrom(a.getClass()))
 				return (T) a;
 		}

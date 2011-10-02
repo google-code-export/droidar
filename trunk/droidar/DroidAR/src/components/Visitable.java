@@ -1,12 +1,11 @@
 package components;
 
-import worldData.Updateable;
 import worldData.Visitor;
 
-public interface Component extends Updateable {
-
+public interface Visitable {
 	/**
-	 * Insert point for any {@link Visitor}
+	 * Insert point for any {@link Visitor}. Normally just call return
+	 * "visitor.default_visit(this);" in this method
 	 * 
 	 * @param visitor
 	 * @return this return value can be processed by the custom {@link Visitor}
@@ -14,5 +13,4 @@ public interface Component extends Updateable {
 	 *         this returned value
 	 */
 	public boolean accept(Visitor visitor);
-
 }

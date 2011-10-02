@@ -26,7 +26,7 @@ import actions.ActionMoveObject;
 import android.app.Activity;
 
 import commands.Command;
-import components.Component;
+import components.Entity;
 
 public class LightningSetup extends DefaultARSetup {
 
@@ -106,7 +106,7 @@ public class LightningSetup extends DefaultARSetup {
 		world.add(o);
 	}
 
-	private Component newCube() {
+	private Entity newCube() {
 		Shape s = new Shape();
 		s.add(new Vec());
 		s.add(new Vec(2, 2, 0));

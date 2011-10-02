@@ -13,7 +13,7 @@ import worldData.Visitor;
  * @author Spobo
  * 
  */
-public class PhysicsComponent implements Component {
+public class PhysicsComponent implements Entity {
 
 	public static final float FRICTION = 1; // TODO make world dependant
 	public static final Vec GRAVITY = new Vec(0, 0, 0);

@@ -42,10 +42,10 @@ public class LargeWorld extends World {
 	}
 
 	@Override
-	public EfficientList<AbstractObj> getAllItems() {
-		EfficientList<AbstractObj> allItems = super.getAllItems();
+	public EfficientList<RenderableEntity> getAllItems() {
+		EfficientList<RenderableEntity> allItems = super.getAllItems();
 		if (allItems != null) {
-			final EfficientList<AbstractObj> result = allItems.copy();
+			final EfficientList<RenderableEntity> result = allItems.copy();
 			tree.getAllItems(tree.new ResultListener() {
 				@Override
 				public void onResult(Obj myValue) {

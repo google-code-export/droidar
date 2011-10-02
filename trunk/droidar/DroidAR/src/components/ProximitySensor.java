@@ -12,7 +12,7 @@ import worldData.Visitor;
 
 import commands.Command;
 
-public abstract class ProximitySensor implements Component {
+public abstract class ProximitySensor implements Entity {
 
 	private static final float DEFAULT_UPDATE_TIME = 1;
 	private static final String LOG_TAG = "ProximitySensor";

@@ -5,7 +5,7 @@ import gl.MeshComponent;
 import system.ParentStack;
 import util.Vec;
 
-import components.Component;
+import components.Entity;
 
 /**
  * This class can be used to move an object which has a meshcompnent in a smooth
@@ -14,7 +14,7 @@ import components.Component;
  * @author Spobo
  * 
  */
-public class MoveObjComp implements Component {
+public class MoveObjComp implements Entity {
 
 	/**
 	 * this vector is the new position, where to send the {@link MeshComponent}

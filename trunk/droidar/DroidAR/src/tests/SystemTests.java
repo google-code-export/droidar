@@ -9,7 +9,7 @@ import util.Wrapper;
 import worldData.Obj;
 import android.util.Log;
 
-import components.Component;
+import components.Entity;
 import components.ProximitySensor;
 
 public class SystemTests extends SimpleTesting {
@@ -37,7 +37,7 @@ public class SystemTests extends SimpleTesting {
 		assertTrue(o.hasComponent(Shape.class));
 		assertFalse(o.hasComponent(MeshGroup.class));
 		assertTrue(o.hasComponent(MeshComponent.class));
-		assertTrue(o.hasComponent(Component.class));
+		assertTrue(o.hasComponent(Entity.class));
 		assertFalse(o.hasComponent(ProximitySensor.class));
 
 	}

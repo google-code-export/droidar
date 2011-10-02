@@ -13,7 +13,7 @@ import android.location.Address;
 import android.location.Location;
 import android.util.Log;
 
-import components.Component;
+import components.Entity;
 
 public class GeoObj extends Obj implements HasDebugInformation {
 
@@ -115,7 +115,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	}
 
 	@Override
-	public void setComp(Component comp) {
+	public void setComp(Entity comp) {
 		if (comp instanceof MeshComponent) {
 			MeshGroup g = getMySurroundGroup();
 			g.clear();

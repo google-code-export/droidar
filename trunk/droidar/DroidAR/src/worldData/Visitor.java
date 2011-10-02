@@ -10,7 +10,7 @@ import util.EfficientList;
 import util.EfficientListQualified;
 import android.util.Log;
 
-import components.Component;
+import components.Entity;
 import components.PhysicsComponent;
 import components.ProximitySensor;
 
@@ -33,7 +33,7 @@ public abstract class Visitor {
 
 	public boolean default_visit(World world) {
 
-		EfficientList<AbstractObj> list = world.getAllItems();
+		EfficientList<RenderableEntity> list = world.getAllItems();
 		if (list != null) {
 			final int lenght = list.myLength;
 			for (int i = 0; i < lenght; i++) {
@@ -52,7 +52,7 @@ public abstract class Visitor {
 	}
 
 	public boolean default_visit(Obj obj) {
-		EfficientList<Component> x = obj.myComponents;
+		EfficientList<Entity> x = obj.myComponents;
 		final int lenght = obj.myComponents.myLength;
 		for (int i = 0; i < lenght; i++) {
 			x.get(i).accept(this);

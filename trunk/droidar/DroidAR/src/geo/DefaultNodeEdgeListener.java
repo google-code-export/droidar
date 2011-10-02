@@ -12,7 +12,7 @@ import util.Vec;
 import worldData.Obj;
 import android.util.Log;
 
-import components.Component;
+import components.Entity;
 import components.ProximitySensor;
 
 public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
@@ -91,7 +91,7 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 		return addNodeToGraph(graph, objectToAdd);
 	}
 
-	private Component newNodeMesh() {
+	private Entity newNodeMesh() {
 
 		return nodeMesh;
 	}
@@ -123,7 +123,7 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 
 	}
 
-	private Component newProxiSensor(final GeoGraph targetGraph) {
+	private Entity newProxiSensor(final GeoGraph targetGraph) {
 		return new ProximitySensor(camera, MIN_DISTANCE) {
 
 			@Override
