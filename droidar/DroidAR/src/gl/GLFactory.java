@@ -10,6 +10,7 @@ import gl.textures.TexturedShape;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import system.ParentStack;
 import util.IO;
 import util.Vec;
 import worldData.Obj;
@@ -527,9 +528,11 @@ public class GLFactory {
 			}
 
 			@Override
-			public void draw(GL10 gl) {
+			public void draw(GL10 gl, Renderable parent,
+					ParentStack<Renderable> stack) {
 				CordinateAxis.draw(gl);
 			}
+
 		};
 	}
 
@@ -546,8 +549,8 @@ public class GLFactory {
 	public Obj newTextObject(String textToDisplay, Vec textPosition,
 			Context context, GLCamera glCamera) {
 
-		float textSize=1;
-		
+		float textSize = 1;
+
 		TextView v = new TextView(context);
 		v.setTypeface(null, Typeface.BOLD);
 		// Set textcolor to black:
@@ -555,8 +558,8 @@ public class GLFactory {
 		v.setText(textToDisplay);
 
 		Obj o = new Obj();
-		MeshComponent mesh = this.newTexturedSquare("textBitmap" + textToDisplay,
-				util.IO.loadBitmapFromView(v),textSize);
+		MeshComponent mesh = this.newTexturedSquare("textBitmap"
+				+ textToDisplay, util.IO.loadBitmapFromView(v), textSize);
 		mesh.myPosition = textPosition.copy();
 		mesh.addAnimation(new AnimationFaceToCamera(glCamera));
 		o.setComp(mesh);

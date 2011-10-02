@@ -2,6 +2,7 @@ package geo;
 
 import gl.GLCamera;
 import gl.MeshComponent;
+import gl.Renderable;
 
 import java.util.Arrays;
 
@@ -9,9 +10,11 @@ import javax.microedition.khronos.opengles.GL10;
 
 import system.EventManager;
 import system.ListInterface;
+import system.ParentStack;
 import util.EfficientList;
 import util.EfficientListQualified;
 import worldData.AbstractObj;
+import worldData.Updateable;
 import worldData.Visitor;
 import worldData.World;
 import android.util.Log;
@@ -508,35 +511,40 @@ public class GeoGraph extends AbstractObj implements ListInterface {
 	}
 
 	@Override
-	public void draw(GL10 gl) {
+	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
 		if (myNodes == null)
 			return;
+		if (stack != null)
+			stack.add(this);
 		{
 			for (int i = 0; i < myNodes.myLength; i++) {
-				myNodes.get(i).draw(gl);
+				myNodes.get(i).render(gl, this, stack);
 			}
 		}
 		{
 			if ((isPath || useEdges) && myEdges != null) {
 				for (int i = 0; i < myEdges.myLength; i++) {
-					myEdges.get(i).draw(gl);
+					myEdges.get(i).render(gl, this, stack);
 				}
 			}
 		}
 	}
 
 	@Override
-	public boolean update(float timeDelta) {
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
 		if (myNodes == null)
 			return false;
+		if (stack != null)
+			stack.add(this);
 		{
 			for (int i = 0; i < myNodes.myLength; i++) {
-				myNodes.get(i).update(timeDelta);
+				myNodes.get(i).update(timeDelta, this, stack);
 			}
 		}
 		if (useEdges && myEdges != null) {
 			for (int i = 0; i < myEdges.myLength; i++) {
-				myEdges.get(i).update(timeDelta);
+				myEdges.get(i).update(timeDelta, this, stack);
 			}
 		}
 		return true;

@@ -2,9 +2,10 @@ package gl;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import system.ParentStack;
 import util.EfficientList;
 import util.Vec;
-import worldData.Obj;
+import worldData.Updateable;
 import worldData.Visitor;
 import android.util.Log;
 
@@ -58,21 +59,25 @@ public class MeshGroup extends MeshComponent {
 	// }
 
 	@Override
-	public void draw(GL10 gl) {
+	public void draw(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+		if (stack != null)
+			stack.add(this);
 		for (int i = 0; i < myMeshes.myLength; i++) {
-			myMeshes.get(i).setMatrixAndDraw(gl);
+			myMeshes.get(i).render(gl, this, stack);
 		}
 	}
 
 	@Override
-	public void update(float timeDelta, Obj obj) {
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
 		if (graficAnimationActive) {
 			for (int i = 0; i < myMeshes.myLength; i++) {
-				myMeshes.get(i).update(timeDelta, obj);
+				myMeshes.get(i).update(timeDelta, this, stack);
 			}
 			// additionally update the own animations too:
-			super.update(timeDelta, obj);
+			super.update(timeDelta, parent, stack);
 		}
+		return true;
 	}
 
 	public boolean accept(Visitor visitor) {
@@ -83,7 +88,7 @@ public class MeshGroup extends MeshComponent {
 	public String toString() {
 		if (myMeshes == null)
 			return "Meshgroup (emtpy) " + super.toString();
-		return super.toString()+"(size=" + myMeshes.myLength + ") " ;
+		return super.toString() + "(size=" + myMeshes.myLength + ") ";
 	}
 
 	public void clear() {

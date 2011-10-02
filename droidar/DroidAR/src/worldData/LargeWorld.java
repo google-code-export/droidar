@@ -1,8 +1,11 @@
 package worldData;
 
+import gl.GLCamera;
+import gl.Renderable;
+
 import javax.microedition.khronos.opengles.GL10;
 
-import gl.GLCamera;
+import system.ParentStack;
 import util.EfficientList;
 import util.QuadTree;
 import util.QuadTree.ResultListener;
@@ -104,28 +107,30 @@ public class LargeWorld extends World {
 	}
 
 	@Override
-	public void drawElements(GLCamera camera, GL10 gl) {
+	public void drawElements(GLCamera camera, GL10 gl,
+			ParentStack<Renderable> stack) {
 
 		EfficientList<Obj> list = getList(camera.getPosition().x,
 				camera.getPosition().y);
 		for (int i = 0; i < list.myLength; i++) {
 			Obj obj = list.get(i);
 			if (obj != null)
-				obj.draw(gl);
+				obj.render(gl, this, stack);
 		}
-		super.drawElements(camera, gl);
+		super.drawElements(camera, gl, stack);
 	}
 
 	@Override
-	public boolean update(float timeDelta) {
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
 		EfficientList<Obj> list = getList(getMyCamera().getPosition().x,
 				getMyCamera().getPosition().y);
 		for (int i = 0; i < list.myLength; i++) {
 			Obj obj = list.get(i);
 			if (obj != null)
-				obj.update(timeDelta);
+				obj.update(timeDelta, this, stack);
 		}
-		return super.update(timeDelta);
+		return super.update(timeDelta, parent, stack);
 	}
 
 	@SuppressWarnings("unchecked")

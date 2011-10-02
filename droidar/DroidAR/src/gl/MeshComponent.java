@@ -7,10 +7,12 @@ import gl.animations.AnimationGroup;
 import javax.microedition.khronos.opengles.GL10;
 
 import listeners.SelectionListener;
+import system.ParentStack;
 import util.Vec;
 import util.Wrapper;
 import worldData.AbstractObj;
 import worldData.Obj;
+import worldData.Updateable;
 import android.opengl.Matrix;
 import android.util.Log;
 
@@ -19,7 +21,7 @@ import commands.undoable.UndoableCommand;
 import components.Component;
 
 public abstract class MeshComponent implements Component, ParentMesh,
-		SelectionListener {
+		SelectionListener, Renderable {
 
 	private static final String LOG_TAG = "MeshComp";
 	/**
@@ -131,11 +133,12 @@ public abstract class MeshComponent implements Component, ParentMesh,
 			gl.glScalef(myScale.x, myScale.y, myScale.z);
 	}
 
-	public synchronized void setMatrixAndDraw(GL10 gl) {
+	public synchronized void render(GL10 gl, Renderable parent,
+			ParentStack<Renderable> stack) {
 		// store current matrix and then modify it:
 		setMatrix(gl);
 		// if (showObejctCoordinateAxis) CordinateAxis.draw(gl);
-		draw(gl);
+		draw(gl, parent, stack);
 		// restore old matrix:
 		gl.glPopMatrix();
 	}
@@ -185,10 +188,18 @@ public abstract class MeshComponent implements Component, ParentMesh,
 		}
 	}
 
-	public abstract void draw(GL10 gl);
+	public abstract void draw(GL10 gl, Renderable parent,
+			ParentStack<Renderable> stack);
 
-	public synchronized void update(float timeDelta, Obj obj) {
+	@Override
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
 		if ((myAnimation != null) && (graficAnimationActive)) {
+			Obj obj = null;
+			if (parent instanceof Obj)
+				obj = (Obj) parent;
+			else if (stack != null)
+				obj = stack.getFirst(Obj.class);
 			// if the animation does not need to be animated anymore..
 			if (!myAnimation.update(timeDelta, obj, this)) {
 				// ..remove it:
@@ -198,6 +209,7 @@ public abstract class MeshComponent implements Component, ParentMesh,
 				myAnimation = null;
 			}
 		}
+		return true;
 	}
 
 	/**

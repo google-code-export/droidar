@@ -28,7 +28,7 @@ public class AnimationGrow implements Animation {
 
 	@Override
 	public boolean update(float timeDelta, Obj obj, MeshComponent mesh) {
-		if (myStopTimer.update(timeDelta)) {
+		if (myStopTimer.update(timeDelta, mesh, null)) {
 			return false;
 		}
 		myGrothSize += myGrothFactor * timeDelta;

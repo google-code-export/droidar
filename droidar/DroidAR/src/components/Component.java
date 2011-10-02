@@ -1,18 +1,9 @@
 package components;
 
-import worldData.Obj;
+import worldData.Updateable;
 import worldData.Visitor;
 
-public interface Component {
-
-	/**
-	 * @param timeDelta
-	 *            on default values will be around 0.020 to 0.025. this value
-	 *            depents manly on the {@link WordUpdater}.GAME_THREAD_DELAY
-	 *            constant but also on the device processor
-	 * @param obj
-	 */
-	public void update(float timeDelta, Obj obj);
+public interface Component extends Updateable {
 
 	/**
 	 * Insert point for any {@link Visitor}

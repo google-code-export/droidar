@@ -1,8 +1,11 @@
 package worldData;
 
+import gl.Renderable;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import system.ListInterface;
+import system.ParentStack;
 import util.EfficientList;
 
 public class ObjGroup extends AbstractObj implements ListInterface {
@@ -34,18 +37,23 @@ public class ObjGroup extends AbstractObj implements ListInterface {
 	}
 
 	@Override
-	public void draw(GL10 gl) {
+	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+		if (stack != null)
+			stack.add(this);
 		int l = myItems.myLength;
 		for (int i = 0; i < l; i++) {
-			myItems.get(i).draw(gl);
+			myItems.get(i).render(gl, this, stack);
 		}
 	}
 
 	@Override
-	public boolean update(float timeDelta) {
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
+		if (stack != null)
+			stack.add(this);
 		int l = myItems.myLength;
 		for (int i = 0; i < l; i++) {
-			myItems.get(i).update(timeDelta);
+			myItems.get(i).update(timeDelta, this, stack);
 		}
 		return true;
 	}

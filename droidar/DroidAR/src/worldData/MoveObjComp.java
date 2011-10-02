@@ -1,13 +1,15 @@
 package worldData;
 
+import gl.HasPosition;
 import gl.MeshComponent;
+import system.ParentStack;
 import util.Vec;
 
 import components.Component;
 
 /**
  * This class can be used to move an object which has a meshcompnent in a smooth
- * way to ne specified position
+ * way to the specified position
  * 
  * @author Spobo
  * 
@@ -37,13 +39,21 @@ public class MoveObjComp implements Component {
 	}
 
 	@Override
-	public void update(float timeDelta, Obj obj) {
-		MeshComponent g = obj.getGraphicsComponent();
-		if (g != null) {
-			Vec.morphToNewVec(g.myPosition, myTargetPos, timeDelta
-					* mySpeedFactor);
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
+		Vec objPos = null;
+
+		// TODO remove these 2 lines later:
+		if (parent instanceof HasPosition)
+			objPos = ((Obj) parent).getPosition();
+
+		if (objPos == null)
+			objPos = stack.getFirst(HasPosition.class).getPosition();
+
+		if (objPos != null) {
+			Vec.morphToNewVec(objPos, myTargetPos, timeDelta * mySpeedFactor);
 
 		}
-
+		return true;
 	}
 }

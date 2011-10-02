@@ -1,5 +1,7 @@
 package worldData;
 
+import system.ParentStack;
+
 public interface Updateable {
 
 	/**
@@ -12,6 +14,6 @@ public interface Updateable {
 	 *            account!
 	 * @return false if the element does not have to be updated anymore
 	 */
-	public boolean update(float timeDelta);
+	public boolean update(float timeDelta, Updateable parent, ParentStack<Updateable> stack);
 
 }

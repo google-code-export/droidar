@@ -6,7 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import listeners.EventListener;
 import system.EventManager;
-import system.RenderStack;
+import system.ParentStack;
 import util.HasDebugInformation;
 import util.L;
 import util.Vec;
@@ -148,7 +148,8 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		return result;
 	}
 
-	public boolean update(float timeDelta) {
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
 
 		if (updateListener == null) {
 			Log.w(LOG_TAG,
@@ -385,7 +386,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 * @param parent
 	 */
 	public synchronized void render(GL10 gl, Renderable parent,
-			RenderStack stack) {
+			ParentStack<Renderable> stack) {
 		// a camera object could be a curser or something like this: TODO use?
 		// if (myCameraObject!=null) loadCameraObject(gl);
 

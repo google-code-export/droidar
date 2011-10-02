@@ -1,9 +1,12 @@
 package gl.textures;
 
+import gl.Renderable;
 import gl.Shape;
 
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11Ext;
+
+import system.ParentStack;
 
 import android.graphics.Bitmap;
 
@@ -23,15 +26,15 @@ public class Textured2dShape extends Shape {
 		super(null);
 		myRenderData = new TexturedRenderData();
 		if (texture != null) {
-			TextureManager.getInstance().addTexture((TexturedRenderData) myRenderData,
-					texture, textureName);
+			TextureManager.getInstance().addTexture(
+					(TexturedRenderData) myRenderData, texture, textureName);
 			textureHeight = texture.getHeight();
 			textureWidth = texture.getWidth();
 		}
 	}
 
 	@Override
-	public void draw(GL10 gl) {
+	public void draw(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
 		gl.glBindTexture(GL10.GL_TEXTURE_2D,
 				((TexturedRenderData) myRenderData).myTextureId);
 		((GL11Ext) gl).glDrawTexfOES(myPosition.x, myPosition.y, myPosition.z,

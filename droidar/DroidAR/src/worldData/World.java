@@ -6,7 +6,7 @@ import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import system.RenderStack;
+import system.ParentStack;
 import util.EfficientList;
 import util.Vec;
 import android.util.Log;
@@ -78,10 +78,10 @@ public class World implements Updateable, Renderable {
 			gl.glScalef(myScale.x, myScale.y, myScale.z);
 	}
 
-	public void render(GL10 gl, Renderable parent, RenderStack stack) {
+	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
 		// TODO reconstruct why this order is important! or wrong..
 		glLoadScreenPosition(gl);
-		myCamera.render(gl, this, null);
+		myCamera.render(gl, this, stack);
 		// glLoadRotation(gl);
 		glLoadScale(gl);
 
@@ -89,24 +89,26 @@ public class World implements Updateable, Renderable {
 
 		CordinateAxis.draw(gl);
 
-		drawElements(myCamera, gl);
+		drawElements(myCamera, gl, stack);
 
 	}
 
-	public void drawElements(GLCamera camera, GL10 gl) {
+	public void drawElements(GLCamera camera, GL10 gl,
+			ParentStack<Renderable> stack) {
 		if (container != null) {
 			for (int i = 0; i < container.myLength; i++) {
 				if (container.get(i) != null)
-					container.get(i).draw(gl);
+					container.get(i).render(gl, this, stack);
 			}
 		}
 	}
 
-	public boolean update(float timeDelta) {
-		myCamera.update(timeDelta);
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
+		myCamera.update(timeDelta, this, stack);
 		if (container != null) {
 			for (int i = 0; i < container.myLength; i++) {
-				container.get(i).update(timeDelta);
+				container.get(i).update(timeDelta, this, stack);
 			}
 		}
 		return true;
