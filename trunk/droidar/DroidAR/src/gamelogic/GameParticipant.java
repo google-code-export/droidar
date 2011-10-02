@@ -6,9 +6,9 @@ import gui.simpleUI.ModifierGroup;
 import java.util.Arrays;
 
 import util.EfficientList;
+import worldData.Entity;
 import android.util.Log;
 
-import components.Entity;
 
 public abstract class GameParticipant implements Entity, EditItem {
 
@@ -80,8 +80,8 @@ public abstract class GameParticipant implements Entity, EditItem {
 
 	public void generateEditGUI(ModifierGroup s) {
 		if (myStatList != null) {
-			EfficientList<Stat> statList = myStatList.getNodes();
-			int l = myStatList.getNodes().myLength;
+			EfficientList<Stat> statList = myStatList.getAllItems();
+			int l = myStatList.getAllItems().myLength;
 			for (int i = 0; i < l; i++) {
 				Stat o = statList.get(i);
 				o.generateEditGUI(s);

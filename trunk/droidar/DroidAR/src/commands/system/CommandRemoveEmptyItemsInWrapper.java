@@ -1,6 +1,6 @@
 package commands.system;
 
-import system.ListInterface;
+import system.Container;
 import util.Wrapper;
 import android.util.Log;
 
@@ -16,11 +16,11 @@ public class CommandRemoveEmptyItemsInWrapper extends Command {
 
 	@Override
 	public boolean execute() {
-		if (myWrapper.getObject() instanceof ListInterface) {
-			((ListInterface) myWrapper.getObject()).removeEmptyItems();
+		if (myWrapper.getObject() instanceof Container) {
+			((Container) myWrapper.getObject()).removeEmptyItems();
 			Log.d("Commands", "" + myWrapper.getObject()
 					+ " removed all emty items (new length="
-					+ ((ListInterface) myWrapper.getObject()).length()
+					+ ((Container) myWrapper.getObject()).length()
 					+ ")");
 			return true;
 		}

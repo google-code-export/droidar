@@ -1,6 +1,6 @@
 package gui;
 
-import system.ListInterface;
+import system.Container;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +8,9 @@ import android.widget.BaseAdapter;
 
 public class CustomBaseAdapter extends BaseAdapter {
 
-	private ListInterface myList;
+	private Container myList;
 
-	public CustomBaseAdapter(ListInterface list) {
+	public CustomBaseAdapter(Container list) {
 		myList = list;
 		Log.d("GUI", "CustomBaseAdapter created with list: " + list);
 	}
@@ -18,17 +18,17 @@ public class CustomBaseAdapter extends BaseAdapter {
 	@Override
 	public int getCount() {
 		Log.d("GUI", "CustomBaseAdapter list has length="
-				+ myList.getNodes().myLength);
-		return myList.getNodes().myLength;
+				+ myList.getAllItems().myLength);
+		return myList.getAllItems().myLength;
 	}
 
 	// stelle finden wieso der geograph nicht aus dem baseaddapter rausfliegt??
 
 	@Override
 	public ListItem getItem(int pos) {
-		if (pos >= myList.getNodes().myLength)
+		if (pos >= myList.getAllItems().myLength)
 			return null;
-		return (ListItem) myList.getNodes().get(pos);
+		return (ListItem) myList.getAllItems().get(pos);
 	}
 
 	@Override

@@ -1,13 +1,14 @@
 package actions;
 
 import listeners.EventListener;
-import system.ListInterface;
+import system.Container;
 import util.EfficientList;
 import util.Vec;
 import android.location.Location;
 import android.view.MotionEvent;
 
-public class EventListenerGroup extends Action implements ListInterface {
+public class EventListenerGroup extends Action implements
+		Container<EventListener> {
 
 	EfficientList<EventListener> myActions = new EfficientList<EventListener>();
 
@@ -101,8 +102,9 @@ public class EventListenerGroup extends Action implements ListInterface {
 		return true;
 	}
 
-	public void add(EventListener action) {
-		myActions.add(action);
+	@Override
+	public boolean add(EventListener action) {
+		return myActions.add(action);
 	}
 
 	@Override
@@ -116,7 +118,7 @@ public class EventListenerGroup extends Action implements ListInterface {
 	}
 
 	@Override
-	public EfficientList<EventListener> getNodes() {
+	public EfficientList<EventListener> getAllItems() {
 		return myActions;
 	}
 
@@ -133,6 +135,7 @@ public class EventListenerGroup extends Action implements ListInterface {
 		 */
 	}
 
+	@Override
 	public boolean remove(EventListener actionToRemove) {
 		return myActions.remove(actionToRemove);
 	}

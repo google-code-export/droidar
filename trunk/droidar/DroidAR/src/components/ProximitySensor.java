@@ -5,6 +5,7 @@ import gl.GLCamera;
 import gl.MeshComponent;
 import system.ParentStack;
 import util.Vec;
+import worldData.Entity;
 import worldData.Obj;
 import worldData.UpdateTimer;
 import worldData.Updateable;

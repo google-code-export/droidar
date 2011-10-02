@@ -1,8 +1,10 @@
 package system;
 
+import geo.GeoObj;
 import gui.CustomBaseAdapter;
 import gui.CustomListActivity;
 import util.EfficientList;
+import worldData.RenderableEntity;
 
 /**
  * any object which should be displayed inside a {@link CustomListActivity} by
@@ -13,7 +15,7 @@ import util.EfficientList;
  * @author Spobo
  * 
  */
-public interface ListInterface<T> {
+public interface Container<T> {
 
 	public void clear();
 
@@ -26,6 +28,10 @@ public interface ListInterface<T> {
 
 	public int length();
 
-	public EfficientList<T> getNodes();
+	public EfficientList<T> getAllItems();
+
+	boolean add(T newElement);
+
+	boolean remove(T x);
 
 }

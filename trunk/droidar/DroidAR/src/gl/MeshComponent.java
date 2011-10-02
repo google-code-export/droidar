@@ -11,6 +11,7 @@ import system.ParentStack;
 import util.Vec;
 import util.Wrapper;
 import worldData.AbstractObj;
+import worldData.Entity;
 import worldData.Obj;
 import worldData.Updateable;
 import worldData.RenderableEntity;
@@ -19,10 +20,9 @@ import android.util.Log;
 
 import commands.Command;
 import commands.undoable.UndoableCommand;
-import components.Entity;
 
-public abstract class MeshComponent implements RenderableEntity, Entity, ParentMesh,
-		SelectionListener {
+public abstract class MeshComponent implements RenderableEntity, Entity,
+		ParentMesh, SelectionListener {
 
 	private static final String LOG_TAG = "MeshComp";
 	/**
@@ -46,6 +46,7 @@ public abstract class MeshComponent implements RenderableEntity, Entity, ParentM
 	public Animation myAnimation;
 	public boolean showObjectCoordinateAxis = false;
 
+	@Deprecated
 	private AbstractObj myParentObj;
 	private ParentMesh myParentMesh;
 	private Command myOnClickCommand;
@@ -249,6 +250,7 @@ public abstract class MeshComponent implements RenderableEntity, Entity, ParentM
 		return myParentMesh;
 	}
 
+	@Deprecated
 	public AbstractObj getMyParentObj() {
 		if (myParentObj == null) {
 			final ParentMesh p = myParentMesh;
@@ -258,6 +260,7 @@ public abstract class MeshComponent implements RenderableEntity, Entity, ParentM
 		return myParentObj;
 	}
 
+	@Deprecated
 	public void setMyParentMesh(ParentMesh parent) {
 		if (myParentMesh != null) {
 			Log.w(LOG_TAG, "The parentObject (" + myParentMesh + ") of " + this
@@ -266,6 +269,7 @@ public abstract class MeshComponent implements RenderableEntity, Entity, ParentM
 		myParentMesh = parent;
 	}
 
+	//TODO dont remove, just reimplement with parameter ParentStack
 	public Vec getAbsolutePosition() {
 		Vec pos;
 		if (myPosition != null) {
@@ -281,29 +285,28 @@ public abstract class MeshComponent implements RenderableEntity, Entity, ParentM
 	}
 
 	public Command getOnClickCommand() {
-		// if the mesh does not have a onClickCommand itself the parent command
-		// is used:
-		if (myOnClickCommand == null)
-			return getMyParentObj().getOnClickCommand();
+
+		// if (myOnClickCommand == null)
+		// return getMyParentObj().getOnClickCommand();
 		return myOnClickCommand;
 	}
 
 	public Command getOnLongClickCommand() {
-		if (myOnLongClickCommand == null)
-			return getMyParentObj().getOnLongClickCommand();
+		// if (myOnLongClickCommand == null)
+		// return getMyParentObj().getOnLongClickCommand();
 		return myOnLongClickCommand;
 	}
 
 	public Command getOnMapClickCommand() {
-		if (myOnMapClickCommand == null)
-			return getMyParentObj().getOnMapClickCommand();
+		// if (myOnMapClickCommand == null)
+		// return getMyParentObj().getOnMapClickCommand();
 		return myOnMapClickCommand;
 	}
 
 	@Override
 	public Command getOnDoubleClickCommand() {
-		if (myOnDoubleClickCommand == null)
-			return getMyParentObj().getOnDoubleClickCommand();
+		// if (myOnDoubleClickCommand == null)
+		// return getMyParentObj().getOnDoubleClickCommand();
 		return myOnDoubleClickCommand;
 	}
 
@@ -361,6 +364,7 @@ public abstract class MeshComponent implements RenderableEntity, Entity, ParentM
 		return null;
 	}
 
+	@Deprecated
 	public void setMyParentObj(AbstractObj obj) {
 		myParentObj = obj;
 	}

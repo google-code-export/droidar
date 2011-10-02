@@ -6,11 +6,11 @@ import geo.GeoObj;
 import gl.MeshComponent;
 import gl.MeshGroup;
 import gl.Shape;
+import system.Container;
 import util.EfficientList;
 import util.EfficientListQualified;
 import android.util.Log;
 
-import components.Entity;
 import components.PhysicsComponent;
 import components.ProximitySensor;
 
@@ -31,7 +31,8 @@ import components.ProximitySensor;
  */
 public abstract class Visitor {
 
-	public boolean default_visit(World world) {
+	@SuppressWarnings("rawtypes")
+	public boolean default_visit(Container world) {
 
 		EfficientList<RenderableEntity> list = world.getAllItems();
 		if (list != null) {
@@ -43,7 +44,7 @@ public abstract class Visitor {
 		return visit(world);
 	}
 
-	public boolean visit(World x) {
+	public boolean visit(Container x) {
 		Log.w("visitor.visit()",
 				this.getClass().toString()
 						+ "World: no visit action defined for classtype "
@@ -79,10 +80,8 @@ public abstract class Visitor {
 	}
 
 	public boolean default_visit(MeshGroup meshGroup) {
-		EfficientList<MeshComponent> meshes = meshGroup.myMeshes; // this way we
-																	// avoid
-		// lookups
-		final int meshSize = meshGroup.myMeshes.myLength;
+		EfficientList<RenderableEntity> meshes = meshGroup.getAllItems();
+		final int meshSize = meshGroup.getAllItems().myLength;
 		for (int i = 0; i < meshSize; i++) {
 			meshes.get(i).accept(this);
 		}
@@ -124,14 +123,10 @@ public abstract class Visitor {
 		return false;
 	}
 
-	public boolean default_visit(AbstractObj abstractObj) {
-		return visit(abstractObj);
-	}
-
 	public boolean default_visit(GeoGraph geoGraph) {
 		{
-			EfficientListQualified<GeoObj> geoObj = geoGraph.getNodes();
-			final int l = geoGraph.getNodes().myLength;
+			EfficientListQualified<GeoObj> geoObj = geoGraph.getAllItems();
+			final int l = geoGraph.getAllItems().myLength;
 			for (int i = 0; i < l; i++) {
 				geoObj.get(i).accept(this);
 			}
@@ -156,6 +151,7 @@ public abstract class Visitor {
 		return false;
 	}
 
+	@Deprecated
 	public boolean visit(AbstractObj x) {
 		Log.w("visitor.visit()",
 				this.getClass().toString()

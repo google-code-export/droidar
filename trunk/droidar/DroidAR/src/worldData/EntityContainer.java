@@ -4,31 +4,32 @@ import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import system.ListInterface;
+import system.Container;
 import system.ParentStack;
 import util.EfficientList;
 
-public class ObjGroup extends AbstractObj implements ListInterface {
+public class EntityContainer extends AbstractObj implements
+		Container<RenderableEntity> {
 
-	private EfficientList<AbstractObj> myItems = new EfficientList<AbstractObj>();
+	private EfficientList<RenderableEntity> myItems = new EfficientList<RenderableEntity>();
 
-	// TODO move add in canbeshowninlist interface
-	public void add(AbstractObj x) {
-		myItems.add(x);
+	public boolean add(RenderableEntity x) {
+		return myItems.add(x);
 	}
 
 	public void clear() {
 		myItems.clear();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void removeEmptyItems() {
 		int l = myItems.myLength;
 
 		for (int i = 0; i < l; i++) {
-			AbstractObj a = myItems.get(i);
-			if (a instanceof ListInterface) {
-				if (((ListInterface) a).isCleared()) {
+			RenderableEntity a = myItems.get(i);
+			if (a instanceof Container) {
+				if (((Container) a).isCleared()) {
 					myItems.remove(a);
 				}
 			}
@@ -59,23 +60,33 @@ public class ObjGroup extends AbstractObj implements ListInterface {
 	}
 
 	@Override
+	public boolean accept(Visitor visitor) {
+		return visitor.default_visit(this);
+	}
+
+	@Override
 	public boolean isCleared() {
-		if (getNodes().myLength == 0) {
+		if (getAllItems().myLength == 0) {
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public EfficientList<AbstractObj> getNodes() {
+	public EfficientList<RenderableEntity> getAllItems() {
 		if (myItems == null)
-			myItems = new EfficientList<AbstractObj>();
+			myItems = new EfficientList<RenderableEntity>();
 		return myItems;
 	}
 
 	@Override
+	public boolean remove(RenderableEntity x) {
+		return myItems.remove(x);
+	}
+
+	@Override
 	public int length() {
-		return getNodes().myLength;
+		return getAllItems().myLength;
 	}
 
 }

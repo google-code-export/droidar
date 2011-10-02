@@ -44,10 +44,6 @@ public abstract class AbstractObj implements HasInfosInterface, ListItem,
 		return false;
 	}
 
-	public boolean accept(Visitor visitor) {
-		return visitor.default_visit(this);
-	}
-
 	@Override
 	public Command getListClickCommand() {
 		return myListClickCommand;

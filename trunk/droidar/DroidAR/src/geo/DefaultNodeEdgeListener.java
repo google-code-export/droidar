@@ -9,10 +9,10 @@ import gl.animations.AnimationMove;
 import gl.animations.AnimationRotate;
 import util.EfficientList;
 import util.Vec;
+import worldData.Entity;
 import worldData.Obj;
 import android.util.Log;
 
-import components.Entity;
 import components.ProximitySensor;
 
 public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
@@ -59,7 +59,7 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 
 		Log.d(LOG_TAG, "Adding obj " + newNode
 				+ " to graph with number of nodes="
-				+ targetGraph.getNodes().myLength);
+				+ targetGraph.getAllItems().myLength);
 
 		Log.d(LOG_TAG, "Setting special props for first node.");
 		setHighlightNodeTransformations(newNode.getGraphicsComponent());
@@ -81,7 +81,7 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 
 		Log.d(LOG_TAG, "Adding obj " + newNode
 				+ " to graph with number of nodes="
-				+ targetGraph.getNodes().myLength);
+				+ targetGraph.getAllItems().myLength);
 
 		return targetGraph.add(newNode);
 	}

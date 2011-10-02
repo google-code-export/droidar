@@ -1,5 +1,6 @@
 package geo;
 
+import system.Container;
 import worldData.LargeWorld;
 import worldData.Visitor;
 import worldData.World;
@@ -18,7 +19,7 @@ public class GeoCalcer extends Visitor {
 	}
 
 	@Override
-	public boolean visit(World x) {
+	public boolean visit(Container x) {
 		if (x instanceof LargeWorld) {
 			((LargeWorld) x).rebuildTree();
 		}

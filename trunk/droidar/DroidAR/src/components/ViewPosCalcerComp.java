@@ -6,6 +6,7 @@ import gl.GLCamera;
 import gl.GLRenderer;
 import system.ParentStack;
 import util.Vec;
+import worldData.Entity;
 import worldData.MoveObjComp;
 import worldData.Obj;
 import worldData.UpdateTimer;

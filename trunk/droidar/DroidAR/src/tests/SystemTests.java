@@ -6,10 +6,10 @@ import gl.Shape;
 import util.Calculus;
 import util.Vec;
 import util.Wrapper;
+import worldData.Entity;
 import worldData.Obj;
 import android.util.Log;
 
-import components.Entity;
 import components.ProximitySensor;
 
 public class SystemTests extends SimpleTesting {

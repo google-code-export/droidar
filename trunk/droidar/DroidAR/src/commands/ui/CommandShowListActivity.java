@@ -4,7 +4,7 @@ import gui.CustomBaseAdapter;
 import gui.CustomListActivity;
 import gui.ListSettings;
 import system.ActivityConnector;
-import system.ListInterface;
+import system.Container;
 import util.Wrapper;
 import android.app.Activity;
 import android.util.Log;
@@ -66,10 +66,10 @@ public class CommandShowListActivity extends Command {
 		 * ActivityConnector
 		 */
 
-		if (myListItemsWrapper.getObject() instanceof ListInterface) {
+		if (myListItemsWrapper.getObject() instanceof Container) {
 
 			BaseAdapter adapter = new CustomBaseAdapter(
-					(ListInterface) myListItemsWrapper.getObject());
+					(Container) myListItemsWrapper.getObject());
 
 			ListSettings listSettings = new ListSettings(adapter,
 					closeOnCorrectClick, myOnCorrectClickCommand,

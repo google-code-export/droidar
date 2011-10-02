@@ -1,6 +1,7 @@
 package worldData;
 
 import gl.GLCamera;
+import gl.HasPosition;
 import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -16,11 +17,11 @@ public class LargeWorld extends World {
 	private float myRenderDistance;
 	private float myRecalcDistanceMin;
 	private float myRecalcDistanceMax;
-	private QuadTree<Obj> tree;
+	private QuadTree<RenderableEntity> tree;
 
 	@SuppressWarnings("rawtypes")
 	private ResultListener itemsListener;
-	private EfficientList<Obj> itemsInRange;
+	private EfficientList<RenderableEntity> itemsInRange;
 	private float oldX;
 	private float oldY;
 
@@ -30,12 +31,12 @@ public class LargeWorld extends World {
 		myRenderDistance = renderDistance;
 		myRecalcDistanceMin = -recalcDistance;
 		myRecalcDistanceMax = recalcDistance;
-		tree = new QuadTree<Obj>();
+		tree = new QuadTree<RenderableEntity>();
 
 		itemsListener = tree.new ResultListener() {
 
 			@Override
-			public void onResult(Obj myValue) {
+			public void onResult(RenderableEntity myValue) {
 				itemsInRange.add(myValue);
 			}
 		};
@@ -48,7 +49,7 @@ public class LargeWorld extends World {
 			final EfficientList<RenderableEntity> result = allItems.copy();
 			tree.getAllItems(tree.new ResultListener() {
 				@Override
-				public void onResult(Obj myValue) {
+				public void onResult(RenderableEntity myValue) {
 					result.add(myValue);
 				}
 			});
@@ -57,13 +58,14 @@ public class LargeWorld extends World {
 		return null;
 	}
 
-	public EfficientList<Obj> getItems(Vec position, float maxDistance) {
+	public EfficientList<RenderableEntity> getItems(Vec position,
+			float maxDistance) {
 
-		final EfficientList<Obj> result = new EfficientList<Obj>();
+		final EfficientList<RenderableEntity> result = new EfficientList<RenderableEntity>();
 		tree.findInArea(tree.new ResultListener() {
 
 			@Override
-			public void onResult(Obj myValue) {
+			public void onResult(RenderableEntity myValue) {
 				result.add(myValue);
 			}
 		}, position.x, position.y, maxDistance);
@@ -71,21 +73,28 @@ public class LargeWorld extends World {
 	}
 
 	@Override
-	public boolean add(AbstractObj x) {
-		if (x instanceof Obj)
-			if (add((Obj) x))
-				return true;
+	public boolean add(RenderableEntity x) {
+		if (x instanceof HasPosition && add((HasPosition) x))
+			return true;
 		return super.add(x);
 	}
 
-	private boolean add(Obj x) {
-		if (x.getGraphicsComponent() != null
-				&& x.getGraphicsComponent().myPosition != null) {
-			tree.add(x.getGraphicsComponent().myPosition.x,
-					x.getGraphicsComponent().myPosition.y, x);
-			return true;
+	private boolean add(HasPosition x) {
+		Vec pos = x.getPosition();
+		if (pos != null) {
+			if (x instanceof RenderableEntity) {
+				tree.add(pos.x, pos.y, (RenderableEntity) x);
+				return true;
+			}
 		}
 		return false;
+	}
+
+	@Override
+	public boolean remove(RenderableEntity x) {
+		if (tree.remove(x))
+			return true;
+		return super.remove(x);
 	}
 
 	/**
@@ -93,10 +102,10 @@ public class LargeWorld extends World {
 	 * expensive so do not call this too often!
 	 */
 	public void rebuildTree() {
-		final EfficientList<Obj> list = new EfficientList<Obj>();
+		final EfficientList<RenderableEntity> list = new EfficientList<RenderableEntity>();
 		tree.getAllItems(tree.new ResultListener() {
 			@Override
-			public void onResult(Obj myValue) {
+			public void onResult(RenderableEntity myValue) {
 				list.add(myValue);
 			}
 		});
@@ -110,10 +119,10 @@ public class LargeWorld extends World {
 	public void drawElements(GLCamera camera, GL10 gl,
 			ParentStack<Renderable> stack) {
 
-		EfficientList<Obj> list = getList(camera.getPosition().x,
+		EfficientList<RenderableEntity> list = getList(camera.getPosition().x,
 				camera.getPosition().y);
 		for (int i = 0; i < list.myLength; i++) {
-			Obj obj = list.get(i);
+			RenderableEntity obj = list.get(i);
 			if (obj != null)
 				obj.render(gl, this, stack);
 		}
@@ -123,10 +132,10 @@ public class LargeWorld extends World {
 	@Override
 	public boolean update(float timeDelta, Updateable parent,
 			ParentStack<Updateable> stack) {
-		EfficientList<Obj> list = getList(getMyCamera().getPosition().x,
-				getMyCamera().getPosition().y);
+		EfficientList<RenderableEntity> list = getList(getMyCamera()
+				.getPosition().x, getMyCamera().getPosition().y);
 		for (int i = 0; i < list.myLength; i++) {
-			Obj obj = list.get(i);
+			RenderableEntity obj = list.get(i);
 			if (obj != null)
 				obj.update(timeDelta, this, stack);
 		}
@@ -134,7 +143,7 @@ public class LargeWorld extends World {
 	}
 
 	@SuppressWarnings("unchecked")
-	private EfficientList<Obj> getList(float x, float y) {
+	private EfficientList<RenderableEntity> getList(float x, float y) {
 		if (itemsInRange != null
 				&& needsNoRecalculation(x - oldX, myRecalcDistanceMin,
 						myRecalcDistanceMax)
@@ -143,7 +152,7 @@ public class LargeWorld extends World {
 			return itemsInRange;
 		} else {
 			if (itemsInRange == null)
-				itemsInRange = new EfficientList<Obj>();
+				itemsInRange = new EfficientList<RenderableEntity>();
 			else
 				itemsInRange.clear();
 			oldX = x;

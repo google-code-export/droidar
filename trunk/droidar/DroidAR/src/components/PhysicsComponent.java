@@ -3,6 +3,7 @@ package components;
 import gl.MeshComponent;
 import system.ParentStack;
 import util.Vec;
+import worldData.Entity;
 import worldData.Obj;
 import worldData.Updateable;
 import worldData.Visitor;
