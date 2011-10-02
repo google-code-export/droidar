@@ -65,7 +65,7 @@ public class ActionPlaceObject extends ActionUseCameraAngles {
 	}
 
 	private void calcPosOnFloor(float rollAngle) {
-		final Vec camPos = myCamera.getMyPosition();
+		final Vec camPos = myCamera.getPosition();
 		if (camPos != null) {
 			Vec newPos = myMoveObjComp.myTargetPos;
 			/*

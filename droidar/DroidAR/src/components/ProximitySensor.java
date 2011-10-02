@@ -41,7 +41,7 @@ public abstract class ProximitySensor implements Component {
 			MeshComponent m = obj.getGraphicsComponent();
 			if (m != null) {
 				float currentDistance = Vec.distance(m.myPosition,
-						myCamera.getMyPosition());
+						myCamera.getPosition());
 				if (0 <= currentDistance && currentDistance < myDistance) {
 					onObjectIsCloseToCamera(myCamera, obj, m, currentDistance);
 				}

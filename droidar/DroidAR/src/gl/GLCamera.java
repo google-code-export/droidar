@@ -26,7 +26,8 @@ import android.util.Log;
  * @author Spobo
  * 
  */
-public class GLCamera implements Updateable, HasDebugInformation, Renderable {
+public class GLCamera implements Updateable, HasDebugInformation, Renderable,
+		HasPosition {
 
 	public interface CameraAngleUpdateListener {
 
@@ -383,7 +384,8 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable {
 	 * @param
 	 * @param parent
 	 */
-	public synchronized void render(GL10 gl, Renderable parent, RenderStack stack) {
+	public synchronized void render(GL10 gl, Renderable parent,
+			RenderStack stack) {
 		// a camera object could be a curser or something like this: TODO use?
 		// if (myCameraObject!=null) loadCameraObject(gl);
 
@@ -774,7 +776,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable {
 	 * @return the position in the virtual world. This vec could be used as the
 	 *         users postion e.g.
 	 */
-	public Vec getMyPosition() {
+	public Vec getPosition() {
 		return myPosition;
 	}
 
@@ -813,7 +815,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable {
 	public Vec getGPSPositionVec() {
 		GeoObj devicePos = EventManager.getInstance()
 				.getZeroPositionLocationObject();
-		return GeoObj.calcGPSPosition(this.getMyPosition(),
+		return GeoObj.calcGPSPosition(this.getPosition(),
 				devicePos.getLatitude(), devicePos.getLongitude(),
 				devicePos.getAltitude());
 	}

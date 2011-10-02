@@ -34,7 +34,7 @@ public class AnimationFaceToCamera implements Animation {
 		myTargetCamera = targetCamera;
 
 		myUpdateDelay = updateDelay;
-		myTargetCameraPosition = myTargetCamera.getMyPosition();
+		myTargetCameraPosition = myTargetCamera.getPosition();
 		this.dontChangeXRotation = dontChangeXRotation;
 		// Log.d("face camera animation", "created. camera=" + myTargetCamera
 		// + " targetMesh class=" + myTargetMesh.getClass()
