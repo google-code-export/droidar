@@ -34,4 +34,6 @@ public interface Container<T> {
 
 	boolean remove(T x);
 
+	void insert(int pos, T item);
+
 }

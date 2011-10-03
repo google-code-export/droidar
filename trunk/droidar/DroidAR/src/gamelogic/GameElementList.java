@@ -82,6 +82,10 @@ public abstract class GameElementList<T> implements Container<T> {
 		}
 	}
 
+	public void insert(int pos, T item) {
+		myList.insert(pos, item);
+	};
+
 	public void generateEditGUI(ModifierGroup s) {
 		for (int i = 0; i < myList.myLength; i++) {
 			Object o = myList.get(i);

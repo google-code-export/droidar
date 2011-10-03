@@ -136,6 +136,11 @@ public class EventListenerGroup extends Action implements
 	}
 
 	@Override
+	public void insert(int pos, EventListener item) {
+		myActions.insert(pos, item);
+	}
+
+	@Override
 	public boolean remove(EventListener actionToRemove) {
 		return myActions.remove(actionToRemove);
 	}

@@ -86,4 +86,9 @@ public class AnimationGroup implements RenderableEntity,
 	public boolean accept(Visitor visitor) {
 		return visitor.default_visit((Container) this);
 	}
+
+	@Override
+	public void insert(int pos, RenderableEntity item) {
+		myItems.insert(pos, item);
+	}
 }

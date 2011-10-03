@@ -64,21 +64,21 @@ public class GLFactory {
 	public RenderGroup newCube(Color canBeNull) {
 		RenderGroup g = new RenderGroup();
 		Shape s1 = newSquare(canBeNull);
-		g.add(s1);
+		g.addAnim(s1);
 
 		Shape s2 = newSquare(canBeNull);
 		s2.myPosition = new Vec(0, 0, 2);
-		g.add(s2);
+		g.addAnim(s2);
 
 		Shape s3 = newSquare(canBeNull);
 		s3.myPosition = new Vec(0, 1, 1);
 		s3.myRotation = new Vec(90, 0, 0);
-		g.add(s3);
+		g.addAnim(s3);
 
 		Shape s4 = newSquare(canBeNull);
 		s4.myPosition = new Vec(0, -1, 1);
 		s4.myRotation = new Vec(90, 0, 0);
-		g.add(s4);
+		g.addAnim(s4);
 
 		return g;
 	}
@@ -231,7 +231,7 @@ public class GLFactory {
 	private void addRotateAnimation(MeshComponent target, int speed,
 			Vec rotationVec) {
 		AnimationRotate a = new AnimationRotate(speed, rotationVec);
-		MeshComponent.addAnimationToTargetsAnimationGroup(target, a);
+		MeshComponent.addAnimationToTargetsAnimationGroup(target, a, true);
 	}
 
 	public void removeAnimationFromTargetsAnimationGroup(MeshComponent target,

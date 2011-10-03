@@ -20,7 +20,7 @@ public class RenderGroup extends MeshComponent implements
 	public RenderGroup() {
 		this(null);
 	}
-	
+
 	/**
 	 * @param newPos
 	 *            not side effect free (working with pos afterwards will change
@@ -145,6 +145,11 @@ public class RenderGroup extends MeshComponent implements
 		// myMeshes.get(i).setMyParentMesh(null);
 		// }
 		myItems.clear();
+	}
+
+	@Override
+	public void insert(int pos, RenderableEntity item) {
+		myItems.insert(pos, item);
 	}
 
 }

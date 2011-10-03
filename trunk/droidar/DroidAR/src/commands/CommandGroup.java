@@ -133,4 +133,8 @@ public class CommandGroup extends UndoableCommand implements Container<Command> 
 		myProcessListener = t;
 	}
 
+	@Override
+	public void insert(int pos, Command item) {
+		myList.insert(pos, item);
+	}
 }
