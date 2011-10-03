@@ -21,7 +21,7 @@ public class LargeWorld extends World {
 
 	@SuppressWarnings("rawtypes")
 	private ResultListener itemsListener;
-	private EfficientList<RenderableEntity> itemsInRange;
+	private volatile EfficientList<RenderableEntity> itemsInRange;
 	private float oldX;
 	private float oldY;
 
@@ -143,7 +143,8 @@ public class LargeWorld extends World {
 	}
 
 	@SuppressWarnings("unchecked")
-	private EfficientList<RenderableEntity> getList(float x, float y) {
+	private synchronized EfficientList<RenderableEntity> getList(float x,
+			float y) {
 		if (itemsInRange != null
 				&& needsNoRecalculation(x - oldX, myRecalcDistanceMin,
 						myRecalcDistanceMax)

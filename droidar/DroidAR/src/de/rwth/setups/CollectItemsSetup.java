@@ -7,7 +7,7 @@ import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.MeshComponent;
-import gl.MeshGroup;
+import gl.RenderGroup;
 import gui.GuiSetup;
 import gui.InfoScreenSettings;
 import system.ErrorHandler;
@@ -58,7 +58,7 @@ public class CollectItemsSetup extends Setup {
 		// circle.myAnimation = new AnimationPulse(2, new Vec(0, 0, 0), new
 		// Vec(4, 4, 4), 0.2f);
 
-		final MeshGroup itemMesh = new MeshGroup();
+		final RenderGroup itemMesh = new RenderGroup();
 		itemMesh.add(arrow);
 		itemMesh.add(circle);
 		itemMesh.myPosition = Vec.getNewRandomPosInXYPlane(

@@ -7,7 +7,7 @@ import gl.GLFactory;
 import gl.GLRenderer;
 import gl.LightSource;
 import gl.MeshComponent;
-import gl.MeshGroup;
+import gl.RenderGroup;
 import gl.Shape;
 import gl.animations.AnimationRotate;
 import gui.GuiSetup;
@@ -55,15 +55,15 @@ public class LightningSetup extends DefaultARSetup {
 		myCamera = world.getMyCamera();
 		final Obj lightObject = new Obj();
 
-		MeshGroup innerGroup = new MeshGroup();
+		RenderGroup innerGroup = new RenderGroup();
 		innerGroup.add(spotLight);
 		innerGroup.add(objectFactory.newCircle(Color.red()));
 		innerGroup.myPosition = new Vec(0, 3, 0);
 
-		MeshGroup outerGroup = new MeshGroup();
+		RenderGroup outerGroup = new RenderGroup();
 		outerGroup.add(innerGroup);
 		outerGroup.add(objectFactory.newCircle(Color.blue()));
-		outerGroup.addAnimation(new AnimationRotate(30, new Vec(0, 0, 1)));
+		outerGroup.add(new AnimationRotate(30, new Vec(0, 0, 1)));
 
 		spotLight.setOnClickCommand(new Command() {
 
@@ -89,7 +89,7 @@ public class LightningSetup extends DefaultARSetup {
 		// mesh = newCube();
 		mesh = objectFactory.newDiamond(Color.red());
 		mesh.myScale = new Vec(2, 3, 1);
-		mesh.addAnimation(new AnimationRotate(30, new Vec(0, 0, -1)));
+		mesh.addAnim(new AnimationRotate(30, new Vec(0, 0, -1)));
 
 		o.setComp(mesh);
 		o.setOnClickCommand(new Command() {

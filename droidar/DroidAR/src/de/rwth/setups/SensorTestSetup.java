@@ -7,7 +7,7 @@ import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.MeshComponent;
-import gl.MeshGroup;
+import gl.RenderGroup;
 import gl.animations.AnimationRotate;
 import gui.GuiSetup;
 import listeners.EventListener;
@@ -71,11 +71,11 @@ public class SensorTestSetup extends Setup {
 
 		world = new World(camera);
 
-		MeshGroup compasrose = new MeshGroup();
+		RenderGroup compasrose = new RenderGroup();
 
 		MeshComponent middle = objectFactory.newDiamond(Color.green());
 		middle.myPosition = new Vec(0, 0, -2.8f);
-		middle.addAnimation(new AnimationRotate(40, new Vec(0, 0, 1)));
+		middle.addAnim(new AnimationRotate(40, new Vec(0, 0, 1)));
 		compasrose.add(middle);
 
 		int smallDistance = 10;

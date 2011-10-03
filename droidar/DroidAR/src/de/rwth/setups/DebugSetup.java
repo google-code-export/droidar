@@ -22,21 +22,21 @@ import util.IO;
 import util.Vec;
 import util.Wrapper;
 import worldData.Obj;
+import worldData.RenderableEntity;
 import worldData.SystemUpdater;
 import worldData.World;
-import actions.Action;
-import actions.ActionBufferedCameraAR;
 import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
 import actions.ActionWASDMovement;
 import android.app.Activity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import commands.Command;
 import commands.CommandGroup;
 import commands.DebugCommandPositionEvent;
-import commands.gl.CommandAddAnimation;
 import commands.gl.CommandCameraMoveAndLookAt;
 import commands.logic.CommandSetWrapperToValue2;
 import commands.system.CameraSetARInputCommand;
@@ -54,6 +54,7 @@ import de.rwth.R;
  */
 public class DebugSetup extends Setup {
 
+	protected static final String LOG_TAG = "DebugSetup";
 	// World radar;
 	World world;
 	GLCamera camera;
@@ -102,7 +103,7 @@ public class DebugSetup extends Setup {
 							IO.loadBitmapFromId(myTargetActivity,
 									R.drawable.elephant64));
 			triangleMesh.myScale = new Vec(10, 10, 10);
-			triangleMesh.addAnimation(new AnimationFaceToCamera(camera, 0.5f));
+			triangleMesh.addAnim(new AnimationFaceToCamera(camera, 0.5f));
 			GeoObj treangleGeo = new GeoObj(GeoObj.iPark1, triangleMesh);
 			w.add(treangleGeo);
 		}
@@ -114,7 +115,7 @@ public class DebugSetup extends Setup {
 							"hippoId",
 							IO.loadBitmapFromId(myTargetActivity,
 									R.drawable.hippopotamus64));
-			triangleMesh.addAnimation(new AnimationFaceToCamera(camera, 0.5f));
+			triangleMesh.addAnim(new AnimationFaceToCamera(camera, 0.5f));
 			triangleMesh.myScale = new Vec(10, 10, 10);
 			GeoObj treangleGeo = new GeoObj(GeoObj.iPark2, triangleMesh);
 			w.add(treangleGeo);
@@ -131,7 +132,7 @@ public class DebugSetup extends Setup {
 							"pandaId",
 							IO.loadBitmapFromId(myTargetActivity,
 									R.drawable.panda64));
-			triangleMesh.addAnimation(new AnimationFaceToCamera(camera, 0.5f));
+			triangleMesh.addAnim(new AnimationFaceToCamera(camera, 0.5f));
 			triangleMesh.myScale = new Vec(10, 10, 10);
 			GeoObj treangleGeo = new GeoObj(GeoObj.iPark3, triangleMesh);
 			w.add(treangleGeo);
@@ -152,7 +153,7 @@ public class DebugSetup extends Setup {
 			button.setOnClickCommand(new CommandShowToast(myTargetActivity,
 					"Thanks alot"));
 
-			button.addAnimation(new AnimationFaceToCamera(camera, 0.5f));
+			button.addAnim(new AnimationFaceToCamera(camera, 0.5f));
 			button.myScale = new Vec(10, 10, 10);
 			button.myColor = Color.red();
 
@@ -209,7 +210,7 @@ public class DebugSetup extends Setup {
 				IO.loadBitmapFromId(myTargetActivity, R.drawable.icon));
 		treangleMesh.myPosition = new Vec(0, -2, 1);
 		treangleMesh.myRotation = new Vec(0, 0, 0);
-		treangleMesh.addAnimation(new AnimationFaceToCamera(camera, 0.5f));
+		treangleMesh.addAnim(new AnimationFaceToCamera(camera, 0.5f));
 		treangle.setComp(treangleMesh);
 		world.add(treangle);
 
@@ -286,25 +287,26 @@ public class DebugSetup extends Setup {
 
 		AnimationRotate rotateAnimation = new AnimationRotate(10, new Vec(0, 0,
 				1));
-		guiSetup.addButtonToBottomView(new CommandAddAnimation(selection,
-				rotateAnimation), "Add RotateAnim");
 		guiSetup.addButtonToBottomView(
-				new CommandAddAnimation(selection, new AnimationColorBounce(2,
+				newCommandAddAnimation(selection, rotateAnimation),
+				"Add RotateAnim");
+		guiSetup.addButtonToBottomView(
+				newCommandAddAnimation(selection, new AnimationColorBounce(2,
 						Color.blue(), Color.green(), 0.2f)), "Add ColorAnim");
 		AnimationPulse pAnimation = new AnimationPulse(2, new Vec(1, 1, 1),
 				new Vec(2, 2, 2), 0.2f);
-		guiSetup.addButtonToBottomView(new CommandAddAnimation(selection,
-				pAnimation), "Add PulseAnim");
+		guiSetup.addButtonToBottomView(
+				newCommandAddAnimation(selection, pAnimation), "Add PulseAnim");
 
 		AnimationBounce bAnimation = new AnimationBounce(12, new Vec(),
 				new Vec(0, 0, 4), 0.01f);
-		guiSetup.addButtonToBottomView(new CommandAddAnimation(selection,
-				bAnimation), "Add Bounce");
+		guiSetup.addButtonToBottomView(
+				newCommandAddAnimation(selection, bAnimation), "Add Bounce");
 
 		AnimationSwingRotate sAnimation = new AnimationSwingRotate(20, new Vec(
 				135, 0, 0), new Vec(225, 0, 0), 0.02f);
-		guiSetup.addButtonToBottomView(new CommandAddAnimation(selection,
-				sAnimation), "Add Swing");
+		guiSetup.addButtonToBottomView(
+				newCommandAddAnimation(selection, sAnimation), "Add Swing");
 
 		guiSetup.addButtonToBottomView(new DebugCommandPositionEvent(
 				geoupdater, GeoObj.rwthI9), "Goto i9");
@@ -325,6 +327,24 @@ public class DebugSetup extends Setup {
 		// now add the different camera buttons:
 		addCameraButtons(guiSetup);
 
+	}
+
+	private Command newCommandAddAnimation(final Wrapper meshWrapper,
+			final RenderableEntity animation) {
+		return new Command() {
+
+			@Override
+			public boolean execute() {
+				if (meshWrapper.getObject() instanceof MeshComponent) {
+					((MeshComponent) meshWrapper.getObject())
+							.addAnim(animation);
+					return true;
+				}
+				Log.e(LOG_TAG,
+						"Cant add animation to " + meshWrapper.getObject());
+				return false;
+			}
+		};
 	}
 
 	private void addCameraButtons(GuiSetup guiSetup) {

@@ -63,7 +63,7 @@ public class TextureManager implements HasDebugInformation {
 	public void updateTextures(GL10 gl) {
 		if (newTexturesToLoad != null && newTexturesToLoad.size() > 0) {
 			try {
-				if (textureArray.length - textureArrayOffset < newTexturesToLoad
+				while (textureArray.length - textureArrayOffset < newTexturesToLoad
 						.size()) {
 					Log.d(LOG_TAG, "Resizing textureArray!");
 					textureArray = doubleTheArraySize(textureArray);

@@ -1,13 +1,18 @@
 package gl.animations;
 
 import gl.MeshComponent;
+import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import system.ParentStack;
 import util.Vec;
 import worldData.Obj;
+import worldData.RenderableEntity;
+import worldData.Updateable;
+import worldData.Visitor;
 
-public class AnimationMove implements Animation {
+public class AnimationMove implements RenderableEntity {
 
 	private final float MIN_DISTANCE = 0.01f;
 	private float timeToMove;
@@ -22,12 +27,13 @@ public class AnimationMove implements Animation {
 	}
 
 	@Override
-	public void setAnimationMatrix(GL10 gl, MeshComponent mesh) {
+	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
 		gl.glTranslatef(pos.x, pos.y, pos.z);
 	}
 
 	@Override
-	public boolean update(float timeDelta, Obj obj, MeshComponent mesh) {
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
 		if (!done) {
 			Vec.morphToNewVec(pos, relativeTargetPos, timeDelta / timeToMove);
 			if (Vec.distance(pos, relativeTargetPos) < MIN_DISTANCE) {
@@ -38,9 +44,7 @@ public class AnimationMove implements Animation {
 	}
 
 	@Override
-	public Animation copy() {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean accept(Visitor visitor) {
+		return visitor.default_visit(this);
 	}
-
 }

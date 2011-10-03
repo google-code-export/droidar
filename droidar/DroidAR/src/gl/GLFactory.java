@@ -1,7 +1,6 @@
 package gl;
 
 import geo.GeoObj;
-import gl.animations.Animation;
 import gl.animations.AnimationFaceToCamera;
 import gl.animations.AnimationGroup;
 import gl.animations.AnimationRotate;
@@ -14,6 +13,7 @@ import system.ParentStack;
 import util.IO;
 import util.Vec;
 import worldData.Obj;
+import worldData.RenderableEntity;
 import worldData.Visitor;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -23,10 +23,10 @@ import android.widget.TextView;
 
 /**
  * Use this factory to understand how to create 3D objects with {@link Shape}s
- * and {@link MeshGroup}s. Often it is more efficient to create the objects you
- * need manually and not combine objects created with this factory. The benefits
- * of algorithmic objects are that they are much more flexible and random
- * {@link Vec}tors can be used to add a unique touch to each object.
+ * and {@link RenderGroup}s. Often it is more efficient to create the objects
+ * you need manually and not combine objects created with this factory. The
+ * benefits of algorithmic objects are that they are much more flexible and
+ * random {@link Vec}tors can be used to add a unique touch to each object.
  * 
  * Loading object from externmal files like md3 is the alternative to this
  * approach.
@@ -61,8 +61,8 @@ public class GLFactory {
 		return s;
 	}
 
-	public MeshGroup newCube(Color canBeNull) {
-		MeshGroup g = new MeshGroup();
+	public RenderGroup newCube(Color canBeNull) {
+		RenderGroup g = new RenderGroup();
 		Shape s1 = newSquare(canBeNull);
 		g.add(s1);
 
@@ -168,7 +168,7 @@ public class GLFactory {
 		return s;
 	}
 
-	public MeshGroup newArrow() {
+	public RenderGroup newArrow() {
 		Color top = Color.blue();
 		Color bottom = Color.red();
 		Color edge1 = Color.red();
@@ -179,7 +179,7 @@ public class GLFactory {
 		return newArrow(x, y, height, top, edge1, bottom, edge2);
 	}
 
-	public MeshGroup newCuror() {
+	public RenderGroup newCuror() {
 		Color top = Color.silver1();
 		Color bottom = Color.silver2();
 		Color edge1 = Color.blackTransparent();
@@ -187,15 +187,15 @@ public class GLFactory {
 		float height = 2;
 		float x = 0.7f;
 		float y = 0f;
-		MeshGroup a = newArrow(x, y, height, top, edge1, bottom, edge2);
+		RenderGroup a = newArrow(x, y, height, top, edge1, bottom, edge2);
 		a.myScale = new Vec(0.3f, 0.3f, 0.3f);
 		return a;
 	}
 
-	private MeshGroup newArrow(float x, float y, float height, Color top,
+	private RenderGroup newArrow(float x, float y, float height, Color top,
 			Color edge1, Color bottom, Color edge2) {
 
-		MeshGroup pyr = new MeshGroup(null);
+		RenderGroup pyr = new RenderGroup(null);
 
 		MultiColoredShape s = new MultiColoredShape();
 
@@ -235,7 +235,7 @@ public class GLFactory {
 	}
 
 	public void removeAnimationFromTargetsAnimationGroup(MeshComponent target,
-			Animation animation) {
+			RenderableEntity animation) {
 		if (target.myAnimation instanceof AnimationGroup) {
 			((AnimationGroup) target.myAnimation).remove(animation);
 		} else if (animation == target.myAnimation) {
@@ -270,13 +270,13 @@ public class GLFactory {
 
 	public Obj newSolarSystem(Vec position) {
 		Obj solarSystem = new Obj();
-		MeshGroup sunBox = new MeshGroup();
+		RenderGroup sunBox = new RenderGroup();
 		if (position != null)
 			sunBox.myPosition = position;
 		solarSystem.setComp(sunBox);
 
-		MeshGroup earthRing = new MeshGroup();
-		MeshGroup earthBox = new MeshGroup();
+		RenderGroup earthRing = new RenderGroup();
+		RenderGroup earthBox = new RenderGroup();
 		earthRing.add(earthBox);
 
 		MeshComponent sun = GLFactory.getInstance().newNSidedPolygonWithGaps(
@@ -293,7 +293,7 @@ public class GLFactory {
 		earth.scaleEqual(0.5f);
 		earthBox.add(earth);
 
-		MeshGroup moonring = new MeshGroup();
+		RenderGroup moonring = new RenderGroup();
 
 		MeshComponent moon = GLFactory.getInstance().newCircle(Color.white());
 		moon.myPosition = new Vec(1, 0, 0);
@@ -309,20 +309,20 @@ public class GLFactory {
 
 	public Obj newHexGroupTest(Vec pos) {
 		Obj hex = new Obj();
-		MeshGroup g1 = new MeshGroup(null, pos);
+		RenderGroup g1 = new RenderGroup(null, pos);
 		hex.setComp(g1);
 		g1.add(this.newHexagon(null));
-		MeshGroup g2 = new MeshGroup(Color.blue(), new Vec(0, 5, 0.1f));
+		RenderGroup g2 = new RenderGroup(Color.blue(), new Vec(0, 5, 0.1f));
 		g2.myAnimation = new AnimationRotate(60, new Vec(0, 0, 1));
 		g1.add(g2);
 
 		g2.add(this.newHexagon(null));
-		MeshGroup g3 = new MeshGroup(Color.red(), new Vec(0, 4, 0));
+		RenderGroup g3 = new RenderGroup(Color.red(), new Vec(0, 4, 0));
 		g3.myAnimation = new AnimationRotate(30, new Vec(0, 0, 1));
 		g2.add(g3);
 
 		g3.add(this.newHexagon(null));
-		MeshGroup g4 = new MeshGroup(Color.green(), new Vec(0, 2, 0));
+		RenderGroup g4 = new RenderGroup(Color.green(), new Vec(0, 2, 0));
 		g4.myAnimation = new AnimationRotate(15, new Vec(0, 0, 1));
 		g3.add(g4);
 
@@ -561,7 +561,7 @@ public class GLFactory {
 		MeshComponent mesh = this.newTexturedSquare("textBitmap"
 				+ textToDisplay, util.IO.loadBitmapFromView(v), textSize);
 		mesh.myPosition = textPosition.copy();
-		mesh.addAnimation(new AnimationFaceToCamera(glCamera));
+		mesh.addAnim(new AnimationFaceToCamera(glCamera));
 		o.setComp(mesh);
 		return o;
 	}

@@ -20,7 +20,7 @@ public class RenderGroup extends MeshComponent implements
 	public RenderGroup() {
 		this(null);
 	}
-
+	
 	/**
 	 * @param newPos
 	 *            not side effect free (working with pos afterwards will change

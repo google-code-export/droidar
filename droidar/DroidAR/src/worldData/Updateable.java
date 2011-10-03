@@ -12,8 +12,10 @@ public interface Updateable {
 	 *            different time-intervals. So don't do movement updates or
 	 *            anything like this without taking the passed time into
 	 *            account!
-	 * @return false if the element does not have to be updated anymore
+	 * @return false if the element does not have to be updated anymore and can
+	 *         be removed from the parent
 	 */
-	public boolean update(float timeDelta, Updateable parent, ParentStack<Updateable> stack);
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack);
 
 }

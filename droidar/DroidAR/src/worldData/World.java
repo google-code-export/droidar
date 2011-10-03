@@ -74,7 +74,7 @@ public class World implements RenderableEntity, Container<RenderableEntity> {
 
 	@Override
 	public boolean accept(Visitor v) {
-		return v.default_visit(this);
+		return v.default_visit((Container) this);
 	}
 
 	private void glLoadScale(GL10 gl) {

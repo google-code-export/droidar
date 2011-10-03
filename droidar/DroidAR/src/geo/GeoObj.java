@@ -1,7 +1,7 @@
 package geo;
 
 import gl.MeshComponent;
-import gl.MeshGroup;
+import gl.RenderGroup;
 import gui.MetaInfos;
 import system.EventManager;
 import util.EfficientList;
@@ -42,7 +42,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * if this is true the {@link GeoObj} will try to calculate its virtual
 	 * position in the world assuming the camera is moving relative to the
 	 * 0-point in the world. whenever a new mesh is assigned to this object and
-	 * therefor a new wrapper {@link MeshGroup} is created this flag is checked.
+	 * therefor a new wrapper {@link RenderGroup} is created this flag is checked.
 	 */
 	private boolean autoCalcVirtualPos = true;
 
@@ -62,7 +62,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * change when using dijsktra!
 	 */
 	public int dijkstraId;
-	private MeshGroup mySurroundGroup;
+	private RenderGroup mySurroundGroup;
 	private GeoObjUpdateListener myUpdateListener;
 	/**
 	 * this flag is used in the {@link CustomItemizedOverlay}-class to
@@ -99,16 +99,16 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	}
 
 	/**
-	 * @return the {@link MeshGroup} where all {@link MeshComponent} will be
+	 * @return the {@link RenderGroup} where all {@link MeshComponent} will be
 	 *         inserted to and which will wrap these objects and recalculate the
 	 *         virtual position of the {@link GeoObj}
 	 */
-	public MeshGroup getMySurroundGroup() {
+	public RenderGroup getMySurroundGroup() {
 		if (mySurroundGroup == null)
 			if (autoCalcVirtualPos) {
-				mySurroundGroup = new MeshGroup(null, getVirtualPosition());
+				mySurroundGroup = new RenderGroup(null, getVirtualPosition());
 			} else {
-				mySurroundGroup = new MeshGroup();
+				mySurroundGroup = new RenderGroup();
 			}
 		return mySurroundGroup;
 	}
@@ -116,7 +116,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	@Override
 	public void setComp(Entity comp) {
 		if (comp instanceof MeshComponent) {
-			MeshGroup g = getMySurroundGroup();
+			RenderGroup g = getMySurroundGroup();
 			g.clear();
 			g.add((MeshComponent) comp);
 			setMyGraphicsComponent(g);

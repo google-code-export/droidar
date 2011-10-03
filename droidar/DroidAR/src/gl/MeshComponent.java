@@ -1,7 +1,6 @@
 package gl;
 
 import geo.GeoObj;
-import gl.animations.Animation;
 import gl.animations.AnimationGroup;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -13,8 +12,8 @@ import util.Wrapper;
 import worldData.AbstractObj;
 import worldData.Entity;
 import worldData.Obj;
-import worldData.Updateable;
 import worldData.RenderableEntity;
+import worldData.Updateable;
 import android.opengl.Matrix;
 import android.util.Log;
 
@@ -43,7 +42,7 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 	public Color myPickColor;
 
 	public boolean graficAnimationActive = true;
-	public Animation myAnimation;
+	public RenderableEntity myAnimation;
 	public boolean showObjectCoordinateAxis = false;
 
 	@Deprecated
@@ -143,14 +142,14 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 	public synchronized void render(GL10 gl, Renderable parent,
 			ParentStack<Renderable> stack) {
 		// store current matrix and then modify it:
-		setMatrix(gl);
+		setMatrix(gl, stack);
 		// if (showObejctCoordinateAxis) CordinateAxis.draw(gl);
 		draw(gl, parent, stack);
 		// restore old matrix:
 		gl.glPopMatrix();
 	}
 
-	public synchronized void setMatrix(GL10 gl) {
+	public synchronized void setMatrix(GL10 gl, ParentStack<Renderable> stack) {
 		gl.glPushMatrix();
 		loadPosition(gl);
 		setScale(gl);
@@ -175,7 +174,7 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 			 * then move and then second rotate would be diferent to rotate
 			 * rotate move!
 			 */
-			myAnimation.setAnimationMatrix(gl, this);
+			myAnimation.render(gl, this, stack);
 		}
 
 		/*
@@ -184,6 +183,9 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 		 * mesh in the corresponding selectionColor
 		 */
 		if (myPickColor != null && ObjectPicker.readyToDrawWithColor) {
+
+			Log.e("", "this=" + this);
+			Log.e("", "this.pickcolor=" + myPickColor);
 
 			// //TODO remove:
 			// byte[] b = ObjectPicker.getByteArrayFromColor(myPickColor);
@@ -202,15 +204,11 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 	public boolean update(float timeDelta, Updateable parent,
 			ParentStack<Updateable> stack) {
 		if ((myAnimation != null) && (graficAnimationActive)) {
-			Obj obj = null;
-			if (parent instanceof Obj)
-				obj = (Obj) parent;
-			else if (stack != null)
-				obj = stack.getFirst(Obj.class);
+
 			// if the animation does not need to be animated anymore..
-			if (!myAnimation.update(timeDelta, obj, this)) {
+			if (!myAnimation.update(timeDelta, this, stack)) {
 				// ..remove it:
-				Log.d(LOG_TAG, "Animation " + myAnimation
+				Log.d(LOG_TAG, myAnimation
 						+ " will now be removed from mesh because it "
 						+ "is finished (returned false on update())");
 				myAnimation = null;
@@ -363,8 +361,8 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 		if (this instanceof Shape) {
 			return ((Shape) this).clone();
 		}
-		if (this instanceof MeshGroup) {
-			return ((MeshGroup) this).clone();
+		if (this instanceof RenderGroup) {
+			return ((RenderGroup) this).clone();
 		}
 		Log.e("", "MeshComponent.clone() subclass missed, add it there");
 		return null;
@@ -375,19 +373,24 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 		myParentObj = obj;
 	}
 
-	public void addAnimation(Animation animation) {
+	/**
+	 * just use the normal add method instead of this one!
+	 * @param animation
+	 */
+	@Deprecated
+	public void addAnim(RenderableEntity animation) {
 		addAnimationToTargetsAnimationGroup(this, animation);
 	}
 
 	public static void addAnimationToTargetsAnimationGroup(
-			MeshComponent target, Animation a) {
+			MeshComponent target, RenderableEntity a) {
 		if (!(target.myAnimation instanceof AnimationGroup)) {
-			AnimationGroup ag = new AnimationGroup();
+			AnimationGroup animGroup = new AnimationGroup();
 			// keep the old animation:
 			if (target.myAnimation != null)
-				ag.add(target.myAnimation);
+				animGroup.add(target.myAnimation);
 			// and change animation to the created group:
-			target.myAnimation = ag;
+			target.myAnimation = animGroup;
 		}
 		((AnimationGroup) target.myAnimation).add(a);
 	}
