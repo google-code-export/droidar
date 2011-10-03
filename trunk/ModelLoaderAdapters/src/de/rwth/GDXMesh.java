@@ -2,10 +2,14 @@ package de.rwth;
 
 import gl.MeshComponent;
 import gl.ObjectPicker;
+import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import system.ParentStack;
+
 import worldData.Obj;
+import worldData.Updateable;
 import worldData.Visitor;
 import android.util.Log;
 
@@ -41,7 +45,7 @@ public class GDXMesh extends MeshComponent {
 	}
 
 	@Override
-	public void draw(GL10 gl) {
+	public void draw(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
 
 		gl.glEnable(GL10.GL_CULL_FACE);
 
@@ -62,8 +66,9 @@ public class GDXMesh extends MeshComponent {
 	}
 
 	@Override
-	public synchronized void update(float timeDelta, Obj obj) {
-		super.update(timeDelta, obj);
+	public synchronized boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
+		super.update(timeDelta, parent, stack);
 		if (anim != null && graficAnimationActive) {
 			animTime += timeDelta;
 			if (animTime > anim.totalDuration - anim.frameDuration) {
@@ -71,6 +76,7 @@ public class GDXMesh extends MeshComponent {
 			}
 			((KeyframedModel) model).setAnimation(anim.name, animTime, true);
 		}
+		return true;
 	}
 
 }

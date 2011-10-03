@@ -1,20 +1,16 @@
 package de.rwth;
 
-import javax.microedition.khronos.opengles.GL10;
-
-import commands.Command;
-
-import actions.ActionMoveObject;
-import android.app.Activity;
-
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.LightSource;
 import gl.MeshComponent;
-import gl.MeshGroup;
+import gl.RenderGroup;
 import gui.GuiSetup;
+
+import javax.microedition.khronos.opengles.GL10;
+
 import system.DefaultARSetup;
 import system.EventManager;
 import util.EfficientList;
@@ -23,6 +19,10 @@ import util.Wrapper;
 import worldData.MoveObjComp;
 import worldData.Obj;
 import worldData.World;
+import actions.ActionMoveObject;
+import android.app.Activity;
+
+import commands.Command;
 
 public class ModelLoaderSetup extends DefaultARSetup {
 
@@ -57,7 +57,7 @@ public class ModelLoaderSetup extends DefaultARSetup {
 		spotLight.myPosition = new Vec(1, 1, 1);
 		MeshComponent circle = objectFactory.newCircle(null);
 		circle.myRotation = new Vec(0.2f, 0.2f, 0.2f);
-		MeshGroup lightGroup = new MeshGroup();
+		RenderGroup lightGroup = new RenderGroup();
 		lightGroup.add(spotLight);
 		lightGroup.add(circle);
 		lightObject.setComp(lightGroup);
