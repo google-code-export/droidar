@@ -1,49 +1,46 @@
 package de.rwth;
 
-import commands.Command;
-
 import geo.GeoObj;
 import gl.Color;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
-import gl.MeshComponent;
-import gl.GLCamera.CameraAngleUpdateListener;
-import gl.MeshGroup;
+import gl.RenderGroup;
 import gui.GuiSetup;
-import system.EventManager;
 import markerDetection.MarkerDetectionSetup;
 import markerDetection.MarkerObjectMap;
 import markerDetection.UnrecognizedMarkerListener;
+import system.EventManager;
 import util.Vec;
 import worldData.Obj;
 import worldData.SystemUpdater;
 import worldData.World;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
-import actions.ActionUseCameraAngles;
 import android.app.Activity;
+
+import commands.Command;
 
 public class MultiMarkerSetup extends MarkerDetectionSetup {
 
 	private GLCamera camera;
 	private World world;
-	private MeshGroup mesh1;
-	private MeshGroup mesh2;
+	private RenderGroup mesh1;
+	private RenderGroup mesh2;
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
 		camera = new GLCamera(new Vec(0, 0, 10));
 		world = new World(camera);
-		mesh1 = new MeshGroup();
+		mesh1 = new RenderGroup();
 
 		mesh1.add(GLFactory.getInstance().newCoordinateSystem());
 		// mesh.add(GLFactory.getInstance().newCircle(new Color(0, 0, 1,
 		// 0.6f)));
 		mesh1.add(GLFactory.getInstance().newCube());
 
-		mesh2 = new MeshGroup();
+		mesh2 = new RenderGroup();
 		mesh2.add(GLFactory.getInstance().newCoordinateSystem());
 		mesh2.add(GLFactory.getInstance().newCircle(new Color(0, 0, 1, 0.6f)));
 		// mesh1.add(GLFactory.getInstance().newCube());

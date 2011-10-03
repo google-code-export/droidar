@@ -99,7 +99,7 @@ public class ExampleMarkerRenderSetup extends MarkerDetectionSetup {
 				IO.loadBitmapFromId(myTargetActivity, R.drawable.icon));
 		treangleMesh.myPosition = new Vec(0, -2, 1);
 		treangleMesh.myRotation = new Vec(0, 0, 0);
-		treangleMesh.addAnimation(new AnimationFaceToCamera(camera, 0.5f));
+		treangleMesh.addAnim(new AnimationFaceToCamera(camera, 0.5f));
 		treangle.setComp(treangleMesh);
 		world.add(treangle);
 
