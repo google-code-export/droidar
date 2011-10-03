@@ -1,11 +1,16 @@
 package gl.animations;
 
 import gl.MeshComponent;
+import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import system.ParentStack;
 import util.Vec;
 import worldData.Obj;
+import worldData.RenderableEntity;
+import worldData.Updateable;
+import worldData.Visitor;
 
 /**
  * This animation simulated the movement of a metronome. For more details see
@@ -14,7 +19,7 @@ import worldData.Obj;
  * @author Spobo
  * 
  */
-public class AnimationSwingRotate implements Animation {
+public class AnimationSwingRotate implements RenderableEntity {
 
 	private final float speed;
 	private final Vec dEnd;
@@ -50,7 +55,8 @@ public class AnimationSwingRotate implements Animation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Obj obj, MeshComponent mesh) {
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
 		Vec.morphToNewVec(currentPos, targetPos, timeDelta * speed);
 		final Vec distance = Vec.sub(currentPos, targetPos);
 		if ((Vec.abs(distance.x) < accuracy)
@@ -68,15 +74,16 @@ public class AnimationSwingRotate implements Animation {
 	}
 
 	@Override
-	public void setAnimationMatrix(GL10 gl, MeshComponent mesh) {
-		gl.glRotatef(currentPos.z, 0, 0, 1);
-		gl.glRotatef(currentPos.x, 1, 0, 0);
-		gl.glRotatef(currentPos.y, 0, 1, 0);
+	public boolean accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		return visitor.default_visit(this);
 	}
 
 	@Override
-	public Animation copy() {
-		return new AnimationSwingRotate(speed, dEnd, uEnd, accuracy);
+	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+		gl.glRotatef(currentPos.z, 0, 0, 1);
+		gl.glRotatef(currentPos.x, 1, 0, 0);
+		gl.glRotatef(currentPos.y, 0, 1, 0);
 	}
 
 }

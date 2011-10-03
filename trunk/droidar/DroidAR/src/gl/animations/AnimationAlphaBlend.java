@@ -2,11 +2,17 @@ package gl.animations;
 
 import gl.Color;
 import gl.MeshComponent;
+import gl.ObjectPicker;
+import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import system.ParentStack;
 import util.Vec;
 import worldData.Obj;
+import worldData.RenderableEntity;
+import worldData.Updateable;
+import worldData.Visitor;
 
 /**
  * TODO what is the difference between this and ColorMorph? what was the intend?
@@ -14,7 +20,7 @@ import worldData.Obj;
  * @author Spobo
  * 
  */
-public class AnimationAlphaBlend implements Animation {
+public class AnimationAlphaBlend implements RenderableEntity {
 
 	private float mySpeed;
 	private Color myLowerColor;
@@ -47,7 +53,8 @@ public class AnimationAlphaBlend implements Animation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Obj obj, MeshComponent mesh) {
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
 		final Vec distance = Color.morphToNewColor(myCurrentColor,
 				myTargetColor, timeDelta * mySpeed);
 
@@ -65,16 +72,15 @@ public class AnimationAlphaBlend implements Animation {
 	}
 
 	@Override
-	public void setAnimationMatrix(GL10 gl, MeshComponent mesh) {
-		gl.glColor4f(myCurrentColor.red, myCurrentColor.green,
-				myCurrentColor.blue, myCurrentColor.alpha);
+	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+		if (!ObjectPicker.readyToDrawWithColor)
+			gl.glColor4f(myCurrentColor.red, myCurrentColor.green,
+					myCurrentColor.blue, myCurrentColor.alpha);
 
 	}
 
 	@Override
-	public Animation copy() {
-		return new AnimationAlphaBlend(mySpeed, myLowerColor, myUpperColor,
-				myAccur);
+	public boolean accept(Visitor visitor) {
+		return visitor.default_visit(this);
 	}
-
 }

@@ -7,7 +7,7 @@ import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.MeshComponent;
-import gl.MeshGroup;
+import gl.RenderGroup;
 import gui.GuiSetup;
 import gui.InfoScreenSettings;
 import system.ErrorHandler;

@@ -104,7 +104,7 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 		if (m != null) {
 			m.myAnimation = new AnimationColorMorph(BLENDING_TIME,
 					newHighlightColor());
-			m.addAnimation(new AnimationRotate(50, new Vec(0, 0, 1)));
+			m.addAnim(new AnimationRotate(50, new Vec(0, 0, 1)));
 		}
 	}
 
@@ -119,7 +119,7 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 	private void setPassedTransformationsOn(MeshComponent m) {
 		m.myAnimation = new AnimationColorMorph(BLENDING_TIME,
 				newAlreadyPassedColor());
-		m.addAnimation(new AnimationMove(MOVEMENT_TIME, new Vec(0, 0, -2)));
+		m.addAnim(new AnimationMove(MOVEMENT_TIME, new Vec(0, 0, -2)));
 
 	}
 

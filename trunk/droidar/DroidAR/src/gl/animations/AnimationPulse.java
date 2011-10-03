@@ -1,13 +1,16 @@
 package gl.animations;
 
-import gl.MeshComponent;
+import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import system.ParentStack;
 import util.Vec;
-import worldData.Obj;
+import worldData.RenderableEntity;
+import worldData.Updateable;
+import worldData.Visitor;
 
-public class AnimationPulse implements Animation {
+public class AnimationPulse implements RenderableEntity {
 
 	private final float speed;
 	private final Vec myLowerEnd;
@@ -36,7 +39,8 @@ public class AnimationPulse implements Animation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Obj obj, MeshComponent mesh) {
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
 		Vec.morphToNewVec(currentScale, targetScale, timeDelta * speed);
 		final Vec distance = Vec.sub(currentScale, targetScale);
 		if ((Vec.abs(distance.x) < accuracy)
@@ -54,13 +58,13 @@ public class AnimationPulse implements Animation {
 	}
 
 	@Override
-	public void setAnimationMatrix(GL10 gl, MeshComponent mesh) {
+	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
 		gl.glScalef(currentScale.x, currentScale.y, currentScale.z);
 	}
 
 	@Override
-	public Animation copy() {
-		return new AnimationPulse(speed, myLowerEnd, myUperEnd, accuracy);
+	public boolean accept(Visitor visitor) {
+		return visitor.default_visit(this);
 	}
 
 }

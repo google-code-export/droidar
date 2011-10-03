@@ -1,7 +1,7 @@
 package tests;
 
 import gl.MeshComponent;
-import gl.MeshGroup;
+import gl.RenderGroup;
 import gl.Shape;
 import util.Calculus;
 import util.Vec;
@@ -35,7 +35,7 @@ public class SystemTests extends SimpleTesting {
 		Obj o = new Obj();
 		o.setComp(new Shape());
 		assertTrue(o.hasComponent(Shape.class));
-		assertFalse(o.hasComponent(MeshGroup.class));
+		assertFalse(o.hasComponent(RenderGroup.class));
 		assertTrue(o.hasComponent(MeshComponent.class));
 		assertTrue(o.hasComponent(Entity.class));
 		assertFalse(o.hasComponent(ProximitySensor.class));

@@ -3,9 +3,9 @@ package worldData;
 import geo.Edge;
 import geo.GeoGraph;
 import geo.GeoObj;
-import gl.MeshComponent;
-import gl.MeshGroup;
+import gl.RenderGroup;
 import gl.Shape;
+import gl.animations.AnimationAlphaBlend;
 import system.Container;
 import util.EfficientList;
 import util.EfficientListQualified;
@@ -31,21 +31,23 @@ import components.ProximitySensor;
  */
 public abstract class Visitor {
 
-	@SuppressWarnings("rawtypes")
-	public boolean default_visit(Container world) {
+	private static final String LOG_TAG = "Visitor.visit()";
 
-		EfficientList<RenderableEntity> list = world.getAllItems();
+	@SuppressWarnings("rawtypes")
+	public boolean default_visit(Container container) {
+
+		EfficientList<RenderableEntity> list = container.getAllItems();
 		if (list != null) {
 			final int lenght = list.myLength;
 			for (int i = 0; i < lenght; i++) {
 				list.get(i).accept(this);
 			}
 		}
-		return visit(world);
+		return visit(container);
 	}
 
 	public boolean visit(Container x) {
-		Log.w("visitor.visit()",
+		Log.w(LOG_TAG,
 				this.getClass().toString()
 						+ "World: no visit action defined for classtype "
 						+ x.getClass());
@@ -62,7 +64,7 @@ public abstract class Visitor {
 	}
 
 	public boolean visit(Obj x) {
-		Log.w("visitor.visit()", this.getClass().toString()
+		Log.w(LOG_TAG, this.getClass().toString()
 				+ "Obj: no visit action defined for classtype " + x.getClass());
 		return false;
 	}
@@ -72,14 +74,26 @@ public abstract class Visitor {
 	}
 
 	public boolean visit(Shape x) {
-		Log.w("visitor.visit()",
+		Log.w(LOG_TAG,
 				this.getClass().toString()
 						+ "Shape: no visit action defined for classtype "
 						+ x.getClass());
 		return false;
 	}
 
-	public boolean default_visit(MeshGroup meshGroup) {
+	public boolean default_visit(RenderableEntity renderEntity) {
+		return visit(renderEntity);
+	}
+
+	public boolean visit(RenderableEntity x) {
+		Log.w(LOG_TAG,
+				this.getClass().toString()
+						+ "Shape: no visit action defined for classtype "
+						+ x.getClass());
+		return false;
+	}
+
+	public boolean default_visit(RenderGroup meshGroup) {
 		EfficientList<RenderableEntity> meshes = meshGroup.getAllItems();
 		final int meshSize = meshGroup.getAllItems().myLength;
 		for (int i = 0; i < meshSize; i++) {
@@ -88,8 +102,8 @@ public abstract class Visitor {
 		return visit(meshGroup);
 	}
 
-	public boolean visit(MeshGroup x) {
-		Log.w("visitor.visit()",
+	public boolean visit(RenderGroup x) {
+		Log.w(LOG_TAG,
 				this.getClass().toString()
 						+ "MeshGroup: no visit action defined for classtype "
 						+ x.getClass());
@@ -101,7 +115,7 @@ public abstract class Visitor {
 	}
 
 	public boolean visit(PhysicsComponent x) {
-		Log.w("visitor.visit()", this.getClass().toString()
+		Log.w(LOG_TAG, this.getClass().toString()
 				+ "PhysicsComponent: no visit action defined for classtype "
 				+ x.getClass());
 		return false;
@@ -116,7 +130,7 @@ public abstract class Visitor {
 
 	// TODO remove too, see above
 	public boolean visit(GeoObj x) {
-		Log.w("visitor.visit()",
+		Log.w(LOG_TAG,
 				this.getClass().toString()
 						+ "GeoObj: no visit action defined for classtype "
 						+ x.getClass());
@@ -144,7 +158,7 @@ public abstract class Visitor {
 	}
 
 	public boolean visit(GeoGraph x) {
-		Log.w("visitor.visit()",
+		Log.w(LOG_TAG,
 				this.getClass().toString()
 						+ "GeoGraph: no visit action defined for classtype "
 						+ x.getClass());
@@ -153,7 +167,7 @@ public abstract class Visitor {
 
 	@Deprecated
 	public boolean visit(AbstractObj x) {
-		Log.w("visitor.visit()",
+		Log.w(LOG_TAG,
 				this.getClass().toString()
 						+ "AbstractObj: no visit action defined for classtype "
 						+ x.getClass());
@@ -165,7 +179,7 @@ public abstract class Visitor {
 	}
 
 	public boolean visit(ProximitySensor x) {
-		Log.w("visitor.visit()",
+		Log.w(LOG_TAG,
 				this.getClass().toString()
 						+ "ProximitySensor: no visit action defined for classtype "
 						+ x.getClass());

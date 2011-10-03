@@ -7,7 +7,7 @@ import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.MeshComponent;
-import gl.MeshGroup;
+import gl.RenderGroup;
 import gui.GuiSetup;
 import system.EventManager;
 import system.Setup;
@@ -180,7 +180,7 @@ public class PositionTestsSetup extends Setup {
 			@Override
 			public boolean execute() {
 
-				MeshGroup mesh = GLFactory.getInstance().newArrow();
+				RenderGroup mesh = GLFactory.getInstance().newArrow();
 				spawnObj(pos, mesh);
 				return true;
 			}

@@ -1,13 +1,18 @@
 package gl.animations;
 
 import gl.MeshComponent;
+import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import system.ParentStack;
 import util.Vec;
 import worldData.Obj;
+import worldData.RenderableEntity;
+import worldData.Updateable;
+import worldData.Visitor;
 
-public class AnimationBounce implements Animation {
+public class AnimationBounce implements RenderableEntity {
 
 	private final int mySpeed;
 	private final Vec dEnd;
@@ -36,7 +41,8 @@ public class AnimationBounce implements Animation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Obj obj, MeshComponent mesh) {
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
 
 		// TODO this does not bounce nice, better use sort of gravity version
 
@@ -57,13 +63,13 @@ public class AnimationBounce implements Animation {
 	}
 
 	@Override
-	public void setAnimationMatrix(GL10 gl, MeshComponent mesh) {
+	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
 		gl.glTranslatef(currentPos.x, currentPos.y, currentPos.z);
 	}
 
 	@Override
-	public Animation copy() {
-		return new AnimationBounce(mySpeed, dEnd, uEnd, accuracy);
+	public boolean accept(Visitor visitor) {
+		return visitor.default_visit(this);
 	}
 
 }

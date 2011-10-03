@@ -3,13 +3,18 @@ package gl.animations;
 import gl.Color;
 import gl.MeshComponent;
 import gl.ObjectPicker;
+import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import system.ParentStack;
 import util.Vec;
 import worldData.Obj;
+import worldData.RenderableEntity;
+import worldData.Updateable;
+import worldData.Visitor;
 
-public class AnimationColorBounce implements Animation {
+public class AnimationColorBounce implements RenderableEntity {
 
 	private float mySpeed;
 	private Color myLowerColor;
@@ -42,7 +47,9 @@ public class AnimationColorBounce implements Animation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Obj obj, MeshComponent mesh) {
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
+
 		final Vec distance = Color.morphToNewColor(myCurrentColor,
 				myTargetColor, timeDelta * mySpeed);
 
@@ -60,7 +67,8 @@ public class AnimationColorBounce implements Animation {
 	}
 
 	@Override
-	public void setAnimationMatrix(GL10 gl, MeshComponent mesh) {
+	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+
 		if (!ObjectPicker.readyToDrawWithColor)
 			gl.glColor4f(myCurrentColor.red, myCurrentColor.green,
 					myCurrentColor.blue, myCurrentColor.alpha);
@@ -68,9 +76,8 @@ public class AnimationColorBounce implements Animation {
 	}
 
 	@Override
-	public Animation copy() {
-		return new AnimationColorBounce(mySpeed, myLowerColor, myUpperColor,
-				myAccur);
+	public boolean accept(Visitor visitor) {
+		return visitor.default_visit(this);
 	}
 
 }
