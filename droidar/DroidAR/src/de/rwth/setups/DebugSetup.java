@@ -337,7 +337,10 @@ public class DebugSetup extends Setup {
 			public boolean execute() {
 				if (meshWrapper.getObject() instanceof MeshComponent) {
 					((MeshComponent) meshWrapper.getObject())
-							.addAnim(animation);
+							.addAnimAtBeginning(animation);
+					Log.e(LOG_TAG,
+							"Added " + animation + " to "
+									+ meshWrapper.getObject());
 					return true;
 				}
 				Log.e(LOG_TAG,

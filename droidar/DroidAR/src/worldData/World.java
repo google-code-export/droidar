@@ -181,6 +181,11 @@ public class World implements RenderableEntity, Container<RenderableEntity> {
 	}
 
 	@Override
+	public void insert(int pos, RenderableEntity item) {
+		container.insert(pos, item);
+	}
+
+	@Override
 	public EfficientList<RenderableEntity> getAllItems() {
 		return container;
 	}

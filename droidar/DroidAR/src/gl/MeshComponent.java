@@ -142,59 +142,28 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 	public synchronized void render(GL10 gl, Renderable parent,
 			ParentStack<Renderable> stack) {
 		// store current matrix and then modify it:
-		setMatrix(gl, stack);
-		// if (showObejctCoordinateAxis) CordinateAxis.draw(gl);
-		draw(gl, parent, stack);
-		// restore old matrix:
-		gl.glPopMatrix();
-	}
-
-	public synchronized void setMatrix(GL10 gl, ParentStack<Renderable> stack) {
 		gl.glPushMatrix();
 		loadPosition(gl);
 		setScale(gl);
 		loadRotation(gl);
 
-		// first draw the color of the mesh:
-		if (myColor != null && !ObjectPicker.readyToDrawWithColor) {
+		if (ObjectPicker.readyToDrawWithColor) {
+			if (myPickColor != null) {
+				gl.glColor4f(myPickColor.red, myPickColor.green,
+						myPickColor.blue, myPickColor.alpha);
+			}
+		} else if (myColor != null) {
 			gl.glColor4f(myColor.red, myColor.green, myColor.blue,
 					myColor.alpha);
 		}
-		/*
-		 * AFTER setting all properties of the mesh (position, color, ...) add
-		 * animation properties. if those would be added before loading the
-		 * properties the animation might be overwritten. for example a color
-		 * morph animation could not be seen if the mesh itself has a color
-		 * defined
-		 */
+
 		if (myAnimation != null) {
-			/*
-			 * TODO if there is more then 1 animation there is a big problem (?)
-			 * two rotate animations and one moveAnimation then first rotation
-			 * then move and then second rotate would be diferent to rotate
-			 * rotate move!
-			 */
 			myAnimation.render(gl, this, stack);
 		}
 
-		/*
-		 * after setting the color and the animations where the color might be
-		 * changed again, check if selectionMode is activated. if so color the
-		 * mesh in the corresponding selectionColor
-		 */
-		if (myPickColor != null && ObjectPicker.readyToDrawWithColor) {
-
-			Log.e("", "this=" + this);
-			Log.e("", "this.pickcolor=" + myPickColor);
-
-			// //TODO remove:
-			// byte[] b = ObjectPicker.getByteArrayFromColor(myPickColor);
-			// String key = "" + b[0] + b[1] + b[2];
-			// Log.d("Color Picking", "drawing mesh with color= " + key);
-
-			gl.glColor4f(myPickColor.red, myPickColor.green, myPickColor.blue,
-					myPickColor.alpha);
-		}
+		draw(gl, parent, stack);
+		// restore old matrix:
+		gl.glPopMatrix();
 	}
 
 	public abstract void draw(GL10 gl, Renderable parent,
@@ -375,24 +344,35 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 
 	/**
 	 * just use the normal add method instead of this one!
+	 * 
 	 * @param animation
 	 */
 	@Deprecated
 	public void addAnim(RenderableEntity animation) {
-		addAnimationToTargetsAnimationGroup(this, animation);
+		addAnimationToTargetsAnimationGroup(this, animation, false);
 	}
 
 	public static void addAnimationToTargetsAnimationGroup(
-			MeshComponent target, RenderableEntity a) {
+			MeshComponent target, RenderableEntity a, boolean insertAtBeginnung) {
 		if (!(target.myAnimation instanceof AnimationGroup)) {
 			AnimationGroup animGroup = new AnimationGroup();
 			// keep the old animation:
-			if (target.myAnimation != null)
+			if (target.myAnimation != null) {
 				animGroup.add(target.myAnimation);
+			}
 			// and change animation to the created group:
 			target.myAnimation = animGroup;
 		}
-		((AnimationGroup) target.myAnimation).add(a);
+		
+		if (insertAtBeginnung) {
+			((AnimationGroup) target.myAnimation).insert(0, a);
+		} else {
+			((AnimationGroup) target.myAnimation).add(a);
+		}
+	}
+
+	public void addAnimAtBeginning(RenderableEntity animation) {
+		addAnimationToTargetsAnimationGroup(this, animation, true);
 	}
 
 }
