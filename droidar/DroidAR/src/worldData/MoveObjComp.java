@@ -17,7 +17,7 @@ public class MoveObjComp implements Entity {
 
 	/**
 	 * this vector is the new position, where to send the {@link MeshComponent}
-	 * of the parent obj to
+	 * of the parent {@link HasPosition} to
 	 */
 	public Vec myTargetPos = new Vec();
 	private float mySpeedFactor;
@@ -44,7 +44,7 @@ public class MoveObjComp implements Entity {
 
 		// TODO remove these 2 lines later:
 		if (parent instanceof HasPosition)
-			objPos = ((Obj) parent).getPosition();
+			objPos = ((HasPosition) parent).getPosition();
 
 		if (objPos == null)
 			objPos = stack.getFirst(HasPosition.class).getPosition();
