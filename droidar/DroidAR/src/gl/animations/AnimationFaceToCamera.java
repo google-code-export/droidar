@@ -1,8 +1,8 @@
 package gl.animations;
 
 import gl.GLCamera;
-import gl.MeshComponent;
 import gl.Renderable;
+import gl.scenegraph.MeshComponent;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -13,7 +13,7 @@ import worldData.RenderableEntity;
 import worldData.Updateable;
 import worldData.Visitor;
 
-public class AnimationFaceToCamera implements RenderableEntity {
+public class AnimationFaceToCamera implements GLAnimation {
 
 	private GLCamera myTargetCamera;
 	private float lastUpdateAway = 0;

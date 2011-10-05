@@ -6,8 +6,8 @@ import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
-import gl.MeshComponent;
-import gl.RenderGroup;
+import gl.scenegraph.MeshComponent;
+import gl.scenegraph.Shape;
 import gui.GuiSetup;
 import gui.InfoScreenSettings;
 import system.ErrorHandler;
@@ -22,7 +22,6 @@ import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
 
-import commands.Command;
 import commands.ui.CommandShowToast;
 import components.ProximitySensor;
 
@@ -50,19 +49,19 @@ public class CollectItemsSetup extends Setup {
 		world = new World(camera);
 
 		MeshComponent arrow = GLFactory.getInstance().newArrow();
-		arrow.myPosition = new Vec(0, 0, 4);
+		arrow.setPosition(new Vec(0, 0, 4));
 
 		MeshComponent circle = GLFactory.getInstance().newCircle(
 				Color.redTransparent());
-		circle.myScale = new Vec(4, 4, 4);
+		circle.setScale(new Vec(4, 4, 4));
 		// circle.myAnimation = new AnimationPulse(2, new Vec(0, 0, 0), new
 		// Vec(4, 4, 4), 0.2f);
 
-		final RenderGroup itemMesh = new RenderGroup();
-		itemMesh.add(arrow);
-		itemMesh.add(circle);
-		itemMesh.myPosition = Vec.getNewRandomPosInXYPlane(
-				camera.getPosition(), 5, 10);
+		final MeshComponent itemMesh = new Shape();
+		itemMesh.addChild(arrow);
+		itemMesh.addChild(circle);
+		itemMesh.setPosition(Vec.getNewRandomPosInXYPlane(camera.getPosition(),
+				5, 10));
 
 		Obj itemToCollect = new Obj();
 		itemToCollect.setComp(new ProximitySensor(camera, 3f) {
@@ -72,8 +71,8 @@ public class CollectItemsSetup extends Setup {
 				catchedNumber++;
 				new CommandShowToast(myTargetActivity, "You got me "
 						+ catchedNumber + " times").execute();
-				itemMesh.myPosition = Vec.getNewRandomPosInXYPlane(
-						camera.getPosition(), 5, 20);
+				itemMesh.setPosition(Vec.getNewRandomPosInXYPlane(
+						camera.getPosition(), 5, 20));
 			}
 		});
 

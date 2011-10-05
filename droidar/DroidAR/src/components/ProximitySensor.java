@@ -1,8 +1,7 @@
 package components;
 
-import android.util.Log;
 import gl.GLCamera;
-import gl.MeshComponent;
+import gl.scenegraph.MeshComponent;
 import system.ParentStack;
 import util.Vec;
 import worldData.Entity;
@@ -10,8 +9,7 @@ import worldData.Obj;
 import worldData.UpdateTimer;
 import worldData.Updateable;
 import worldData.Visitor;
-
-import commands.Command;
+import android.util.Log;
 
 public abstract class ProximitySensor implements Entity {
 
@@ -49,7 +47,7 @@ public abstract class ProximitySensor implements Entity {
 				Obj obj = (Obj) parent;
 				MeshComponent m = obj.getGraphicsComponent();
 				if (m != null) {
-					float currentDistance = Vec.distance(m.myPosition,
+					float currentDistance = Vec.distance(m.getPosition(),
 							myCamera.getPosition());
 					if (0 <= currentDistance && currentDistance < myDistance) {
 						onObjectIsCloseToCamera(myCamera, obj, m,

@@ -1,7 +1,7 @@
 package worldData;
 
 import gl.HasPosition;
-import gl.MeshComponent;
+import gl.scenegraph.MeshComponent;
 import system.ParentStack;
 import util.Vec;
 

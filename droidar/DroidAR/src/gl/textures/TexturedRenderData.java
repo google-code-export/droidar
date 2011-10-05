@@ -2,7 +2,7 @@ package gl.textures;
 
 import gl.GLUtilityClass;
 import gl.ObjectPicker;
-import gl.RenderData;
+import gl.scenegraph.RenderData;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;

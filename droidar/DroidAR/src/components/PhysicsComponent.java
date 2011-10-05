@@ -1,6 +1,6 @@
 package components;
 
-import gl.MeshComponent;
+import gl.scenegraph.MeshComponent;
 import system.ParentStack;
 import util.Vec;
 import worldData.Entity;
@@ -36,7 +36,7 @@ public class PhysicsComponent implements Entity {
 			final MeshComponent v = obj.getGraphicsComponent();
 
 			updateAccel(timeDelta);
-			velocityVerletIntegration(timeDelta, v.myPosition);
+			velocityVerletIntegration(timeDelta, v.getPosition());
 			updateSpeed(timeDelta);
 			iterateCollisions(timeDelta, obj);
 		}

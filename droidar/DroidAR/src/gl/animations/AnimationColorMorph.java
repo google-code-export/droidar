@@ -2,8 +2,8 @@ package gl.animations;
 
 import gl.Color;
 import gl.HasColor;
-import gl.MeshComponent;
 import gl.Renderable;
+import gl.scenegraph.MeshComponent;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -16,7 +16,7 @@ import worldData.RenderableEntity;
 import worldData.Updateable;
 import worldData.Visitor;
 
-public class AnimationColorMorph implements RenderableEntity {
+public class AnimationColorMorph implements GLAnimation {
 
 	private static final float MIN_DISTANCE = 0.001f;
 	private float myDurationInMS;

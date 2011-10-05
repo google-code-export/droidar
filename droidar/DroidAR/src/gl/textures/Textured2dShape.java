@@ -1,7 +1,7 @@
 package gl.textures;
 
 import gl.Renderable;
-import gl.Shape;
+import gl.scenegraph.Shape;
 
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11Ext;
@@ -35,10 +35,12 @@ public class Textured2dShape extends Shape {
 
 	@Override
 	public void draw(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
-		gl.glBindTexture(GL10.GL_TEXTURE_2D,
-				((TexturedRenderData) myRenderData).myTextureId);
-		((GL11Ext) gl).glDrawTexfOES(myPosition.x, myPosition.y, myPosition.z,
-				textureWidth, textureHeight);
+		if (myRenderData != null) {
+			gl.glBindTexture(GL10.GL_TEXTURE_2D,
+					((TexturedRenderData) myRenderData).myTextureId);
+			((GL11Ext) gl).glDrawTexfOES(myPosition.x, myPosition.y,
+					myPosition.z, textureWidth, textureHeight);
+		}
 	}
 
 }

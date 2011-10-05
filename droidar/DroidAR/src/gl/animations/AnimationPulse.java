@@ -10,7 +10,7 @@ import worldData.RenderableEntity;
 import worldData.Updateable;
 import worldData.Visitor;
 
-public class AnimationPulse implements RenderableEntity {
+public class AnimationPulse implements GLAnimation {
 
 	private final float speed;
 	private final Vec myLowerEnd;

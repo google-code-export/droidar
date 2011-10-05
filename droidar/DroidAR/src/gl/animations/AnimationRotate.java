@@ -1,7 +1,7 @@
 package gl.animations;
 
-import gl.MeshComponent;
 import gl.Renderable;
+import gl.scenegraph.MeshComponent;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -18,7 +18,7 @@ import worldData.Visitor;
  * @author Spobo
  * 
  */
-public class AnimationRotate implements RenderableEntity {
+public class AnimationRotate implements GLAnimation {
 
 	private float angle = 0;
 	private final float speed;

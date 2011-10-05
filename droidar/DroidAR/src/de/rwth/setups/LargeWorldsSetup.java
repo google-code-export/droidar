@@ -1,13 +1,10 @@
 package de.rwth.setups;
 
 import geo.GeoObj;
-import gl.Color;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
-import gl.MeshComponent;
-import gl.RenderGroup;
 import gui.GuiSetup;
 import gui.InfoScreenSettings;
 import system.ErrorHandler;
@@ -16,21 +13,13 @@ import system.Setup;
 import util.Vec;
 import worldData.AbstractObj;
 import worldData.LargeWorld;
-import worldData.Obj;
 import worldData.SystemUpdater;
 import worldData.World;
-import actions.Action;
 import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
 import actions.ActionWASDMovement;
 import android.app.Activity;
-
-import commands.Command;
-import commands.ui.CommandShowToast;
-import components.ProximitySensor;
-
-import de.rwth.R;
 
 public class LargeWorldsSetup extends Setup {
 

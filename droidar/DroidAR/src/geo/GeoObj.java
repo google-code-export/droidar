@@ -1,7 +1,7 @@
 package geo;
 
-import gl.MeshComponent;
-import gl.RenderGroup;
+import gl.scenegraph.MeshComponent;
+import gl.scenegraph.Shape;
 import gui.MetaInfos;
 import system.EventManager;
 import util.EfficientList;
@@ -42,7 +42,8 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * if this is true the {@link GeoObj} will try to calculate its virtual
 	 * position in the world assuming the camera is moving relative to the
 	 * 0-point in the world. whenever a new mesh is assigned to this object and
-	 * therefor a new wrapper {@link RenderGroup} is created this flag is checked.
+	 * therefor a new wrapper {@link RenderGroup} is created this flag is
+	 * checked.
 	 */
 	private boolean autoCalcVirtualPos = true;
 
@@ -62,7 +63,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * change when using dijsktra!
 	 */
 	public int dijkstraId;
-	private RenderGroup mySurroundGroup;
+	private MeshComponent mySurroundGroup;
 	private GeoObjUpdateListener myUpdateListener;
 	/**
 	 * this flag is used in the {@link CustomItemizedOverlay}-class to
@@ -103,12 +104,12 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 *         inserted to and which will wrap these objects and recalculate the
 	 *         virtual position of the {@link GeoObj}
 	 */
-	public RenderGroup getMySurroundGroup() {
+	public MeshComponent getMySurroundGroup() {
 		if (mySurroundGroup == null)
 			if (autoCalcVirtualPos) {
-				mySurroundGroup = new RenderGroup(null, getVirtualPosition());
+				mySurroundGroup = new Shape(null, getVirtualPosition());
 			} else {
-				mySurroundGroup = new RenderGroup();
+				mySurroundGroup = new Shape();
 			}
 		return mySurroundGroup;
 	}
@@ -116,9 +117,9 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	@Override
 	public void setComp(Entity comp) {
 		if (comp instanceof MeshComponent) {
-			RenderGroup g = getMySurroundGroup();
-			g.clear();
-			g.add((MeshComponent) comp);
+			MeshComponent g = getMySurroundGroup();
+			g.clearChildren();
+			g.addChild((MeshComponent) comp);
 			setMyGraphicsComponent(g);
 			/*
 			 * if the surround-group was not jet added to the GeoObj it will be
@@ -453,7 +454,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 			MeshComponent m = getGraphicsComponent();
 
 			if (m != null) {
-				m.myPosition = pos;
+				m.setPosition(pos);
 				return true;
 			}
 		}
@@ -505,12 +506,12 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	public void showDebugInformation() {
 		Log.e(LOG_TAG, "Information about " + this);
 		Log.d(LOG_TAG, "mySurroundGroup=" + mySurroundGroup);
-		Log.d(LOG_TAG, "mySurroundGroup.myPosition="
-				+ mySurroundGroup.myPosition);
-		Log.d(LOG_TAG, "mySurroundGroup.myScale=" + mySurroundGroup.myScale);
-		Log.d(LOG_TAG, "mySurroundGroup.myRotation="
-				+ mySurroundGroup.myRotation);
-		Log.d(LOG_TAG, "mesh inside=" + mySurroundGroup.getAllItems().get(0));
+		Log.d(LOG_TAG,
+				"mySurroundGroup.myPosition=" + mySurroundGroup.getPosition());
+		Log.d(LOG_TAG, "mySurroundGroup.myScale=" + mySurroundGroup.getScale());
+		Log.d(LOG_TAG,
+				"mySurroundGroup.myRotation=" + mySurroundGroup.getRotation());
+		Log.d(LOG_TAG, "mesh inside=" + mySurroundGroup.getChildren());
 
 	}
 

@@ -1,9 +1,9 @@
 package gl.animations;
 
 import gl.Color;
-import gl.MeshComponent;
 import gl.ObjectPicker;
 import gl.Renderable;
+import gl.scenegraph.MeshComponent;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -14,7 +14,7 @@ import worldData.RenderableEntity;
 import worldData.Updateable;
 import worldData.Visitor;
 
-public class AnimationColorBounce implements RenderableEntity {
+public class AnimationColorBounce implements GLAnimation {
 
 	private float mySpeed;
 	private Color myLowerColor;

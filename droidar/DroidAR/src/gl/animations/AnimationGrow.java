@@ -1,7 +1,7 @@
 package gl.animations;
 
-import gl.MeshComponent;
 import gl.Renderable;
+import gl.scenegraph.MeshComponent;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -14,7 +14,7 @@ import worldData.Updateable;
 import worldData.Visitor;
 import android.util.Log;
 
-public class AnimationGrow implements RenderableEntity {
+public class AnimationGrow implements GLAnimation {
 
 	private static final String LOG_TAG = "Grow Animation";
 	private float myGrothSize;

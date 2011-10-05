@@ -1,6 +1,6 @@
 package gl.textures;
 
-import gl.Shape;
+import gl.scenegraph.Shape;
 
 import java.util.ArrayList;
 
@@ -23,9 +23,10 @@ public class TexturedShape extends Shape {
 		 * correctly
 		 */
 		if (texture != null) {
-			texture = TextureManager.getInstance().resizeBitmapIfNecessary(texture);
-			TextureManager.getInstance().addTexture((TexturedRenderData) myRenderData,
-					texture, textureName);
+			texture = TextureManager.getInstance().resizeBitmapIfNecessary(
+					texture);
+			TextureManager.getInstance().addTexture(
+					(TexturedRenderData) myRenderData, texture, textureName);
 		} else {
 			Log.e("TexturedShape",
 					"got null-bitmap! check bitmap creation process");
@@ -33,10 +34,10 @@ public class TexturedShape extends Shape {
 	}
 
 	public void add(Vec vec, int x, int y) {
-		myShapeArray.add(vec);
+		getMyShapeArray().add(vec);
 		// z coordinate not needed for 2d textures:
 		myTexturePositions.add(new Vec(x, y, 0));
-		myRenderData.updateShape(myShapeArray);
+		myRenderData.updateShape(getMyShapeArray());
 		((TexturedRenderData) myRenderData)
 				.updateTextureBuffer(myTexturePositions);
 	}

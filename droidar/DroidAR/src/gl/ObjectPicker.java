@@ -1,5 +1,7 @@
 package gl;
 
+import gl.scenegraph.MeshComponent;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.HashMap;

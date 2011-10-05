@@ -1,5 +1,7 @@
 package gl;
 
+import gl.scenegraph.MeshComponent;
+
 import java.util.Date;
 
 import javax.microedition.khronos.opengles.GL10;

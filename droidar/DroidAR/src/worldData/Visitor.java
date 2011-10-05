@@ -3,9 +3,7 @@ package worldData;
 import geo.Edge;
 import geo.GeoGraph;
 import geo.GeoObj;
-import gl.RenderGroup;
-import gl.Shape;
-import gl.animations.AnimationAlphaBlend;
+import gl.scenegraph.Shape;
 import system.Container;
 import util.EfficientList;
 import util.EfficientListQualified;
@@ -33,9 +31,7 @@ public abstract class Visitor {
 
 	private static final String LOG_TAG = "Visitor.visit()";
 
-	@SuppressWarnings("rawtypes")
-	public boolean default_visit(Container container) {
-
+	public boolean default_visit(Container<RenderableEntity> container) {
 		EfficientList<RenderableEntity> list = container.getAllItems();
 		if (list != null) {
 			final int lenght = list.myLength;
@@ -46,7 +42,7 @@ public abstract class Visitor {
 		return visit(container);
 	}
 
-	public boolean visit(Container x) {
+	public boolean visit(Container<RenderableEntity> x) {
 		Log.w(LOG_TAG,
 				this.getClass().toString()
 						+ "World: no visit action defined for classtype "
@@ -89,23 +85,6 @@ public abstract class Visitor {
 		Log.w(LOG_TAG,
 				this.getClass().toString()
 						+ "Shape: no visit action defined for classtype "
-						+ x.getClass());
-		return false;
-	}
-
-	public boolean default_visit(RenderGroup meshGroup) {
-		EfficientList<RenderableEntity> meshes = meshGroup.getAllItems();
-		final int meshSize = meshGroup.getAllItems().myLength;
-		for (int i = 0; i < meshSize; i++) {
-			meshes.get(i).accept(this);
-		}
-		return visit(meshGroup);
-	}
-
-	public boolean visit(RenderGroup x) {
-		Log.w(LOG_TAG,
-				this.getClass().toString()
-						+ "MeshGroup: no visit action defined for classtype "
 						+ x.getClass());
 		return false;
 	}

@@ -2,8 +2,11 @@ package gl;
 
 import geo.GeoObj;
 import gl.animations.AnimationFaceToCamera;
-import gl.animations.AnimationGroup;
 import gl.animations.AnimationRotate;
+import gl.animations.RenderList;
+import gl.scenegraph.MeshComponent;
+import gl.scenegraph.MultiColoredShape;
+import gl.scenegraph.Shape;
 import gl.textures.Textured2dShape;
 import gl.textures.TexturedShape;
 
@@ -61,24 +64,24 @@ public class GLFactory {
 		return s;
 	}
 
-	public RenderGroup newCube(Color canBeNull) {
-		RenderGroup g = new RenderGroup();
+	public MeshComponent newCube(Color canBeNull) {
+		MeshComponent g = new Shape();
 		Shape s1 = newSquare(canBeNull);
-		g.addAnim(s1);
+		g.addChild(s1);
 
 		Shape s2 = newSquare(canBeNull);
-		s2.myPosition = new Vec(0, 0, 2);
-		g.addAnim(s2);
+		s2.setPosition(new Vec(0, 0, 2));
+		g.addChild(s2);
 
 		Shape s3 = newSquare(canBeNull);
-		s3.myPosition = new Vec(0, 1, 1);
-		s3.myRotation = new Vec(90, 0, 0);
-		g.addAnim(s3);
+		s3.setPosition(new Vec(0, 1, 1));
+		s3.setRotation(new Vec(90, 0, 0));
+		g.addChild(s3);
 
 		Shape s4 = newSquare(canBeNull);
-		s4.myPosition = new Vec(0, -1, 1);
-		s4.myRotation = new Vec(90, 0, 0);
-		g.addAnim(s4);
+		s4.setPosition(new Vec(0, -1, 1));
+		s4.setRotation(new Vec(90, 0, 0));
+		g.addChild(s4);
 
 		return g;
 	}
@@ -168,7 +171,7 @@ public class GLFactory {
 		return s;
 	}
 
-	public RenderGroup newArrow() {
+	public MeshComponent newArrow() {
 		Color top = Color.blue();
 		Color bottom = Color.red();
 		Color edge1 = Color.red();
@@ -179,7 +182,7 @@ public class GLFactory {
 		return newArrow(x, y, height, top, edge1, bottom, edge2);
 	}
 
-	public RenderGroup newCuror() {
+	public MeshComponent newCuror() {
 		Color top = Color.silver1();
 		Color bottom = Color.silver2();
 		Color edge1 = Color.blackTransparent();
@@ -187,15 +190,15 @@ public class GLFactory {
 		float height = 2;
 		float x = 0.7f;
 		float y = 0f;
-		RenderGroup a = newArrow(x, y, height, top, edge1, bottom, edge2);
-		a.myScale = new Vec(0.3f, 0.3f, 0.3f);
+		MeshComponent a = newArrow(x, y, height, top, edge1, bottom, edge2);
+		a.setScale(new Vec(0.3f, 0.3f, 0.3f));
 		return a;
 	}
 
-	private RenderGroup newArrow(float x, float y, float height, Color top,
+	private MeshComponent newArrow(float x, float y, float height, Color top,
 			Color edge1, Color bottom, Color edge2) {
 
-		RenderGroup pyr = new RenderGroup(null);
+		MeshComponent pyr = new Shape(null);
 
 		MultiColoredShape s = new MultiColoredShape();
 
@@ -218,10 +221,10 @@ public class GLFactory {
 		s4.add(new Vec(0, -1, 0), edge2);
 		s4.add(new Vec(0, y, -height), bottom);
 
-		pyr.add(s);
-		pyr.add(s2);
-		pyr.add(s3);
-		pyr.add(s4);
+		pyr.addChild(s);
+		pyr.addChild(s2);
+		pyr.addChild(s3);
+		pyr.addChild(s4);
 
 		GLFactory.getInstance().addRotateAnimation(pyr, 120, new Vec(0, 0, 1));
 
@@ -231,17 +234,7 @@ public class GLFactory {
 	private void addRotateAnimation(MeshComponent target, int speed,
 			Vec rotationVec) {
 		AnimationRotate a = new AnimationRotate(speed, rotationVec);
-		MeshComponent.addAnimationToTargetsAnimationGroup(target, a, true);
-	}
-
-	public void removeAnimationFromTargetsAnimationGroup(MeshComponent target,
-			RenderableEntity animation) {
-		if (target.myAnimation instanceof AnimationGroup) {
-			((AnimationGroup) target.myAnimation).remove(animation);
-		} else if (animation == target.myAnimation) {
-			target.myAnimation = null;
-		}
-
+		MeshComponent.addChildToTargetsChildGroup(target, a, true);
 	}
 
 	public MeshComponent newGrid(Color netColor, float spaceBetweenNetStrings,
@@ -270,63 +263,63 @@ public class GLFactory {
 
 	public Obj newSolarSystem(Vec position) {
 		Obj solarSystem = new Obj();
-		RenderGroup sunBox = new RenderGroup();
+		MeshComponent sunBox = new Shape();
 		if (position != null)
-			sunBox.myPosition = position;
+			sunBox.setPosition(position);
 		solarSystem.setComp(sunBox);
 
-		RenderGroup earthRing = new RenderGroup();
-		RenderGroup earthBox = new RenderGroup();
-		earthRing.add(earthBox);
+		MeshComponent earthRing = new Shape();
+		MeshComponent earthBox = new Shape();
+		earthRing.addChild(earthBox);
 
 		MeshComponent sun = GLFactory.getInstance().newNSidedPolygonWithGaps(
 				20, Color.red());
 		GLFactory.getInstance().addRotateAnimation(sun, 30, new Vec(1, 1, 1));
-		sunBox.add(sun);
+		sunBox.addChild(sun);
 
 		GLFactory.getInstance().addRotateAnimation(earthRing, 40,
 				new Vec(0.5f, 0.3f, 1));
-		earthBox.myPosition = new Vec(3, 0, 0);
-		sunBox.add(earthRing);
+		earthBox.setPosition(new Vec(3, 0, 0));
+		sunBox.addChild(earthRing);
 
 		MeshComponent earth = GLFactory.getInstance().newCircle(Color.green());
 		earth.scaleEqual(0.5f);
-		earthBox.add(earth);
+		earthBox.addChild(earth);
 
-		RenderGroup moonring = new RenderGroup();
+		MeshComponent moonring = new Shape();
 
 		MeshComponent moon = GLFactory.getInstance().newCircle(Color.white());
-		moon.myPosition = new Vec(1, 0, 0);
+		moon.setPosition(new Vec(1, 0, 0));
 		moon.scaleEqual(0.2f);
 		GLFactory.getInstance().addRotateAnimation(moonring, 80,
 				new Vec(0, 1, -1));
-		moonring.add(moon);
+		moonring.addChild(moon);
 
-		earthBox.add(moonring);
+		earthBox.addChild(moonring);
 
 		return solarSystem;
 	}
 
 	public Obj newHexGroupTest(Vec pos) {
 		Obj hex = new Obj();
-		RenderGroup g1 = new RenderGroup(null, pos);
+		MeshComponent g1 = new Shape(null, pos);
 		hex.setComp(g1);
-		g1.add(this.newHexagon(null));
-		RenderGroup g2 = new RenderGroup(Color.blue(), new Vec(0, 5, 0.1f));
-		g2.myAnimation = new AnimationRotate(60, new Vec(0, 0, 1));
-		g1.add(g2);
+		g1.addChild(this.newHexagon(null));
+		MeshComponent g2 = new Shape(Color.blue(), new Vec(0, 5, 0.1f));
+		g2.addAnimation(new AnimationRotate(60, new Vec(0, 0, 1)));
+		g1.addChild(g2);
 
-		g2.add(this.newHexagon(null));
-		RenderGroup g3 = new RenderGroup(Color.red(), new Vec(0, 4, 0));
-		g3.myAnimation = new AnimationRotate(30, new Vec(0, 0, 1));
-		g2.add(g3);
+		g2.addChild(this.newHexagon(null));
+		MeshComponent g3 = new Shape(Color.red(), new Vec(0, 4, 0));
+		g3.addAnimation(new AnimationRotate(30, new Vec(0, 0, 1)));
+		g2.addChild(g3);
 
-		g3.add(this.newHexagon(null));
-		RenderGroup g4 = new RenderGroup(Color.green(), new Vec(0, 2, 0));
-		g4.myAnimation = new AnimationRotate(15, new Vec(0, 0, 1));
-		g3.add(g4);
+		g3.addChild(this.newHexagon(null));
+		MeshComponent g4 = new Shape(Color.green(), new Vec(0, 2, 0));
+		g4.addAnimation(new AnimationRotate(15, new Vec(0, 0, 1)));
+		g3.addChild(g4);
 
-		g4.add(this.newHexagon(null));
+		g4.addChild(this.newHexagon(null));
 
 		// Vec v = g4.getAbsolutePosition();
 		// System.out.println("absolut Pos: " + v);
@@ -560,8 +553,8 @@ public class GLFactory {
 		Obj o = new Obj();
 		MeshComponent mesh = this.newTexturedSquare("textBitmap"
 				+ textToDisplay, util.IO.loadBitmapFromView(v), textSize);
-		mesh.myPosition = textPosition.copy();
-		mesh.addAnim(new AnimationFaceToCamera(glCamera));
+		mesh.setPosition(textPosition);
+		mesh.addChild(new AnimationFaceToCamera(glCamera));
 		o.setComp(mesh);
 		return o;
 	}

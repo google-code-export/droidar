@@ -6,10 +6,9 @@ import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.LightSource;
-import gl.MeshComponent;
-import gl.RenderGroup;
-import gl.Shape;
 import gl.animations.AnimationRotate;
+import gl.scenegraph.MeshComponent;
+import gl.scenegraph.Shape;
 import gui.GuiSetup;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -55,15 +54,15 @@ public class LightningSetup extends DefaultARSetup {
 		myCamera = world.getMyCamera();
 		final Obj lightObject = new Obj();
 
-		RenderGroup innerGroup = new RenderGroup();
-		innerGroup.add(spotLight);
-		innerGroup.add(objectFactory.newCircle(Color.red()));
-		innerGroup.myPosition = new Vec(0, 3, 0);
+		MeshComponent innerGroup = new Shape();
+		innerGroup.addChild(spotLight);
+		innerGroup.addChild(objectFactory.newCircle(Color.red()));
+		innerGroup.setPosition(new Vec(0, 3, 0));
 
-		RenderGroup outerGroup = new RenderGroup();
-		outerGroup.add(innerGroup);
-		outerGroup.add(objectFactory.newCircle(Color.blue()));
-		outerGroup.add(new AnimationRotate(30, new Vec(0, 0, 1)));
+		MeshComponent outerGroup = new Shape();
+		outerGroup.addAnimation(new AnimationRotate(30, new Vec(0, 0, 1)));
+		outerGroup.addChild(innerGroup);
+		outerGroup.addChild(objectFactory.newCircle(Color.blue()));
 
 		spotLight.setOnClickCommand(new Command() {
 
@@ -88,8 +87,8 @@ public class LightningSetup extends DefaultARSetup {
 		MeshComponent mesh = objectFactory.newCube();
 		// mesh = newCube();
 		mesh = objectFactory.newDiamond(Color.red());
-		mesh.myScale = new Vec(2, 3, 1);
-		mesh.addAnim(new AnimationRotate(30, new Vec(0, 0, -1)));
+		mesh.setScale(new Vec(2, 3, 1));
+		mesh.addChild(new AnimationRotate(30, new Vec(0, 0, -1)));
 
 		o.setComp(mesh);
 		o.setOnClickCommand(new Command() {

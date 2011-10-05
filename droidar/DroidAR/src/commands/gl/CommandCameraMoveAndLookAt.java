@@ -80,7 +80,7 @@ public class CommandCameraMoveAndLookAt extends UndoableCommand {
 		}
 
 		if (myRotation != null) {
-			myRotationBackup = Vec.copy(myTargetCamera.myRotationVec);
+			myRotationBackup = Vec.copy(myTargetCamera.getRotation());
 			myTargetCamera.setNewRotation(myRotation);
 		}
 		return true;

@@ -8,9 +8,9 @@ import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
-import gl.MeshComponent;
 import gl.animations.AnimationColorBounce;
 import gl.animations.AnimationPulse;
+import gl.scenegraph.MeshComponent;
 import gui.GuiSetup;
 import gui.MetaInfos;
 import system.ErrorHandler;
@@ -41,8 +41,6 @@ public class IndoorSetup extends Setup {
 	private GeoObj mySelectedWaypoint;
 	private GeoGraph mySearchresultGraph;
 	private MetaInfos i;
-
-
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
@@ -144,7 +142,7 @@ public class IndoorSetup extends Setup {
 
 		MeshComponent myShape = GLFactory.getInstance().newDiamond(null);
 		p.setComp(myShape);
-		p.getGraphicsComponent().myColor = new Color(1, 0, 0, .6f);
+		p.getGraphicsComponent().setColor(new Color(1, 0, 0, .6f));
 		myShape.setOnClickCommand(new Command() {
 			@Override
 			public boolean execute() {
@@ -162,10 +160,12 @@ public class IndoorSetup extends Setup {
 	private void setSelected(GeoObj newWaypoint) {
 		if (mySelectedWaypoint != null
 				&& mySelectedWaypoint.getGraphicsComponent() != null)
-			mySelectedWaypoint.getGraphicsComponent().myAnimation = null;
+			mySelectedWaypoint.getGraphicsComponent().clearChildren();
 		mySelectedWaypoint = newWaypoint;
-		mySelectedWaypoint.getGraphicsComponent().myAnimation = new AnimationPulse(
-				2, new Vec(1, 1, 1), new Vec(2, 2, 2), 0.2f);
+		mySelectedWaypoint.getGraphicsComponent()
+				.addAnimation(
+						new AnimationPulse(2, new Vec(1, 1, 1),
+								new Vec(2, 2, 2), 0.2f));
 	}
 
 	/**
@@ -191,7 +191,8 @@ public class IndoorSetup extends Setup {
 						if (mySearchresultGraph != null)
 							unmarkGeoGraphAsSearchPath(myGraph.getAllItems());
 						mySearchresultGraph = searchresultGraph;
-						markGeoObjAsSearchPath(mySearchresultGraph.getAllItems());
+						markGeoObjAsSearchPath(mySearchresultGraph
+								.getAllItems());
 					}
 
 					return true;
@@ -229,7 +230,7 @@ public class IndoorSetup extends Setup {
 			GeoObj g = geoObjs.get(i);
 			MeshComponent gf = g.getGraphicsComponent();
 			if (gf != null) {
-				gf.myAnimation = a;
+				gf.addAnimation(a);
 			}
 		}
 	}
@@ -240,7 +241,7 @@ public class IndoorSetup extends Setup {
 	private void unselectCurrentSelectedWaypoint() {
 		if (mySelectedWaypoint != null
 				&& mySelectedWaypoint.getGraphicsComponent() != null)
-			mySelectedWaypoint.getGraphicsComponent().myAnimation = null;
+			mySelectedWaypoint.getGraphicsComponent().clearChildren();
 		mySelectedWaypoint = null;
 	}
 
