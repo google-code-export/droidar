@@ -1,31 +1,28 @@
 package de.rwth;
 
-import commands.logic.CommandSetWrapperToValue2;
-import commands.system.CommandPlaySound;
-
 import geo.GeoObj;
 import gl.Color;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
-import gl.MeshComponent;
-import gl.Shape;
 import gl.animations.AnimationFaceToCamera;
+import gl.scenegraph.MeshComponent;
+import gl.scenegraph.Shape;
 import gui.GuiSetup;
-import system.EventManager;
 import markerDetection.MarkerDetectionSetup;
 import markerDetection.MarkerObjectMap;
 import markerDetection.UnrecognizedMarkerListener;
+import system.EventManager;
 import util.IO;
 import util.Vec;
 import worldData.Obj;
 import worldData.SystemUpdater;
 import worldData.World;
 import actions.ActionBufferedCameraAR;
-import actions.ActionMoveCameraBuffered;
-import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
+
+import commands.system.CommandPlaySound;
 
 public class ExampleMarkerRenderSetup extends MarkerDetectionSetup {
 
@@ -64,15 +61,15 @@ public class ExampleMarkerRenderSetup extends MarkerDetectionSetup {
 		world.add(GLFactory.getInstance().newHexGroupTest(new Vec(0, 0, -0.1f)));
 
 		MeshComponent c = GLFactory.getInstance().newCube(null);
-		c.myPosition = new Vec(-3, 3, 0);
-		c.myScale = new Vec(0.5f, 0.5f, 0.5f);
+		c.setPosition(new Vec(-3, 3, 0));
+		c.setScale(new Vec(0.5f, 0.5f, 0.5f));
 		c.setOnClickCommand(new CommandPlaySound("/sdcard/train.mp3"));
 		Obj geoC = new Obj();
 		geoC.setComp(c);
 		world.add(geoC);
 
 		MeshComponent c2 = GLFactory.getInstance().newCube(null);
-		c2.myPosition = new Vec(3, 3, 0);
+		c2.setPosition(new Vec(3, 3, 0));
 		// GeoObj geoC = new GeoObj(GeoObj.normaluhr, c);
 		Obj geoC2 = new Obj();
 		geoC2.setComp(c2);
@@ -81,7 +78,7 @@ public class ExampleMarkerRenderSetup extends MarkerDetectionSetup {
 		Obj hex = new Obj();
 		Shape hexMesh = GLFactory.getInstance().newHexagon(
 				new Color(0, 0, 1, 0.7f));
-		hexMesh.myPosition.add(new Vec(0, 0, -1));
+		hexMesh.getPosition().add(new Vec(0, 0, -1));
 		hexMesh.scaleEqual(4.5f);
 		hex.setComp(hexMesh);
 
@@ -97,9 +94,9 @@ public class ExampleMarkerRenderSetup extends MarkerDetectionSetup {
 		MeshComponent treangleMesh = GLFactory.getInstance().newTexturedSquare(
 				"worldIconId",
 				IO.loadBitmapFromId(myTargetActivity, R.drawable.icon));
-		treangleMesh.myPosition = new Vec(0, -2, 1);
-		treangleMesh.myRotation = new Vec(0, 0, 0);
-		treangleMesh.addAnim(new AnimationFaceToCamera(camera, 0.5f));
+		treangleMesh.setPosition(new Vec(0, -2, 1));
+		treangleMesh.setPosition(new Vec(0, 0, 0));
+		treangleMesh.addChild(new AnimationFaceToCamera(camera, 0.5f));
 		treangle.setComp(treangleMesh);
 		world.add(treangle);
 

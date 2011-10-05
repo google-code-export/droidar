@@ -2,7 +2,7 @@ package de.rwth;
 
 import gl.GLCamera;
 import gl.MarkerObject;
-import gl.MeshComponent;
+import gl.scenegraph.MeshComponent;
 import util.Vec;
 import android.opengl.Matrix;
 
@@ -44,8 +44,8 @@ public class VirtualObjectMarker implements MarkerObject {
 				markerCenterPosVec, 0);
 
 		Vec camPos = myCamera.getPosition();
-		myTargetMesh.myPosition = new Vec(resultPosVec[0] + camPos.x,
-				resultPosVec[1] + camPos.y, resultPosVec[2] + camPos.z);
+		myTargetMesh.setPosition(new Vec(resultPosVec[0] + camPos.x,
+				resultPosVec[1] + camPos.y, resultPosVec[2] + camPos.z));
 
 		Matrix.multiplyMM(antiCameraMarkerRotMatrix, 0, invertedCameraMatrix,
 				0, markerRotMatrix, startOffset);

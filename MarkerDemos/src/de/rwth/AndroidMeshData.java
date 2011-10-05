@@ -1,9 +1,9 @@
 package de.rwth;
 
 import gl.Color;
-import gl.MeshComponent;
-import gl.Shape;
-import gl.TriangulatedRenderData;
+import gl.scenegraph.MeshComponent;
+import gl.scenegraph.Shape;
+import gl.scenegraph.TriangulatedRenderData;
 
 public class AndroidMeshData {
 	static float vertices[] = { -0.6f, 0f, -1.41667f, -0.6f, 0f, -0.5f, -0.4f,
@@ -31,7 +31,7 @@ public class AndroidMeshData {
 		r.setVertexArray(vertices);
 		r.setIndeceArray(indices);
 		mesh.setMyRenderData(r);
-		mesh.myColor = Color.green();
+		mesh.setColor(Color.green());
 		return mesh;
 	}
 

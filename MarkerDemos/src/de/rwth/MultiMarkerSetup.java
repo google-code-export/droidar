@@ -6,7 +6,8 @@ import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
-import gl.RenderGroup;
+import gl.scenegraph.MeshComponent;
+import gl.scenegraph.Shape;
 import gui.GuiSetup;
 import markerDetection.MarkerDetectionSetup;
 import markerDetection.MarkerObjectMap;
@@ -26,23 +27,24 @@ public class MultiMarkerSetup extends MarkerDetectionSetup {
 
 	private GLCamera camera;
 	private World world;
-	private RenderGroup mesh1;
-	private RenderGroup mesh2;
+	private MeshComponent mesh1;
+	private MeshComponent mesh2;
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
 		camera = new GLCamera(new Vec(0, 0, 10));
 		world = new World(camera);
-		mesh1 = new RenderGroup();
+		mesh1 = new Shape();
 
-		mesh1.add(GLFactory.getInstance().newCoordinateSystem());
+		mesh1.addChild(GLFactory.getInstance().newCoordinateSystem());
 		// mesh.add(GLFactory.getInstance().newCircle(new Color(0, 0, 1,
 		// 0.6f)));
-		mesh1.add(GLFactory.getInstance().newCube());
+		mesh1.addChild(GLFactory.getInstance().newCube());
 
-		mesh2 = new RenderGroup();
-		mesh2.add(GLFactory.getInstance().newCoordinateSystem());
-		mesh2.add(GLFactory.getInstance().newCircle(new Color(0, 0, 1, 0.6f)));
+		mesh2 = new Shape();
+		mesh2.addChild(GLFactory.getInstance().newCoordinateSystem());
+		mesh2.addChild(GLFactory.getInstance().newCircle(
+				new Color(0, 0, 1, 0.6f)));
 		// mesh1.add(GLFactory.getInstance().newCube());
 
 	}
@@ -77,7 +79,7 @@ public class MultiMarkerSetup extends MarkerDetectionSetup {
 		Obj o2 = new Obj();
 		o2.setComp(mesh2);
 		world.add(o2);
-		
+
 		world.add(objectFactory.newHexGroupTest(new Vec()));
 
 	}
@@ -117,7 +119,7 @@ public class MultiMarkerSetup extends MarkerDetectionSetup {
 
 				rayDirection.setLength(5);
 
-				mesh1.myPosition = rayPosition.add(rayDirection);
+				mesh1.setPosition(rayPosition.add(rayDirection));
 
 				return false;
 			}
