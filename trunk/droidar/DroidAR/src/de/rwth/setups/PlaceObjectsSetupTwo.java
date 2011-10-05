@@ -6,7 +6,7 @@ import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
-import gl.MeshComponent;
+import gl.scenegraph.MeshComponent;
 import gui.GuiSetup;
 import system.ErrorHandler;
 import system.EventManager;

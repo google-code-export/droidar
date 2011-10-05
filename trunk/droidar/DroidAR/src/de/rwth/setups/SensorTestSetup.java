@@ -6,9 +6,9 @@ import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
-import gl.MeshComponent;
-import gl.RenderGroup;
 import gl.animations.AnimationRotate;
+import gl.scenegraph.MeshComponent;
+import gl.scenegraph.Shape;
 import gui.GuiSetup;
 import listeners.EventListener;
 import system.ErrorHandler;
@@ -71,48 +71,48 @@ public class SensorTestSetup extends Setup {
 
 		world = new World(camera);
 
-		RenderGroup compasrose = new RenderGroup();
+		MeshComponent compasrose = new Shape();
 
 		MeshComponent middle = objectFactory.newDiamond(Color.green());
-		middle.myPosition = new Vec(0, 0, -2.8f);
-		middle.addAnim(new AnimationRotate(40, new Vec(0, 0, 1)));
-		compasrose.add(middle);
+		middle.setPosition(new Vec(0, 0, -2.8f));
+		middle.addChild(new AnimationRotate(40, new Vec(0, 0, 1)));
+		compasrose.addChild(middle);
 
 		int smallDistance = 10;
 		int longDistance = 60;
 
 		MeshComponent north = objectFactory.newDiamond(Color.redTransparent());
-		north.myPosition = new Vec(0, smallDistance, 0);
+		north.setPosition(new Vec(0, smallDistance, 0));
 
 		MeshComponent north2 = objectFactory.newDiamond(Color.red());
-		north2.myPosition = new Vec(0, longDistance, 0);
+		north2.setPosition(new Vec(0, longDistance, 0));
 
 		MeshComponent east = objectFactory.newDiamond(Color.blueTransparent());
-		east.myPosition = new Vec(smallDistance, 0, 0);
+		east.setPosition(new Vec(smallDistance, 0, 0));
 
 		MeshComponent east2 = objectFactory.newDiamond(Color.blue());
-		east2.myPosition = new Vec(longDistance, 0, 0);
+		east2.setPosition(new Vec(longDistance, 0, 0));
 
 		MeshComponent south = objectFactory.newDiamond(Color.blueTransparent());
-		south.myPosition = new Vec(0, -smallDistance, 0);
+		south.setPosition(new Vec(0, -smallDistance, 0));
 
 		MeshComponent south2 = objectFactory.newDiamond(Color.blue());
-		south2.myPosition = new Vec(0, -longDistance, 0);
+		south2.setPosition(new Vec(0, -longDistance, 0));
 
 		MeshComponent west = objectFactory.newDiamond(Color.blueTransparent());
-		west.myPosition = new Vec(-smallDistance, 0, 0);
+		west.setPosition(new Vec(-smallDistance, 0, 0));
 
 		MeshComponent west2 = objectFactory.newDiamond(Color.blue());
-		west2.myPosition = new Vec(-longDistance, 0, 0);
+		west2.setPosition(new Vec(-longDistance, 0, 0));
 
-		compasrose.add(north2);
-		compasrose.add(north);
-		compasrose.add(east2);
-		compasrose.add(east);
-		compasrose.add(south2);
-		compasrose.add(south);
-		compasrose.add(west2);
-		compasrose.add(west);
+		compasrose.addChild(north2);
+		compasrose.addChild(north);
+		compasrose.addChild(east2);
+		compasrose.addChild(east);
+		compasrose.addChild(south2);
+		compasrose.addChild(south);
+		compasrose.addChild(west2);
+		compasrose.addChild(west);
 
 		currentPosition.setComp(compasrose);
 		world.add(currentPosition);

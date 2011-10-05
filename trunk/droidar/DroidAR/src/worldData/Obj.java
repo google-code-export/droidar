@@ -1,9 +1,9 @@
 package worldData;
 
 import gl.HasPosition;
-import gl.MeshComponent;
 import gl.ObjectPicker;
 import gl.Renderable;
+import gl.scenegraph.MeshComponent;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -152,8 +152,14 @@ public class Obj extends AbstractObj implements HasPosition {
 	@Override
 	public Vec getPosition() {
 		if (myGraphicsComponent != null)
-			return myGraphicsComponent.myPosition;
+			return myGraphicsComponent.getPosition();
 		return null;
+	}
+
+	@Override
+	public void setPosition(Vec position) {
+		if (myGraphicsComponent != null)
+			myGraphicsComponent.setPosition(position);
 	}
 
 	@Override

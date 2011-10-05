@@ -121,7 +121,6 @@ public class Color {
 	 */
 	public static Vec morphToNewColor(Color target, Color values, float speed) {
 		Vec d = new Vec();
-
 		if (target != null && values != null) {
 			d.x = values.red - target.red;
 			target.red = target.red + d.x * speed;
@@ -204,6 +203,13 @@ public class Color {
 	public float[] toFloatArray() {
 		float[] c = { red, green, blue, alpha };
 		return c;
+	}
+
+	public void setTo(Color c) {
+		alpha = c.alpha;
+		green = c.green;
+		blue = c.blue;
+		red = c.red;
 	}
 
 }

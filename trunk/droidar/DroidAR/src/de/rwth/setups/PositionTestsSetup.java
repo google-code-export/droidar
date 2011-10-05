@@ -6,8 +6,7 @@ import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
-import gl.MeshComponent;
-import gl.RenderGroup;
+import gl.scenegraph.MeshComponent;
 import gui.GuiSetup;
 import system.EventManager;
 import system.Setup;
@@ -105,8 +104,6 @@ public class PositionTestsSetup extends Setup {
 					}
 				});
 
-		
-
 		guiSetup.addButtonToBottomView(new Command() {
 
 			@Override
@@ -132,8 +129,7 @@ public class PositionTestsSetup extends Setup {
 		addSpawnButtonToUI(posC, "Spawn at posC", guiSetup);
 		addSpawnButtonToUI(posD, "Spawn at posD", guiSetup);
 		addSpawnButtonToUI(posE, "Spawn at posE", guiSetup);
-		
-		
+
 		addGpsPosOutputButtons(guiSetup);
 
 	}
@@ -180,7 +176,7 @@ public class PositionTestsSetup extends Setup {
 			@Override
 			public boolean execute() {
 
-				RenderGroup mesh = GLFactory.getInstance().newArrow();
+				MeshComponent mesh = GLFactory.getInstance().newArrow();
 				spawnObj(pos, mesh);
 				return true;
 			}
@@ -191,10 +187,10 @@ public class PositionTestsSetup extends Setup {
 	private void spawnObj(final GeoObj pos, MeshComponent mesh) {
 		GeoObj x = new GeoObj(pos);
 
-		mesh.myPosition = Vec.getNewRandomPosInXYPlane(new Vec(), 0.1f, 1f);
+		mesh.setPosition(Vec.getNewRandomPosInXYPlane(new Vec(), 0.1f, 1f));
 		x.setComp(mesh);
-		CommandShowToast.show(myTargetActivity,
-				"Object spawned at " + x.getMySurroundGroup().myPosition);
+		CommandShowToast.show(myTargetActivity, "Object spawned at "
+				+ x.getMySurroundGroup().getPosition());
 		world.add(x);
 	}
 }

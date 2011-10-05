@@ -3,10 +3,10 @@ package geo;
 import gl.Color;
 import gl.GLCamera;
 import gl.GLFactory;
-import gl.MeshComponent;
 import gl.animations.AnimationColorMorph;
 import gl.animations.AnimationMove;
 import gl.animations.AnimationRotate;
+import gl.scenegraph.MeshComponent;
 import util.EfficientList;
 import util.Vec;
 import worldData.Entity;
@@ -97,30 +97,34 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 	}
 
 	private void setNormalTransformations(MeshComponent m) {
-		m.myColor = newNormalColor();
+		m.setColor(newNormalColor());
 	}
 
 	private void setHighlightNodeTransformations(MeshComponent m) {
 		if (m != null) {
-			m.myAnimation = new AnimationColorMorph(BLENDING_TIME,
-					newHighlightColor());
-			m.addAnim(new AnimationRotate(50, new Vec(0, 0, 1)));
+			m.removeAllAnimations();
+			m.addAnimation(new AnimationColorMorph(BLENDING_TIME,
+					newHighlightColor()));
+			m.addAnimation(new AnimationRotate(50, new Vec(0, 0, 1)));
 		}
 	}
 
 	private void setHighlightEdgeTransformation(GeoObj edge) {
 		if (edge != null) {
-			edge.getGraphicsComponent().myAnimation = new AnimationColorMorph(
-					BLENDING_TIME, newPathHighlightColor());
+			edge.getGraphicsComponent().removeAllAnimations();
+			edge.getGraphicsComponent().addAnimation(
+					new AnimationColorMorph(BLENDING_TIME,
+							newPathHighlightColor()));
 		}
 
 	}
 
 	private void setPassedTransformationsOn(MeshComponent m) {
-		m.myAnimation = new AnimationColorMorph(BLENDING_TIME,
-				newAlreadyPassedColor());
-		m.addAnim(new AnimationMove(MOVEMENT_TIME, new Vec(0, 0, -2)));
+		m.removeAllAnimations();
 
+		m.addAnimation(new AnimationMove(MOVEMENT_TIME, new Vec(0, 0, -2)));
+		m.addAnimation(new AnimationColorMorph(BLENDING_TIME,
+				newAlreadyPassedColor()));
 	}
 
 	private Entity newProxiSensor(final GeoGraph targetGraph) {
@@ -132,7 +136,7 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 				Log.d(LOG_TAG, "Proxim Sensor executed, close to " + obj);
 
 				Log.d(LOG_TAG, "     meshComp=" + meshComp);
-				Log.d(LOG_TAG, "     meshComp.myColor=" + meshComp.myColor);
+				Log.d(LOG_TAG, "     meshComp.myColor=" + meshComp.getColor());
 
 				setPassedTransformationsOn(meshComp);
 				obj.remove(this);
@@ -173,7 +177,7 @@ public class DefaultNodeEdgeListener implements NodeListener, EdgeListener {
 			Log.d(LOG_TAG, "Adding edge from " + startPoint + " to " + endPoint);
 			GeoObj edge = targetGraph.addEdge(startPoint, endPoint, Edge
 					.getDefaultMesh(targetGraph, startPoint, endPoint, null));
-			edge.getGraphicsComponent().myColor = newNotJetWalkedColor();
+			edge.getGraphicsComponent().setColor(newNotJetWalkedColor());
 		}
 
 	}

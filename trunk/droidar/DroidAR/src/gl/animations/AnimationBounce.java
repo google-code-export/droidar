@@ -1,7 +1,7 @@
 package gl.animations;
 
-import gl.MeshComponent;
 import gl.Renderable;
+import gl.scenegraph.MeshComponent;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -12,7 +12,7 @@ import worldData.RenderableEntity;
 import worldData.Updateable;
 import worldData.Visitor;
 
-public class AnimationBounce implements RenderableEntity {
+public class AnimationBounce implements GLAnimation {
 
 	private final int mySpeed;
 	private final Vec dEnd;

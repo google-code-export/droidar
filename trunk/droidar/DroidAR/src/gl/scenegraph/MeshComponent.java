@@ -1,12 +1,23 @@
-package gl;
+package gl.scenegraph;
 
 import geo.GeoObj;
-import gl.animations.AnimationGroup;
+import gl.Color;
+import gl.HasColor;
+import gl.HasPosition;
+import gl.HasRotation;
+import gl.HasScale;
+import gl.ObjectPicker;
+import gl.ParentMesh;
+import gl.Renderable;
+import gl.animations.GLAnimation;
+import gl.animations.RenderList;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import listeners.SelectionListener;
+import system.Container;
 import system.ParentStack;
+import util.EfficientList;
 import util.Vec;
 import util.Wrapper;
 import worldData.AbstractObj;
@@ -21,7 +32,8 @@ import commands.Command;
 import commands.undoable.UndoableCommand;
 
 public abstract class MeshComponent implements RenderableEntity, Entity,
-		ParentMesh, SelectionListener, HasPosition {
+		ParentMesh, SelectionListener, HasPosition, HasColor, HasRotation,
+		HasScale {
 
 	private static final String LOG_TAG = "MeshComp";
 	/**
@@ -29,24 +41,24 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 	 * is i north direction (along green axis) positive z value is in sky
 	 * direction
 	 */
-	public Vec myPosition = new Vec(); // TODO think if it would be better not
-	// to init here?
+	protected Vec myPosition;
 	/**
 	 * a vector that describes how the MeshComp is rotated. For example:
 	 * Vec(90,0,0) would rotate it 90 degree around the x axis
 	 */
-	public Vec myRotation;
-	public Vec myScale;
-	public Color myColor;
+	private Vec myRotation;
+	private Vec myScale;
+	private Color myColor;
 
-	public Color myPickColor;
+	private Color myPickColor;
 
-	public boolean graficAnimationActive = true;
-	public RenderableEntity myAnimation;
-	public boolean showObjectCoordinateAxis = false;
+	@Deprecated
+	private boolean graficAnimationActive = true;
+	private RenderableEntity myChildren;
 
 	@Deprecated
 	private AbstractObj myParentObj;
+	@Deprecated
 	private ParentMesh myParentMesh;
 	private Command myOnClickCommand;
 	private Command myOnLongClickCommand;
@@ -65,6 +77,45 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 	 */
 	public void setRotationMatrix(float[] rotationMatrix) {
 		this.markerRotationMatrix = rotationMatrix;
+	}
+
+	@Override
+	public Vec getRotation() {
+		return myRotation;
+	}
+
+	@Override
+	public Vec getScale() {
+		return myScale;
+	}
+
+	@Override
+	public void setScale(Vec scale) {
+		if (myScale == null)
+			myScale = scale.copy();
+		else
+			myScale.setToVec(scale);
+	}
+
+	@Override
+	public void setRotation(Vec rotation) {
+		if (myRotation == null)
+			myRotation = rotation.copy();
+		else
+			myRotation.setToVec(rotation);
+	}
+
+	@Override
+	public void setColor(Color c) {
+		if (myColor == null)
+			myColor = c.copy();
+		else
+			myColor.setTo(c);
+	}
+
+	@Override
+	public Color getColor() {
+		return myColor;
 	}
 
 	/**
@@ -89,7 +140,17 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 
 	@Override
 	public Vec getPosition() {
+		if (myPosition == null)
+			myPosition = new Vec();
 		return myPosition;
+	}
+
+	@Override
+	public void setPosition(Vec position) {
+		if (myPosition == null)
+			myPosition = position.copy();
+		else
+			myPosition.setToVec(position);
 	}
 
 	protected MeshComponent(Color canBeNull) {
@@ -105,12 +166,12 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 		this.myScale = new Vec(scaleRate, scaleRate, scaleRate);
 	}
 
-	public void loadPosition(GL10 gl) {
+	private void loadPosition(GL10 gl) {
 		if (myPosition != null)
 			gl.glTranslatef(myPosition.x, myPosition.y, myPosition.z);
 	}
 
-	public void loadRotation(GL10 gl) {
+	private void loadRotation(GL10 gl) {
 
 		if (markerRotationMatrix != null) {
 			gl.glMultMatrixf(markerRotationMatrix, 0);
@@ -134,7 +195,7 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 
 	}
 
-	public void setScale(GL10 gl) {
+	private void setScale(GL10 gl) {
 		if (myScale != null)
 			gl.glScalef(myScale.x, myScale.y, myScale.z);
 	}
@@ -157,8 +218,8 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 					myColor.alpha);
 		}
 
-		if (myAnimation != null) {
-			myAnimation.render(gl, this, stack);
+		if (myChildren != null) {
+			myChildren.render(gl, this, stack);
 		}
 
 		draw(gl, parent, stack);
@@ -172,15 +233,15 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 	@Override
 	public boolean update(float timeDelta, Updateable parent,
 			ParentStack<Updateable> stack) {
-		if ((myAnimation != null) && (graficAnimationActive)) {
+		if ((myChildren != null) && (graficAnimationActive)) {
 
 			// if the animation does not need to be animated anymore..
-			if (!myAnimation.update(timeDelta, this, stack)) {
+			if (!myChildren.update(timeDelta, this, stack)) {
 				// ..remove it:
-				Log.d(LOG_TAG, myAnimation
+				Log.d(LOG_TAG, myChildren
 						+ " will now be removed from mesh because it "
 						+ "is finished (returned false on update())");
-				myAnimation = null;
+				myChildren = null;
 			}
 		}
 		return true;
@@ -327,12 +388,6 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 	}
 
 	public MeshComponent clone() throws CloneNotSupportedException {
-		if (this instanceof Shape) {
-			return ((Shape) this).clone();
-		}
-		if (this instanceof RenderGroup) {
-			return ((RenderGroup) this).clone();
-		}
 		Log.e("", "MeshComponent.clone() subclass missed, add it there");
 		return null;
 	}
@@ -343,36 +398,69 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 	}
 
 	/**
-	 * just use the normal add method instead of this one!
-	 * 
-	 * @param animation
+	 * @param child
 	 */
-	@Deprecated
-	public void addAnim(RenderableEntity animation) {
-		addAnimationToTargetsAnimationGroup(this, animation, false);
+	public void addChild(RenderableEntity child) {
+		addChildToTargetsChildGroup(this, child, false);
 	}
 
-	public static void addAnimationToTargetsAnimationGroup(
-			MeshComponent target, RenderableEntity a, boolean insertAtBeginnung) {
-		if (!(target.myAnimation instanceof AnimationGroup)) {
-			AnimationGroup animGroup = new AnimationGroup();
+	public static void addChildToTargetsChildGroup(MeshComponent target,
+			RenderableEntity a, boolean insertAtBeginnung) {
+		if (!(target.myChildren instanceof RenderList)) {
+			RenderList animGroup = new RenderList();
 			// keep the old animation:
-			if (target.myAnimation != null) {
-				animGroup.add(target.myAnimation);
+			if (target.myChildren != null) {
+				animGroup.add(target.myChildren);
 			}
 			// and change animation to the created group:
-			target.myAnimation = animGroup;
+			target.myChildren = animGroup;
 		}
-		
+
 		if (insertAtBeginnung) {
-			((AnimationGroup) target.myAnimation).insert(0, a);
+			((RenderList) target.myChildren).insert(0, a);
 		} else {
-			((AnimationGroup) target.myAnimation).add(a);
+			((RenderList) target.myChildren).add(a);
 		}
 	}
 
-	public void addAnimAtBeginning(RenderableEntity animation) {
-		addAnimationToTargetsAnimationGroup(this, animation, true);
+	public void addAnimation(GLAnimation animation) {
+		addChildToTargetsChildGroup(this, animation, true);
+	}
+
+	// @Override TODO
+	public void clearChildren() {
+		myChildren = null;
+	}
+
+	public void removeAllAnimations() {
+		if (myChildren instanceof GLAnimation)
+			this.clearChildren();
+		if (myChildren instanceof Container)
+			removeAllElementsOfType(((Container) myChildren), GLAnimation.class);
+	}
+
+	/**
+	 * @param c
+	 *            the collection to run through. Can be
+	 *            {@link MeshComponent#getChildren()} for example if the child
+	 *            is a collection (check via instanceof!)
+	 * @param classTypeToRemove
+	 *            The class-type (like {@link GLAnimation}.class e.g.) If an
+	 *            object of the specified class-type is found in the passed
+	 *            {@link Container} it will be removes
+	 */
+	public static void removeAllElementsOfType(Container c,
+			Class classTypeToRemove) {
+		EfficientList list = c.getAllItems();
+		for (int i = 0; i < list.myLength; i++) {
+			if (classTypeToRemove.isAssignableFrom(list.get(i).getClass())) {
+				c.remove(list.get(i));
+			}
+		}
+	}
+
+	public RenderableEntity getChildren() {
+		return myChildren;
 	}
 
 }

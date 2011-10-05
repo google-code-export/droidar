@@ -1,8 +1,8 @@
 package geo;
 
 import gl.GLCamera;
-import gl.MeshComponent;
 import gl.Renderable;
+import gl.scenegraph.MeshComponent;
 
 import java.util.Arrays;
 

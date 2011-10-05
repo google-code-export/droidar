@@ -1,4 +1,6 @@
-package gl;
+package gl.scenegraph;
+
+import gl.Color;
 
 import java.util.ArrayList;
 
@@ -18,9 +20,9 @@ public class MultiColoredShape extends Shape {
 	}
 
 	public void add(Vec v, Color c) {
-		myShapeArray.add(v);
+		getMyShapeArray().add(v);
 		myColors.add(c);
-		myRenderData.updateShape(myShapeArray);
+		myRenderData.updateShape(getMyShapeArray());
 		((MultiColorRenderData) myRenderData).updateColorBuffer(myColors);
 	}
 

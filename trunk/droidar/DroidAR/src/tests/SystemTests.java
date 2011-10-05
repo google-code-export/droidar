@@ -1,14 +1,12 @@
 package tests;
 
-import gl.MeshComponent;
-import gl.RenderGroup;
-import gl.Shape;
+import gl.scenegraph.MeshComponent;
+import gl.scenegraph.Shape;
 import util.Calculus;
 import util.Vec;
 import util.Wrapper;
 import worldData.Entity;
 import worldData.Obj;
-import android.util.Log;
 
 import components.ProximitySensor;
 
@@ -35,7 +33,6 @@ public class SystemTests extends SimpleTesting {
 		Obj o = new Obj();
 		o.setComp(new Shape());
 		assertTrue(o.hasComponent(Shape.class));
-		assertFalse(o.hasComponent(RenderGroup.class));
 		assertTrue(o.hasComponent(MeshComponent.class));
 		assertTrue(o.hasComponent(Entity.class));
 		assertFalse(o.hasComponent(ProximitySensor.class));

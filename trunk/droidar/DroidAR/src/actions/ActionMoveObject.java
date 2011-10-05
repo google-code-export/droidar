@@ -1,7 +1,8 @@
 package actions;
 
 import gl.GLCamera;
-import gl.MeshComponent;
+import gl.HasPosition;
+import gl.scenegraph.MeshComponent;
 import util.Vec;
 import util.Wrapper;
 import worldData.MoveObjComp;
@@ -38,14 +39,12 @@ public class ActionMoveObject extends ActionDoAlongAxis {
 		MoveObjComp mc = obj.getComp(MoveObjComp.class);
 		MeshComponent m = obj.getComp(MeshComponent.class);
 		if (mc != null) {
-			if (mc.myTargetPos == null && m != null && m.myPosition != null) {
-				mc.myTargetPos = m.myPosition.copy();
+			if (mc.myTargetPos == null && m != null && m.getPosition() != null) {
+				mc.myTargetPos = m.getPosition().copy();
 			}
 			mc.myTargetPos.add(x, y, 0.0f);
 		} else if (m != null) {
-			if (m.myPosition == null)
-				m.myPosition = new Vec();
-			m.myPosition.add(x, y, 0);
+			m.getPosition().add(x, y, 0);
 		}
 	}
 }

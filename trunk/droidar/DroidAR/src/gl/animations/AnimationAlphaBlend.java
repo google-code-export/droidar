@@ -1,7 +1,6 @@
 package gl.animations;
 
 import gl.Color;
-import gl.MeshComponent;
 import gl.ObjectPicker;
 import gl.Renderable;
 
@@ -9,8 +8,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 import system.ParentStack;
 import util.Vec;
-import worldData.Obj;
-import worldData.RenderableEntity;
 import worldData.Updateable;
 import worldData.Visitor;
 
@@ -20,7 +17,7 @@ import worldData.Visitor;
  * @author Spobo
  * 
  */
-public class AnimationAlphaBlend implements RenderableEntity {
+public class AnimationAlphaBlend implements GLAnimation {
 
 	private float mySpeed;
 	private Color myLowerColor;

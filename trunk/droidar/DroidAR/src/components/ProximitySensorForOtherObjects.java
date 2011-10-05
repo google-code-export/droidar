@@ -1,7 +1,7 @@
 package components;
 
 import android.util.Log;
-import gl.MeshComponent;
+import gl.scenegraph.MeshComponent;
 import system.ParentStack;
 import util.EfficientList;
 import util.QuadTree;
@@ -67,7 +67,7 @@ public class ProximitySensorForOtherObjects implements Entity {
 	private void findObjectsCloseTo(Obj obj, MeshComponent myMesh,
 			LargeWorld largeWorld) {
 		EfficientList<RenderableEntity> list = largeWorld.getItems(
-				myMesh.myPosition, myMaxDistance);
+				myMesh.getPosition(), myMaxDistance);
 		for (int i = 0; i < list.myLength; i++) {
 			myCommand.execute(list.get(i));
 		}
@@ -81,8 +81,8 @@ public class ProximitySensorForOtherObjects implements Entity {
 					MeshComponent objMesh = ((Obj) list.get(i))
 							.getGraphicsComponent();
 					if (objMesh != null) {
-						float currentDistance = Vec.distance(myMesh.myPosition,
-								objMesh.myPosition);
+						float currentDistance = Vec.distance(
+								myMesh.getPosition(), objMesh.getPosition());
 						if (0 <= currentDistance
 								&& currentDistance < myMaxDistance) {
 							myCommand.execute(list.get(i));

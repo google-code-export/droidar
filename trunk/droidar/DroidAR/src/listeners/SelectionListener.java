@@ -1,6 +1,6 @@
 package listeners;
 
-import gl.MeshComponent;
+import gl.scenegraph.MeshComponent;
 
 import commands.Command;
 

@@ -6,14 +6,15 @@ import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
-import gl.MeshComponent;
-import gl.Shape;
 import gl.animations.AnimationBounce;
 import gl.animations.AnimationColorBounce;
 import gl.animations.AnimationFaceToCamera;
 import gl.animations.AnimationPulse;
 import gl.animations.AnimationRotate;
 import gl.animations.AnimationSwingRotate;
+import gl.animations.GLAnimation;
+import gl.scenegraph.MeshComponent;
+import gl.scenegraph.Shape;
 import gui.GuiSetup;
 import system.ErrorHandler;
 import system.EventManager;
@@ -102,8 +103,8 @@ public class DebugSetup extends Setup {
 							"elefantId",
 							IO.loadBitmapFromId(myTargetActivity,
 									R.drawable.elephant64));
-			triangleMesh.myScale = new Vec(10, 10, 10);
-			triangleMesh.addAnim(new AnimationFaceToCamera(camera, 0.5f));
+			triangleMesh.setScale(new Vec(10, 10, 10));
+			triangleMesh.addChild(new AnimationFaceToCamera(camera, 0.5f));
 			GeoObj treangleGeo = new GeoObj(GeoObj.iPark1, triangleMesh);
 			w.add(treangleGeo);
 		}
@@ -115,8 +116,8 @@ public class DebugSetup extends Setup {
 							"hippoId",
 							IO.loadBitmapFromId(myTargetActivity,
 									R.drawable.hippopotamus64));
-			triangleMesh.addAnim(new AnimationFaceToCamera(camera, 0.5f));
-			triangleMesh.myScale = new Vec(10, 10, 10);
+			triangleMesh.addChild(new AnimationFaceToCamera(camera, 0.5f));
+			triangleMesh.setScale(new Vec(10, 10, 10));
 			GeoObj treangleGeo = new GeoObj(GeoObj.iPark2, triangleMesh);
 			w.add(treangleGeo);
 
@@ -132,8 +133,8 @@ public class DebugSetup extends Setup {
 							"pandaId",
 							IO.loadBitmapFromId(myTargetActivity,
 									R.drawable.panda64));
-			triangleMesh.addAnim(new AnimationFaceToCamera(camera, 0.5f));
-			triangleMesh.myScale = new Vec(10, 10, 10);
+			triangleMesh.addChild(new AnimationFaceToCamera(camera, 0.5f));
+			triangleMesh.setScale(new Vec(10, 10, 10));
 			GeoObj treangleGeo = new GeoObj(GeoObj.iPark3, triangleMesh);
 			w.add(treangleGeo);
 		}
@@ -153,9 +154,9 @@ public class DebugSetup extends Setup {
 			button.setOnClickCommand(new CommandShowToast(myTargetActivity,
 					"Thanks alot"));
 
-			button.addAnim(new AnimationFaceToCamera(camera, 0.5f));
-			button.myScale = new Vec(10, 10, 10);
-			button.myColor = Color.red();
+			button.addChild(new AnimationFaceToCamera(camera, 0.5f));
+			button.setScale(new Vec(10, 10, 10));
+			button.setColor(Color.red());
 
 			GeoObj treangleGeo = new GeoObj(GeoObj.iPark4, button);
 
@@ -173,15 +174,15 @@ public class DebugSetup extends Setup {
 				selection);
 
 		MeshComponent c = GLFactory.getInstance().newCube(null);
-		c.myPosition = new Vec(-3, 3, 0);
-		c.myScale = new Vec(0.5f, 0.5f, 0.5f);
+		c.setPosition(new Vec(-3, 3, 0));
+		c.setScale(new Vec(0.5f, 0.5f, 0.5f));
 		c.setOnClickCommand(new CommandPlaySound("/sdcard/train.mp3"));
 		Obj geoC = new Obj();
 		geoC.setComp(c);
 		world.add(geoC);
 
 		MeshComponent c2 = GLFactory.getInstance().newCube(null);
-		c2.myPosition = new Vec(3, 3, 0);
+		c2.setPosition(new Vec(3, 3, 0));
 		c2.setOnClickCommand(commandSelectObj);
 		// GeoObj geoC = new GeoObj(GeoObj.normaluhr, c);
 		Obj geoC2 = new Obj();
@@ -191,7 +192,7 @@ public class DebugSetup extends Setup {
 		Obj hex = new Obj();
 		Shape hexMesh = GLFactory.getInstance().newHexagon(
 				new Color(0, 0, 1, 0.7f));
-		hexMesh.myPosition.add(new Vec(0, 0, -1));
+		hexMesh.getPosition().add(new Vec(0, 0, -1));
 		hexMesh.scaleEqual(4.5f);
 		hex.setComp(hexMesh);
 
@@ -208,9 +209,9 @@ public class DebugSetup extends Setup {
 		MeshComponent treangleMesh = GLFactory.getInstance().newTexturedSquare(
 				"worldIconId",
 				IO.loadBitmapFromId(myTargetActivity, R.drawable.icon));
-		treangleMesh.myPosition = new Vec(0, -2, 1);
-		treangleMesh.myRotation = new Vec(0, 0, 0);
-		treangleMesh.addAnim(new AnimationFaceToCamera(camera, 0.5f));
+		treangleMesh.setPosition(new Vec(0, -2, 1));
+		treangleMesh.setRotation(new Vec(0, 0, 0));
+		treangleMesh.addChild(new AnimationFaceToCamera(camera, 0.5f));
 		treangle.setComp(treangleMesh);
 		world.add(treangle);
 
@@ -330,14 +331,14 @@ public class DebugSetup extends Setup {
 	}
 
 	private Command newCommandAddAnimation(final Wrapper meshWrapper,
-			final RenderableEntity animation) {
+			final GLAnimation animation) {
 		return new Command() {
 
 			@Override
 			public boolean execute() {
 				if (meshWrapper.getObject() instanceof MeshComponent) {
 					((MeshComponent) meshWrapper.getObject())
-							.addAnimAtBeginning(animation);
+							.addAnimation(animation);
 					Log.e(LOG_TAG,
 							"Added " + animation + " to "
 									+ meshWrapper.getObject());

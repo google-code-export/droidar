@@ -2,7 +2,7 @@ package geo;
 
 import gl.Color;
 import gl.GLFactory;
-import gl.MeshComponent;
+import gl.scenegraph.MeshComponent;
 
 public class Edge extends GeoObj implements Comparable<Edge> {
 

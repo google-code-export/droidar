@@ -1,4 +1,6 @@
-package gl;
+package gl.scenegraph;
+
+import gl.GLUtilityClass;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;

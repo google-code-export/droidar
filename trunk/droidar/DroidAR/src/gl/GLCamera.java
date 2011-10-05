@@ -27,7 +27,7 @@ import android.util.Log;
  * 
  */
 public class GLCamera implements Updateable, HasDebugInformation, Renderable,
-		HasPosition {
+		HasPosition, HasRotation {
 
 	public interface CameraAngleUpdateListener {
 
@@ -59,6 +59,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	// TODO would be dangerous to set any of those vecs to null because there
 	// might be references in commands to those objects so check where those are
 	// set to null!
+	@Deprecated
 	private Vec myNewPosition = new Vec(0, 0, 0);
 
 	/**
@@ -69,7 +70,8 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 * 
 	 * TODO complete this description
 	 */
-	public Vec myRotationVec = new Vec(0, 0, 0);
+	private Vec myRotationVec = new Vec(0, 0, 0);
+	@Deprecated
 	public Vec myNewRotationVec;
 
 	/**
@@ -197,6 +199,19 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 
 		return true;
 
+	}
+
+	@Override
+	public Vec getRotation() {
+		return myRotationVec;
+	}
+
+	@Override
+	public void setRotation(Vec rotation) {
+		if (myRotationVec == null)
+			myRotationVec = rotation;
+		else
+			myRotationVec.setToVec(rotation);
 	}
 
 	public void setNewPosition(Vec cameraPosition) {
@@ -779,6 +794,14 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 */
 	public Vec getPosition() {
 		return myPosition;
+	}
+
+	@Override
+	public void setPosition(Vec position) {
+		if (myPosition == null)
+			myPosition = position;
+		else
+			myPosition.setToVec(position);
 	}
 
 	/**
