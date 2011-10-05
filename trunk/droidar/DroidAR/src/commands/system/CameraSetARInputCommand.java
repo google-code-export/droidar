@@ -17,7 +17,7 @@ public class CameraSetARInputCommand extends UndoableCommand {
 
 	@Override
 	public boolean override_do() {
-		backupValue = myTargetCamera.sensorInputEnabled;
+		backupValue = myTargetCamera.isSensorInputEnabled();
 		myTargetCamera.setSensorInputEnabled(valueToSet);
 		myTargetCamera.resetBufferedAngle(); // TODO do this here?
 		return true;

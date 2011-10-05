@@ -77,7 +77,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	/**
 	 * set to false if you want the camera not to react on sensor events
 	 */
-	public boolean sensorInputEnabled = true;
+	private boolean sensorInputEnabled = true;
 	/**
 	 * this enshures that the rotation matrix is only recalculated if the
 	 * acceleration or magnetometer values have changed
@@ -871,6 +871,10 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		Log.w(LOG_TAG, "   > myNewRotationVec=" + myNewRotationVec);
 		Log.w(LOG_TAG, "   > rotationMatrix=" + rotationMatrix);
 		Log.w(LOG_TAG, "   > unrotatedMatrix=" + unrotatedMatrix);
+	}
+
+	public boolean isSensorInputEnabled() {
+		return sensorInputEnabled;
 	}
 
 }
