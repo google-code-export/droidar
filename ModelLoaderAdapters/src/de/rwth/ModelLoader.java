@@ -1,8 +1,8 @@
 package de.rwth;
 
 import gl.GLRenderer;
-import gl.MeshComponent;
 import gl.Renderable;
+import gl.scenegraph.MeshComponent;
 import system.ParentStack;
 import system.Setup;
 import worldData.World;
