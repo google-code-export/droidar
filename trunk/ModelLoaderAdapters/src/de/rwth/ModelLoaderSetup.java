@@ -5,8 +5,8 @@ import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.LightSource;
-import gl.MeshComponent;
-import gl.RenderGroup;
+import gl.scenegraph.MeshComponent;
+import gl.scenegraph.Shape;
 import gui.GuiSetup;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -54,12 +54,12 @@ public class ModelLoaderSetup extends DefaultARSetup {
 		this.renderer = renderer;
 		cam = world.getMyCamera();
 		final Obj lightObject = new Obj();
-		spotLight.myPosition = new Vec(1, 1, 1);
+		spotLight.setPosition(new Vec(1, 1, 1));
 		MeshComponent circle = objectFactory.newCircle(null);
-		circle.myRotation = new Vec(0.2f, 0.2f, 0.2f);
-		RenderGroup lightGroup = new RenderGroup();
-		lightGroup.add(spotLight);
-		lightGroup.add(circle);
+		circle.setRotation(new Vec(0.2f, 0.2f, 0.2f));
+		MeshComponent lightGroup = new Shape();
+		lightGroup.addChild(spotLight);
+		lightGroup.addChild(circle);
 		lightObject.setComp(lightGroup);
 		lightObject.setComp(new MoveObjComp(1));
 		lightObject.setOnClickCommand(new Command() {

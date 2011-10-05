@@ -1,19 +1,16 @@
 package de.rwth;
 
-import gl.MeshComponent;
 import gl.ObjectPicker;
 import gl.Renderable;
+import gl.scenegraph.MeshComponent;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import system.ParentStack;
-
-import worldData.Obj;
 import worldData.Updateable;
 import worldData.Visitor;
 import android.util.Log;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.model.Model;
 import com.badlogic.gdx.graphics.g3d.model.keyframe.KeyframedAnimation;
@@ -69,7 +66,7 @@ public class GDXMesh extends MeshComponent {
 	public synchronized boolean update(float timeDelta, Updateable parent,
 			ParentStack<Updateable> stack) {
 		super.update(timeDelta, parent, stack);
-		if (anim != null && graficAnimationActive) {
+		if (anim != null) {
 			animTime += timeDelta;
 			if (animTime > anim.totalDuration - anim.frameDuration) {
 				animTime = 0;
