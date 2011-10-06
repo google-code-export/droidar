@@ -74,8 +74,7 @@ public class CommandCameraMoveAndLookAt extends UndoableCommand {
 		}
 
 		if (myPos != null) {
-			// TODO good point ceck where i forgot Vec.copy()
-			myPosBackup = Vec.copy(myTargetCamera.getMyNewPosition());
+			myPosBackup = Vec.copy(myTargetCamera.getPosition());
 			myTargetCamera.setNewPosition(myPos);
 		}
 

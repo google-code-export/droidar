@@ -662,4 +662,10 @@ public class Vec {
 	public float scalarMult(Vec b) {
 		return x * b.x + y * b.y + z * b.z;
 	}
+
+	public void setTo(float x, float y, float z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
 }

@@ -10,6 +10,7 @@ import system.ParentStack;
 import util.HasDebugInformation;
 import util.L;
 import util.Vec;
+import worldData.MoveObjComp;
 import worldData.Updateable;
 import actions.DefaultUpdateListener;
 import android.hardware.SensorManager;
@@ -60,8 +61,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	// might be references in commands to those objects so check where those are
 	// set to null!
 	@Deprecated
-	private Vec myNewPosition = new Vec(0, 0, 0);
-
+	// private Vec myNewPosition = new Vec(0, 0, 0);
 	/**
 	 * to move from the green to the red axis (clockwise) you would have to add
 	 * 90 degree
@@ -126,6 +126,8 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	public float[] myAnglesInRadians = new float[3];
 	public boolean forceAngleCalculation = false;
 
+	private MoveObjComp myMover = new MoveObjComp(3);
+
 	public GLCamera() {
 	}
 
@@ -189,12 +191,8 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 
 		}
 
-		if ((myPosition != null) && (myNewPosition != null)) {
-			Vec.morphToNewVec(myPosition, myNewPosition, timeDelta * 3);
-
-			// TODO check if myPosition and myNewPosition are nearly the
-			// same
-			// and then setMyNewPos=null
+		if (myPosition != null) {
+			myMover.update(timeDelta, this, stack);
 		}
 
 		return true;
@@ -215,14 +213,10 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	}
 
 	public void setNewPosition(Vec cameraPosition) {
-		if (myNewPosition == null) {
-			myNewPosition = new Vec(cameraPosition);
-			if (myPosition == null) {
-				myPosition = new Vec();
-			}
-		} else {
-			myNewPosition.setToVec(cameraPosition);
+		if (myPosition == null) {
+			myPosition = new Vec();
 		}
+		myMover.myTargetPos = cameraPosition;
 	}
 
 	public void setNewCameraOffset(Vec newCameraOffset) {
@@ -613,8 +607,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 * @param deltaY
 	 */
 	public synchronized void changeXYPositionBuffered(float deltaX, float deltaY) {
-		myNewPosition.x += deltaX;
-		myNewPosition.y += deltaY;
+		myMover.myTargetPos.add(deltaX, deltaY, 0);
 	}
 
 	/**
@@ -719,10 +712,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 *            eg. -10 to move the camera 10 meters down
 	 */
 	public void changeZPositionBuffered(float deltaZ) {
-		if (myNewPosition == null) {
-			myNewPosition = new Vec();
-		}
-		myNewPosition.z += deltaZ;
+		myMover.myTargetPos.add(0, 0, deltaZ);
 	}
 
 	/**
@@ -752,12 +742,12 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 */
 	public void resetPosition(boolean resetZValueToo) {
 		float pz = myPosition.z;
-		float npz = myNewPosition.z;
+		float npz = myMover.myTargetPos.z;
 		myPosition.setToZero();
-		myNewPosition.setToZero();
+		myMover.myTargetPos.setToZero();
 		if (!resetZValueToo) {
 			myPosition.z = pz;
-			myNewPosition.z = npz;
+			myMover.myTargetPos.z = npz;
 		}
 	}
 
@@ -769,15 +759,12 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	}
 
 	public void changeNewPosition(float deltaX, float deltaY, float deltaZ) {
-		myNewPosition.x += deltaX;
-		myNewPosition.y += deltaY;
-		myNewPosition.z += deltaZ;
+		myMover.myTargetPos.add(deltaX, deltaY, deltaZ);
 	}
 
 	public void setNewPosition(float x, float y, float z) {
-		myNewPosition.x = x;
-		myNewPosition.y = y;
-		myNewPosition.z = z;
+		myMover.myTargetPos.setTo(x, y, z);
+
 	}
 
 	public Vec getNewCameraOffset() {
@@ -808,10 +795,10 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 * @return The position where the camera moves to. Will be NULL if new
 	 *         position never set before!
 	 */
-	public Vec getMyNewPosition() {
-
-		return myNewPosition;
-	}
+	// public Vec getMyNewPosition() {
+	//
+	// return myNewPosition;
+	// }
 
 	/**
 	 * The resulting coordinates can differ from
@@ -864,7 +851,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	public void showDebugInformation() {
 		Log.w(LOG_TAG, "Infos about GLCamera:");
 		Log.w(LOG_TAG, "   > myPosition=" + myPosition);
-		Log.w(LOG_TAG, "   > myPosition=" + myNewPosition);
+		Log.w(LOG_TAG, "   > myMover.myTargetPos=" + myMover.myTargetPos);
 		Log.w(LOG_TAG, "   > myOffset=" + myOffset);
 		Log.w(LOG_TAG, "   > myNewOffset=" + myNewOffset);
 		Log.w(LOG_TAG, "   > myRotationVec=" + myRotationVec);
