@@ -40,17 +40,17 @@ public class MoveObjComp implements Entity {
 	@Override
 	public boolean update(float timeDelta, Updateable parent,
 			ParentStack<Updateable> stack) {
-		Vec objPos = null;
+		Vec pos = null;
 
 		// TODO remove these 2 lines later:
 		if (parent instanceof HasPosition)
-			objPos = ((HasPosition) parent).getPosition();
+			pos = ((HasPosition) parent).getPosition();
 
-		if (objPos == null)
-			objPos = stack.getFirst(HasPosition.class).getPosition();
+		if (pos == null)
+			pos = stack.getFirst(HasPosition.class).getPosition();
 
-		if (objPos != null) {
-			Vec.morphToNewVec(objPos, myTargetPos, timeDelta * mySpeedFactor);
+		if (pos != null) {
+			Vec.morphToNewVec(pos, myTargetPos, timeDelta * mySpeedFactor);
 
 		}
 		return true;

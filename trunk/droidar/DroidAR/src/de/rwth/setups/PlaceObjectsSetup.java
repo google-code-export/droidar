@@ -8,11 +8,6 @@ import gl.GLFactory;
 import gl.GLRenderer;
 import gl.scenegraph.MeshComponent;
 import gui.GuiSetup;
-import gui.simpleUI.EditItem;
-import gui.simpleUI.ModifierGroup;
-import gui.simpleUI.modifiers.InfoText;
-import gui.simpleUI.modifiers.TextModifier;
-import listeners.ObjectCreateListener;
 import system.ErrorHandler;
 import system.EventManager;
 import system.Setup;
@@ -27,11 +22,8 @@ import actions.ActionMoveCameraBuffered;
 import actions.ActionPlaceObject;
 import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
-import android.view.Gravity;
 
 import commands.Command;
-import commands.obj.CommandCreateObjectInWrapper;
-import commands.ui.CommandShowInfoScreen;
 
 public class PlaceObjectsSetup extends Setup {
 
@@ -89,29 +81,31 @@ public class PlaceObjectsSetup extends Setup {
 	@Override
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity context) {
 
-		guiSetup.addButtonToTopView(new CommandCreateObjectInWrapper(
-				placeObjectWrapper, new ObjectCreateListener() {
+		guiSetup.addButtonToTopView(new Command() {
+			@Override
+			public boolean execute() {
+				final Obj placerContainer = newObject();
+				world.add(placerContainer);
+				placeObjectWrapper.setTo(placerContainer);
+				return true;
+			}
 
+			private Obj newObject() {
+				final Obj placerContainer = new Obj();
+				Color c = Color.getRandomRGBColor();
+				c.alpha = 0.7f;
+				MeshComponent arrow = GLFactory.getInstance().newDiamond(c);
+				arrow.setOnClickCommand(new Command() {
 					@Override
-					public boolean setWrapperToObject(Wrapper targetWrapper) {
-						final Obj placerContainer = new Obj();
-						Color c = Color.getRandomRGBColor();
-						c.alpha = 0.7f;
-						MeshComponent arrow = GLFactory.getInstance()
-								.newDiamond(c);
-						arrow.setOnClickCommand(new Command() {
-							@Override
-							public boolean execute() {
-								placeObjectWrapper.setTo(placerContainer);
-								return true;
-							}
-						});
-						placerContainer.setComp(arrow);
-						world.add(placerContainer);
-						targetWrapper.setTo(placerContainer);
-						return false;
+					public boolean execute() {
+						placeObjectWrapper.setTo(placerContainer);
+						return true;
 					}
-				}), "Place next!");
+				});
+				placerContainer.setComp(arrow);
+				return placerContainer;
+			}
+		}, "Place next!");
 
 		guiSetup.setTopViewCentered();
 	}

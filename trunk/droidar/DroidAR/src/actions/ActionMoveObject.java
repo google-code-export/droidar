@@ -37,14 +37,18 @@ public class ActionMoveObject extends ActionDoAlongAxis {
 
 	private void foundObj(Obj obj, float x, float y) {
 		MoveObjComp mc = obj.getComp(MoveObjComp.class);
-		MeshComponent m = obj.getComp(MeshComponent.class);
+		Vec pos = obj.getPosition();
 		if (mc != null) {
-			if (mc.myTargetPos == null && m != null && m.getPosition() != null) {
-				mc.myTargetPos = m.getPosition().copy();
+			if (mc.myTargetPos == null && pos != null) {
+				mc.myTargetPos = pos.copy();
 			}
 			mc.myTargetPos.add(x, y, 0.0f);
-		} else if (m != null) {
-			m.getPosition().add(x, y, 0);
+		} else if (pos != null) {
+			/*
+			 * if no move comp was found in the target object, the mesh itself
+			 * will be used
+			 */
+			pos.add(x, y, 0);
 		}
 	}
 }
