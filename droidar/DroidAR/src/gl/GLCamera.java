@@ -188,7 +188,6 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 
 		if ((myOffset != null) && (myNewOffset != null)) {
 			Vec.morphToNewVec(myOffset, myNewOffset, timeDelta);
-
 		}
 
 		if (myPosition != null) {

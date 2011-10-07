@@ -10,6 +10,7 @@ import worldData.Updateable;
  * @author Spobo
  * 
  */
+@Deprecated
 public class ActionRotateCameraBufferedDebug extends Action {
 
 	private Updateable myCamera;

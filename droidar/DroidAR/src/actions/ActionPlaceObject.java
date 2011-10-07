@@ -1,11 +1,22 @@
 package actions;
 
+import components.ViewPosCalcerComp;
+import de.rwth.setups.PlaceObjectsSetupTwo;
+
 import gl.GLCamera;
 import util.Vec;
 import util.Wrapper;
 import worldData.MoveObjComp;
 import worldData.Obj;
 
+/**
+ * Don't use this {@link Action} anymore, instead use a
+ * {@link ViewPosCalcerComp} like in the {@link PlaceObjectsSetupTwo} !
+ * 
+ * @author Spobo
+ * 
+ */
+@Deprecated
 public class ActionPlaceObject extends ActionUseCameraAngles {
 
 	private GLCamera myCamera;
@@ -23,6 +34,7 @@ public class ActionPlaceObject extends ActionUseCameraAngles {
 	 *            maximum distance in meters how far away from the camera the
 	 *            elements can be places
 	 */
+	@Deprecated
 	public ActionPlaceObject(GLCamera targetCamera, Wrapper objToPlace,
 			float maxDistance) {
 		super(targetCamera);
@@ -67,7 +79,7 @@ public class ActionPlaceObject extends ActionUseCameraAngles {
 	private void calcPosOnFloor(float rollAngle) {
 		final Vec camPos = myCamera.getPosition();
 		if (camPos != null) {
-			Vec newPos = myMoveObjComp.myTargetPos;
+			Vec targetPos = myMoveObjComp.myTargetPos;
 			/*
 			 * the following formula calculates the opposite side of the
 			 * right-angled triangle where the adjacent side is the height of
@@ -78,18 +90,18 @@ public class ActionPlaceObject extends ActionUseCameraAngles {
 			float distance = (float) (Math.tan(Math.toRadians(rollAngle)) * camPos.z);
 			if (distance > maxDistance)
 				distance = maxDistance;
-			newPos.x = 0;
-			newPos.y = distance;
-			newPos.z = 0;
+			targetPos.x = 0;
+			targetPos.y = distance;
+			targetPos.z = 0;
 			if (myAzimuth != 0) {
 				// now calc the real position according to the cam rotation:
-				newPos.rotateAroundZAxis(360 - myAzimuth);
+				targetPos.rotateAroundZAxis(360 - myAzimuth);
 			}
 
 			// dont forget to mention that the camera doesnt have to be a
 			// the zero point:
-			newPos.x += camPos.x;
-			newPos.y += camPos.y;
+			targetPos.x += camPos.x;
+			targetPos.y += camPos.y;
 		}
 	}
 }
