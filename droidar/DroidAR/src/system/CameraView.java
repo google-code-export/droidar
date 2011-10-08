@@ -11,7 +11,7 @@ import android.view.SurfaceView;
 
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	SurfaceHolder mHolder;
-	Camera mCamera;
+	Camera myCamera;
 
 	public CameraView(Context context) {
 		super(context);
@@ -36,10 +36,10 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	public void surfaceCreated(SurfaceHolder holder) {
 		// The Surface has been created, acquire the camera and tell it
 		// where to draw.
-		mCamera = Camera.open();
+		myCamera = Camera.open();
 		Log.d("Activity", "Camera opened");
 		try {
-			mCamera.setPreviewDisplay(holder);
+			myCamera.setPreviewDisplay(holder);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -64,10 +64,10 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	public void resumeCamera() {
-		if (mCamera != null) {
-			mCamera.startPreview();
+		if (myCamera != null) {
+			myCamera.startPreview();
 			Log
-					.d("Activity", "Camera preview started (camera=" + mCamera
+					.d("Activity", "Camera preview started (camera=" + myCamera
 							+ ")");
 		} else {
 			Log.d("Activity",
@@ -76,17 +76,17 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	public void pause() {
-		if (mCamera != null) {
+		if (myCamera != null) {
 			Log.d("Activity", "Camera preview stopped");
-			mCamera.stopPreview();
+			myCamera.stopPreview();
 		}
 	}
 
 	public void releaseCamera() {
-		if (mCamera != null) {
-			mCamera.stopPreview();
-			mCamera.release();
-			mCamera = null;
+		if (myCamera != null) {
+			myCamera.stopPreview();
+			myCamera.release();
+			myCamera = null;
 			Log.d("Activity", "Camera released");
 		}
 	}

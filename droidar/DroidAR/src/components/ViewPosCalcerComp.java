@@ -4,7 +4,7 @@ import gl.GLCamera;
 import system.ParentStack;
 import util.Vec;
 import worldData.Entity;
-import worldData.MoveObjComp;
+import worldData.MoveComp;
 import worldData.Obj;
 import worldData.UpdateTimer;
 import worldData.Updateable;

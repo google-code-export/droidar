@@ -1,5 +1,6 @@
 package system;
 
+import listeners.EventListener;
 import geo.GeoObj;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
@@ -12,6 +13,7 @@ import worldData.World;
 import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
+import actions.ActionWASDMovement;
 import android.R;
 import android.app.Activity;
 
@@ -37,10 +39,12 @@ public abstract class DefaultARSetup extends Setup {
 	protected static final int ZDELTA = 5;
 	private GLCamera camera;
 	private World world;
+	private ActionWASDMovement wasdAction;
 
 	public DefaultARSetup() {
 		camera = new GLCamera(new Vec(0, 0, 2));
 		world = new World(camera);
+		wasdAction = new ActionWASDMovement(camera, 25, 50, 20);
 	}
 
 	@Override
@@ -75,7 +79,7 @@ public abstract class DefaultARSetup extends Setup {
 	@Override
 	public void _c_addActionsToEvents(EventManager eventManager,
 			CustomGLSurfaceView arView) {
-		arView.onTouchMoveAction = new ActionMoveCameraBuffered(camera, 5, 25);
+		arView.onTouchMoveAction = wasdAction;
 		eventManager
 				.addOnOrientationChangedAction(new ActionRotateCameraBuffered(
 						camera));
@@ -88,6 +92,7 @@ public abstract class DefaultARSetup extends Setup {
 	@Override
 	public void _d_addElementsToUpdateThread(SystemUpdater updater) {
 		updater.addObjectToUpdateCycle(world);
+		updater.addObjectToUpdateCycle(wasdAction);
 	}
 
 	@Override

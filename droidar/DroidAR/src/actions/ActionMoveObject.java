@@ -5,7 +5,7 @@ import gl.HasPosition;
 import gl.scenegraph.MeshComponent;
 import util.Vec;
 import util.Wrapper;
-import worldData.MoveObjComp;
+import worldData.MoveComp;
 import worldData.Obj;
 import android.R.integer;
 import android.view.MotionEvent;
@@ -36,7 +36,7 @@ public class ActionMoveObject extends ActionDoAlongAxis {
 	}
 
 	private void foundObj(Obj obj, float x, float y) {
-		MoveObjComp mc = obj.getComp(MoveObjComp.class);
+		MoveComp mc = obj.getComp(MoveComp.class);
 		Vec pos = obj.getPosition();
 		if (mc != null) {
 			if (mc.myTargetPos == null && pos != null) {

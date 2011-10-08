@@ -34,7 +34,7 @@ public class SystemUpdater implements Runnable {
 		 */
 		for (int i = 0; i < myObjectsToUpdate.myLength; i++) {
 			if (myObjectsToUpdate.get(i) instanceof UpdatableWithInit)
-				((UpdatableWithInit) myObjectsToUpdate.get(i)).refresh();
+				((UpdatableWithInit) myObjectsToUpdate.get(i)).init();
 		}
 
 		while (notKilled) {

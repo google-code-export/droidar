@@ -12,7 +12,7 @@ import system.ErrorHandler;
 import system.EventManager;
 import system.Setup;
 import util.Vec;
-import worldData.MoveObjComp;
+import worldData.MoveComp;
 import worldData.Obj;
 import worldData.SystemUpdater;
 import worldData.World;
@@ -32,7 +32,7 @@ public class PlaceObjectsSetupTwo extends Setup {
 	private World world;
 	private ViewPosCalcerComp viewPosCalcer;
 	private Obj selectedObj;
-	private MoveObjComp moveComp;
+	private MoveComp moveComp;
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
@@ -47,14 +47,14 @@ public class PlaceObjectsSetupTwo extends Setup {
 					Vec targetVec) {
 				if (parent instanceof Obj) {
 					Obj obj = (Obj) parent;
-					MoveObjComp m = obj.getComp(MoveObjComp.class);
+					MoveComp m = obj.getComp(MoveComp.class);
 					if (m != null) {
 						m.myTargetPos = targetVec;
 					}
 				}
 			}
 		};
-		moveComp = new MoveObjComp(4);
+		moveComp = new MoveComp(4);
 	}
 
 	@Override
