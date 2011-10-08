@@ -16,7 +16,7 @@ import system.EventManager;
 import util.EfficientList;
 import util.Vec;
 import util.Wrapper;
-import worldData.MoveObjComp;
+import worldData.MoveComp;
 import worldData.Obj;
 import worldData.World;
 import actions.ActionMoveObject;
@@ -61,7 +61,7 @@ public class ModelLoaderSetup extends DefaultARSetup {
 		lightGroup.addChild(spotLight);
 		lightGroup.addChild(circle);
 		lightObject.setComp(lightGroup);
-		lightObject.setComp(new MoveObjComp(1));
+		lightObject.setComp(new MoveComp(1));
 		lightObject.setOnClickCommand(new Command() {
 
 			@Override
@@ -82,7 +82,7 @@ public class ModelLoaderSetup extends DefaultARSetup {
 				final Obj o = new Obj();
 				o.setComp(gdxMesh);
 				world.add(o);
-				o.setComp(new MoveObjComp(1));
+				o.setComp(new MoveComp(1));
 				o.setOnClickCommand(new Command() {
 
 					@Override
@@ -118,7 +118,7 @@ public class ModelLoaderSetup extends DefaultARSetup {
 			public boolean execute() {
 				if (targetMoveWrapper.getObject() instanceof Obj) {
 					((Obj) targetMoveWrapper.getObject())
-							.getComp(MoveObjComp.class).myTargetPos.z -= zMoveFactor;
+							.getComp(MoveComp.class).myTargetPos.z -= zMoveFactor;
 					return true;
 				}
 				return false;
@@ -130,7 +130,7 @@ public class ModelLoaderSetup extends DefaultARSetup {
 			public boolean execute() {
 				if (targetMoveWrapper.getObject() instanceof Obj) {
 					((Obj) targetMoveWrapper.getObject())
-							.getComp(MoveObjComp.class).myTargetPos.z += zMoveFactor;
+							.getComp(MoveComp.class).myTargetPos.z += zMoveFactor;
 					return true;
 				}
 				return false;
