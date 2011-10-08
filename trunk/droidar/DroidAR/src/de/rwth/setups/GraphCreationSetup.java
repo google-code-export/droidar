@@ -29,10 +29,9 @@ import android.app.Activity;
 import android.widget.EditText;
 
 import commands.Command;
-import commands.system.CommandRequestWifiPosition;
 import commands.ui.CommandShowEditScreen;
 
-public class IndoorSetup extends Setup {
+public class GraphCreationSetup extends Setup {
 
 	private GeoGraph myGraph;
 	private World world;
@@ -49,7 +48,7 @@ public class IndoorSetup extends Setup {
 				"Error in DroidAR App");
 
 		myGraph = new GeoGraph();
-		camera = new GLCamera();
+		camera = new GLCamera(new Vec(0, 0, 1f));
 		world = new World(camera);
 		world.add(myGraph);
 
@@ -90,13 +89,6 @@ public class IndoorSetup extends Setup {
 		final EditText editText = guiSetup.addSearchbarToView(
 				guiSetup.getTopView(), findWayToWaypoint(), "Waypoint name..");
 
-		guiSetup.addButtonToBottomView(new CommandShowEditScreen(
-				myTargetActivity, i), "demo editscreen");
-
-		guiSetup.addButtonToBottomView(new CommandRequestWifiPosition(
-				myTargetActivity, new ActionCalcRelativePos(world, camera)),
-				"Start Positioning");
-
 		guiSetup.addButtonToBottomView(new Command() {
 			@Override
 			public boolean execute() {
@@ -110,7 +102,7 @@ public class IndoorSetup extends Setup {
 				setSelected(newWaypoint);
 				return true;
 			}
-		}, "Neuer Wegpunkt");
+		}, "New waypoint");
 
 		guiSetup.addButtonToBottomView(new Command() {
 			@Override
@@ -131,7 +123,7 @@ public class IndoorSetup extends Setup {
 				setSelected(newWaypoint);
 				return true;
 			}
-		}, "Neuer verbundener Wegpunkt");
+		}, "New connected waypoint");
 
 	}
 
@@ -160,7 +152,7 @@ public class IndoorSetup extends Setup {
 	private void setSelected(GeoObj newWaypoint) {
 		if (mySelectedWaypoint != null
 				&& mySelectedWaypoint.getGraphicsComponent() != null)
-			mySelectedWaypoint.getGraphicsComponent().clearChildren();
+			mySelectedWaypoint.getGraphicsComponent().removeAllAnimations();
 		mySelectedWaypoint = newWaypoint;
 		mySelectedWaypoint.getGraphicsComponent()
 				.addAnimation(
@@ -241,7 +233,7 @@ public class IndoorSetup extends Setup {
 	private void unselectCurrentSelectedWaypoint() {
 		if (mySelectedWaypoint != null
 				&& mySelectedWaypoint.getGraphicsComponent() != null)
-			mySelectedWaypoint.getGraphicsComponent().clearChildren();
+			mySelectedWaypoint.getGraphicsComponent().removeAllAnimations();
 		mySelectedWaypoint = null;
 	}
 
