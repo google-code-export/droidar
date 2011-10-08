@@ -10,7 +10,7 @@ import system.ParentStack;
 import util.HasDebugInformation;
 import util.L;
 import util.Vec;
-import worldData.MoveObjComp;
+import worldData.MoveComp;
 import worldData.Updateable;
 import actions.DefaultUpdateListener;
 import android.hardware.SensorManager;
@@ -126,7 +126,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	public float[] myAnglesInRadians = new float[3];
 	public boolean forceAngleCalculation = false;
 
-	private MoveObjComp myMover = new MoveObjComp(3);
+	private MoveComp myMover = new MoveComp(3);
 
 	public GLCamera() {
 	}

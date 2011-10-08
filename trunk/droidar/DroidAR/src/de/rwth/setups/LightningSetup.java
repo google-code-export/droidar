@@ -19,7 +19,7 @@ import util.EfficientList;
 import util.Vec;
 import util.Wrapper;
 import worldData.Entity;
-import worldData.MoveObjComp;
+import worldData.MoveComp;
 import worldData.Obj;
 import worldData.World;
 import actions.ActionMoveObject;
@@ -74,7 +74,7 @@ public class LightningSetup extends DefaultARSetup {
 		});
 
 		lightObject.setComp(outerGroup);
-		lightObject.setComp(new MoveObjComp(1));
+		lightObject.setComp(new MoveComp(1));
 		world.add(lightObject);
 
 		targetMoveWrapper = new Wrapper(lightObject);
@@ -99,7 +99,7 @@ public class LightningSetup extends DefaultARSetup {
 				return true;
 			}
 		});
-		o.setComp(new MoveObjComp(1));
+		o.setComp(new MoveComp(1));
 		world.add(o);
 
 		world.add(o);
@@ -140,7 +140,7 @@ public class LightningSetup extends DefaultARSetup {
 			public boolean execute() {
 				if (targetMoveWrapper.getObject() instanceof Obj) {
 					((Obj) targetMoveWrapper.getObject())
-							.getComp(MoveObjComp.class).myTargetPos.z -= zMoveFactor;
+							.getComp(MoveComp.class).myTargetPos.z -= zMoveFactor;
 					return true;
 				}
 				return false;
@@ -152,7 +152,7 @@ public class LightningSetup extends DefaultARSetup {
 			public boolean execute() {
 				if (targetMoveWrapper.getObject() instanceof Obj) {
 					((Obj) targetMoveWrapper.getObject())
-							.getComp(MoveObjComp.class).myTargetPos.z += zMoveFactor;
+							.getComp(MoveComp.class).myTargetPos.z += zMoveFactor;
 					return true;
 				}
 				return false;

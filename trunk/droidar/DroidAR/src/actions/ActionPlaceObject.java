@@ -6,7 +6,7 @@ import de.rwth.setups.PlaceObjectsSetupTwo;
 import gl.GLCamera;
 import util.Vec;
 import util.Wrapper;
-import worldData.MoveObjComp;
+import worldData.MoveComp;
 import worldData.Obj;
 
 /**
@@ -23,7 +23,7 @@ public class ActionPlaceObject extends ActionUseCameraAngles {
 	private Wrapper myObjWrapper;
 	private float maxDistance;
 	private float myAzimuth;
-	private MoveObjComp myMoveObjComp;
+	private MoveComp myMoveObjComp;
 	private Obj compareObj;
 
 	/**
@@ -41,7 +41,7 @@ public class ActionPlaceObject extends ActionUseCameraAngles {
 		myCamera = targetCamera;
 		myObjWrapper = objToPlace;
 		this.maxDistance = maxDistance;
-		myMoveObjComp = new MoveObjComp(4);
+		myMoveObjComp = new MoveComp(4);
 	}
 
 	@Override

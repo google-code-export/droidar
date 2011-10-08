@@ -13,7 +13,7 @@ public class ArActivity extends Activity {
 
 	private static final String LOG_TAG = "ArActivity";
 
-	private static Setup setupToUse;
+	private static Setup staticSetupHolder;
 
 	private Setup mySetupToUse;
 
@@ -25,9 +25,9 @@ public class ArActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(LOG_TAG, "main onCreate");
-		if (setupToUse != null) {
-			mySetupToUse = setupToUse;
-			setupToUse = null;
+		if (staticSetupHolder != null) {
+			mySetupToUse = staticSetupHolder;
+			staticSetupHolder = null;
 			runSetup();
 		} else {
 			Log.e(LOG_TAG, "There was no Setup specified to use. "
@@ -38,7 +38,7 @@ public class ArActivity extends Activity {
 	}
 
 	public static void startWithSetup(Activity currentActivity, Setup setupToUse) {
-		ArActivity.setupToUse = setupToUse;
+		ArActivity.staticSetupHolder = setupToUse;
 		currentActivity.startActivity(new Intent(currentActivity,
 				ArActivity.class));
 	}
