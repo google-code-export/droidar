@@ -1,7 +1,5 @@
 package listeners;
 
-import gl.scenegraph.MeshComponent;
-
 import commands.Command;
 
 public interface SelectionListener {
