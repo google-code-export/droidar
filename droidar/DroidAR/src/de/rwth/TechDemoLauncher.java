@@ -17,7 +17,7 @@ import commands.ui.CommandShowToast;
 import de.rwth.setups.CollectItemsSetup;
 import de.rwth.setups.DebugSetup;
 import de.rwth.setups.GraphMovementTestSetup;
-import de.rwth.setups.IndoorSetup;
+import de.rwth.setups.GraphCreationSetup;
 import de.rwth.setups.LargeWorldsSetup;
 import de.rwth.setups.LightningSetup;
 import de.rwth.setups.PlaceObjectsSetup;
@@ -33,7 +33,6 @@ public class TechDemoLauncher extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.demoselector);
 
-		
 		showSetup("Animation Demo", new DebugSetup());
 		showSetup("Large worlds", new LargeWorldsSetup());
 		showSetup("Lightning Demo", new LightningSetup());
@@ -41,6 +40,7 @@ public class TechDemoLauncher extends Activity {
 		showSetup("Placing objects Demo", new PlaceObjectsSetup());
 		showSetup("Placing objects Demo 2", new PlaceObjectsSetupTwo());
 		showSetup("Graph Movement Test", new GraphMovementTestSetup());
+		showSetup("Graph creation Test", new GraphCreationSetup());
 		showSetup("Sensor Processing Demo", new SensorTestSetup());
 		showSetup("Position tests", new PositionTestsSetup());
 
@@ -51,9 +51,6 @@ public class TechDemoLauncher extends Activity {
 				runTests();
 			}
 		});
-
-		showSetup("Indoor Navigator (Needs special localization service!)",
-				new IndoorSetup());
 
 	}
 
