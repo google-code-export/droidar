@@ -1,9 +1,6 @@
 package components;
 
-import android.opengl.GLSurfaceView.Renderer;
-import android.util.Log;
 import gl.GLCamera;
-import gl.GLRenderer;
 import system.ParentStack;
 import util.Vec;
 import worldData.Entity;
@@ -12,14 +9,22 @@ import worldData.Obj;
 import worldData.UpdateTimer;
 import worldData.Updateable;
 import worldData.Visitor;
+import android.util.Log;
 
-public class ViewPosCalcerComp implements Entity {
+public abstract class ViewPosCalcerComp implements Entity {
 
 	private static final String LOG_TAG = "ViewPosCalcerComp";
 	private GLCamera myCamera;
 	private int myMaxDistance;
 	private UpdateTimer timer;
 
+	/**
+	 * @param camera
+	 * @param maxDistance
+	 *            suggestion: around 20 to 100
+	 * @param updateSpeed
+	 *            e.g. every 0.1f seconds
+	 */
 	public ViewPosCalcerComp(GLCamera camera, int maxDistance, float updateSpeed) {
 		myCamera = camera;
 		myMaxDistance = maxDistance;
@@ -31,30 +36,24 @@ public class ViewPosCalcerComp implements Entity {
 			ParentStack<Updateable> stack) {
 
 		if (timer.update(timeDelta, this, stack)) {
-			if (parent instanceof Obj) {
-				Obj obj = (Obj) parent;
-				MoveObjComp m = obj.getComp(MoveObjComp.class);
-				if (m != null) {
-					Vec targetVec = myCamera
-							.getPositionOnGroundWhereTheCameraIsLookingAt();
-					targetVec.sub(myCamera.getPosition());
-					if (targetVec.getLength() > myMaxDistance) {
-						targetVec.setLength(myMaxDistance);
-					}
-					m.myTargetPos = targetVec;
-				} else {
-					Log.w(LOG_TAG,
-							"Sensor is not child of a Obj and therefor cant run!");
-				}
+
+			Vec targetVec = myCamera
+					.getPositionOnGroundWhereTheCameraIsLookingAt();
+
+			if (targetVec.getLength() > myMaxDistance) {
+				targetVec.setLength(myMaxDistance);
 			}
+
+			onPositionUpdate(parent, targetVec);
 		}
 		return true;
 	}
 
+	public abstract void onPositionUpdate(Updateable parent, Vec targetVec);
+
 	@Override
 	public boolean accept(Visitor visitor) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }

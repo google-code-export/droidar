@@ -21,6 +21,7 @@ import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
+import android.util.Log;
 
 import commands.Command;
 import components.ViewPosCalcerComp;
@@ -41,7 +42,18 @@ public class PlaceObjectsSetupTwo extends Setup {
 				"Error in DroidAR App");
 		camera = new GLCamera(new Vec(0, 0, 15));
 		world = new World(camera);
-		viewPosCalcer = new ViewPosCalcerComp(camera, 50, 0.1f);
+		viewPosCalcer = new ViewPosCalcerComp(camera, 150, 0.1f) {
+			public void onPositionUpdate(worldData.Updateable parent,
+					Vec targetVec) {
+				if (parent instanceof Obj) {
+					Obj obj = (Obj) parent;
+					MoveObjComp m = obj.getComp(MoveObjComp.class);
+					if (m != null) {
+						m.myTargetPos = targetVec;
+					}
+				}
+			}
+		};
 		moveComp = new MoveObjComp(4);
 	}
 
@@ -110,7 +122,7 @@ public class PlaceObjectsSetupTwo extends Setup {
 			selectedObj.remove(viewPosCalcer);
 			selectedObj.remove(moveComp);
 		}
-		obj.setComp(viewPosCalcer);
+		obj.setComp(viewPosCalcer); //TODO removed from old one properly?
 		obj.setComp(moveComp);
 		selectedObj = obj;
 	}
