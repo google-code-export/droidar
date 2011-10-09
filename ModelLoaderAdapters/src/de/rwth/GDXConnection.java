@@ -48,11 +48,6 @@ public class GDXConnection implements Renderable {
 			}
 
 			@Override
-			public void setIcon(Pixmap pixmap) {
-
-			}
-
-			@Override
 			public boolean setDisplayMode(DisplayMode displayMode) {
 				return false;
 			}
@@ -172,6 +167,10 @@ public class GDXConnection implements Renderable {
 			@Override
 			public float getDensity() {
 				return 1;
+			}
+
+			@Override
+			public void setIcon(Pixmap[] pixmaps) {
 			}
 		};
 		if (gl instanceof javax.microedition.khronos.opengles.GL11) {
