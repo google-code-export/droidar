@@ -43,17 +43,17 @@ public class RenderList implements RenderableEntity,
 	}
 
 	@Override
-	public boolean add(RenderableEntity animation) {
-		if (animation == this) {
+	public boolean add(RenderableEntity child) {
+		if (child == this) {
 			Log.e(LOG_TAG, "Not allowed to add object to itself!");
 			return false;
 		}
-		return myItems.add(animation);
+		return myItems.add(child);
 	}
 
 	@Override
-	public boolean remove(RenderableEntity animation) {
-		return myItems.remove(animation);
+	public boolean remove(RenderableEntity child) {
+		return myItems.remove(child);
 	}
 
 	@Override

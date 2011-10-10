@@ -22,7 +22,21 @@ public class Obj extends AbstractObj implements HasPosition {
 		this.myComponents = myComponents;
 	}
 
-	MeshComponent myGraphicsComponent;
+	private MeshComponent myGraphicsComponent;
+
+	/**
+	 * @return the same object as {@link Obj#getGraphicsComponent()}
+	 */
+	public MeshComponent getRenderComp() {
+		return getGraphicsComponent();
+	}
+
+	/**
+	 * @return the same object as {@link Obj#getGraphicsComponent()}
+	 */
+	public MeshComponent getMeshComp() {
+		return getGraphicsComponent();
+	}
 
 	public MeshComponent getGraphicsComponent() {
 		return myGraphicsComponent;
@@ -94,8 +108,7 @@ public class Obj extends AbstractObj implements HasPosition {
 			gl.glColor4f(0, 0, 0, 1);
 		} else {
 			/*
-			 * before drawing a new object, reset the color to white TODO better
-			 * way? gl_clear(color_bit) or anything like this?
+			 * before drawing a new object, reset the color to white
 			 */
 			gl.glColor4f(1, 1, 1, 1);
 		}

@@ -412,13 +412,13 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 			return;
 		}
 		if (!(target.myChildren instanceof RenderList)) {
-			RenderList animGroup = new RenderList();
+			RenderList childrenGroup = new RenderList();
 			// keep the old animation:
 			if (target.myChildren != null) {
-				animGroup.add(target.myChildren);
+				childrenGroup.add(target.myChildren);
 			}
 			// and change animation to the created group:
-			target.myChildren = animGroup;
+			target.myChildren = childrenGroup;
 		}
 
 		if (insertAtBeginnung) {
@@ -435,6 +435,32 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 	// @Override TODO
 	public void clearChildren() {
 		myChildren = null;
+	}
+
+	// @Override TODO
+	public boolean remove(RenderableEntity meshToRemove) {
+		return find(meshToRemove, true);
+	}
+
+	// @Override TODO
+	public boolean contains(RenderableEntity meshToFind) {
+		return find(meshToFind, false);
+	}
+
+	// @Override TODO
+	private boolean find(RenderableEntity entity, boolean andRemove) {
+		if (myChildren == entity) {
+			if (andRemove)
+				clearChildren();
+			return true;
+		}
+		if (myChildren instanceof Container) {
+			if (andRemove)
+				return ((Container) myChildren).remove(entity);
+			else
+				return ((Container) myChildren).getAllItems().contains(entity) >= 0;
+		}
+		return false;
 	}
 
 	public void removeAllAnimations() {
