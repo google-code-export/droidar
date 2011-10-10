@@ -10,3 +10,5 @@ The following three projects have to be added to your workspace to get the model
 [http://code.google.com/p/libgdx/source/browse/#svn%2Ftrunk%2Fbackends%2Fgdx-backend-android android backend]
 
 [http://code.google.com/p/libgdx/source/browse/#svn%2Ftrunk%2Fextensions%2Fmodel-loaders%2Fmodel-loaders model loader extension]
+
+[http://droidar.blogspot.com/2011/10/loading-external-3d-objects.html (Related blogpost)]
