@@ -1,0 +1,12 @@
+#labels 3d,model,loader,external,models
+This video tutorial will shortly explain how to load 3d models from external files using the [http://code.google.com/p/droidar/source/browse/#svn%2Ftrunk%2FModelLoaderAdapters model loader adapter extension]:
+
+<wiki:video url="http://www.youtube.com/watch?v=Ufm-89CkGZk"/>
+
+The following three projects have to be added to your workspace to get the model loader extension running(also explained in the video):
+
+[http://code.google.com/p/libgdx/source/browse/#svn%2Ftrunk%2Fgdx gdx]
+
+[http://code.google.com/p/libgdx/source/browse/#svn%2Ftrunk%2Fbackends%2Fgdx-backend-android android backend]
+
+[http://code.google.com/p/libgdx/source/browse/#svn%2Ftrunk%2Fextensions%2Fmodel-loaders%2Fmodel-loaders model loader extension]
