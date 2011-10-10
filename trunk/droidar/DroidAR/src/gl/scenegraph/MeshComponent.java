@@ -406,6 +406,11 @@ public abstract class MeshComponent implements RenderableEntity, Entity,
 
 	public static void addChildToTargetsChildGroup(MeshComponent target,
 			RenderableEntity a, boolean insertAtBeginnung) {
+		if (a == null) {
+			Log.e(LOG_TAG, "Request to add NULL object as a child to " + target
+					+ " was denied!");
+			return;
+		}
 		if (!(target.myChildren instanceof RenderList)) {
 			RenderList animGroup = new RenderList();
 			// keep the old animation:
