@@ -554,7 +554,7 @@ public class GLFactory {
 		MeshComponent mesh = this.newTexturedSquare("textBitmap"
 				+ textToDisplay, util.IO.loadBitmapFromView(v), textSize);
 		mesh.setPosition(textPosition);
-		mesh.addChild(new AnimationFaceToCamera(glCamera));
+		mesh.addAnimation(new AnimationFaceToCamera(glCamera));
 		o.setComp(mesh);
 		return o;
 	}

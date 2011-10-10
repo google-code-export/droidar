@@ -1,5 +1,7 @@
 package de.rwth.setups;
 
+import java.util.HashMap;
+
 import geo.GeoObj;
 import gl.Color;
 import gl.CustomGLSurfaceView;

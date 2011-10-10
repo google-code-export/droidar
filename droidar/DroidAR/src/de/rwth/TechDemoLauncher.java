@@ -20,6 +20,7 @@ import de.rwth.setups.GraphMovementTestSetup;
 import de.rwth.setups.GraphCreationSetup;
 import de.rwth.setups.LargeWorldsSetup;
 import de.rwth.setups.LightningSetup;
+import de.rwth.setups.FastChangingTextSetup;
 import de.rwth.setups.PlaceObjectsSetup;
 import de.rwth.setups.PlaceObjectsSetupTwo;
 import de.rwth.setups.PositionTestsSetup;
@@ -32,9 +33,10 @@ public class TechDemoLauncher extends Activity {
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.demoselector);
-
+		
 		showSetup("Animation Demo", new DebugSetup());
 		showSetup("Large worlds", new LargeWorldsSetup());
+		showSetup("Changing text Demo", new FastChangingTextSetup());
 		showSetup("Lightning Demo", new LightningSetup());
 		showSetup("Collecting Items Demo", new CollectItemsSetup());
 		showSetup("Placing objects Demo", new PlaceObjectsSetup());
