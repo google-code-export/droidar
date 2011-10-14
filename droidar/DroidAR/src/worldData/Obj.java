@@ -126,6 +126,8 @@ public class Obj extends AbstractObj implements HasPosition {
 	}
 
 	public boolean remove(Entity compToRemove) {
+		if (compToRemove instanceof MeshComponent)
+			myGraphicsComponent = null;
 		return myComponents.remove(compToRemove);
 	}
 

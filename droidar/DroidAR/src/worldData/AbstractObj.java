@@ -1,13 +1,9 @@
 package worldData;
 
-import gl.Renderable;
 import gui.ListItem;
 import gui.MetaInfos;
 import gui.simpleUI.EditItem;
 import gui.simpleUI.ModifierGroup;
-
-import javax.microedition.khronos.opengles.GL10;
-
 import listeners.ItemGuiListener;
 import listeners.SelectionListener;
 import util.Log;
@@ -28,8 +24,6 @@ public abstract class AbstractObj implements HasInfosInterface, ListItem,
 	private Command myOnLongClickCommand;
 	private Command myOnMapClickCommand;
 
-	
-	
 	@Override
 	public MetaInfos getInfoObject() {
 		if (myInfoObj == null)
