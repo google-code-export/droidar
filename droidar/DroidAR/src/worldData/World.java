@@ -182,11 +182,15 @@ public class World implements RenderableEntity, Container<RenderableEntity> {
 
 	@Override
 	public void insert(int pos, RenderableEntity item) {
+		if (container == null)
+			container = new EfficientList<RenderableEntity>();
 		container.insert(pos, item);
 	}
 
 	@Override
 	public EfficientList<RenderableEntity> getAllItems() {
+		if (container == null)
+			container = new EfficientList<RenderableEntity>();
 		return container;
 	}
 

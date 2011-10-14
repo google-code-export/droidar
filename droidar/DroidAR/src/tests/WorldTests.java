@@ -40,8 +40,13 @@ public class WorldTests extends SimpleTesting {
 		assertTrue(o.getComp(MeshComponent.class) == s);
 		o.remove(s);
 		assertTrue(o.getComp(MeshComponent.class) == null);
-
+		assertTrue(w.getAllItems().myLength == 0);
 		w.add(o);
+		assertTrue(w.getAllItems().myLength == 1);
+		assertTrue(w.getAllItems().contains(o) >= 0);
+		w.remove(o);
+		assertTrue(w.getAllItems().myLength == 0);
+		assertTrue(w.getAllItems().contains(o) == -1);
 	}
 
 }
