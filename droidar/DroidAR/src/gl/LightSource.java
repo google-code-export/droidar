@@ -9,7 +9,7 @@ import javax.microedition.khronos.opengles.GL10;
 import system.ParentStack;
 import util.Vec;
 import worldData.Visitor;
-import android.util.Log;
+import util.Log;
 
 /**
  * Great tutorials:

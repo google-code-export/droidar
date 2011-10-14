@@ -10,7 +10,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import listeners.ItemGuiListener;
 import listeners.SelectionListener;
-import android.util.Log;
+import util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 

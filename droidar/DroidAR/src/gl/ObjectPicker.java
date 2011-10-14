@@ -12,7 +12,7 @@ import listeners.SelectionListener;
 import system.Setup;
 import util.Wrapper;
 import android.app.Activity;
-import android.util.Log;
+import util.Log;
 
 import commands.Command;
 import commands.system.CommandDeviceVibrate;

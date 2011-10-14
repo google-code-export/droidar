@@ -1,7 +1,7 @@
 package util;
 
 import worldData.AbstractObj;
-import android.util.Log;
+import util.Log;
 
 /**
  * collections are realy expensive so dont use them if performance is important!

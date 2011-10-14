@@ -1,7 +1,7 @@
 package geo;
 
 import gl.GLFactory;
-import android.util.Log;
+import util.Log;
 
 public interface EdgeListener {
 

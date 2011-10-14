@@ -3,7 +3,7 @@ package commands.logic;
 import util.Wrapper;
 import util.Wrapper.Type;
 import worldData.Obj;
-import android.util.Log;
+import util.Log;
 
 import commands.undoable.UndoableCommand;
 

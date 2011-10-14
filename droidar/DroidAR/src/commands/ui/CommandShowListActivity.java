@@ -7,7 +7,7 @@ import system.ActivityConnector;
 import system.Container;
 import util.Wrapper;
 import android.app.Activity;
-import android.util.Log;
+import util.Log;
 import android.widget.BaseAdapter;
 
 import commands.Command;

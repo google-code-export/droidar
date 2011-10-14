@@ -21,7 +21,7 @@ import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
-import android.util.Log;
+import util.Log;
 
 import commands.Command;
 import components.ViewPosCalcerComp;

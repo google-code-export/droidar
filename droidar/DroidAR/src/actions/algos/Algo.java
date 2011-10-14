@@ -1,6 +1,6 @@
 package actions.algos;
 
-import android.util.Log;
+import util.Log;
 
 public abstract class Algo {
 

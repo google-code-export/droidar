@@ -5,7 +5,7 @@ import util.EfficientList;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+import util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;

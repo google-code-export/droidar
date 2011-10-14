@@ -1,7 +1,7 @@
 package commands.logic;
 
 import listeners.ProcessListener;
-import android.util.Log;
+import util.Log;
 
 import commands.Command;
 

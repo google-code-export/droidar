@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import util.Vec;
 import android.graphics.Bitmap;
-import android.util.Log;
+import util.Log;
 
 public class TexturedShape extends Shape {
 

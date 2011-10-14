@@ -11,7 +11,7 @@ import util.EfficientList;
 import util.Vec;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
-import android.util.Log;
+import util.Log;
 
 /**
  * This is the OpenGL renderer used for the {@link CustomGLSurfaceView}

@@ -4,7 +4,7 @@ import gl.GLCamera;
 import listeners.EventListener;
 import util.Vec;
 import android.location.Location;
-import android.util.Log;
+import util.Log;
 import android.view.MotionEvent;
 
 public abstract class Action implements EventListener {

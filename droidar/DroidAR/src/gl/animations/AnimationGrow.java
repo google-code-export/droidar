@@ -6,13 +6,13 @@ import gl.scenegraph.MeshComponent;
 import javax.microedition.khronos.opengles.GL10;
 
 import system.ParentStack;
+import util.Log;
 
 import worldData.Obj;
 import worldData.RenderableEntity;
 import worldData.UpdateTimer;
 import worldData.Updateable;
 import worldData.Visitor;
-import android.util.Log;
 
 public class AnimationGrow implements GLAnimation {
 

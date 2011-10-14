@@ -15,7 +15,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.util.Log;
+import util.Log;
 import android.widget.TextView;
 
 /**

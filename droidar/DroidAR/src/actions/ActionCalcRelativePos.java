@@ -5,7 +5,7 @@ import geo.GeoCalcer;
 import gl.GLCamera;
 import worldData.World;
 import android.location.Location;
-import android.util.Log;
+import util.Log;
 
 /**
  * This action is the basic action for virtual camera movement in relation to

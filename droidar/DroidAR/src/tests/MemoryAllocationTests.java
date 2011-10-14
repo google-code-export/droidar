@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import util.EfficientList;
 import android.os.SystemClock;
-import android.util.Log;
+import util.Log;
 
 /**
  * This demonstrates that the use of {@link EfficientList} on older devices is

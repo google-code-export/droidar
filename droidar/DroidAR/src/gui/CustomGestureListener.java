@@ -1,7 +1,7 @@
 package gui;
 
 import system.TouchEventInterface;
-import android.util.Log;
+import util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 

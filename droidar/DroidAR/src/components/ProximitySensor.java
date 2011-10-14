@@ -9,7 +9,7 @@ import worldData.Obj;
 import worldData.UpdateTimer;
 import worldData.Updateable;
 import worldData.Visitor;
-import android.util.Log;
+import util.Log;
 
 public abstract class ProximitySensor implements Entity {
 

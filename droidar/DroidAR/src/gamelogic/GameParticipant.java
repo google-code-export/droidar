@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import util.EfficientList;
 import worldData.Entity;
-import android.util.Log;
+import util.Log;
 
 
 public abstract class GameParticipant implements Entity, EditItem {

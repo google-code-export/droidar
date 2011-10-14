@@ -3,9 +3,9 @@ package gl;
 import geo.GeoObj;
 import gl.animations.AnimationFaceToCamera;
 import gl.animations.AnimationRotate;
-import gl.animations.RenderList;
 import gl.scenegraph.MeshComponent;
 import gl.scenegraph.MultiColoredShape;
+import gl.scenegraph.RenderList;
 import gl.scenegraph.Shape;
 import gl.textures.Textured2dShape;
 import gl.textures.TexturedShape;
@@ -21,7 +21,7 @@ import worldData.Visitor;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.util.Log;
+import util.Log;
 import android.widget.TextView;
 
 /**

@@ -357,6 +357,10 @@ public class Vec {
 		return new Vec(x, y, z);
 	}
 
+	/**
+	 * @param length
+	 * @return the resized vector to allow chains
+	 */
 	public Vec setLength(float length) {
 		return mult(length / vectorLength(this));
 	}

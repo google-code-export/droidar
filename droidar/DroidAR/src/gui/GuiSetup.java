@@ -4,7 +4,7 @@ import system.Setup;
 import system.TaskManager;
 import util.Wrapper;
 import android.graphics.Color;
-import android.util.Log;
+import util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;

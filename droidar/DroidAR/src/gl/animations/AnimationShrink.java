@@ -11,7 +11,7 @@ import worldData.Obj;
 import worldData.RenderableEntity;
 import worldData.Updateable;
 import worldData.Visitor;
-import android.util.Log;
+import util.Log;
 
 public class AnimationShrink implements GLAnimation {
 

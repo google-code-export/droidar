@@ -25,7 +25,7 @@ import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.util.Log;
+import util.Log;
 
 public class GeoUtils {
 

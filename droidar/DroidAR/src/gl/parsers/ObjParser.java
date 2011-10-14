@@ -11,7 +11,7 @@ import java.util.StringTokenizer;
 import util.EfficientList;
 import util.Vec;
 import android.content.res.Resources;
-import android.util.Log;
+import util.Log;
 
 /*
  * TODO

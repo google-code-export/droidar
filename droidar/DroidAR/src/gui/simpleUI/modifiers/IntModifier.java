@@ -3,7 +3,7 @@ package gui.simpleUI.modifiers;
 import gui.simpleUI.AbstractModifier;
 import gui.simpleUI.SimpleUI;
 import android.content.Context;
-import android.util.Log;
+import util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;

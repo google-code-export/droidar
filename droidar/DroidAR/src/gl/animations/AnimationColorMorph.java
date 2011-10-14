@@ -7,7 +7,7 @@ import gl.scenegraph.MeshComponent;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.util.Log;
+import util.Log;
 
 import system.ParentStack;
 import util.Vec;

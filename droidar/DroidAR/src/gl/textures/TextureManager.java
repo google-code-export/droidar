@@ -11,7 +11,7 @@ import util.HasDebugInformation;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.opengl.GLUtils;
-import android.util.Log;
+import util.Log;
 
 public class TextureManager implements HasDebugInformation {
 

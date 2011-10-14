@@ -1,6 +1,6 @@
 package commands;
 
-import android.util.Log;
+import util.Log;
 import geo.GeoObj;
 import listeners.EventListener;
 import system.EventManager;

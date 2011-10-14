@@ -17,7 +17,7 @@ import worldData.AbstractObj;
 import worldData.Updateable;
 import worldData.Visitor;
 import worldData.World;
-import android.util.Log;
+import util.Log;
 
 /**
  * A {@link GeoGraph} is a simple graph which holds {@link GeoObj}s and supports

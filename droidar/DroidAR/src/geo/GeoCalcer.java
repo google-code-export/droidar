@@ -4,7 +4,7 @@ import system.Container;
 import worldData.LargeWorld;
 import worldData.Visitor;
 import worldData.World;
-import android.util.Log;
+import util.Log;
 
 public class GeoCalcer extends Visitor {
 

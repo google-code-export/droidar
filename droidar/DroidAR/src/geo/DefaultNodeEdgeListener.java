@@ -11,7 +11,7 @@ import util.EfficientList;
 import util.Vec;
 import worldData.Entity;
 import worldData.Obj;
-import android.util.Log;
+import util.Log;
 
 import components.ProximitySensor;
 
