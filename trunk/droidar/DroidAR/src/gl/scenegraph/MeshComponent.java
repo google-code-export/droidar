@@ -10,7 +10,6 @@ import gl.ObjectPicker;
 import gl.ParentMesh;
 import gl.Renderable;
 import gl.animations.GLAnimation;
-import gl.animations.RenderList;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -26,7 +25,7 @@ import worldData.Obj;
 import worldData.RenderableEntity;
 import worldData.Updateable;
 import android.opengl.Matrix;
-import android.util.Log;
+import util.Log;
 
 import commands.Command;
 import commands.undoable.UndoableCommand;

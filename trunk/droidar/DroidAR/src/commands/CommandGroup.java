@@ -3,7 +3,7 @@ package commands;
 import listeners.ProcessListener;
 import system.Container;
 import util.EfficientList;
-import android.util.Log;
+import util.Log;
 
 import commands.undoable.UndoableCommand;
 

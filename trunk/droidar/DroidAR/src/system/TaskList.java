@@ -1,7 +1,7 @@
 package system;
 
 import util.EfficientList;
-import android.util.Log;
+import util.Log;
 
 import commands.Command;
 import commands.CommandGroup;

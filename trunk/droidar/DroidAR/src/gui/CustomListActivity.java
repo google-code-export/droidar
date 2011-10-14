@@ -4,7 +4,7 @@ import system.ActivityConnector;
 import util.EfficientList;
 import android.app.ListActivity;
 import android.os.Bundle;
-import android.util.Log;
+import util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;

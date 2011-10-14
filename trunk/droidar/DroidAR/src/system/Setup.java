@@ -26,7 +26,7 @@ import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
 import android.graphics.PixelFormat;
 import android.os.SystemClock;
-import android.util.Log;
+import util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;

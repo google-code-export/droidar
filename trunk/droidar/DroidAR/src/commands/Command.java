@@ -4,7 +4,7 @@ import gui.ListItem;
 import gui.MetaInfos;
 import listeners.ItemGuiListener;
 import worldData.HasInfosInterface;
-import android.util.Log;
+import util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 

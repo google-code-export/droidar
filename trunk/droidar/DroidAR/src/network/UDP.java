@@ -9,7 +9,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 
-import android.util.Log;
+import util.Log;
 
 public class UDP {
 

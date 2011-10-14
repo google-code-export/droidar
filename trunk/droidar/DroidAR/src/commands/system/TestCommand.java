@@ -1,6 +1,6 @@
 package commands.system;
 
-import util.L;
+import util.Log;
 
 import commands.undoable.UndoableCommand;
 
@@ -11,14 +11,14 @@ public class TestCommand extends UndoableCommand {
 	@Override
 	public boolean override_do() {
 		x++;
-		L.out("Test Command do. Count: " + x);
+		Log.out("Test Command do. Count: " + x);
 		return true;
 	}
 
 	@Override
 	public boolean override_undo() {
 		x--;
-		L.out("Test Command undo. Count: " + x);
+		Log.out("Test Command undo. Count: " + x);
 		return true;
 	}
 

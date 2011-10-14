@@ -20,7 +20,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
+import util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 

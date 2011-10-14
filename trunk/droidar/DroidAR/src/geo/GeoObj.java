@@ -12,7 +12,7 @@ import worldData.Obj;
 import worldData.Visitor;
 import android.location.Address;
 import android.location.Location;
-import android.util.Log;
+import util.Log;
 
 public class GeoObj extends Obj implements HasDebugInformation {
 

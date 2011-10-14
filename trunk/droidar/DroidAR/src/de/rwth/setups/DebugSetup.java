@@ -33,7 +33,7 @@ import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
 import actions.ActionWASDMovement;
 import android.app.Activity;
-import android.util.Log;
+import util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 

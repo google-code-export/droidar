@@ -16,6 +16,7 @@ import commands.ui.CommandShowToast;
 
 import de.rwth.setups.CollectItemsSetup;
 import de.rwth.setups.DebugSetup;
+import de.rwth.setups.FarAwayPOIScenarioSetup;
 import de.rwth.setups.GraphMovementTestSetup;
 import de.rwth.setups.GraphCreationSetup;
 import de.rwth.setups.LargeWorldsSetup;
@@ -25,6 +26,7 @@ import de.rwth.setups.PlaceObjectsSetup;
 import de.rwth.setups.PlaceObjectsSetupTwo;
 import de.rwth.setups.PositionTestsSetup;
 import de.rwth.setups.SensorTestSetup;
+import de.rwth.setups.TooFarAwayComp;
 
 public class TechDemoLauncher extends Activity {
 	@Override
@@ -33,7 +35,8 @@ public class TechDemoLauncher extends Activity {
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.demoselector);
-		
+
+		showSetup("'Too far away' scenario", new FarAwayPOIScenarioSetup());
 		showSetup("Animation Demo", new DebugSetup());
 		showSetup("Large worlds", new LargeWorldsSetup());
 		showSetup("Changing text Demo", new FastChangingTextSetup());

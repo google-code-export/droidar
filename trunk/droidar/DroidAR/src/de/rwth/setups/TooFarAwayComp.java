@@ -11,17 +11,14 @@ import worldData.UpdateTimer;
 import worldData.Updateable;
 import worldData.Visitor;
 
-public class TooFarAwayComp implements Entity {
+public abstract class TooFarAwayComp implements Entity {
 
-	private MeshComponent myReplaceMesh;
 	private float maxDistance;
 	private GLCamera myCamera;
 	private UpdateTimer timer;
 
-	public TooFarAwayComp(float distance, MeshComponent replaceMesh,
-			GLCamera camera) {
+	public TooFarAwayComp(float distance, GLCamera camera) {
 		maxDistance = distance;
-		myReplaceMesh = replaceMesh;
 		myCamera = camera;
 		timer = new UpdateTimer(1, null);
 	}
@@ -31,23 +28,42 @@ public class TooFarAwayComp implements Entity {
 			ParentStack<Updateable> stack) {
 		if (parent instanceof HasPosition
 				&& timer.update(timeDelta, parent, stack)) {
-			if (Vec.distance(myCamera.getPosition(),
-					((HasPosition) parent).getPosition()) > maxDistance) {
-				showFarAwayMesh(parent);
+
+			Vec direction = ((HasPosition) parent).getPosition().copy()
+					.sub(myCamera.getPosition());
+			if (direction.getLength() > maxDistance) {
+				showFarAwayMesh(parent, direction);
+			} else {
+				hideFarAwayMesh(parent);
 			}
 		}
 		return true;
 	}
 
-	private void showFarAwayMesh(Updateable parent) {
+	private void hideFarAwayMesh(Updateable parent) {
 		if (parent instanceof Obj)
-			addTo((Obj) parent);
-
+			hideIn((Obj) parent);
+		if (parent instanceof MeshComponent)
+			hideIn((MeshComponent) parent);
 	}
 
-	private void addTo(Obj parent) {
-		if (!parent.getMeshComp().contains(myReplaceMesh))
-			parent.getMeshComp().addChild(myReplaceMesh);
+	private void hideIn(Obj parent) {
+		hideIn(parent.getMeshComp());
+	}
+
+	public abstract void hideIn(MeshComponent parent);
+
+	private void showFarAwayMesh(Updateable parent, Vec direction) {
+		if (parent instanceof Obj)
+			addTo((Obj) parent, direction);
+		if (parent instanceof MeshComponent)
+			addTo((MeshComponent) parent, direction);
+	}
+
+	public abstract void addTo(MeshComponent parent, Vec direction);
+
+	private void addTo(Obj parent, Vec direction) {
+		addTo(parent.getMeshComp(), direction);
 	}
 
 	@Override

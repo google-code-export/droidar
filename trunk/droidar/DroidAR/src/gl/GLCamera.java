@@ -8,7 +8,7 @@ import listeners.EventListener;
 import system.EventManager;
 import system.ParentStack;
 import util.HasDebugInformation;
-import util.L;
+import util.Log;
 import util.Vec;
 import worldData.MoveComp;
 import worldData.Updateable;
@@ -16,7 +16,6 @@ import actions.DefaultUpdateListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.opengl.Matrix;
-import android.util.Log;
 
 /**
  * This is the virtual camera needed to display a virtual world. The 3 important
@@ -672,7 +671,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 * This will reset the rotation vector of the virtual camera
 	 */
 	public void resetBufferedAngle() {
-		L.out("Reseting camera rotation!");
+		Log.d(LOG_TAG, "Reseting camera rotation in resetBufferedAngle()!");
 		if ((myNewRotationVec != null) && (sensorInputEnabled))
 			myNewRotationVec.setToZero();
 	}

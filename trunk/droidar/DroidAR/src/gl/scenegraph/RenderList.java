@@ -1,4 +1,4 @@
-package gl.animations;
+package gl.scenegraph;
 
 import gl.Renderable;
 
@@ -10,7 +10,7 @@ import util.EfficientList;
 import worldData.RenderableEntity;
 import worldData.Updateable;
 import worldData.Visitor;
-import android.util.Log;
+import util.Log;
 
 public class RenderList implements RenderableEntity,
 		Container<RenderableEntity> {

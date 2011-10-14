@@ -54,6 +54,7 @@ public abstract class SimpleTesting {
 		new EfficientListTests().run();
 		new GeoTests().run();
 		new IOTests(myTargetActivity).run();
+		new WorldTests().run();
 
 	}
 }

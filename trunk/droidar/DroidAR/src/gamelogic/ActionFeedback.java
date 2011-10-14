@@ -1,6 +1,6 @@
 package gamelogic;
 
-import android.util.Log;
+import util.Log;
 
 public class ActionFeedback {
 

@@ -29,7 +29,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
-import android.util.Log;
+import util.Log;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 

@@ -10,7 +10,7 @@ import system.Container;
 import system.ParentStack;
 import util.EfficientList;
 import util.Vec;
-import android.util.Log;
+import util.Log;
 
 //TODO not the best way to extend ArrayList here..
 public class World implements RenderableEntity, Container<RenderableEntity> {

@@ -6,7 +6,7 @@ import network.TCP.ResponseListener;
 import network.UDP;
 import network.UDP.Client;
 import network.UDP.Server;
-import android.util.Log;
+import util.Log;
 
 public class NetworkTests extends SimpleTesting {
 

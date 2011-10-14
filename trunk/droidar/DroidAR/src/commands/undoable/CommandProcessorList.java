@@ -2,10 +2,11 @@ package commands.undoable;
 
 import java.util.ArrayList;
 
-import util.L;
+import util.Log;
 
 public class CommandProcessorList extends ArrayList<UndoableCommand> {
 
+	private static final String LOG_TAG = "Command Processor List";
 	private int currentPos = 0;
 
 	@Override
@@ -16,7 +17,7 @@ public class CommandProcessorList extends ArrayList<UndoableCommand> {
 		if (this.size() >= currentPos) {
 			this.removeRange(currentPos - 1, this.size());
 		}
-		L.out("Adding Command: " + object.getClass());
+		Log.d(LOG_TAG, "Adding Command: " + object.getClass());
 		return super.add(object);
 	}
 
@@ -35,10 +36,12 @@ public class CommandProcessorList extends ArrayList<UndoableCommand> {
 		boolean result = false;
 
 		if (currentPos - 1 >= 0) {
-			L.out("Undoing Command: " + this.get(currentPos - 1).getClass());
+			Log.d(LOG_TAG, "Undoing Command: "
+					+ this.get(currentPos - 1).getClass());
 			result = this.get(currentPos - 1).override_undo();
 		} else {
-			L.out("Error - CommandList already at beginning: " + currentPos);
+			Log.e(LOG_TAG, "Error - CommandList already at beginning: "
+					+ currentPos);
 			return false;
 		}
 		// if the command was undone correctly move to the pointer to the
@@ -52,10 +55,11 @@ public class CommandProcessorList extends ArrayList<UndoableCommand> {
 		boolean result = false;
 
 		if (currentPos < this.size()) {
-			L.out("Redoing Command: " + this.get(currentPos).getClass());
+			Log.d(LOG_TAG, "Redoing Command: "
+					+ this.get(currentPos).getClass());
 			result = this.get(currentPos).override_do();
 		} else {
-			L.out("CommandList at end: " + currentPos);
+			Log.e(LOG_TAG, "CommandList at end: " + currentPos);
 			return false;
 		}
 		if (result)

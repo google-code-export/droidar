@@ -1,7 +1,7 @@
 package gui;
 
 import system.Container;
-import android.util.Log;
+import util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;

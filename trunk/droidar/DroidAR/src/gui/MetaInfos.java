@@ -17,7 +17,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
-import android.util.Log;
+import util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import de.rwth.R;

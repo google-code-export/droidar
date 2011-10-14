@@ -2,7 +2,7 @@ package worldData;
 
 import util.EfficientList;
 import android.os.SystemClock;
-import android.util.Log;
+import util.Log;
 
 public class SystemUpdater implements Runnable {
 
