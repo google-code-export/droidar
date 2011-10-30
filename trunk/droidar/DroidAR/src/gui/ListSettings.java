@@ -24,7 +24,7 @@ public class ListSettings {
 
 	protected boolean closeOnCorrectClick = true;
 
-	protected UndoableCommand myMenuCommands;
+	protected Command myMenuCommands;
 
 	private String myActivityName;
 
