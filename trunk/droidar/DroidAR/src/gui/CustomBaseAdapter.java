@@ -5,12 +5,25 @@ import util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.SimpleCursorAdapter;
 
+/**
+ * use {@link SimpleCursorAdapter} instead!!
+ * 
+ * @author Spobo
+ * 
+ */
 @Deprecated
 public class CustomBaseAdapter extends BaseAdapter {
 
 	private Container myList;
 
+	/**
+	 * use {@link SimpleCursorAdapter} instead!!
+	 * 
+	 * @param list
+	 */
+	@Deprecated
 	public CustomBaseAdapter(Container list) {
 		myList = list;
 		Log.d("GUI", "CustomBaseAdapter created with list: " + list);
@@ -18,8 +31,9 @@ public class CustomBaseAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		Log.d("GUI", "CustomBaseAdapter list has length="
-				+ myList.getAllItems().myLength);
+		Log.d("GUI",
+				"CustomBaseAdapter list has length="
+						+ myList.getAllItems().myLength);
 		return myList.getAllItems().myLength;
 	}
 
