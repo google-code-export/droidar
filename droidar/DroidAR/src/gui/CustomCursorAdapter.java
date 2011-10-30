@@ -10,6 +10,7 @@ import android.widget.Filterable;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+@Deprecated
 public class CustomCursorAdapter extends SimpleCursorAdapter implements
 		Filterable {
 
