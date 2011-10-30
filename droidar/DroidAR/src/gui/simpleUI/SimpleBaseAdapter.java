@@ -85,15 +85,19 @@ public class SimpleBaseAdapter extends BaseAdapter {
 				while (keepUpdaterRunning) {
 					try {
 						Thread.sleep(UPDATE_SPEED);
+						a.runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									refreshCount(myList.size());
+								} catch (Exception e) {
+									keepUpdaterRunning = false;
+								}
+							}
+						});
 					} catch (InterruptedException e) {
 						keepUpdaterRunning = false;
 					}
-					a.runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							refreshCount(myList.size());
-						}
-					});
 				}
 			}
 		}).start();
