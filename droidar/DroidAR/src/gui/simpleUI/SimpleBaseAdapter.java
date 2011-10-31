@@ -60,7 +60,10 @@ public class SimpleBaseAdapter extends BaseAdapter {
 	 * @param activity
 	 *            if the {@link ListView} should auto-update itself when the
 	 *            {@link List} is changed pass the {@link Activity} which
-	 *            displays the {@link ListView}
+	 *            displays the {@link ListView}, otherwise if auto-updates are
+	 *            not necessary because the list does not change or the notify
+	 *            method of the adapter is called manually on each change pass
+	 *            null
 	 * @param listToDisplay
 	 *            the {@link List} that should be displayed
 	 */
