@@ -332,6 +332,7 @@ public abstract class Setup {
 	 * the rest will be done automatically
 	 * 
 	 * @param infoScreenData
+	 *            See {@link InfoScreenSettings}
 	 */
 	public void _f_addInfoScreen(InfoScreenSettings infoScreenData) {
 		Log.d(LOG_TAG, "Info screen will be closed instantly");

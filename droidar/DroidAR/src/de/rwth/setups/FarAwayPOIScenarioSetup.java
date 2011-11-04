@@ -1,18 +1,11 @@
 package de.rwth.setups;
 
-import geo.GeoObj;
-import gl.CustomGLSurfaceView;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.scenegraph.MeshComponent;
-import gui.GuiSetup;
-import android.app.Activity;
 import system.DefaultARSetup;
-import system.EventManager;
-import system.Setup;
 import util.Vec;
 import worldData.Obj;
-import worldData.SystemUpdater;
 import worldData.World;
 
 public class FarAwayPOIScenarioSetup extends DefaultARSetup {

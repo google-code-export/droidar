@@ -9,9 +9,9 @@ import util.Log;
 
 /**
  * This action is the basic action for virtual camera movement in relation to
- * the device movement. The gps input is used to calculate the virtual position.
- * If the distance to the center of the virtual world gets to big, the virtual
- * zero postion is reseted and the virtual positions are recalculated
+ * the physical device movement. The GPS input is used to calculate the virtual
+ * position. If the distance to the center of the virtual world gets to big, the
+ * virtual zero position is reseted and the virtual positions are recalculated
  * 
  * TODO combine this with the moveCamera action? good idea or not?
  * 
@@ -22,7 +22,10 @@ public class ActionCalcRelativePos extends Action {
 
 	private static final double MAX_METER_DISTANCE = 500; // 500 meter
 	private static final String LOG_TAG = "ActionCalcRelativePos";
-	private static final boolean LOG_SHOW_POSITION = true;
+
+	private static final boolean LOG_SHOW_POSITION = true; // TODO switch to
+															// false
+
 	/**
 	 * this could be replaces by the
 	 * {@link EventManager#getZeroPositionLocationObject()} values. Should store
@@ -43,7 +46,6 @@ public class ActionCalcRelativePos extends Action {
 
 	@Override
 	public boolean onLocationChanged(Location location) {
-
 		if (nullLatitude == 0 || nullLongitude == 0) {
 			resetWorldZeroPositions(location);
 		} else {
@@ -65,10 +67,10 @@ public class ActionCalcRelativePos extends Action {
 
 			/*
 			 * The altitude should be set to a certain position too. This can be
-			 * done by using location.getAltitude() TODO first think of all
-			 * consequences!
+			 * done by using location.getAltitude()
 			 */
-			final double altMet = 0;// location.getAltitude(); TODO
+			final double altMet = 0;// location.getAltitude(); //TODO first
+									// think of all consequences!
 
 			if (worldShouldBeRecalced(latitudeDistInMeters,
 					longitudeDistInMeters, altMet)) {
@@ -86,21 +88,8 @@ public class ActionCalcRelativePos extends Action {
 			double altDistMet) {
 		// myCamera.setNewPosition((float) latDistMet, (float) longDistMet,
 		// (float) altDistMet);
-		myCamera.setNewPosition((float) latDistMet, (float) longDistMet, 0);
-	}
-
-	private void setNewNullValues(Location location) {
-		nullLatitude = location.getLatitude();
-		nullLongitude = location.getLongitude();
-		nullAltitude = location.getAltitude();
-		EventManager.getInstance().setZeroLocation(location);
-	}
-
-	private void calcNewWorldPositions() {
-		if (myGeoCalcer == null)
-			myGeoCalcer = new GeoCalcer();
-		myGeoCalcer.setNullPos(nullLatitude, nullLongitude, nullAltitude);
-		myWorld.accept(myGeoCalcer);
+		myCamera.setNewPosition((float) latDistMet, (float) longDistMet,
+				(float) altDistMet);
 	}
 
 	private void resetCameraToNullPosition() {
@@ -121,6 +110,20 @@ public class ActionCalcRelativePos extends Action {
 		setNewNullValues(location);
 		resetCameraToNullPosition();
 		calcNewWorldPositions();
+	}
+
+	private void setNewNullValues(Location location) {
+		nullLatitude = location.getLatitude();
+		nullLongitude = location.getLongitude();
+		nullAltitude = location.getAltitude();
+		EventManager.getInstance().setZeroLocation(location);
+	}
+
+	private void calcNewWorldPositions() {
+		if (myGeoCalcer == null)
+			myGeoCalcer = new GeoCalcer();
+		myGeoCalcer.setNullPos(nullLatitude, nullLongitude, nullAltitude);
+		myWorld.accept(myGeoCalcer);
 	}
 
 }

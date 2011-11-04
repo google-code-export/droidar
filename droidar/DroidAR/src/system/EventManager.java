@@ -173,22 +173,6 @@ public class EventManager implements LocationListener, SensorEventListener {
 		}
 	}
 
-	/*
-	 * // load inR matrix from current sensor data:
-	 * SensorManager.getRotationMatrix(inR, null, gravityValues,
-	 * geomagneticValues);
-	 * 
-	 * SensorManager.getOrientation(inR, orientation);
-	 * mapMagAndAcclDataToVector(orientation); orientetionChanged(orientation);
-	 */
-
-	// private void mapMagAndAcclDataToVector(float[] values) {
-	// // degree=radians*180/PI
-	// values[0] = values[0] * 360 / 3.141592653589793f;
-	// values[1] = values[1] * 180 / 3.141592653589793f;
-	// values[2] = values[2] * -180 / 3.141592653589793f;
-	// }
-
 	public void onLocationChanged(Location location) {
 		if (onLocationChangedAction != null) {
 			onLocationChangedAction.onLocationChanged(location);
@@ -196,15 +180,16 @@ public class EventManager implements LocationListener, SensorEventListener {
 	}
 
 	public void onProviderDisabled(String provider) {
-
+		Log.w(LOG_TAG, "Didnt handle onProviderDisabled of " + provider);
 	}
 
 	public void onProviderEnabled(String provider) {
-
+		Log.w(LOG_TAG, "Didnt handle onProviderEnabled of " + provider);
 	}
 
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-
+		Log.w(LOG_TAG, "Didnt handle onStatusChanged of " + provider
+				+ "(status=" + status + ")");
 	}
 
 	public void addOnOrientationChangedAction(EventListener action) {
@@ -438,11 +423,11 @@ public class EventManager implements LocationListener, SensorEventListener {
 	 * the current device position (and because of this also the current camera
 	 * position)
 	 * 
-	 * @return the zero position. This will be not a copy so do not change it!
+	 * @return the zero position. This will NOT be a copy so do not modify it!
 	 */
 	public GeoObj getZeroPositionLocationObject() {
 		if (zeroPos == null) {
-			Log.e(LOG_TAG, "Zero pos was not yet received! "
+			Log.w(LOG_TAG, "Zero pos was not yet received! "
 					+ "The last known position of the device will be used "
 					+ "at the zero position.");
 			zeroPos = getCurrentLocationObject().copy();
