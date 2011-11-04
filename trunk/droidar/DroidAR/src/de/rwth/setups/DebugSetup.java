@@ -89,11 +89,56 @@ public class DebugSetup extends Setup {
 
 		initWorld(world);
 		initI9Tests(world);
+		initNTest(world);
 
 		world.add(objectFactory.newTextObject("text Input", new Vec(10, 1, 1),
 				myTargetActivity, camera));
 
 		renderer.addRenderElement(world);
+
+	}
+
+	private void initNTest(World w) {
+		{
+			MeshComponent triangleMesh = GLFactory.getInstance()
+					.newTexturedSquare(
+							"elefantId",
+							IO.loadBitmapFromId(myTargetActivity,
+									R.drawable.elephant64));
+			triangleMesh.setScale(new Vec(10, 10, 10));
+			triangleMesh.addChild(new AnimationFaceToCamera(camera, 0.5f));
+			GeoObj treangleGeo = new GeoObj(GeoObj.n1, triangleMesh);
+			w.add(treangleGeo);
+		}
+		{
+
+			MeshComponent triangleMesh = GLFactory.getInstance()
+					.newTexturedSquare(
+							"hippoId",
+							IO.loadBitmapFromId(myTargetActivity,
+									R.drawable.hippopotamus64));
+			triangleMesh.addChild(new AnimationFaceToCamera(camera, 0.5f));
+			triangleMesh.setScale(new Vec(10, 10, 10));
+			GeoObj treangleGeo = new GeoObj(GeoObj.n2, triangleMesh);
+			w.add(treangleGeo);
+
+			CommandSetWrapperToValue2 commandSelectObj = new CommandSetWrapperToValue2(
+					selection);
+			triangleMesh.setOnClickCommand(commandSelectObj);
+
+		}
+
+		{
+			MeshComponent triangleMesh = GLFactory.getInstance()
+					.newTexturedSquare(
+							"pandaId",
+							IO.loadBitmapFromId(myTargetActivity,
+									R.drawable.panda64));
+			triangleMesh.addChild(new AnimationFaceToCamera(camera, 0.5f));
+			triangleMesh.setScale(new Vec(10, 10, 10));
+			GeoObj treangleGeo = new GeoObj(GeoObj.n3, triangleMesh);
+			w.add(treangleGeo);
+		}
 
 	}
 

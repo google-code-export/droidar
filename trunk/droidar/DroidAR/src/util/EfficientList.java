@@ -21,7 +21,7 @@ public class EfficientList<T> {
 
 	private static final String LOG_TAG = "Efficient List";
 
-	protected final int INIT_SIZE = 1;
+	protected final int INIT_SIZE = 2;
 
 	/**
 	 * is accessible to increase performance in loops

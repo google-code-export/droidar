@@ -18,14 +18,22 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import util.Log;
 import util.Wrapper;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import util.Log;
+import android.net.Uri;
+import android.provider.Settings;
 
 public class GeoUtils {
 
@@ -131,29 +139,17 @@ public class GeoUtils {
 	}
 
 	public static Location getCurrentLocation(Context context) {
-		Location l = getCurrentLocation(context, Criteria.ACCURACY_FINE);
-		if (l == null) {
-			Log.e(LOG_TAG, "Fine accuracy position could not be detected!");
-			l = GeoUtils.getCurrentLocation(context, Criteria.ACCURACY_COARSE);
-			if (l != null)
-				Log.i(LOG_TAG, "Coarse accuracy position detected");
-		}
-		return l;
-	}
-
-	public Location getCurrentLocation() {
-		Location l = GeoUtils.getCurrentLocation(myContext,
+		Location l = GeoUtils.getCurrentLocation(context,
 				Criteria.ACCURACY_FINE);
 		if (l == null) {
 			Log.e(LOG_TAG,
 					"Fine accuracy position could not be detected! Will use coarse location.");
-			l = GeoUtils
-					.getCurrentLocation(myContext, Criteria.ACCURACY_COARSE);
+			l = GeoUtils.getCurrentLocation(context, Criteria.ACCURACY_COARSE);
 			if (l == null) {
 				Log.e(LOG_TAG,
 						"Coarse accuracy position could not be detected! Last try..");
 				try {
-					LocationManager lm = ((LocationManager) myContext
+					LocationManager lm = ((LocationManager) context
 							.getSystemService(Context.LOCATION_SERVICE));
 					Log.d(LOG_TAG, "Searching through "
 							+ lm.getAllProviders().size()
@@ -169,6 +165,10 @@ public class GeoUtils {
 		}
 		Log.d(LOG_TAG, "current position=" + l);
 		return l;
+	}
+
+	public Location getCurrentLocation() {
+		return getCurrentLocation(myContext);
 	}
 
 	public static Location getCurrentLocation(Context context, int accuracy) {
@@ -359,6 +359,71 @@ public class GeoUtils {
 		urlString.append(Double.toString(destPos.getLongitude()));
 		urlString.append("&;ie=UTF8&0&om=0&output=kml");
 		return urlString.toString();
+	}
+
+	public static boolean isGPSDisabled(Context context) {
+		return !((LocationManager) context
+				.getSystemService(Context.LOCATION_SERVICE))
+				.isProviderEnabled(LocationManager.GPS_PROVIDER);
+	}
+
+	public boolean isGPSDisabled() {
+		return isGPSDisabled(myContext);
+	}
+
+	/**
+	 * @param activity
+	 * @return true if GPS could be enabled without user interaction, else the
+	 *         settings will be started and false is returend
+	 */
+	public static boolean enableGPS(Activity activity) {
+		if (canTurnOnGPSAutomatically(activity)) {
+			String provider = Settings.Secure.getString(
+					activity.getContentResolver(),
+					Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+			if (!provider.contains("gps")) { // if gps is disabled
+				final Intent poke = new Intent();
+				poke.setClassName("com.android.settings",
+						"com.android.settings.widget.SettingsAppWidgetProvider");
+				poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
+				poke.setData(Uri.parse("3"));
+				activity.sendBroadcast(poke);
+				return true;
+			}
+		} else {
+			Log.d(LOG_TAG, "Can't enable GPS automatically, will start "
+					+ "settings for manual enabling!");
+			activity.startActivity(new Intent(
+					android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+		}
+		return false;
+	}
+
+	/**
+	 * source from
+	 * http://stackoverflow.com/questions/4721449/enable-gps-programatically
+	 * -like-tasker
+	 */
+	private static boolean canTurnOnGPSAutomatically(Context c) {
+		PackageInfo pacInfo = null;
+		try {
+			pacInfo = c.getPackageManager().getPackageInfo(
+					"com.android.settings", PackageManager.GET_RECEIVERS);
+		} catch (NameNotFoundException e) {
+			Log.e(LOG_TAG, "com.android.settings package not found");
+			return false; // package not found
+		}
+		if (pacInfo != null) {
+			for (ActivityInfo actInfo : pacInfo.receivers) {
+				// test if recevier is exported. if so, we can toggle GPS.
+				if (actInfo.name
+						.equals("com.android.settings.widget.SettingsAppWidgetProvider")
+						&& actInfo.exported) {
+					return true;
+				}
+			}
+		}
+		return false; // default
 	}
 
 }
