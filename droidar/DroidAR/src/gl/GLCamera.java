@@ -217,6 +217,10 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		myMover.myTargetPos = cameraPosition;
 	}
 
+	public Vec getMyNewPosition() {
+		return myMover.myTargetPos;
+	}
+
 	public void setNewCameraOffset(Vec newCameraOffset) {
 		if (newCameraOffset != null) {
 			if (myNewOffset == null) {

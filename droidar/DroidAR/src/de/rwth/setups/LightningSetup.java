@@ -32,9 +32,16 @@ public class LightningSetup extends DefaultARSetup {
 	private static float zMoveFactor = 1f;
 
 	private Wrapper targetMoveWrapper;
-	private GLCamera myCamera;
 
 	private LightSource spotLight;
+
+	private Obj lightObject;
+
+	public LightningSetup() {
+		super();
+		lightObject = new Obj();
+		targetMoveWrapper = new Wrapper(lightObject);
+	}
 
 	@Override
 	public boolean _a2_initLightning(EfficientList<LightSource> lights) {
@@ -50,10 +57,6 @@ public class LightningSetup extends DefaultARSetup {
 			GLFactory objectFactory) {
 
 		addNewObjToWorld(world, objectFactory);
-
-		myCamera = world.getMyCamera();
-		final Obj lightObject = new Obj();
-
 		MeshComponent innerGroup = new Shape();
 		innerGroup.addChild(spotLight);
 		innerGroup.addChild(objectFactory.newCircle(Color.red()));
@@ -76,8 +79,6 @@ public class LightningSetup extends DefaultARSetup {
 		lightObject.setComp(outerGroup);
 		lightObject.setComp(new MoveComp(1));
 		world.add(lightObject);
-
-		targetMoveWrapper = new Wrapper(lightObject);
 
 	}
 
@@ -128,7 +129,7 @@ public class LightningSetup extends DefaultARSetup {
 		eventManager.onTrackballEventAction = null;
 
 		eventManager.addOnTrackballAction(new ActionMoveObject(
-				targetMoveWrapper, myCamera, 10, 100));
+				targetMoveWrapper, getCamera(), 10, 100));
 	}
 
 	@Override
