@@ -1,8 +1,14 @@
 package de.rwth.setups;
 
+import commands.Command;
+import commands.ui.CommandShowToast;
+
+import android.app.Activity;
+import geo.GeoObj;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.scenegraph.MeshComponent;
+import gui.GuiSetup;
 import system.DefaultARSetup;
 import util.Vec;
 import worldData.Obj;
@@ -29,6 +35,23 @@ public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 				parent.addChild(arrow);
 			}
 		});
+		
+	}
 
+	@Override
+	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity activity) {
+		super._e2_addElementsToGuiSetup(guiSetup, activity);
+		guiSetup.addButtonToBottomView(new Command() {
+
+			@Override
+			public boolean execute() {
+				// float[] rayPos = new float[4];
+				// float[] rayDir = new float[4];
+				CommandShowToast.show(getActivity(), "altitude="
+						+ getCamera().getGPSPositionVec());
+
+				return true;
+			}
+		}, "Show altitude");
 	}
 }

@@ -380,6 +380,10 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		if (rayPos != null) {
 			float[] initPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 			Matrix.multiplyMV(rayPos, 0, invRotMatrix, 0, initPos, 0);
+			/*
+			 * TODO is raypos != 0 if initPos ist the 0 vector?? is this calc.
+			 * redundant?
+			 */
 			rayPos[0] += myPosition.x;
 			rayPos[1] += myPosition.y;
 			rayPos[2] += myPosition.z;
@@ -398,8 +402,6 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 */
 	public synchronized void render(GL10 gl, Renderable parent,
 			ParentStack<Renderable> stack) {
-		// a camera object could be a curser or something like this: TODO use?
-		// if (myCameraObject!=null) loadCameraObject(gl);
 
 		// if the camera sould not be in the center of the rotation it has to be
 		// moved out before rotating:

@@ -21,7 +21,6 @@ import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
-import util.Log;
 
 import commands.Command;
 import components.ViewPosCalcerComp;
@@ -122,7 +121,7 @@ public class PlaceObjectsSetupTwo extends Setup {
 			selectedObj.remove(viewPosCalcer);
 			selectedObj.remove(moveComp);
 		}
-		obj.setComp(viewPosCalcer); //TODO removed from old one properly?
+		obj.setComp(viewPosCalcer);
 		obj.setComp(moveComp);
 		selectedObj = obj;
 	}

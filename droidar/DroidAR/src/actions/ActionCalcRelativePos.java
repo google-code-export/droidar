@@ -33,11 +33,11 @@ public class ActionCalcRelativePos extends Action {
 	 */
 	private double nullLongitude;
 	private double nullLatitude;
+	private double nullAltitude;
 
 	private World myWorld;
 	private GLCamera myCamera;
 	private GeoCalcer myGeoCalcer;
-	private double nullAltitude;
 
 	public ActionCalcRelativePos(World world, GLCamera camera) {
 		myWorld = world;
@@ -47,6 +47,10 @@ public class ActionCalcRelativePos extends Action {
 	@Override
 	public boolean onLocationChanged(Location location) {
 		if (nullLatitude == 0 || nullLongitude == 0) {
+			/*
+			 * if the nullLat or nullLong are 0 this method was probably never
+			 * called before (TODO problem when living in greenwhich e.g.?)
+			 */
 			resetWorldZeroPositions(location);
 		} else {
 			/*
@@ -60,24 +64,20 @@ public class ActionCalcRelativePos extends Action {
 			final double longitudeDistInMeters = (location.getLongitude() - nullLongitude)
 					* 111319.4917 * Math.cos(nullLatitude * 0.0174532925);
 
+			final double altitudeInMeters = location.getAltitude() - nullAltitude;
+
 			if (LOG_SHOW_POSITION) {
 				Log.v(LOG_TAG, "latitudeDistInMeters=" + latitudeDistInMeters);
 				Log.v(LOG_TAG, "longitudeDistInMeters=" + longitudeDistInMeters);
+				Log.v(LOG_TAG, "altMet=" + altitudeInMeters);
 			}
 
-			/*
-			 * The altitude should be set to a certain position too. This can be
-			 * done by using location.getAltitude()
-			 */
-			final double altMet = 0;// location.getAltitude(); //TODO first
-									// think of all consequences!
-
 			if (worldShouldBeRecalced(latitudeDistInMeters,
-					longitudeDistInMeters, altMet)) {
+					longitudeDistInMeters, altitudeInMeters)) {
 				resetWorldZeroPositions(location);
 			} else {
 				updateCamera(latitudeDistInMeters, longitudeDistInMeters,
-						altMet);
+						altitudeInMeters);
 			}
 		}
 
