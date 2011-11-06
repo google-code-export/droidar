@@ -6,6 +6,7 @@ import gl.HasColor;
 import gl.HasPosition;
 import gl.HasRotation;
 import gl.HasScale;
+import gl.LightSource;
 import gl.ObjectPicker;
 import gl.ParentMesh;
 import gl.Renderable;
@@ -30,9 +31,21 @@ import util.Log;
 import commands.Command;
 import commands.undoable.UndoableCommand;
 
-public abstract class MeshComponent implements RenderableEntity, Entity,
-		ParentMesh, SelectionListener, HasPosition, HasColor, HasRotation,
-		HasScale {
+/**
+ * This is a subclass of {@link RenderableEntity} and it can be used for any
+ * type of World Object which has a position ( {@link HasPosition} ), a
+ * {@link Color}, a rotation ( {@link HasRotation} ) and a scale (
+ * {@link HasScale} ). <br>
+ * It can have children {@link MeshComponent#addChild(RenderableEntity)} so also
+ * a {@link Shape} or {@link LightSource} can have direct children if required.
+ * A special type of child is the {@link GLAnimation} (which is a
+ * {@link RenderableEntity} as well).
+ * 
+ * @author Spobo
+ * 
+ */
+public abstract class MeshComponent implements RenderableEntity, ParentMesh,
+		SelectionListener, HasPosition, HasColor, HasRotation, HasScale {
 
 	private static final String LOG_TAG = "MeshComp";
 	/**
