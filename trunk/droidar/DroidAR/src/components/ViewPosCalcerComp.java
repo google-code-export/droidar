@@ -49,6 +49,12 @@ public abstract class ViewPosCalcerComp implements Entity {
 		return true;
 	}
 
+	/**
+	 * This will be called in constant time intervals 
+	 * 
+	 * @param parent
+	 * @param targetVec
+	 */
 	public abstract void onPositionUpdate(Updateable parent, Vec targetVec);
 
 	@Override

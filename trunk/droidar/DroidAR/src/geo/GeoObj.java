@@ -89,6 +89,27 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		this.myUpdateListener = myUpdateListener;
 	}
 
+	/**
+	 * Use this constructor if you want to position the GeoObject relatively to
+	 * the users GPS position. Set a {@link MeshComponent} and the virtual
+	 * postion and then extract the PGS coordinates if you need them:
+	 * 
+	 * <br>
+	 * <br>
+	 * 
+	 * GeoObj x=new GeoObj(); <br>
+	 * 
+	 * x.setComp(addMeshCompHere...); <br>
+	 * 
+	 * //place it 10 meters north of the users position: <br>
+	 * 
+	 * x.setVirtualPosition(new Vec(10,0,0)); <br>
+	 * <br>
+	 * 
+	 * x.getLatitude()<br>
+	 * 
+	 * x.getLongitude()<br>
+	 */
 	public GeoObj() {
 		super();
 		setComp(loadDefaultMesh());
@@ -276,7 +297,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		position.x = (float) ((myLongitude - zeroLongitude) * 111319.4917 * Math
 				.cos(zeroLatitude * 0.0174532925));
 		position.y = (float) ((myLatitude - zeroLatitude) * 111133.3333);
-		// TODO set z (altitude) too
+		position.z = (float) (myAltitude - zeroAltitude);
 		return position;
 	}
 
