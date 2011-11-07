@@ -10,6 +10,7 @@ import util.Vec;
 import worldData.Entity;
 import worldData.Obj;
 import worldData.Visitor;
+import actions.ActionCalcRelativePos;
 import android.location.Address;
 import android.location.Location;
 import util.Log;
@@ -173,6 +174,19 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	// return true;
 	// }
 
+	/**
+	 * To position a {@link GeoObj} at the current camera position this
+	 * constructor could be used like this: <br>
+	 * <br>
+	 * Vec pos = glCameraInstance.getGPSPositionVec(); <br>
+	 * GeoObj o = new GeoObj(pos.y, pos.x, pos.z);
+	 * 
+	 * !Important
+	 * 
+	 * @param lati
+	 * @param longi
+	 * @param alti
+	 */
 	public GeoObj(double lati, double longi, double alti) {
 		this(lati, longi, alti, loadDefaultMesh());
 	}
@@ -297,7 +311,8 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		position.x = (float) ((myLongitude - zeroLongitude) * 111319.4917 * Math
 				.cos(zeroLatitude * 0.0174532925));
 		position.y = (float) ((myLatitude - zeroLatitude) * 111133.3333);
-		position.z = (float) (myAltitude - zeroAltitude);
+		if (ActionCalcRelativePos.USE_ALTITUDE_VALUES)
+			position.z = (float) (myAltitude - zeroAltitude);
 		return position;
 	}
 
@@ -371,7 +386,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * with {@link GeoObj}.calcGPSPosition e.g.
 	 * 
 	 * @param GPSPosition
-	 *            a Vector with x=Longitude, y=Latitude, z=Altitude
+	 *            a {@link Vec} with x=Longitude, y=Latitude, z=Altitude
 	 */
 	public void setMyPosition(Vec GPSPosition) {
 		setMyLongitude(GPSPosition.x);
