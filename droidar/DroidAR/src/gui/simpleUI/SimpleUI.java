@@ -15,16 +15,23 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
 /**
- * Don't forget to add
+ * 
+ * This is an old version of simpleui.googlecode.com which will be removed from
+ * this project soon!! <br>
+ * <br>
+ * <br>
+ * <br>
+ * 
+ * Don't forget to add<br>
  * 
  * < activity android:name="SmartUI" android:theme=
- * "@android:style/Theme.Translucent"> < /activity>
- * 
+ * "@android:style/Theme.Translucent"> < /activity> <br>
  * to your Manifest.xml file!
  * 
  * @author Spobo
  * 
  */
+@Deprecated
 public class SimpleUI extends Activity {
 
 	public static final int DEFAULT_PADDING = 4;
