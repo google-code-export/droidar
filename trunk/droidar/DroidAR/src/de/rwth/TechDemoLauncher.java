@@ -7,6 +7,7 @@ import tests.SimpleTesting;
 import worldData.LargeWorld;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -36,6 +37,15 @@ public class TechDemoLauncher extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.demoselector);
 
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		System.out.println("DemoScreen onResume");
+		LinearLayout l = ((LinearLayout) findViewById(R.id.demoScreenLinView));
+		l.removeAllViews();
+
 		showSetup("'Too far away' scenario", new FarAwayPOIScenarioSetup());
 		showSetup("Animation Demo", new DebugSetup());
 		showSetup("Large worlds", new LargeWorldsSetup());
@@ -49,14 +59,11 @@ public class TechDemoLauncher extends Activity {
 		showSetup("Sensor Processing Demo", new SensorTestSetup());
 		showSetup("Position tests", new PositionTestsSetup());
 
-		LinearLayout l = ((LinearLayout) findViewById(R.id.demoScreenLinView));
-
 		l.addView(new SimpleButton("Run tests") {
 			public void onButtonPressed() {
 				runTests();
 			}
 		});
-
 	}
 
 	private void showSetup(String string, final Setup aSetupInstance) {

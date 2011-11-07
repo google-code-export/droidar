@@ -2,6 +2,7 @@ package actions;
 
 import system.EventManager;
 import geo.GeoCalcer;
+import geo.GeoObj;
 import gl.GLCamera;
 import worldData.World;
 import android.location.Location;
@@ -19,6 +20,12 @@ import util.Log;
  * 
  */
 public class ActionCalcRelativePos extends Action {
+
+	/**
+	 * set this to false if your scenario does not need to take altitude values
+	 * into account
+	 */
+	public static boolean USE_ALTITUDE_VALUES = true;
 
 	private static final double MAX_METER_DISTANCE = 500; // 500 meter
 	private static final String LOG_TAG = "ActionCalcRelativePos";
@@ -64,20 +71,25 @@ public class ActionCalcRelativePos extends Action {
 			final double longitudeDistInMeters = (location.getLongitude() - nullLongitude)
 					* 111319.4917 * Math.cos(nullLatitude * 0.0174532925);
 
-			final double altitudeInMeters = location.getAltitude() - nullAltitude;
+			/*
+			 * if the altitude values should be used calculate the correct
+			 * height else use 0 as the height
+			 */
+			final double relativeHeight = USE_ALTITUDE_VALUES ? location
+					.getAltitude() - nullAltitude : 0;
 
 			if (LOG_SHOW_POSITION) {
 				Log.v(LOG_TAG, "latitudeDistInMeters=" + latitudeDistInMeters);
 				Log.v(LOG_TAG, "longitudeDistInMeters=" + longitudeDistInMeters);
-				Log.v(LOG_TAG, "altMet=" + altitudeInMeters);
+				Log.v(LOG_TAG, "relativeHeight=" + relativeHeight);
 			}
 
 			if (worldShouldBeRecalced(latitudeDistInMeters,
-					longitudeDistInMeters, altitudeInMeters)) {
+					longitudeDistInMeters)) {
 				resetWorldZeroPositions(location);
 			} else {
 				updateCamera(latitudeDistInMeters, longitudeDistInMeters,
-						altitudeInMeters);
+						relativeHeight);
 			}
 		}
 
@@ -96,8 +108,7 @@ public class ActionCalcRelativePos extends Action {
 		myCamera.resetPosition(false);
 	}
 
-	private boolean worldShouldBeRecalced(double latDistMet,
-			double longDistMet, double altDistMet) {
+	private boolean worldShouldBeRecalced(double latDistMet, double longDistMet) {
 		if (Math.abs(latDistMet) > MAX_METER_DISTANCE)
 			return true;
 		if (Math.abs(longDistMet) > MAX_METER_DISTANCE)
