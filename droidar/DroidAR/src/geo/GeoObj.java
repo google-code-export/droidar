@@ -218,8 +218,24 @@ public class GeoObj extends Obj implements HasDebugInformation {
 				loadDefaultMesh(), false);
 	}
 
+	/**
+	 * This constructor can be used if the altitude is unknown and should be the
+	 * same as the current camera altitude (to be at the same height like the
+	 * camera)
+	 * 
+	 * @param latitude
+	 * @param longitude
+	 */
 	public GeoObj(double latitude, double longitude) {
-		this(latitude, longitude, 0);
+		this(latitude, longitude, getDeviceAltidute());
+	}
+
+	private static double getDeviceAltidute() {
+		if (ActionCalcRelativePos.USE_ALTITUDE_VALUES) {
+			return EventManager.getInstance().getCurrentLocationObject()
+					.getAltitude();
+		}
+		return 0;
 	}
 
 	/**
