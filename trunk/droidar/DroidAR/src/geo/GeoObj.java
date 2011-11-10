@@ -15,6 +15,14 @@ import android.location.Address;
 import android.location.Location;
 import util.Log;
 
+/**
+ * This is a subclass of {@link Obj} which has a fixed GPS position in the
+ * virtual world. It is the default class to create any object with a location.
+ * Also check the {@link GeoUtils} methods for some useful things.
+ * 
+ * @author Spobo
+ * 
+ */
 public class GeoObj extends Obj implements HasDebugInformation {
 
 	public interface GeoObjUpdateListener {
