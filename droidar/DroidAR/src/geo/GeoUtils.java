@@ -35,6 +35,15 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.Settings;
 
+/**
+ * This util class is a collection of all common location related operations
+ * like enabling GPS, receiving the current position, mapping an address to gps
+ * coordinates or converting to correct position values
+ * {@link GeoUtils#convertDegreesMinutesSecondsToDecimalDegrees(double, double, double)}
+ * 
+ * @author Spobo
+ * 
+ */
 public class GeoUtils {
 
 	private static final String LOG_TAG = "Geo Utils";
