@@ -676,8 +676,7 @@ public class GeoGraph extends AbstractObj implements Container<GeoObj> {
 	}
 
 	public static GeoGraph convertToGeoGraph(EfficientList<GeoObj> list,
-			boolean directional, GLCamera camera) {
-		DefaultNodeEdgeListener l = new DefaultNodeEdgeListener(camera);
+			boolean directional, SimpleNodeEdgeListener l) {
 		return convertToGeoGraph(list, directional, l, l);
 	}
 

@@ -1,5 +1,6 @@
 package de.rwth.setups;
 
+import geo.DefaultNodeEdgeListener;
 import geo.GeoGraph;
 import geo.GeoObj;
 import gl.CustomGLSurfaceView;
@@ -32,7 +33,8 @@ public class GraphMovementTestSetup extends DefaultARSetup {
 		l.add(newOb(30, 40));
 		l.add(newOb(30, 50));
 		l.add(newOb(30, 60));
-		GeoGraph g = GeoGraph.convertToGeoGraph(l, true, getCamera());
+		GeoGraph g = GeoGraph.convertToGeoGraph(l, true,
+				new DefaultNodeEdgeListener(getCamera()));
 		world.add(g);
 	}
 
