@@ -1,18 +1,40 @@
 package tests;
 
+import commands.DebugCommandPositionEvent;
+
 import geo.GeoGraph;
 import geo.GeoObj;
+import gl.GLCamera;
+import gl.GLFactory;
+import gl.HasPosition;
 import util.Vec;
+import worldData.World;
+import actions.ActionCalcRelativePos;
+import android.util.Log;
 
 public class GeoTests extends SimpleTesting {
 
-	private static final String LOG_TEST = "Geo Tests";
+	private static final String LOG_TAG = "Geo Tests";
+
+	public static final GeoObj a1 = new GeoObj(50.769118, 6.097568, 0, "A1");
+	public static final GeoObj a2 = new GeoObj(50.769328, 6.097514, 0, "A2");
+	public static final GeoObj a3 = new GeoObj(50.769159, 6.097986, 0, "A3");
+	public static final GeoObj n1 = new GeoObj(50.769444, 6.095191, 0, "N1");
+	public static final GeoObj n2 = new GeoObj(50.769617, 6.09481, 0, "N2");
+	public static final GeoObj n3 = new GeoObj(50.769174, 6.095156, 0, "N3");
+	public static final GeoObj rwthI9 = new GeoObj(50.778393, 6.060886, 0, "I9");
+	public static final GeoObj iPark1 = new GeoObj(50.778771, 6.061074, 0, "P1");
+	public static final GeoObj iPark2 = new GeoObj(50.778661, 6.060497, 0, "P2");
+	public static final GeoObj iPark3 = new GeoObj(50.779134, 6.060202, 0, "P3");
+	public static final GeoObj iPark4 = new GeoObj(50.779242, 6.060787, 0, "P4");
+	public static final GeoObj p = new GeoObj(50.781161, 6.078752, 0, "Ponttor");
 
 	@Override
 	public void run() throws Exception {
 		t8();
 		distanceCalcTest();
 		virtualPosToGPSPosTest();
+		positioningTests();
 		t7();
 		t6();
 		t5();
@@ -81,6 +103,116 @@ public class GeoTests extends SimpleTesting {
 				g.findBestPointFor("test")).getAllItems().myLength == 2);
 		assertTrue(g.findPath(g.getClosesedObjTo(s3),
 				g.findBestPointFor("test")).getAllItems().myLength == 2);
+	}
+
+	private void positioningTests() throws Exception {
+
+		GLCamera camera = new GLCamera();
+		World world = new World(camera);
+		ActionCalcRelativePos gpsAction = new ActionCalcRelativePos(world,
+				camera);
+		GeoObj posA = new GeoObj(50.78095, 6.06607);
+		posA.setComp(GLFactory.getInstance().newArrow());
+		world.add(posA);
+		GeoObj posB = new GeoObj(50.78094, 6.06788);
+		posB.setComp(GLFactory.getInstance().newArrow());
+		world.add(posB);
+		GeoObj posC = new GeoObj(50.77998, 6.06790);
+		posC.setComp(GLFactory.getInstance().newArrow());
+		world.add(posC);
+		GeoObj posD = new GeoObj(50.77997, 6.06584);
+		posD.setComp(GLFactory.getInstance().newArrow());
+		world.add(posD);
+
+		moveCenterAndTest(camera, gpsAction, posA, posB, posC, posD);
+		moveNorthAndTest(camera, gpsAction, posA, posB, posC, posD);
+		moveCenterAndTest(camera, gpsAction, posA, posB, posC, posD);
+		moveEastAndTest(camera, gpsAction, posA, posB, posC, posD);
+		moveNorthAndTest(camera, gpsAction, posA, posB, posC, posD);
+		moveSouthEastAndTest(camera, gpsAction, posA, posB, posC, posD);
+	}
+
+	private void moveSouthEastAndTest(GLCamera camera,
+			ActionCalcRelativePos gpsAction, GeoObj posA, GeoObj posB,
+			GeoObj posC, GeoObj posD) throws Exception {
+		new DebugCommandPositionEvent(gpsAction, new GeoObj(50.77959, 6.06914))
+				.execute();
+
+		assertTrue(isNorthOf(posA, camera));
+		assertTrue(isNorthOf(posB, camera));
+		assertTrue(isNorthOf(posC, camera));
+		assertTrue(isNorthOf(posD, camera));
+
+		assertFalse(isEastOf(posC, camera));
+		assertFalse(isEastOf(posB, camera));
+		assertFalse(isEastOf(posA, camera));
+		assertFalse(isEastOf(posD, camera));
+	}
+
+	private void moveEastAndTest(GLCamera camera,
+			ActionCalcRelativePos gpsAction, GeoObj posA, GeoObj posB,
+			GeoObj posC, GeoObj posD) throws Exception {
+		// move camera above of the park:
+		new DebugCommandPositionEvent(gpsAction, new GeoObj(50.78046, 6.06524))
+				.execute();
+
+		assertTrue(isNorthOf(posA, camera));
+		assertTrue(isNorthOf(posB, camera));
+		assertFalse(isNorthOf(posC, camera));
+		assertFalse(isNorthOf(posD, camera));
+
+		assertTrue(isEastOf(posC, camera));
+		assertTrue(isEastOf(posB, camera));
+		assertTrue(isEastOf(posA, camera));
+		assertTrue(isEastOf(posD, camera));
+	}
+
+	private void moveNorthAndTest(GLCamera camera,
+			ActionCalcRelativePos gpsAction, GeoObj posA, GeoObj posB,
+			GeoObj posC, GeoObj posD) throws Exception {
+		// move camera above of the park:
+		new DebugCommandPositionEvent(gpsAction, new GeoObj(50.78171, 6.06718))
+				.execute();
+
+		assertFalse(isNorthOf(posA, camera));
+		assertFalse(isNorthOf(posB, camera));
+		assertFalse(isNorthOf(posC, camera));
+		assertFalse(isNorthOf(posD, camera));
+
+		assertTrue(isEastOf(posC, camera));
+		assertTrue(isEastOf(posB, camera));
+		assertFalse(isEastOf(posA, camera));
+		assertFalse(isEastOf(posD, camera));
+	}
+
+	private void moveCenterAndTest(GLCamera camera,
+			ActionCalcRelativePos gpsAction, GeoObj posA, GeoObj posB,
+			GeoObj posC, GeoObj posD) throws Exception {
+		// move camera to center of the park:
+		new DebugCommandPositionEvent(gpsAction, new GeoObj(50.78043, 6.06707))
+				.execute();
+
+		assertTrue(isNorthOf(posA, camera));
+		assertTrue(isNorthOf(posB, camera));
+		assertFalse(isNorthOf(posC, camera));
+		assertFalse(isNorthOf(posD, camera));
+
+		assertTrue(isEastOf(posC, camera));
+		assertTrue(isEastOf(posB, camera));
+		assertFalse(isEastOf(posA, camera));
+		assertFalse(isEastOf(posD, camera));
+	}
+
+	private boolean isNorthOf(GeoObj a, GLCamera b) throws Exception {
+		float dist = a.getVirtualPosition().y - b.getMyNewPosition().y;
+		Log.v(LOG_TAG, "north dist=" + dist);
+		return (dist > 0);
+	}
+
+	private boolean isEastOf(GeoObj a, GLCamera b) throws Exception {
+		float dist = a.getVirtualPosition().x - b.getMyNewPosition().x;
+		Log.v(LOG_TAG, "east dist=" + dist);
+		return (dist > 0);
 	}
 
 	private void distanceCalcTest() throws Exception {
@@ -172,118 +304,118 @@ public class GeoTests extends SimpleTesting {
 
 	private void t6() throws Exception {
 		GeoGraph g = new GeoGraph();
-		assertTrue(g.add(GeoObj.a1));
-		assertTrue(!g.add(GeoObj.a1));
-		assertTrue(g.add(GeoObj.a2));
-		assertTrue(g.add(GeoObj.a3));
-		assertTrue(g.add(GeoObj.n1));
-		assertTrue(g.add(GeoObj.n2));
-		assertTrue(g.add(GeoObj.n3));
-		assertTrue(!g.add(GeoObj.n3));
-		assertTrue(g.addEdge(GeoObj.a1, GeoObj.a2, null) != null);
-		assertTrue(g.addEdge(GeoObj.a1, GeoObj.a2, null) == null);
-		assertTrue(g.addEdge(GeoObj.a1, GeoObj.a3, null) != null);
-		assertTrue(g.addEdge(GeoObj.a1, GeoObj.n1, null) != null);
-		assertTrue(g.addEdge(GeoObj.n1, GeoObj.n2, null) != null);
-		assertTrue(g.addEdge(GeoObj.n2, GeoObj.n3, null) != null);
-		assertTrue(g.findPath(GeoObj.a3, GeoObj.a3).getAllItems().myLength == 1);
+		assertTrue(g.add(a1));
+		assertTrue(!g.add(a1));
+		assertTrue(g.add(a2));
+		assertTrue(g.add(a3));
+		assertTrue(g.add(n1));
+		assertTrue(g.add(n2));
+		assertTrue(g.add(n3));
+		assertTrue(!g.add(n3));
+		assertTrue(g.addEdge(a1, a2, null) != null);
+		assertTrue(g.addEdge(a1, a2, null) == null);
+		assertTrue(g.addEdge(a1, a3, null) != null);
+		assertTrue(g.addEdge(a1, n1, null) != null);
+		assertTrue(g.addEdge(n1, n2, null) != null);
+		assertTrue(g.addEdge(n2, n3, null) != null);
+		assertTrue(g.findPath(a3, a3).getAllItems().myLength == 1);
 	}
 
 	private void t5() throws Exception {
 		GeoGraph g = new GeoGraph();
 
-		assertTrue(g.add(GeoObj.iPark1));
-		assertTrue(g.add(GeoObj.iPark2));
-		assertTrue(g.add(GeoObj.iPark3));
-		assertTrue(g.add(GeoObj.iPark4));
-		assertTrue(g.add(GeoObj.rwthI9));
+		assertTrue(g.add(iPark1));
+		assertTrue(g.add(iPark2));
+		assertTrue(g.add(iPark3));
+		assertTrue(g.add(iPark4));
+		assertTrue(g.add(rwthI9));
 
-		assertTrue(g.addEdge(GeoObj.rwthI9, GeoObj.iPark1, null) != null);
-		assertTrue(g.addEdge(GeoObj.iPark1, GeoObj.iPark2, null) != null);
-		assertTrue(g.addEdge(GeoObj.iPark2, GeoObj.iPark3, null) != null);
-		assertTrue(g.addEdge(GeoObj.iPark3, GeoObj.iPark4, null) != null);
-		assertTrue(g.addEdge(GeoObj.iPark1, GeoObj.iPark4, null) != null);
+		assertTrue(g.addEdge(rwthI9, iPark1, null) != null);
+		assertTrue(g.addEdge(iPark1, iPark2, null) != null);
+		assertTrue(g.addEdge(iPark2, iPark3, null) != null);
+		assertTrue(g.addEdge(iPark3, iPark4, null) != null);
+		assertTrue(g.addEdge(iPark1, iPark4, null) != null);
 
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4).getAllItems().myLength == 3);
+		assertTrue(g.findPath(rwthI9, iPark4).getAllItems().myLength == 3);
 
 	}
 
 	private void t4() throws Exception {
 		GeoGraph g = new GeoGraph();
-		assertTrue(g.add(GeoObj.rwthI9));
-		assertTrue(g.add(GeoObj.iPark1));
-		assertTrue(g.add(GeoObj.iPark2));
-		assertTrue(g.add(GeoObj.iPark3));
-		assertTrue(g.add(GeoObj.iPark4));
+		assertTrue(g.add(rwthI9));
+		assertTrue(g.add(iPark1));
+		assertTrue(g.add(iPark2));
+		assertTrue(g.add(iPark3));
+		assertTrue(g.add(iPark4));
 
-		assertTrue(g.addEdge(GeoObj.rwthI9, GeoObj.iPark1, null) != null);
-		assertTrue(g.findPath(GeoObj.iPark1, GeoObj.rwthI9).getAllItems().myLength == 2);
+		assertTrue(g.addEdge(rwthI9, iPark1, null) != null);
+		assertTrue(g.findPath(iPark1, rwthI9).getAllItems().myLength == 2);
 
-		assertTrue(g.addEdge(GeoObj.iPark1, GeoObj.iPark2, null) != null);
-		assertTrue(g.addEdge(GeoObj.iPark2, GeoObj.iPark3, null) != null);
-		assertTrue(g.addEdge(GeoObj.iPark3, GeoObj.iPark4, null) != null);
+		assertTrue(g.addEdge(iPark1, iPark2, null) != null);
+		assertTrue(g.addEdge(iPark2, iPark3, null) != null);
+		assertTrue(g.addEdge(iPark3, iPark4, null) != null);
 
-		assertTrue(g.findPath(GeoObj.iPark4, GeoObj.iPark2).getAllItems().myLength == 3);
+		assertTrue(g.findPath(iPark4, iPark2).getAllItems().myLength == 3);
 
 	}
 
 	private void t1() throws Exception {
 		GeoGraph g = new GeoGraph();
-		assertTrue(g.add(GeoObj.iPark1));
-		assertTrue(g.add(GeoObj.iPark2));
-		assertTrue(g.add(GeoObj.rwthI9));
-		assertTrue(g.add(GeoObj.iPark3));
-		assertTrue(g.add(GeoObj.iPark4));
-		assertTrue(!g.add(GeoObj.iPark4));
+		assertTrue(g.add(iPark1));
+		assertTrue(g.add(iPark2));
+		assertTrue(g.add(rwthI9));
+		assertTrue(g.add(iPark3));
+		assertTrue(g.add(iPark4));
+		assertTrue(!g.add(iPark4));
 		assertTrue(g.getAllItems().myLength == 5);
 
-		assertTrue(g.addEdge(GeoObj.rwthI9, GeoObj.iPark1, null) != null);
-		assertTrue(g.addEdge(GeoObj.iPark1, GeoObj.iPark2, null) != null);
-		assertTrue(g.addEdge(GeoObj.iPark2, GeoObj.iPark3, null) != null);
-		assertTrue(g.addEdge(GeoObj.rwthI9, GeoObj.iPark3, null) != null);
-		assertTrue(g.addEdge(GeoObj.iPark3, GeoObj.iPark4, null) != null);
-		assertTrue(g.addEdge(GeoObj.iPark1, GeoObj.iPark4, null) != null);
+		assertTrue(g.addEdge(rwthI9, iPark1, null) != null);
+		assertTrue(g.addEdge(iPark1, iPark2, null) != null);
+		assertTrue(g.addEdge(iPark2, iPark3, null) != null);
+		assertTrue(g.addEdge(rwthI9, iPark3, null) != null);
+		assertTrue(g.addEdge(iPark3, iPark4, null) != null);
+		assertTrue(g.addEdge(iPark1, iPark4, null) != null);
 		// g.addEdge(GeoObj.infZentPark, GeoObj.infZentPark4);
 
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark1).getAllItems().myLength == 2);
-		assertTrue(g.findPath(GeoObj.iPark1, GeoObj.iPark2).getAllItems().myLength == 2);
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark3).getAllItems().myLength == 2);
+		assertTrue(g.findPath(rwthI9, iPark1).getAllItems().myLength == 2);
+		assertTrue(g.findPath(iPark1, iPark2).getAllItems().myLength == 2);
+		assertTrue(g.findPath(rwthI9, iPark3).getAllItems().myLength == 2);
 
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4) != null);
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4).getAllItems() != null);
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4).getAllItems().myLength == 3);
+		assertTrue(g.findPath(rwthI9, iPark4) != null);
+		assertTrue(g.findPath(rwthI9, iPark4).getAllItems() != null);
+		assertTrue(g.findPath(rwthI9, iPark4).getAllItems().myLength == 3);
 	}
 
 	private void t3() throws Exception {
 		GeoGraph g = new GeoGraph();
-		assertTrue(g.add(GeoObj.iPark1));
-		assertTrue(g.add(GeoObj.iPark2));
-		assertTrue(g.add(GeoObj.rwthI9));
-		assertTrue(g.add(GeoObj.iPark3));
-		assertTrue(g.add(GeoObj.iPark4));
+		assertTrue(g.add(iPark1));
+		assertTrue(g.add(iPark2));
+		assertTrue(g.add(rwthI9));
+		assertTrue(g.add(iPark3));
+		assertTrue(g.add(iPark4));
 		// assertTrue(g.add(GeoObj.zollern));
 
-		assertTrue(g.addEdge(GeoObj.rwthI9, GeoObj.iPark1, null) != null);
-		assertTrue(g.addEdge(GeoObj.iPark1, GeoObj.iPark2, null) != null);
-		assertTrue(g.addEdge(GeoObj.iPark2, GeoObj.iPark3, null) != null);
-		assertTrue(g.addEdge(GeoObj.iPark3, GeoObj.iPark4, null) != null);
+		assertTrue(g.addEdge(rwthI9, iPark1, null) != null);
+		assertTrue(g.addEdge(iPark1, iPark2, null) != null);
+		assertTrue(g.addEdge(iPark2, iPark3, null) != null);
+		assertTrue(g.addEdge(iPark3, iPark4, null) != null);
 
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4) != null);
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4).getAllItems() != null);
-		assertTrue(g.findPath(GeoObj.rwthI9, GeoObj.iPark4).getAllItems().myLength == 5);
+		assertTrue(g.findPath(rwthI9, iPark4) != null);
+		assertTrue(g.findPath(rwthI9, iPark4).getAllItems() != null);
+		assertTrue(g.findPath(rwthI9, iPark4).getAllItems().myLength == 5);
 	}
 
 	private void t2() throws Exception {
 		GeoGraph g = new GeoGraph();
-		assertTrue(g.add(GeoObj.iPark2));
-		assertTrue(g.add(GeoObj.iPark3));
-		assertTrue(g.add(GeoObj.iPark4));
-		assertTrue(g.add(GeoObj.rwthI9));
+		assertTrue(g.add(iPark2));
+		assertTrue(g.add(iPark3));
+		assertTrue(g.add(iPark4));
+		assertTrue(g.add(rwthI9));
 
-		assertTrue(g.addEdge(GeoObj.iPark2, GeoObj.iPark3, null) != null);
-		assertTrue(g.addEdge(GeoObj.iPark3, GeoObj.iPark4, null) != null);
+		assertTrue(g.addEdge(iPark2, iPark3, null) != null);
+		assertTrue(g.addEdge(iPark3, iPark4, null) != null);
 
-		GeoGraph path = g.findPath(GeoObj.iPark2, GeoObj.iPark4);
+		GeoGraph path = g.findPath(iPark2, iPark4);
 		assertTrue(path != null);
 		assertTrue(path.getAllItems() != null);
 		assertTrue(path.getAllItems().myLength == 3);

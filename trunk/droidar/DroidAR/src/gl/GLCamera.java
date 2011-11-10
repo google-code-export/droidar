@@ -217,6 +217,13 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		myMover.myTargetPos = cameraPosition;
 	}
 
+	/**
+	 * x positive means east of zero pos (latitude direction) <br>
+	 * y positive means north of zero pos (longitude direction) <br>
+	 * z the height of the camera
+	 * 
+	 * @return the {@link Vec} (x,y,z)
+	 */
 	public Vec getMyNewPosition() {
 		return myMover.myTargetPos;
 	}
@@ -766,6 +773,14 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		myMover.myTargetPos.add(deltaX, deltaY, deltaZ);
 	}
 
+	/**
+	 * @param x
+	 *            positive means east of zero pos (latitude direction)
+	 * @param y
+	 *            positive means north of zero pos (longitude direction)
+	 * @param z
+	 *            the height of the camera
+	 */
 	public void setNewPosition(float x, float y, float z) {
 		myMover.myTargetPos.setTo(x, y, z);
 
@@ -781,7 +796,11 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 
 	/**
 	 * @return the position in the virtual world. This vec could be used as the
-	 *         users postion e.g.
+	 *         users postion e.g. <br>
+	 * <br>
+	 *         x positive means east of zero pos (latitude direction) <br>
+	 *         y positive means north of zero pos (longitude direction) <br>
+	 *         z the height of the camera
 	 */
 	public Vec getPosition() {
 		return myPosition;

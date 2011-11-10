@@ -31,18 +31,34 @@ public class GeoObj extends Obj implements HasDebugInformation {
 
 	}
 
-	// TODO move somewhere else:
+	/*
+	 * TODO move somewhere else and dont use these to not create new
+	 * dependencies:
+	 */
+
+	@Deprecated
 	public static final GeoObj a1 = new GeoObj(50.769118, 6.097568, 0, "A1");
+	@Deprecated
 	public static final GeoObj a2 = new GeoObj(50.769328, 6.097514, 0, "A2");
+	@Deprecated
 	public static final GeoObj a3 = new GeoObj(50.769159, 6.097986, 0, "A3");
+	@Deprecated
 	public static final GeoObj n1 = new GeoObj(50.769444, 6.095191, 0, "N1");
+	@Deprecated
 	public static final GeoObj n2 = new GeoObj(50.769617, 6.09481, 0, "N2");
+	@Deprecated
 	public static final GeoObj n3 = new GeoObj(50.769174, 6.095156, 0, "N3");
+	@Deprecated
 	public static final GeoObj rwthI9 = new GeoObj(50.778393, 6.060886, 0, "I9");
+	@Deprecated
 	public static final GeoObj iPark1 = new GeoObj(50.778771, 6.061074, 0, "P1");
+	@Deprecated
 	public static final GeoObj iPark2 = new GeoObj(50.778661, 6.060497, 0, "P2");
+	@Deprecated
 	public static final GeoObj iPark3 = new GeoObj(50.779134, 6.060202, 0, "P3");
+	@Deprecated
 	public static final GeoObj iPark4 = new GeoObj(50.779242, 6.060787, 0, "P4");
+	@Deprecated
 	public static final GeoObj p = new GeoObj(50.781161, 6.078752, 0, "Ponttor");
 
 	private static final String LOG_TAG = "GeoObj";
@@ -308,7 +324,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * @param zeroLongitude
 	 * @param zeroAltitude
 	 * @return the target Vec or a new Vec with the correct virtual position if
-	 *         target vec was null
+	 *         target vec was null (x=longitude, y=latitude, z=altitude)
 	 */
 	public Vec getVirtualPosition(double zeroLatitude, double zeroLongitude,
 			double zeroAltitude) {
@@ -325,11 +341,11 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		 * 
 		 * degree to radians: PI/180=0.0174532925
 		 * 
-		 * TODO check what happens when myLongi positive but zeroLongi negative
-		 * for example. this can create problems i think! both have to be
+		 * TODO check what happens when myLongi is positive but zeroLongi is
+		 * negative for example. this can create problems! both have to be
 		 * negative or positive otherwise delta value is wrong! this will nearly
-		 * never happen, but for people in englang eg it might be a problem when
-		 * living near the 0 latitude..
+		 * never happen, but for people in Greenwhich eg it might be a problem
+		 * when living near the 0 latitude..
 		 */
 		Vec position = new Vec();
 		position.x = (float) ((myLongitude - zeroLongitude) * 111319.4917 * Math
@@ -486,7 +502,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * aToB_Distance=b.getVirtualPosition(a);
 	 * 
 	 * @param relativeNullPoint
-	 * @return
+	 * @return (x=longitude, y=latitude, z=altitude)
 	 */
 	public Vec getVirtualPosition(GeoObj relativeNullPoint) {
 		if (relativeNullPoint == null) {
@@ -503,7 +519,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * This will use the current gps values and calculate the virtual position
 	 * in account to the current device gps position
 	 * 
-	 * @return the virtual position
+	 * @return the virtual position (x=longitude, y=latitude, z=altitude)
 	 */
 	public Vec getVirtualPosition() {
 		return getVirtualPosition(EventManager.getInstance()

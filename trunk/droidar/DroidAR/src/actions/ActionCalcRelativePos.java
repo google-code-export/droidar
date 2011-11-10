@@ -98,9 +98,7 @@ public class ActionCalcRelativePos extends Action {
 
 	private void updateCamera(double latDistMet, double longDistMet,
 			double altDistMet) {
-		// myCamera.setNewPosition((float) latDistMet, (float) longDistMet,
-		// (float) altDistMet);
-		myCamera.setNewPosition((float) latDistMet, (float) longDistMet,
+		myCamera.setNewPosition((float) longDistMet,(float) latDistMet,
 				(float) altDistMet);
 	}
 
