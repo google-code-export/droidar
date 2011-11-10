@@ -50,6 +50,26 @@ public class GeoUtils {
 	}
 
 	/**
+	 * In DroidAR all coordinates have to be decimal degrees. Use this method if
+	 * you have to convert to decimal degrees.
+	 * 
+	 * Example usage: <br>
+	 * 16° 19' 28,29" to 16,324525°
+	 * 
+	 * @param degree
+	 *            16
+	 * @param minutes
+	 *            19
+	 * @param seconds
+	 *            28,29
+	 * @return 16,324525°
+	 */
+	public static double convertDegreesMinutesSecondsToDecimalDegrees(
+			double degree, double minutes, double seconds) {
+		return degree + ((minutes + (seconds / 60)) / 60) / 60;
+	}
+
+	/**
 	 * This method returns the best match for a specified position. It could for
 	 * example be used to calculate the closest address to your current
 	 * location.
