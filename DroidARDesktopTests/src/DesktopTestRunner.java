@@ -16,7 +16,7 @@ public class DesktopTestRunner {
 			new SystemTests().run();
 			new EfficientListTests().run();
 			new WorldTests().run();
-			// new GeoTests().run();
+			//new GeoTests().run();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
