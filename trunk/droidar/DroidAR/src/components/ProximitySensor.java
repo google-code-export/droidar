@@ -1,5 +1,6 @@
 package components;
 
+import geo.GeoObj;
 import gl.GLCamera;
 import gl.scenegraph.MeshComponent;
 import system.ParentStack;
@@ -49,17 +50,30 @@ public abstract class ProximitySensor implements Entity {
 				if (m != null) {
 					float currentDistance = Vec.distance(m.getPosition(),
 							myCamera.getPosition());
-					if (0 <= currentDistance && currentDistance < myDistance) {
-						onObjectIsCloseToCamera(myCamera, obj, m,
-								currentDistance);
-					}
+					checkCurrentDistance(obj, m, currentDistance);
+					return true;
+				} else {
+					Log.w(LOG_TAG, "MeshComp of target Obj was null!");
 				}
+			}
+			if (parent instanceof GeoObj) {
+				GeoObj obj = (GeoObj) parent;
+				float currentDistance = obj.getVirtualPosition(
+						myCamera.getGPSPositionAsGeoObj()).getLength();
+				checkCurrentDistance(obj, null, currentDistance);
 			} else {
-				Log.w(LOG_TAG,
-						"Sensor is not child of a Obj and therefor cant run!");
+				Log.w(LOG_TAG, "Sensor parent " + parent
+						+ " has no position, cant be used!");
 			}
 		}
 		return true;
+	}
+
+	private void checkCurrentDistance(Obj obj, MeshComponent m,
+			float currentDistance) {
+		if (0 <= currentDistance && currentDistance < myDistance) {
+			onObjectIsCloseToCamera(myCamera, obj, m, currentDistance);
+		}
 	}
 
 	/**
