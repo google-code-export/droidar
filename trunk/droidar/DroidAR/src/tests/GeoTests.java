@@ -107,6 +107,16 @@ public class GeoTests extends SimpleTesting {
 
 	private void positioningTests() throws Exception {
 
+		/*
+		 * The test playground looks like this:
+		 * 
+		 * A B
+		 * 
+		 * Cam
+		 * 
+		 * D C
+		 */
+
 		GLCamera camera = new GLCamera();
 		World world = new World(camera);
 		ActionCalcRelativePos gpsAction = new ActionCalcRelativePos(world,
@@ -130,6 +140,12 @@ public class GeoTests extends SimpleTesting {
 		moveEastAndTest(camera, gpsAction, posA, posB, posC, posD);
 		moveNorthAndTest(camera, gpsAction, posA, posB, posC, posD);
 		moveSouthEastAndTest(camera, gpsAction, posA, posB, posC, posD);
+
+		assertTrue(posA.getVirtualPosition().x < posC.getVirtualPosition().x);
+		assertTrue(posA.getVirtualPosition().y > posC.getVirtualPosition().y);
+		assertTrue(posD.getVirtualPosition().x < posB.getVirtualPosition().x);
+		assertTrue(posD.getVirtualPosition().y < posB.getVirtualPosition().y);
+
 	}
 
 	private void moveSouthEastAndTest(GLCamera camera,
