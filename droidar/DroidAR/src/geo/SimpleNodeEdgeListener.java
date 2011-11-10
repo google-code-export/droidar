@@ -51,6 +51,8 @@ public abstract class SimpleNodeEdgeListener implements NodeListener,
 	public boolean addFirstNodeToGraph(final GeoGraph targetGraph,
 			GeoObj newNode) {
 		newNode.setComp(getNodeMesh());
+		newNode.setComp(newProxiSensor(targetGraph));
+
 		setNormalTransformations(newNode.getGraphicsComponent());
 
 		Log.d(LOG_TAG, "First node will be added now..");
@@ -61,7 +63,6 @@ public abstract class SimpleNodeEdgeListener implements NodeListener,
 
 		Log.d(LOG_TAG, "Setting special props for first node.");
 		setHighlightNodeTransformations(newNode.getGraphicsComponent());
-		newNode.setComp(newProxiSensor(targetGraph));
 
 		return targetGraph.add(newNode);
 
@@ -114,11 +115,12 @@ public abstract class SimpleNodeEdgeListener implements NodeListener,
 	}
 
 	private void setPassedTransformationsOn(MeshComponent m) {
-		m.removeAllAnimations();
-
-		m.addAnimation(new AnimationMove(MOVEMENT_TIME, new Vec(0, 0, -2)));
-		m.addAnimation(new AnimationColorMorph(BLENDING_TIME,
-				newAlreadyPassedColor()));
+		if (m != null) {
+			m.removeAllAnimations();
+			m.addAnimation(new AnimationMove(MOVEMENT_TIME, new Vec(0, 0, -2)));
+			m.addAnimation(new AnimationColorMorph(BLENDING_TIME,
+					newAlreadyPassedColor()));
+		}
 	}
 
 	private Entity newProxiSensor(final GeoGraph targetGraph) {
@@ -130,7 +132,9 @@ public abstract class SimpleNodeEdgeListener implements NodeListener,
 				Log.d(LOG_TAG, "Proxim Sensor executed, close to " + obj);
 
 				Log.d(LOG_TAG, "     meshComp=" + meshComp);
-				Log.d(LOG_TAG, "     meshComp.myColor=" + meshComp.getColor());
+				if (meshComp != null)
+					Log.d(LOG_TAG,
+							"     meshComp.myColor=" + meshComp.getColor());
 
 				setPassedTransformationsOn(meshComp);
 				obj.remove(this);
@@ -181,9 +185,21 @@ public abstract class SimpleNodeEdgeListener implements NodeListener,
 
 	}
 
+	/**
+	 * for now don't return null the {@link SimpleNodeEdgeListener} does not
+	 * work then properly(TODO)
+	 * 
+	 * @param targetGraph
+	 * @param startPoint
+	 * @param endPoint
+	 * @return
+	 */
 	public abstract MeshComponent getEdgeMesh(GeoGraph targetGraph,
 			GeoObj startPoint, GeoObj endPoint);
 
+	/**
+	 * @return null is no node mesh should be used
+	 */
 	public abstract MeshComponent getNodeMesh();
 
 }
