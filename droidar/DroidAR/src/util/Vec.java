@@ -5,22 +5,22 @@ public class Vec {
 	private static final float SMALLEST_DISTANCE = 0.0001f;
 	/**
 	 * @param x
-	 *            value on red axis (east direction)
+	 *            value on red axis (east direction=longitude)
 	 * @param y
-	 *            value on green axis (north direction)
+	 *            value on green axis (north direction=latitude)
 	 * @param z
-	 *            value on blue axis (sky direction)
+	 *            value on blue axis (sky direction=altitude=height)
 	 */
 	public float x, y, z = 0;
 	private float[] myArray;
 
 	/**
 	 * @param x
-	 *            value on red axis (east direction)
+	 *            value on red axis (east direction=longitude)
 	 * @param y
-	 *            value on green axis (north direction)
+	 *            value on green axis (north direction=latitude)
 	 * @param z
-	 *            value on blue axis (sky direction)
+	 *            value on blue axis (sky direction=altitude=height)
 	 */
 	public Vec(float x, float y, float z) {
 		this.x = x;

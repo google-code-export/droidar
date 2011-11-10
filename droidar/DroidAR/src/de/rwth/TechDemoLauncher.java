@@ -99,6 +99,7 @@ public class TechDemoLauncher extends Activity {
 			new CommandShowToast(this, "All tests succeded on this device :)")
 					.execute();
 		} catch (Exception e) {
+			e.printStackTrace();
 			ErrorHandler.showErrorLog(this, e, true);
 		}
 	}
