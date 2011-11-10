@@ -480,6 +480,14 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	// setMyAltitude(location.getAltitude());
 	// }
 
+	/**
+	 * This method can also be used to calculate the distance between
+	 * {@link GeoObj} a and {@link GeoObj} b by doing this: <br>
+	 * aToB_Distance=b.getVirtualPosition(a);
+	 * 
+	 * @param relativeNullPoint
+	 * @return
+	 */
 	public Vec getVirtualPosition(GeoObj relativeNullPoint) {
 		if (relativeNullPoint == null) {
 			Log.e(LOG_TAG, "Virtual position can't be calculated if the "
