@@ -50,7 +50,7 @@ public class GeoUtils {
 	private Geocoder myGeoCoder;
 	private Context myContext;
 
-	private DefaultNodeEdgeListener defaultNEListener;
+	private SimpleNodeEdgeListener defaultNEListener;
 
 	public GeoUtils(Context context, GLCamera glCamera) {
 		myContext = context;

@@ -580,6 +580,9 @@ public class Vec {
 		return valueVec.copy();
 	}
 
+	/**
+	 * @return the mirrored version on the x y and z axis
+	 */
 	public Vec getNegativeClone() {
 		return new Vec(-x, -y, -z);
 	}

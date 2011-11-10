@@ -385,38 +385,67 @@ public class GLFactory {
 
 	}
 
+	public MeshComponent newDirectedPath(GeoObj from, GeoObj to, Color color) {
+		return GLFactory.getInstance().newDirectedPath(
+				to.getVirtualPosition(from), color);
+	}
+
 	public MeshComponent newDirectedPath(Vec lineEndPos, Color c) {
 
 		Shape s = new Shape(c);
 		Vec orth = Vec.getOrthogonalHorizontal(lineEndPos).normalize()
-				.mult(0.7f);
+				.mult(0.9f);
+		Vec orthClone = orth.getNegativeClone();
+		float down = 0.5f;
+		Vec l = lineEndPos.copy().setLength(0.3f);
+		orth.add(l);
+		orth.z -= down;
+		orthClone.add(l);
+		orthClone.z -= down;
 
+		Vec start = new Vec().add(l.mult(3));
 		s.add(orth);
-		s.add(orth.getNegativeClone());
+		s.add(start);
 		s.add(lineEndPos);
+
+		s.add(start);
+		s.add(orthClone);
+		s.add(lineEndPos);
+
 		return s;
+	}
+
+	public MeshComponent newUndirectedPath(GeoObj from, GeoObj to, Color color) {
+		return GLFactory.getInstance().newUndirectedPath(
+				to.getVirtualPosition(from), color);
 	}
 
 	public MeshComponent newUndirectedPath(Vec lineEnd, Color c) {
 
-		Vec e2 = Vec.getOrthogonalHorizontal(lineEnd).normalize().mult(0.7f);
-		Vec e1 = e2.getNegativeClone();
+		float down = 0.5f;
 
-		Vec l1 = Vec.mult(0.25f, lineEnd);
-		Vec l3 = Vec.mult(0.75f, lineEnd);
+		Vec e2 = Vec.getOrthogonalHorizontal(lineEnd).normalize().mult(0.9f);
+		Vec e1 = e2.getNegativeClone();
+		e2.z -= down;
+		e1.z -= down;
+
+		Vec l25percent = Vec.mult(0.25f, lineEnd);
+		Vec l75percent = Vec.mult(0.75f, lineEnd);
 
 		Vec e3 = Vec.add(lineEnd, e1);
 		Vec e4 = Vec.add(lineEnd, e2);
+		e3.z -= down;
+		e4.z -= down;
 
 		Shape s = new Shape(c);
 
 		s.add(e1);
 		s.add(e2);
-		s.add(l3);
+		s.add(l75percent);
 
 		s.add(e3);
 		s.add(e4);
-		s.add(l1);
+		s.add(l25percent);
 
 		return s;
 	}
@@ -496,16 +525,6 @@ public class GLFactory {
 
 	public static void resetInstance() {
 		myInstance = new GLFactory();
-	}
-
-	public MeshComponent newUndirectedPath(GeoObj from, GeoObj to, Color color) {
-		return GLFactory.getInstance().newUndirectedPath(
-				to.getVirtualPosition(from), color);
-	}
-
-	public MeshComponent newDirectedPath(GeoObj from, GeoObj to, Color color) {
-		return GLFactory.getInstance().newDirectedPath(
-				to.getVirtualPosition(from), color);
 	}
 
 	public MeshComponent newCube() {
