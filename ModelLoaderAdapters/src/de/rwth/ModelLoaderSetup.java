@@ -31,13 +31,13 @@ public class ModelLoaderSetup extends DefaultARSetup {
 	private String fileName;
 	private String textureName;
 	private LightSource spotLight;
-	private GLCamera cam;
 	private Wrapper targetMoveWrapper;
 	private GLRenderer renderer;
 
 	public ModelLoaderSetup(String fileName, String textureName) {
 		this.fileName = fileName;
 		this.textureName = textureName;
+		targetMoveWrapper = new Wrapper();
 	}
 
 	@Override
@@ -52,7 +52,6 @@ public class ModelLoaderSetup extends DefaultARSetup {
 	public void addObjectsTo(GLRenderer renderer, final World world,
 			GLFactory objectFactory) {
 		this.renderer = renderer;
-		cam = world.getMyCamera();
 		final Obj lightObject = new Obj();
 		spotLight.setPosition(new Vec(1, 1, 1));
 		MeshComponent circle = objectFactory.newCircle(null);
@@ -72,7 +71,7 @@ public class ModelLoaderSetup extends DefaultARSetup {
 		});
 		world.add(lightObject);
 
-		targetMoveWrapper = new Wrapper(lightObject);
+		targetMoveWrapper.setTo(lightObject);
 
 		GDXConnection.init(myTargetActivity, renderer);
 
@@ -106,7 +105,7 @@ public class ModelLoaderSetup extends DefaultARSetup {
 		eventManager.onTrackballEventAction = null;
 
 		eventManager.addOnTrackballAction(new ActionMoveObject(
-				targetMoveWrapper, cam, 10, 200));
+				targetMoveWrapper, getCamera(), 10, 200));
 	}
 
 	@Override
@@ -141,9 +140,12 @@ public class ModelLoaderSetup extends DefaultARSetup {
 
 			@Override
 			public boolean execute() {
-				lightsOnOff = !lightsOnOff;
-				renderer.setUseLightning(lightsOnOff);
-				return true;
+				if (renderer != null) {
+					lightsOnOff = !lightsOnOff;
+					renderer.setUseLightning(lightsOnOff);
+					return true;
+				}
+				return false;
 			}
 		}, "Lights on/of");
 
