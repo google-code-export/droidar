@@ -59,8 +59,9 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	// TODO would be dangerous to set any of those vecs to null because there
 	// might be references in commands to those objects so check where those are
 	// set to null!
-	@Deprecated
+	// @Deprecated
 	// private Vec myNewPosition = new Vec(0, 0, 0);
+
 	/**
 	 * to move from the green to the red axis (clockwise) you would have to add
 	 * 90 degree

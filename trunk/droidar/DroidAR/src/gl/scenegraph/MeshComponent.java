@@ -450,6 +450,13 @@ public abstract class MeshComponent implements RenderableEntity, ParentMesh,
 	}
 
 	// @Override TODO
+	/**
+	 * Removes a child (this migth also be an {@link GLAnimation}) from the
+	 * {@link MeshComponent}
+	 * 
+	 * @param meshToRemove
+	 * @return
+	 */
 	public boolean remove(RenderableEntity meshToRemove) {
 		return find(meshToRemove, true);
 	}

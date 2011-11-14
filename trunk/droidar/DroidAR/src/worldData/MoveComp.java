@@ -1,6 +1,9 @@
 package worldData;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import gl.HasPosition;
+import gl.Renderable;
 import gl.scenegraph.MeshComponent;
 import system.ParentStack;
 import util.Vec;
@@ -12,7 +15,7 @@ import util.Vec;
  * @author Spobo
  * 
  */
-public class MoveComp implements Entity {
+public class MoveComp implements RenderableEntity {
 
 	/**
 	 * this vector is the new position, where to send the {@link MeshComponent}
@@ -53,5 +56,10 @@ public class MoveComp implements Entity {
 
 		}
 		return true;
+	}
+
+	@Override
+	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+
 	}
 }

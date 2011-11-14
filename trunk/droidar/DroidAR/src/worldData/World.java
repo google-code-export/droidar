@@ -114,7 +114,8 @@ public class World implements RenderableEntity, Container<RenderableEntity> {
 		myCamera.update(timeDelta, this, stack);
 		if (container != null) {
 			for (int i = 0; i < container.myLength; i++) {
-				container.get(i).update(timeDelta, this, stack);
+				if (!container.get(i).update(timeDelta, this, stack))
+					remove(container.get(i));
 			}
 		}
 		return true;
