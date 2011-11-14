@@ -1,19 +1,17 @@
 package de.rwth.setups;
 
-import commands.Command;
-import commands.ui.CommandShowToast;
-
-import android.app.Activity;
-import android.util.Log;
 import geo.GeoObj;
 import gl.GLFactory;
 import gl.GLRenderer;
-import gl.scenegraph.MeshComponent;
 import gui.GuiSetup;
 import system.DefaultARSetup;
 import util.Vec;
-import worldData.Obj;
 import worldData.World;
+import android.app.Activity;
+import android.util.Log;
+
+import commands.Command;
+import commands.ui.CommandShowToast;
 
 public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 
@@ -22,23 +20,11 @@ public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 	@Override
 	public void addObjectsTo(GLRenderer renderer, World world,
 			final GLFactory objectFactory) {
-		Obj o = new Obj();
-		o.setComp(objectFactory.newArrow());
-		o.setComp(new TooFarAwayComp(50, getCamera()) {
-			MeshComponent arrow = objectFactory.newArrow();
-
-			@Override
-			public void hideIn(MeshComponent parent) {
-				parent.remove(arrow);
-			}
-
-			@Override
-			public void addTo(MeshComponent parent, Vec direction) {
-				arrow.setPosition(direction.copy().setLength(5));
-				parent.addChild(arrow);
-			}
-		});
-
+		GeoObj o = new GeoObj();
+		o.setComp(objectFactory.newCube());
+		o.setVirtualPosition(new Vec(20, 50, 0));
+		o.setComp(new SimpleTooFarAwayComp(30, getCamera(), getActivity()));
+		world.add(o);
 	}
 
 	@Override
@@ -66,6 +52,8 @@ public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 
 				final GeoObj o = new GeoObj(pos.y, pos.x, pos.z);
 				o.setComp(GLFactory.getInstance().newArrow());
+				o.setComp(new SimpleTooFarAwayComp(30, getCamera(),
+						getActivity()));
 				o.setOnClickCommand(new Command() {
 
 					@Override

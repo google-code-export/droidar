@@ -4,11 +4,31 @@ import java.nio.FloatBuffer;
 
 import util.Vec;
 
+/**
+ * The values for the color channels (eg {@link Color#red} have to be between 0
+ * and 1!
+ * 
+ * @author Spobo
+ * 
+ */
 public class Color {
 
+	/**
+	 * has to be between 0 and 1
+	 */
 	public float red;
+
+	/**
+	 * see {@link Color#red}
+	 */
 	public float green;
+	/**
+	 * see {@link Color#red}
+	 */
 	public float blue;
+	/**
+	 * see {@link Color#red}
+	 */
 	public float alpha;
 
 	/**

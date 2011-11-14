@@ -327,7 +327,7 @@ public class GLFactory {
 		return hex;
 	}
 
-	public MeshComponent newDiamond(Color canBeNull) {
+	public Shape newDiamond(Color canBeNull) {
 		Shape s = new Shape(canBeNull);
 		float width = 0.7f;
 		float heigth = 2f;
@@ -385,12 +385,12 @@ public class GLFactory {
 
 	}
 
-	public MeshComponent newDirectedPath(GeoObj from, GeoObj to, Color color) {
+	public Shape newDirectedPath(GeoObj from, GeoObj to, Color color) {
 		return GLFactory.getInstance().newDirectedPath(
 				to.getVirtualPosition(from), color);
 	}
 
-	public MeshComponent newDirectedPath(Vec lineEndPos, Color c) {
+	public Shape newDirectedPath(Vec lineEndPos, Color c) {
 
 		Shape s = new Shape(c);
 		Vec orth = Vec.getOrthogonalHorizontal(lineEndPos).normalize()
@@ -420,7 +420,7 @@ public class GLFactory {
 				to.getVirtualPosition(from), color);
 	}
 
-	public MeshComponent newUndirectedPath(Vec lineEnd, Color c) {
+	public Shape newUndirectedPath(Vec lineEnd, Color c) {
 
 		float down = 0.5f;
 
@@ -450,7 +450,7 @@ public class GLFactory {
 		return s;
 	}
 
-	public MeshComponent newNSidedPolygon(int numberOfSides, float radius,
+	public Shape newNSidedPolygon(int numberOfSides, float radius,
 			Color c) {
 		Shape s = new Shape(c);
 
@@ -468,11 +468,11 @@ public class GLFactory {
 		return s;
 	}
 
-	public MeshComponent newCircle(Color c) {
+	public Shape newCircle(Color c) {
 		return newNSidedPolygon(20, 1, c);
 	}
 
-	public MeshComponent newNSidedPolygonWithGaps(int numberOfSides, Color c) {
+	public Shape newNSidedPolygonWithGaps(int numberOfSides, Color c) {
 		Shape s = new Shape(c);
 
 		Vec v = new Vec(1, 0, 0);
@@ -492,7 +492,7 @@ public class GLFactory {
 	private static final float HEIGHT_TO_SIDE_FACTOR = (float) (2f / Math
 			.sqrt(3f));
 
-	public MeshComponent newPyramid(Vec center, float height, Color color) {
+	public Shape newPyramid(Vec center, float height, Color color) {
 		Shape p = new Shape(color);
 		// side length:
 		float a = HEIGHT_TO_SIDE_FACTOR * Math.abs(height);

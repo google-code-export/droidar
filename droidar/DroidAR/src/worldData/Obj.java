@@ -57,7 +57,9 @@ public class Obj extends AbstractObj implements HasPosition {
 		final int lenght = myComponents.myLength;
 		for (int i = 0; i < lenght; i++) {
 			if (myComponents.get(i) != null)
-				myComponents.get(i).update(timeDelta, this, stack);
+				if (!myComponents.get(i).update(timeDelta, this, stack)) {
+					remove(myComponents.get(i));
+				}
 		}
 		return true;
 	}

@@ -105,4 +105,12 @@ public class Shape extends MeshComponent {
 		return "Shape " + super.toString();
 	}
 
+	public void clearShape() {
+		setMyRenderData(null);
+	}
+
+	public RenderData getMyRenderData() {
+		return myRenderData;
+	}
+
 }
