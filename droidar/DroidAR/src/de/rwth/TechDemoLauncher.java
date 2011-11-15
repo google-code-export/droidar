@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import commands.ui.CommandShowToast;
+import components.TooFarAwayComp;
 
 import de.rwth.setups.CollectItemsSetup;
 import de.rwth.setups.DebugSetup;
@@ -27,7 +28,6 @@ import de.rwth.setups.PlaceObjectsSetup;
 import de.rwth.setups.PlaceObjectsSetupTwo;
 import de.rwth.setups.PositionTestsSetup;
 import de.rwth.setups.SensorTestSetup;
-import de.rwth.setups.TooFarAwayComp;
 
 public class TechDemoLauncher extends Activity {
 	@Override

@@ -1,4 +1,4 @@
-package de.rwth.setups;
+package components;
 
 import gl.Color;
 import gl.GLCamera;

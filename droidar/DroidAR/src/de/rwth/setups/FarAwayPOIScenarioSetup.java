@@ -12,6 +12,7 @@ import android.util.Log;
 
 import commands.Command;
 import commands.ui.CommandShowToast;
+import components.SimpleTooFarAwayComp;
 
 public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 
