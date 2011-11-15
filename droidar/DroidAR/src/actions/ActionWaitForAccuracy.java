@@ -4,7 +4,6 @@ import geo.GeoUtils;
 import system.EventManager;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.res.Resources.Theme;
 import android.location.Location;
 import android.util.Log;
 import android.view.View;

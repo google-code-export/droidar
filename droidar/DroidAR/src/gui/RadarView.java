@@ -4,10 +4,14 @@ import gl.GLCamera;
 import gl.HasColor;
 import gl.HasPosition;
 import gl.scenegraph.Shape;
+import system.ParentStack;
 import util.EfficientList;
 import util.Vec;
 import worldData.Obj;
 import worldData.RenderableEntity;
+import worldData.UpdateTimer;
+import worldData.Updateable;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -16,10 +20,12 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class RadarView extends View {
+public class RadarView extends View implements Updateable {
 
-	private static final int DEFAULT_SIZE = 250;
+	private static final int DEFAULT_VIEW_SIZE = 250;
 	private static final int MARGIN = 4;
+	private static final float DEFAULT_UPDATE_SPEED = 1;
+	private static final int DEFAULT_RADAR_MAX_DISTANCE = 200;
 
 	Paint paint;
 	private Paint linePaint;
@@ -27,22 +33,64 @@ public class RadarView extends View {
 	private int mySize;
 	private int myHalfSize;
 	private Vec myRotVec;
-	private int myDisplRadius = 100;
+	private int myDisplRadius = DEFAULT_RADAR_MAX_DISTANCE;
 	private boolean displayOutOfRadarArea = true;
+	private boolean rotateNeedle = false;
 	private EfficientList<RenderableEntity> items;
 	private GLCamera myCamera;
 	private Bitmap background;
-	private boolean rotateNeedle;
 	private double myRotation;
+	private UpdateTimer myTimer;
 
 	// private String debug;
 
-	public RadarView(Context context) {
+	public RadarView(Context context, GLCamera camera, int radarViewSize,
+			int displRadiusInMeters, float updateSpeed, boolean rotateNeedle,
+			boolean displayOutOfRadarArea) {
 		super(context);
-		init(DEFAULT_SIZE);
+		init(radarViewSize, updateSpeed);
+		myCamera = camera;
+		setRotateNeedle(rotateNeedle);
+		setRadarDisplRadius(displRadiusInMeters);
+		setDisplayOutOfRadarArea(displayOutOfRadarArea);
 	}
 
-	private void init(int size) {
+	public void setRotateNeedle(boolean rotateNeedle) {
+		this.rotateNeedle = rotateNeedle;
+	}
+
+	public void setDisplayOutOfRadarArea(boolean displayOutOfRadarArea) {
+		this.displayOutOfRadarArea = displayOutOfRadarArea;
+	}
+
+	public void setRadarDisplRadius(int displRadiusInMeters) {
+		this.myDisplRadius = displRadiusInMeters;
+	}
+
+	@Deprecated
+	public RadarView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		init(DEFAULT_VIEW_SIZE, DEFAULT_UPDATE_SPEED);
+	}
+
+	@Deprecated
+	public RadarView(Context context) {
+		super(context);
+		init(DEFAULT_VIEW_SIZE, DEFAULT_UPDATE_SPEED);
+	}
+
+	@Deprecated
+	public RadarView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		init(DEFAULT_VIEW_SIZE, DEFAULT_UPDATE_SPEED);
+	}
+
+	public RadarView(Activity myTargetActivity, GLCamera camera) {
+		this(myTargetActivity, camera, DEFAULT_VIEW_SIZE,
+				DEFAULT_RADAR_MAX_DISTANCE, DEFAULT_UPDATE_SPEED, false, true);
+	}
+
+	private void init(int size, float updateSpeed) {
 		paint = new Paint();
 		paint.setAntiAlias(true);
 		paint.setColor(Color.WHITE);
@@ -56,6 +104,7 @@ public class RadarView extends View {
 		myRotVec = new Vec(myHalfSize / 2.5f, 0, 0);
 		if (isInEditMode())
 			loadDemoValues();
+		myTimer = new UpdateTimer(updateSpeed, null);
 	}
 
 	/**
@@ -68,11 +117,12 @@ public class RadarView extends View {
 		setElementsOutOfRadarAreaVisible(true);
 		setCompassNeedleShouldBeRotated(true);
 		myCamera = new GLCamera();
-		myCamera.setPosition(new Vec(0, 0, 0));
+		myCamera.setPosition(new Vec(30, 40, 0));
 		items = new EfficientList<RenderableEntity>();
 		items.add(newObj(40, 40));
 		items.add(newObj(10, 10));
 		items.add(newObj(200, 200));
+		items.add(newObj(200, -200));
 	}
 
 	private RenderableEntity newObj(int x, int y) {
@@ -100,11 +150,6 @@ public class RadarView extends View {
 		myRotVec.rotateAroundZAxis(rotation - 90);
 	}
 
-	public RadarView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		init(DEFAULT_SIZE);
-	}
-
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
@@ -114,6 +159,10 @@ public class RadarView extends View {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
+		/*
+		 * TODO store in bitmap object and only redraw if something changes to
+		 * increase performance!
+		 */
 		drawBackGround(canvas);
 
 		if (items != null)
@@ -168,8 +217,7 @@ public class RadarView extends View {
 				/*
 				 * now convert the distance in meters into a distance in pixels:
 				 */
-				pos.setLength(length / myDisplRadius
-						* (myHalfSize - MARGIN * 2));
+				pos.setLength(length / myDisplRadius * (myHalfSize - MARGIN));
 
 				/*
 				 * the canvas coords are not like the opengl coords! 10,10 means
@@ -191,7 +239,7 @@ public class RadarView extends View {
 			if (c != null)
 				paint.setColor(c.toIntARGB());
 		}
-		canvas.drawCircle(northPos, eastPos, 5, paint);
+		canvas.drawCircle(northPos, eastPos, 6, paint);
 	}
 
 	private void drawBackGround(Canvas canvas) {
@@ -240,4 +288,20 @@ public class RadarView extends View {
 		return b;
 	}
 
+	@Override
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
+		if (myTimer.update(timeDelta, parent, stack)) {
+			try {
+				setRotation(myCamera.getAngleUpdateListener()
+						.getCurrentAngles()[0]);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		/*
+		 * TODO if view was removed from parent it can return false here!
+		 */
+		return true;
+	}
 }

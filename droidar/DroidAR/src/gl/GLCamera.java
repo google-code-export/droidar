@@ -44,6 +44,11 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		 */
 		void updateAnglesByCamera(float[] myAnglesInRadians, Vec myRotationVec);
 
+		/**
+		 * @return see {@link SensorManager#getOrientation(float[], float[])}
+		 */
+		float[] getCurrentAngles();
+
 	}
 
 	private static final String LOG_TAG = "GLCamera";
@@ -531,7 +536,16 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 */
 	public void setAngleUpdateListener(
 			CameraAngleUpdateListener myAngleUpdateListener) {
+		if (this.myAngleUpdateListener != null) {
+			Log.w(LOG_TAG,
+					"The myAngleUpdateListener was just replaced which will "
+							+ "cause some other listener to get now more events");
+		}
 		this.myAngleUpdateListener = myAngleUpdateListener;
+	}
+
+	public CameraAngleUpdateListener getAngleUpdateListener() {
+		return myAngleUpdateListener;
 	}
 
 	private void glLoadPosition(GL10 gl, Vec vec) {
