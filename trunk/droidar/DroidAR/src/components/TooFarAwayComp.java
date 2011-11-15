@@ -1,4 +1,4 @@
-package de.rwth.setups;
+package components;
 
 import geo.GeoObj;
 import gl.GLCamera;
@@ -75,7 +75,6 @@ public abstract class TooFarAwayComp implements Entity {
 		Log.e(LOG_TAG, "Could not extract position from parent! " + parent
 				+ "(Class=" + parent.getClass() + "). "
 				+ "The comp cant be used in this context.");
-
 		return false;
 	}
 
