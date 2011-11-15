@@ -4,6 +4,7 @@ import geo.GeoObj;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gui.GuiSetup;
+import gui.RadarView;
 import system.DefaultARSetup;
 import util.Vec;
 import worldData.World;
@@ -43,6 +44,8 @@ public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 				return true;
 			}
 		}, "Show altitude");
+
+		guiSetup.addViewToTop(new RadarView(myTargetActivity));
 
 		guiSetup.addButtonToBottomView(new Command() {
 
