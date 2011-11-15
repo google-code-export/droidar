@@ -1,8 +1,12 @@
 package util;
 
+import gl.GLCamera;
+import gl.GLCamera.CameraAngleUpdateListener;
+
 public class Vec {
 
 	private static final float SMALLEST_DISTANCE = 0.0001f;
+	private static final String LOG_TAG = "Vec";
 	/**
 	 * @param x
 	 *            value on red axis (east direction=longitude)
@@ -362,6 +366,14 @@ public class Vec {
 	 * @return the resized vector to allow chains
 	 */
 	public Vec setLength(float length) {
+		if (length == 0f) {
+			length = 0.00000001f;
+		}
+		if (x == 0f && y == 0f && z == 0f) {
+			Log.w(LOG_TAG,
+					"Request to setLength on 0 Vector which is impossible");
+			return this;
+		}
 		return mult(length / vectorLength(this));
 	}
 

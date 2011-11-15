@@ -1,5 +1,7 @@
 package worldData;
 
+import gl.Color;
+import gl.HasColor;
 import gl.HasPosition;
 import gl.ObjectPicker;
 import gl.Renderable;
@@ -13,7 +15,7 @@ import util.Vec;
 
 import commands.Command;
 
-public class Obj extends AbstractObj implements HasPosition {
+public class Obj extends AbstractObj implements HasPosition, HasColor {
 
 	private static final String LOG_TAG = "Obj";
 	EfficientList<Entity> myComponents = new EfficientList<Entity>();
@@ -182,6 +184,21 @@ public class Obj extends AbstractObj implements HasPosition {
 	@Override
 	public boolean accept(Visitor visitor) {
 		return visitor.default_visit(this);
+	}
+
+	@Override
+	public Color getColor() {
+		if (myGraphicsComponent != null) {
+			return myGraphicsComponent.getColor();
+		}
+		return null;
+	}
+
+	@Override
+	public void setColor(Color c) {
+		if (myGraphicsComponent != null) {
+			myGraphicsComponent.setColor(c);
+		}
 	}
 
 	// public String getDebugInfos() {
