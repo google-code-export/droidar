@@ -1,9 +1,11 @@
 package gui;
 
 import gl.GLCamera;
+import gl.GLCamera.CameraAngleUpdateListener;
 import gl.HasColor;
 import gl.HasPosition;
 import gl.scenegraph.Shape;
+import listeners.EventListener;
 import system.ParentStack;
 import util.EfficientList;
 import util.Vec;
@@ -18,14 +20,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 public class RadarView extends View implements Updateable {
 
-	private static final int DEFAULT_VIEW_SIZE = 250;
+	private static final int DEFAULT_VIEW_SIZE = 150;
 	private static final int MARGIN = 4;
 	private static final float DEFAULT_UPDATE_SPEED = 1;
 	private static final int DEFAULT_RADAR_MAX_DISTANCE = 200;
+	protected static final String LOG_TAG = "RadarView";
 
 	Paint paint;
 	private Paint linePaint;
@@ -41,18 +45,29 @@ public class RadarView extends View implements Updateable {
 	private Bitmap background;
 	private double myRotation;
 	private UpdateTimer myTimer;
+	private float myUpdateSpeed = DEFAULT_UPDATE_SPEED;
 
 	// private String debug;
 
 	public RadarView(Context context, GLCamera camera, int radarViewSize,
 			int displRadiusInMeters, float updateSpeed, boolean rotateNeedle,
-			boolean displayOutOfRadarArea) {
+			boolean displayOutOfRadarArea, EfficientList<RenderableEntity> items) {
 		super(context);
-		init(radarViewSize, updateSpeed);
+		init(radarViewSize);
 		myCamera = camera;
 		setRotateNeedle(rotateNeedle);
 		setRadarDisplRadius(displRadiusInMeters);
 		setDisplayOutOfRadarArea(displayOutOfRadarArea);
+		setItems(items);
+		setUpdateSpeed(updateSpeed);
+	}
+
+	public void setUpdateSpeed(float myUpdateSpeed) {
+		this.myUpdateSpeed = myUpdateSpeed;
+	}
+
+	public void setItems(EfficientList<RenderableEntity> items) {
+		this.items = items;
 	}
 
 	public void setRotateNeedle(boolean rotateNeedle) {
@@ -70,27 +85,29 @@ public class RadarView extends View implements Updateable {
 	@Deprecated
 	public RadarView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		init(DEFAULT_VIEW_SIZE, DEFAULT_UPDATE_SPEED);
+		init(DEFAULT_VIEW_SIZE);
 	}
 
 	@Deprecated
 	public RadarView(Context context) {
 		super(context);
-		init(DEFAULT_VIEW_SIZE, DEFAULT_UPDATE_SPEED);
+		init(DEFAULT_VIEW_SIZE);
 	}
 
 	@Deprecated
 	public RadarView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init(DEFAULT_VIEW_SIZE, DEFAULT_UPDATE_SPEED);
+		init(DEFAULT_VIEW_SIZE);
 	}
 
-	public RadarView(Activity myTargetActivity, GLCamera camera) {
+	public RadarView(Activity myTargetActivity, GLCamera camera,
+			EfficientList<RenderableEntity> items) {
 		this(myTargetActivity, camera, DEFAULT_VIEW_SIZE,
-				DEFAULT_RADAR_MAX_DISTANCE, DEFAULT_UPDATE_SPEED, false, true);
+				DEFAULT_RADAR_MAX_DISTANCE, DEFAULT_UPDATE_SPEED, false, true,
+				items);
 	}
 
-	private void init(int size, float updateSpeed) {
+	private void init(int size) {
 		paint = new Paint();
 		paint.setAntiAlias(true);
 		paint.setColor(Color.WHITE);
@@ -104,7 +121,7 @@ public class RadarView extends View implements Updateable {
 		myRotVec = new Vec(myHalfSize / 2.5f, 0, 0);
 		if (isInEditMode())
 			loadDemoValues();
-		myTimer = new UpdateTimer(updateSpeed, null);
+		myTimer = new UpdateTimer(myUpdateSpeed, null);
 	}
 
 	/**
@@ -148,6 +165,7 @@ public class RadarView extends View implements Updateable {
 	public void setRotation(double rotation) {
 		myRotation = rotation;
 		myRotVec.rotateAroundZAxis(rotation - 90);
+		this.postInvalidate();
 	}
 
 	@Override
@@ -293,8 +311,21 @@ public class RadarView extends View implements Updateable {
 			ParentStack<Updateable> stack) {
 		if (myTimer.update(timeDelta, parent, stack)) {
 			try {
-				setRotation(myCamera.getAngleUpdateListener()
-						.getCurrentAngles()[0]);
+				CameraAngleUpdateListener l = myCamera.getAngleUpdateListener();
+				if (l != null) {
+					setRotation(l.getCurrentAngles()[0]);
+				} else {
+					Log.w(LOG_TAG,
+							"The CameraAngleUpdateListener was null so the "
+									+ "radar will be the update listener itself");
+					/*
+					 * register the radar as an CameraAngleUpdateListener and
+					 * remove it from the update cycle
+					 */
+					myCamera.setAngleUpdateListener(createUpdateListener());
+					return false;
+				}
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -303,5 +334,23 @@ public class RadarView extends View implements Updateable {
 		 * TODO if view was removed from parent it can return false here!
 		 */
 		return true;
+	}
+
+	private CameraAngleUpdateListener createUpdateListener() {
+		return new CameraAngleUpdateListener() {
+			final float rad2deg = (float) (180.0f / Math.PI);
+
+			@Override
+			public void updateAnglesByCamera(float[] myAnglesInRadians,
+					Vec myRotationVec) {
+				setRotation(myAnglesInRadians[0] * rad2deg);
+			}
+
+			@Override
+			public float[] getCurrentAngles() {
+				Log.e(LOG_TAG, "getCurrentAngles not implemented");
+				return null;
+			}
+		};
 	}
 }

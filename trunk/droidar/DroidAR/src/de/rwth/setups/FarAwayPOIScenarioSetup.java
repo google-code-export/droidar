@@ -7,6 +7,7 @@ import gui.GuiSetup;
 import gui.RadarView;
 import system.DefaultARSetup;
 import util.Vec;
+import worldData.SystemUpdater;
 import worldData.World;
 import android.app.Activity;
 import android.util.Log;
@@ -20,9 +21,11 @@ public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 	private String LOG_TAG = "FarAwayPOIScenarioSetup";
 	private RadarView radar;
 
-	public FarAwayPOIScenarioSetup() {
-		super();
-		radar = new RadarView(myTargetActivity, getCamera());
+	@Override
+	public void _a_initFieldsIfNecessary() {
+		super._a_initFieldsIfNecessary();
+		radar = new RadarView(getActivity(), getCamera(), getWorld()
+				.getAllItems());
 	}
 
 	@Override
@@ -33,6 +36,12 @@ public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 		o.setVirtualPosition(new Vec(20, 50, 0));
 		o.setComp(new SimpleTooFarAwayComp(30, getCamera(), getActivity()));
 		world.add(o);
+	}
+
+	@Override
+	public void _d_addElementsToUpdateThread(SystemUpdater updater) {
+		super._d_addElementsToUpdateThread(updater);
+		updater.addObjectToUpdateCycle(radar);
 	}
 
 	@Override
@@ -50,7 +59,6 @@ public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 				return true;
 			}
 		}, "Show altitude");
-
 		guiSetup.addViewToTop(radar);
 
 		guiSetup.addButtonToBottomView(new Command() {
