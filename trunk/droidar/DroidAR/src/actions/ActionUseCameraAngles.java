@@ -1,5 +1,6 @@
 package actions;
 
+import android.hardware.SensorManager;
 import gl.GLCamera;
 import gl.GLCamera.CameraAngleUpdateListener;
 import util.Vec;
@@ -15,6 +16,10 @@ public abstract class ActionUseCameraAngles extends Action implements
 
 	private int accelCounter;
 	private int accelThreshold = 10;
+	/**
+	 * sould represent {@link SensorManager#getOrientation(float[], float[])}
+	 */
+	private float[] myAngles = new float[3];
 
 	// private int magnetCounter;
 	// private int magnetThreshold = 10;
@@ -62,10 +67,14 @@ public abstract class ActionUseCameraAngles extends Action implements
 			/*
 			 * missing documentation for the following calculations.. TODO
 			 */
-			updatePitch((float) Math.toDegrees(Math.atan2(-target[1],
-					Math.sqrt(target[2] * target[2] + target[0] * target[0]))));
-			updateRoll(180 + (float) -Math.toDegrees(Math.atan2(target[0],
-					-target[2])));
+			float pitch = (float) Math.toDegrees(Math.atan2(-target[1],
+					Math.sqrt(target[2] * target[2] + target[0] * target[0])));
+			myAngles[1] = pitch;
+			updatePitch(pitch);
+			float roll = 180 + (float) -Math.toDegrees(Math.atan2(target[0],
+					-target[2]));
+			myAngles[2] = pitch;
+			updateRoll(roll);
 
 		}
 		return true;
@@ -131,6 +140,13 @@ public abstract class ActionUseCameraAngles extends Action implements
 		azimuth += cameraRotationVec.z;
 		if (azimuth >= 360)
 			azimuth -= 360;
+		myAngles[0] = azimuth;
 		updateCompassAzimuth(azimuth);
 	}
+
+	@Override
+	public float[] getCurrentAngles() {
+		return myAngles;
+	}
+
 }

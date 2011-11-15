@@ -18,6 +18,12 @@ import components.SimpleTooFarAwayComp;
 public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 
 	private String LOG_TAG = "FarAwayPOIScenarioSetup";
+	private RadarView radar;
+
+	public FarAwayPOIScenarioSetup() {
+		super();
+		radar = new RadarView(myTargetActivity, getCamera());
+	}
 
 	@Override
 	public void addObjectsTo(GLRenderer renderer, World world,
@@ -45,7 +51,7 @@ public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 			}
 		}, "Show altitude");
 
-		guiSetup.addViewToTop(new RadarView(myTargetActivity));
+		guiSetup.addViewToTop(radar);
 
 		guiSetup.addButtonToBottomView(new Command() {
 
