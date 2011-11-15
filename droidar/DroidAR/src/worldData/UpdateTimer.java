@@ -6,6 +6,10 @@ import commands.Command;
 public class UpdateTimer implements Updateable {
 
 	private static final float DEF_RETRY_TIME = 0.2f;
+	/**
+	 * set the interval (in s) the {@link UpdateTimer} is triggered and its
+	 * command is executed. Example values: 5s; 0.5s
+	 */
 	private float myTriggerValue;
 	private Command myCommand;
 	private float time = 0;
@@ -48,8 +52,8 @@ public class UpdateTimer implements Updateable {
 
 	/**
 	 * @param myTriggerValue
-	 *            The time-value in s which also has to be set in the
-	 *            constructor.
+	 *            set the interval (in s) the {@link UpdateTimer} is triggered
+	 *            and its command is executed. Example values: 5s; 0.5s
 	 */
 	public void setTriggerTime(float myTriggerValue) {
 		this.myTriggerValue = myTriggerValue;
