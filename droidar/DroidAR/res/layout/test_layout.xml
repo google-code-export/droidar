@@ -13,15 +13,7 @@
 
     <gui.RadarView
         android:id="@+id/radarView1"
-        android:layout_width="169dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.10" >
-    </gui.RadarView>
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="105dp"
-        android:layout_height="wrap_content"
-        android:text="Button" />
-
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    
 </LinearLayout>
