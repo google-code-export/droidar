@@ -128,7 +128,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * 
 	 * //place it 10 meters north of the users position: <br>
 	 * 
-	 * x.setVirtualPosition(new Vec(10,0,0)); <br>
+	 * x.setVirtualPosition(new Vec(0,10,0)); <br>
 	 * <br>
 	 * 
 	 * x.getLatitude()<br>

@@ -121,8 +121,6 @@ public abstract class ActionUseCameraAngles extends Action implements
 		return true;
 	}
 
-	final float rad2deg = (float) (180.0f / Math.PI);
-
 	public void updateAnglesByCamera(float[] anglesInRadians,
 			Vec cameraRotationVec) {
 
@@ -136,7 +134,7 @@ public abstract class ActionUseCameraAngles extends Action implements
 		// float pitch = anglesInRadians[1] * rad2deg;
 		// float roll = anglesInRadians[2] * -rad2deg;
 
-		float azimuth = anglesInRadians[0] * rad2deg;
+		float azimuth = anglesInRadians[0];
 		azimuth += cameraRotationVec.z;
 		if (azimuth >= 360)
 			azimuth -= 360;
