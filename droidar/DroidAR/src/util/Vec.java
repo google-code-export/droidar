@@ -3,6 +3,12 @@ package util;
 import gl.GLCamera;
 import gl.GLCamera.CameraAngleUpdateListener;
 
+/**
+ * see {@link Vec#Vec(float, float, float)}
+ * 
+ * @author Spobo
+ * 
+ */
 public class Vec {
 
 	private static final float SMALLEST_DISTANCE = 0.0001f;
@@ -97,22 +103,21 @@ public class Vec {
 	}
 
 	/**
-	 * rotates the vector CLOCKWISE around the z axis
+	 * rotates the vector COUNTERCLOCKWISE around the z axis. Warning this is
+	 * different to {@link GLCamera#getCameraAnglesInDegree()}[0] which will
+	 * give the rotation CLOCKWISE around the Z axsis
+	 * 
+	 * <br>
+	 * <br>
+	 * 
+	 * EXAMPLE: vector (0,10,0) is currently pointing north. passing 90 degree
+	 * here will cause it to point to -10 0 0 (so west)
 	 * 
 	 * <br>
 	 * <br>
 	 * 
 	 * if you want to rotate according to the current camera rotation you have
-	 * to calculate 360-angle first because this values (e.g.
-	 * {@link GLCamera#myAnglesInRadians} or the values passed to the
-	 * {@link CameraAngleUpdateListener}) will be given COUNTERClOCKWISE
-	 * 
-	 * <br>
-	 * <br>
-	 * 
-	 * example: vector (0,10,0) should point in same direction as the camera is
-	 * looking and camera looks east (90 degree) then rotate the (0,10,0) vector
-	 * clockwise by 90 degree
+	 * to calculate 360-angle first
 	 * 
 	 * @param angleInDegree
 	 */
@@ -686,5 +691,26 @@ public class Vec {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+	}
+
+	/**
+	 * @param x
+	 * @param y
+	 * @return a value from 0 to 359
+	 */
+	public static float getRotationAroundZAxis(float x, float y) {
+		/*
+		 * Scalarproduct rule:
+		 * 
+		 * cos(w)=a*b/(|a|*|b|)
+		 * 
+		 * a is (1,0,0)
+		 */
+		float result = (float) Math.acos((x / Math.sqrt(x * x + y * y)))
+				* rad2deg;
+		if (y < 0)
+			return 360 - result;
+		return result;
+
 	}
 }

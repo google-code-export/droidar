@@ -43,6 +43,22 @@ public class SystemTests extends SimpleTesting {
 		normalCalculationTest();
 		assertEquals(Vec.rotatedVecInXYPlane(10, 90), new Vec(0, 10, 0));
 		vecRoundingTest();
+		vecRotateTests();
+	}
+
+	private void vecRotateTests() throws Exception {
+		assertTrue(Vec.getRotationAroundZAxis(10, 10) == 45);
+		assertTrue(Vec.getRotationAroundZAxis(3, 0) == 0);
+		assertTrue(Vec.getRotationAroundZAxis(-4, -4) == 180 + 45);
+		assertTrue(Vec.getRotationAroundZAxis(2, -2) == 360 - 45);
+
+		Vec x = new Vec(0, 10, 0);
+		float degree = -90;
+		x.rotateAroundZAxis(90);
+		System.out.println(x.x);
+		System.out.println(x.y);
+		System.out.println(x.z);
+
 	}
 
 	private void vecRoundingTest() throws Exception {

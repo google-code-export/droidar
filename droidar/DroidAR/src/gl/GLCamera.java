@@ -29,20 +29,18 @@ import android.opengl.Matrix;
 public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		HasPosition, HasRotation {
 
+	@Deprecated
 	public interface CameraAngleUpdateListener {
 
 		/**
-		 * @param myAnglesInRadians
-		 *            These values are calculated with
-		 *            {@link SensorManager#getOrientation(float[], float[])} and
-		 *            they represent the rotation caused by the device sensors
+		 * @param myAnglesInDegrees
+		 *            0 = north, 90 = east
 		 * @param myRotationVec
-		 *            These values (in radians, positive and COUNTERCLOCKWISE)
-		 *            are additional rotation values which might be set by the
-		 *            developer/user so they have to be considered even if they
-		 *            are normally 0.
+		 *            These values are additional rotation values which might be
+		 *            set by the developer/user so they have to be considered
+		 *            even if they are normally 0.
 		 */
-		void updateAnglesByCamera(float[] myAnglesInRadians, Vec myRotationVec);
+		void updateAnglesByCamera(float[] myAnglesInDegrees, Vec myRotationVec);
 
 		/**
 		 * @return see {@link SensorManager#getOrientation(float[], float[])}
@@ -69,7 +67,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 
 	/**
 	 * to move from the green to the red axis (clockwise) you would have to add
-	 * 90 degree
+	 * 90 degree.
 	 * 
 	 * y is rotation around green achsis counterclockwise
 	 * 
@@ -128,8 +126,9 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 * if an angleUpdateListener is set or
 	 * {@link GLCamera#forceAngleCalculation} is set to true
 	 */
-	public float[] myAnglesInRadians = new float[3];
-	public boolean forceAngleCalculation = false;
+	private float[] cameraAnglesInDegree = new float[3];
+	private float[] rotDirection = new float[4];
+	// public boolean forceAngleCalculation = false;
 
 	private MoveComp myMover = new MoveComp(3);
 
@@ -475,7 +474,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 				SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X,
 				rotationMatrix);
 
-		updateCameraAnglesIfNeeded();
+		updateCameraAngles();
 
 		accelOrMagChanged = false;
 		matrixOffset = 0;
@@ -494,7 +493,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 				SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X,
 				rotationMatrix);
 
-		updateCameraAnglesIfNeeded();
+		updateCameraAngles();
 
 		orientationValuesChanged = false;
 		matrixOffset = 0;
@@ -513,17 +512,35 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 
 	}
 
-	private void updateCameraAnglesIfNeeded() {
+	private void updateCameraAngles() {
+		calcOrientation();
 		if (myAngleUpdateListener != null) {
-			/*
-			 * 
-			 */
-			SensorManager.getOrientation(rotationMatrix, myAnglesInRadians);
-			myAngleUpdateListener.updateAnglesByCamera(myAnglesInRadians,
+			myAngleUpdateListener.updateAnglesByCamera(cameraAnglesInDegree,
 					myRotationVec);
-		} else if (forceAngleCalculation) {
-			SensorManager.getOrientation(rotationMatrix, myAnglesInRadians);
 		}
+		// else if (forceAngleCalculation) {
+		// SensorManager.getOrientation(rotationMatrix, cameraAnglesInDegree);
+		// // TODO convert to degree
+		// }
+	}
+
+	private void calcOrientation() {
+		Matrix.invertM(invRotMatrix, 0, rotationMatrix, matrixOffset);
+		float[] initDir = { 0, 0, -GLRenderer.minViewDistance, 0.0f };
+		// TODO not a good idea to use myAnglesInRadians2 here, maybe additional
+		// helper var?:
+		Matrix.multiplyMV(rotDirection, 0, invRotMatrix, 0, initDir, 0);
+		cameraAnglesInDegree[0] = Vec.getRotationAroundZAxis(rotDirection[1],
+				rotDirection[0]);
+	}
+
+	/**
+	 * Currently only the azimuth is calculated here
+	 * 
+	 * @return [0]=azimuth (0 is north and 90 is east)
+	 */
+	public float[] getCameraAnglesInDegree() {
+		return cameraAnglesInDegree;
 	}
 
 	/**

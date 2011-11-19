@@ -33,7 +33,8 @@ public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 			final GLFactory objectFactory) {
 		GeoObj o = new GeoObj();
 		o.setComp(objectFactory.newCube());
-		o.setVirtualPosition(new Vec(20, 50, 0));
+		// place 20 meters north of the user:
+		o.setVirtualPosition(new Vec(0, 20, 0));
 		o.setComp(new SimpleTooFarAwayComp(30, getCamera(), getActivity()));
 		world.add(o);
 	}

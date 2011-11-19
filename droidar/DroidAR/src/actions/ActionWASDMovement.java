@@ -43,13 +43,11 @@ public class ActionWASDMovement extends Action implements Updateable {
 	public ActionWASDMovement(GLCamera camera, float xReduction,
 			float yReduction, float maxSpeed) {
 		myTargetCamera = camera;
-		myTargetCamera.forceAngleCalculation = true;
 		this.xReduction = xReduction;
 		this.yReduction = yReduction;
 		myMaxSpeed = maxSpeed;
 	}
 
-	final float rad2deg = (float) (180.0f / Math.PI);
 
 	@Override
 	public boolean onTouchMove(MotionEvent e1, MotionEvent e2,
@@ -90,8 +88,8 @@ public class ActionWASDMovement extends Action implements Updateable {
 			// Vec.getOrthogonalHorizontal(accelerationVec);
 
 			Vec yDir = new Vec(yFactor, 0, 0);
-			yDir.rotateAroundZAxis(180 - myTargetCamera.myAnglesInRadians[0]
-					* rad2deg);
+			yDir.rotateAroundZAxis(180 - myTargetCamera.getCameraAnglesInDegree()[0]
+					);
 
 			// System.out.println("yDir="+yDir);
 

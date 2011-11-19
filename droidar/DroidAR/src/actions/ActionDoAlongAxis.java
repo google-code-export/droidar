@@ -32,7 +32,6 @@ public abstract class ActionDoAlongAxis extends Action {
 	public ActionDoAlongAxis(GLCamera camera, float trackballFactor,
 			float touchscreenFactor) {
 		myTargetCamera = camera;
-		myTargetCamera.forceAngleCalculation = true;
 		myTrackballFactor = trackballFactor;
 		myTouchscreenReductionFactor = touchscreenFactor;
 	}
@@ -43,8 +42,6 @@ public abstract class ActionDoAlongAxis extends Action {
 
 		return true;
 	}
-
-	final float rad2deg = (float) (180.0f / Math.PI);
 
 	@Override
 	public boolean onTouchMove(MotionEvent e1, MotionEvent e2,
@@ -66,8 +63,8 @@ public abstract class ActionDoAlongAxis extends Action {
 	private void AlignAcordingToViewAxes(float x, float y) {
 		movementVec.x = x;
 		movementVec.y = y;
-		movementVec
-				.rotateAroundZAxis(360 - (myTargetCamera.myAnglesInRadians[0] * rad2deg));
+		movementVec.rotateAroundZAxis(360 - (myTargetCamera
+				.getCameraAnglesInDegree()[0]));
 		doAlongViewAxis(movementVec.x, movementVec.y);
 
 	}
