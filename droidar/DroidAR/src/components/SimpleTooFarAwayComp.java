@@ -17,7 +17,6 @@ import commands.ui.CommandShowToast;
 
 public class SimpleTooFarAwayComp extends TooFarAwayComp {
 
-	private static final Color ARROW_COLOR = Color.green();
 	private Shape arrow;
 	private MoveComp mover = new MoveComp(3);
 
@@ -25,7 +24,7 @@ public class SimpleTooFarAwayComp extends TooFarAwayComp {
 			final Activity a) {
 		super(maxDistance, camera);
 
-		arrow = new Shape(ARROW_COLOR);
+		arrow = new Shape(Color.green());
 		arrow.setOnClickCommand(new Command() {
 
 			@Override
@@ -72,7 +71,7 @@ public class SimpleTooFarAwayComp extends TooFarAwayComp {
 			Vec direction) {
 		Vec lineEndPos = direction.copy().setLength(-10);
 		arrow.setMyRenderData(GLFactory.getInstance()
-				.newDirectedPath(lineEndPos, ARROW_COLOR).getMyRenderData());
+				.newDirectedPath(lineEndPos, null).getMyRenderData());
 		Vec pos = direction.setLength(direction.getLength() - 10);
 		pos.z -= 5;
 		mover.myTargetPos = pos;

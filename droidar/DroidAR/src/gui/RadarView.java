@@ -5,12 +5,14 @@ import gl.HasColor;
 import gl.HasPosition;
 import gl.scenegraph.Shape;
 import system.ParentStack;
+import system.Setup;
 import util.EfficientList;
 import util.Vec;
 import worldData.Obj;
 import worldData.RenderableEntity;
 import worldData.UpdateTimer;
 import worldData.Updateable;
+import worldData.World;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -24,11 +26,11 @@ public class RadarView extends View implements Updateable {
 
 	private static final int DEFAULT_VIEW_SIZE = 250;
 	private static final int MARGIN = 4;
-	private static final float DEFAULT_UPDATE_SPEED = 1;
+	private static final float DEFAULT_UPDATE_SPEED = 0.3f;
 	private static final int DEFAULT_RADAR_MAX_DISTANCE = 200;
-	protected static final String LOG_TAG = "RadarView";
+	private static final String LOG_TAG = "RadarView";
 
-	Paint paint;
+	private Paint paint;
 	private Paint linePaint;
 
 	private int mySize;
@@ -44,7 +46,7 @@ public class RadarView extends View implements Updateable {
 	private UpdateTimer myTimer;
 	private float myUpdateSpeed = DEFAULT_UPDATE_SPEED;
 
-	private String debug;
+	// private String debug;
 
 	public RadarView(Context context, GLCamera camera, int radarViewSize,
 			int displRadiusInMeters, float updateSpeed, boolean rotateNeedle,
@@ -97,14 +99,24 @@ public class RadarView extends View implements Updateable {
 		init(DEFAULT_VIEW_SIZE);
 	}
 
-	public RadarView(Activity myTargetActivity, GLCamera camera,
-			EfficientList<RenderableEntity> items) {
-		this(myTargetActivity, camera, DEFAULT_VIEW_SIZE,
+	/**
+	 * @param myTargetActivity
+	 * @param radarViewSize
+	 *            size of the radar view in pixels (e.g. pass
+	 *            {@link Setup#getScreenWidth()/3}
+	 * @param camera
+	 * @param items
+	 *            e.g. the complete virtual {@link World} (then use
+	 *            {@link World#getAllItems()})
+	 */
+	public RadarView(Activity myTargetActivity, int radarViewSize,
+			GLCamera camera, EfficientList<RenderableEntity> items) {
+		this(myTargetActivity, camera, radarViewSize,
 				DEFAULT_RADAR_MAX_DISTANCE, DEFAULT_UPDATE_SPEED, false, true,
 				items);
 	}
 
-	private void init(int size) {
+	private void init(int viewSize) {
 		paint = new Paint();
 		paint.setAntiAlias(true);
 		paint.setColor(Color.WHITE);
@@ -113,8 +125,8 @@ public class RadarView extends View implements Updateable {
 		linePaint.setStyle(Paint.Style.STROKE);
 		linePaint.setStrokeWidth(2);
 
-		mySize = size;
-		myHalfSize = size / 2;
+		mySize = viewSize;
+		myHalfSize = viewSize / 2;
 		myRotVec = new Vec(myHalfSize / 2.5f, 0, 0);
 		if (isInEditMode())
 			loadDemoValues();
@@ -126,7 +138,7 @@ public class RadarView extends View implements Updateable {
 	 * xml layout editor
 	 */
 	private void loadDemoValues() {
-		setRotation(90);
+		setRotation(45);
 		setDisplayedAreaSize(200);
 		setElementsOutOfRadarAreaVisible(true);
 		setCompassNeedleShouldBeRotated(true);
@@ -134,9 +146,9 @@ public class RadarView extends View implements Updateable {
 		myCamera.setPosition(new Vec(40, 40, 0));
 		items = new EfficientList<RenderableEntity>();
 		items.add(newObj(40, 500));
-		// items.add(newObj(10, 10));
-		// items.add(newObj(200, 200));
-		// items.add(newObj(200, -200));
+		items.add(newObj(10, 10));
+		items.add(newObj(200, 200));
+		items.add(newObj(200, -200));
 	}
 
 	private RenderableEntity newObj(int x, int y) {
@@ -192,10 +204,10 @@ public class RadarView extends View implements Updateable {
 		canvas.drawCircle(myHalfSize, myHalfSize, myHalfSize - MARGIN,
 				linePaint);
 
-		if (debug != null) { // TODO remove this
-			paint.setColor(Color.RED);
-			canvas.drawText(debug, 0, myHalfSize, paint);
-		}
+		// if (debug != null) { // TODO remove this
+		// paint.setColor(Color.RED);
+		// canvas.drawText(debug, 0, myHalfSize, paint);
+		// }
 	}
 
 	private void drawCompassNeedle(Canvas canvas) {
@@ -238,7 +250,7 @@ public class RadarView extends View implements Updateable {
 				 * the canvas coords are not like the opengl coords! 10,10 means
 				 * down on the screen
 				 */
-				//debug = "" + pos;
+				// debug = "" + pos;
 				float northPos = myHalfSize - pos.y;
 				float eastPos = myHalfSize + pos.x;
 

@@ -53,11 +53,8 @@ public class SystemTests extends SimpleTesting {
 		assertTrue(Vec.getRotationAroundZAxis(2, -2) == 360 - 45);
 
 		Vec x = new Vec(0, 10, 0);
-		float degree = -90;
 		x.rotateAroundZAxis(90);
-		System.out.println(x.x);
-		System.out.println(x.y);
-		System.out.println(x.z);
+		assertEquals(x, new Vec(-10, 0, 0));
 
 	}
 

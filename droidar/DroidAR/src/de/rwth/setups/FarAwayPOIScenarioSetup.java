@@ -24,8 +24,8 @@ public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 	@Override
 	public void _a_initFieldsIfNecessary() {
 		super._a_initFieldsIfNecessary();
-		radar = new RadarView(getActivity(), getCamera(), getWorld()
-				.getAllItems());
+		radar = new RadarView(getActivity(), (int) (getScreenWidth() / 3),
+				getCamera(), getWorld().getAllItems());
 	}
 
 	@Override
@@ -47,6 +47,7 @@ public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 
 	@Override
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity activity) {
+		guiSetup.addViewToTop(radar);
 		super._e2_addElementsToGuiSetup(guiSetup, activity);
 		guiSetup.addButtonToBottomView(new Command() {
 
@@ -60,7 +61,6 @@ public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 				return true;
 			}
 		}, "Show altitude");
-		guiSetup.addViewToTop(radar);
 
 		guiSetup.addButtonToBottomView(new Command() {
 

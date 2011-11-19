@@ -131,7 +131,6 @@ public abstract class DefaultARSetup extends Setup {
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity activity) {
 		guiSetup.setRightViewAllignBottom();
 
-		guiSetup.setTopViewCentered();
 		guiSetup.addViewToTop(minAccuracyAction.getView());
 		
 		guiSetup.addImangeButtonToRightView(R.drawable.arrow_up_float,
