@@ -30,6 +30,8 @@ public class GLRenderer implements Renderer {
 	public static float nearHeight;
 	public static float aspectRatio;
 
+	private static final String LOG_TAG = "GLRenderer";
+
 	private boolean useLightning = false;
 	private boolean switchLightning = false;
 
@@ -272,6 +274,9 @@ public class GLRenderer implements Renderer {
 	}
 
 	public void addRenderElement(Renderable elementToRender) {
+		if (elementToRender == null) {
+			Log.e(LOG_TAG, "Added element was NULL, cant be added!");
+		}
 		elementsToRender.add(elementToRender);
 	}
 

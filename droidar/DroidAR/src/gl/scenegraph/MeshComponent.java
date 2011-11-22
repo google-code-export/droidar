@@ -440,12 +440,31 @@ public abstract class MeshComponent implements RenderableEntity, ParentMesh,
 		}
 	}
 
+	/**
+	 * An animation will be inserted at the BEGINNING of the children list. So
+	 * the last animation added will be executed first by the renderer!
+	 * 
+	 * @param animation
+	 */
 	public void addAnimation(GLAnimation animation) {
 		addChildToTargetsChildGroup(this, animation, true);
 	}
 
-	// @Override TODO
+	/**
+	 * use {@link MeshComponent#removeAllChildren()} instead
+	 */
+	@Deprecated
 	public void clearChildren() {
+		myChildren = null;
+	}
+
+	/**
+	 * Removes all children from this {@link MeshComponent}, also all
+	 * {@link GLAnimation}s which might have been added via
+	 * {@link MeshComponent#addAnimation(GLAnimation)}
+	 */
+	// @Override TODO
+	public void removeAllChildren() {
 		myChildren = null;
 	}
 

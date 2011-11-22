@@ -15,7 +15,7 @@ import util.Log;
 //TODO not the best way to extend ArrayList here..
 public class World implements RenderableEntity, Container<RenderableEntity> {
 
-	private static final String LTAG = "World";
+	private static final String LOG_TAG = "World";
 	/**
 	 * think of this as the position on the screen
 	 */
@@ -49,10 +49,10 @@ public class World implements RenderableEntity, Container<RenderableEntity> {
 		 * check if obj already added before adding it to the world!
 		 */
 		if (container.contains(x) != -1) {
-			Log.e(LTAG, "Object " + x + " already contained in this world!");
+			Log.e(LOG_TAG, "Object " + x + " already contained in this world!");
 			return false;
 		}
-		Log.v(LTAG, "Adding " + x + " to " + this);
+		Log.v(LOG_TAG, "Adding " + x + " to " + this);
 		return container.add(x);
 	}
 
@@ -114,8 +114,12 @@ public class World implements RenderableEntity, Container<RenderableEntity> {
 		myCamera.update(timeDelta, this, stack);
 		if (container != null) {
 			for (int i = 0; i < container.myLength; i++) {
-				if (!container.get(i).update(timeDelta, this, stack))
+				if (!container.get(i).update(timeDelta, this, stack)) {
+					Log.w(LOG_TAG, "Object " + container.get(i)
+							+ " was removed from the world on "
+							+ "update (because it returned false)!");
 					remove(container.get(i));
+				}
 			}
 		}
 		return true;
