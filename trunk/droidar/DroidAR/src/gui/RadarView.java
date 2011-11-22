@@ -179,7 +179,6 @@ public class RadarView extends View implements Updateable {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		this.setMeasuredDimension(mySize, mySize);
 	}

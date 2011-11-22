@@ -26,6 +26,7 @@ import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
+import android.util.Log;
 import android.widget.EditText;
 
 import commands.Command;
@@ -33,6 +34,7 @@ import commands.ui.CommandShowEditScreen;
 
 public class GraphCreationSetup extends Setup {
 
+	private static final String LOG_TAG = "GraphCreationSetup";
 	private GeoGraph myGraph;
 	private World world;
 	private GLCamera camera;
@@ -45,7 +47,7 @@ public class GraphCreationSetup extends Setup {
 	public void _a_initFieldsIfNecessary() {
 		// allow the user to send error reports to the developer:
 		ErrorHandler.enableEmailReports("droidar.rwth@gmail.com",
-				"Error in DroidAR App");
+				"Error in GraphCreationSetup");
 
 		myGraph = new GeoGraph();
 		camera = new GLCamera(new Vec(0, 0, 1f));
@@ -132,6 +134,8 @@ public class GraphCreationSetup extends Setup {
 
 		p.setMyPosition(camera.getGPSPositionVec());
 
+		Log.d(LOG_TAG, "new geoObj with virtual pos=" + p.getVirtualPosition());
+
 		MeshComponent myShape = GLFactory.getInstance().newDiamond(null);
 		p.setComp(myShape);
 		p.getGraphicsComponent().setColor(new Color(1, 0, 0, .6f));
@@ -153,6 +157,7 @@ public class GraphCreationSetup extends Setup {
 		if (mySelectedWaypoint != null
 				&& mySelectedWaypoint.getGraphicsComponent() != null)
 			mySelectedWaypoint.getGraphicsComponent().removeAllAnimations();
+
 		mySelectedWaypoint = newWaypoint;
 		mySelectedWaypoint.getGraphicsComponent()
 				.addAnimation(
@@ -172,8 +177,9 @@ public class GraphCreationSetup extends Setup {
 			public boolean execute(Object transfairObject) {
 				if (transfairObject instanceof String) {
 
-					String searchFor = (String) transfairObject;
-					GeoObj targetElement = myGraph.findBestPointFor(searchFor);
+					String searchString = (String) transfairObject;
+					GeoObj targetElement = myGraph
+							.findBestPointFor(searchString);
 					GeoObj currentClosestElement = myGraph
 							.getClosesedObjTo(camera.getGPSPositionAsGeoObj());
 
@@ -204,37 +210,31 @@ public class GraphCreationSetup extends Setup {
 	}
 
 	private void unmarkGeoGraphAsSearchPath(
-			EfficientListQualified<GeoObj> geoObj) {
-		if (geoObj != null) {
-			setAnimToGeoObjList(geoObj, null);
+			EfficientListQualified<GeoObj> objList) {
+		if (objList != null) {
+			for (int i = 0; i < objList.myLength; i++) {
+				MeshComponent g = objList.get(i).getGraphicsComponent();
+				if (g != null)
+					g.removeAllAnimations();
+			}
 		}
 	}
 
-	private void markGeoObjAsSearchPath(EfficientList<GeoObj> geoObjs) {
+	private void markGeoObjAsSearchPath(EfficientList<GeoObj> objList) {
 		// unselectCurrentSelectedWaypoint();
-		setAnimToGeoObjList(geoObjs, new AnimationColorBounce(2, Color.green(),
+		setAnimToGeoObjList(objList, new AnimationColorBounce(2, Color.green(),
 				Color.red(), 0.2f));
 	}
 
-	private void setAnimToGeoObjList(EfficientList<GeoObj> geoObjs,
+	private void setAnimToGeoObjList(EfficientList<GeoObj> objList,
 			AnimationColorBounce a) {
-		for (int i = 0; i < geoObjs.myLength; i++) {
-			GeoObj g = geoObjs.get(i);
+		for (int i = 0; i < objList.myLength; i++) {
+			GeoObj g = objList.get(i);
 			MeshComponent gf = g.getGraphicsComponent();
 			if (gf != null) {
 				gf.addAnimation(a);
 			}
 		}
-	}
-
-	/**
-	 * TODO never called..
-	 */
-	private void unselectCurrentSelectedWaypoint() {
-		if (mySelectedWaypoint != null
-				&& mySelectedWaypoint.getGraphicsComponent() != null)
-			mySelectedWaypoint.getGraphicsComponent().removeAllAnimations();
-		mySelectedWaypoint = null;
 	}
 
 }

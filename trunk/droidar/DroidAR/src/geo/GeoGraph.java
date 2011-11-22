@@ -515,8 +515,9 @@ public class GeoGraph extends AbstractObj implements Container<GeoObj> {
 	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
 		if (myNodes == null)
 			return;
-		if (stack != null)
+		if (stack != null) {
 			stack.add(this);
+		}
 		{
 			for (int i = 0; i < myNodes.myLength; i++) {
 				myNodes.get(i).render(gl, this, stack);
@@ -535,7 +536,7 @@ public class GeoGraph extends AbstractObj implements Container<GeoObj> {
 	public boolean update(float timeDelta, Updateable parent,
 			ParentStack<Updateable> stack) {
 		if (myNodes == null)
-			return false;
+			return true;
 		if (stack != null)
 			stack.add(this);
 		{
