@@ -20,6 +20,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class RadarView extends View implements Updateable {
@@ -29,6 +30,7 @@ public class RadarView extends View implements Updateable {
 	private static final float DEFAULT_UPDATE_SPEED = 0.3f;
 	private static final int DEFAULT_RADAR_MAX_DISTANCE = 200;
 	private static final String LOG_TAG = "RadarView";
+	private static final int MIN_DISP_RADIUS = 20;
 
 	private Paint paint;
 	private Paint linePaint;
@@ -45,6 +47,7 @@ public class RadarView extends View implements Updateable {
 	private double myRotation;
 	private UpdateTimer myTimer;
 	private float myUpdateSpeed = DEFAULT_UPDATE_SPEED;
+	private double myTouchScaleFactor = 5;
 
 	// private String debug;
 
@@ -207,6 +210,22 @@ public class RadarView extends View implements Updateable {
 		// paint.setColor(Color.RED);
 		// canvas.drawText(debug, 0, myHalfSize, paint);
 		// }
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return onTouch(event.getX() - myHalfSize, event.getY() - myHalfSize);
+	}
+
+	private boolean onTouch(float x, float y) {
+		double distFromCenter = Math.sqrt(x * x + y * y);
+		distFromCenter *= myTouchScaleFactor;
+		System.out.println("distFromCenter=" + distFromCenter);
+		myDisplRadius = (int) distFromCenter;
+		if (myDisplRadius < MIN_DISP_RADIUS)
+			myDisplRadius = MIN_DISP_RADIUS;
+		System.out.println("myDisplRadius=" + myDisplRadius);
+		return true;
 	}
 
 	private void drawCompassNeedle(Canvas canvas) {
