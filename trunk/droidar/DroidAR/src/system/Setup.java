@@ -577,23 +577,12 @@ public abstract class Setup {
 		return arView;
 	}
 
-	public final void pauseCameraPreview() {
-		if (myCameraView != null) {
-			Log.d(LOG_TAG, "Pausing camera preview manually" + myCameraView);
-			myCameraView.pause();
-		}
-	}
-
-	public final void resumeCameraPreview() {
-		if (myCameraView != null) {
-			Log.d(LOG_TAG, "Resuming camera preview manually" + myCameraView);
-			myCameraView.resumeCamera();
-		}
-	}
-
+	/**
+	 * This will kill the camera
+	 */
 	public void releaseCamera() {
 		if (myCameraView != null) {
-			Log.d(LOG_TAG, "Releasing camera preview manually" + myCameraView);
+			Log.d(LOG_TAG, "Releasing camera preview " + myCameraView);
 			myCameraView.releaseCamera();
 		}
 	}
@@ -637,73 +626,145 @@ public abstract class Setup {
 		return false;
 	}
 
+	/**
+	 * see {@link Activity#onDestroy}
+	 * 
+	 * @param a
+	 */
 	public void onDestroy(Activity a) {
 		Log.d(LOG_TAG, "Default onDestroy behavior");
-		glRenderer.pause();
-		myGLSurfaceView.onPause();
-		worldUpdater.pauseUpdater();
+		pauseRenderer();
+		pauseUpdater();
 		worldUpdater.killUpdaterThread();
-		if (myCameraView != null)
-			myCameraView.releaseCamera();
-		// TODO check if all threads are killed correctly
-		// Log.d(LOG_TAG,
-		// "default onDestroy behavior (killing complete process)");
-		// System.gc();
-		// android.os.Process.killProcess(android.os.Process.myPid());
-		// System.exit(1);
+		releaseCamera();
+
+		// killCompleteApplicationProcess();
 	}
 
-	// /**
-	// * to see what to return here, take a look at the description of
-	// * {@link MapActivity#isRouteDisplayed}
-	// *
-	// * @param a
-	// * @return default implementation is to return false
-	// */
-	// public boolean isRouteDisplayed(MapActivity a) {
-	// return false;
-	// }
-
-	public void onPause(Activity a) {
-		Log.d(LOG_TAG, "main onPause");
+	/**
+	 * This will kill the complete process and thereby also any other activity
+	 * which uses this process. Only use this method if you want to implement a
+	 * final "Exit application" button.
+	 */
+	public static void killCompleteApplicationProcess() {
+		Log.w(LOG_TAG, "Killing complete process");
+		System.gc();
+		android.os.Process.killProcess(android.os.Process.myPid());
+		System.exit(1);
 	}
 
-	public void onStop(Activity a) {
-		Log.d(LOG_TAG, "main onStop (setup=" + this + ")");
-		glRenderer.pause();
-		worldUpdater.pauseUpdater();
-		// myCameraView.releaseCamera();
-	}
-
+	/**
+	 * see {@link Activity#onStart}
+	 * 
+	 * @param a
+	 */
 	public void onStart(Activity a) {
 		Log.d(LOG_TAG, "main onStart (setup=" + this + ")");
-		if (glRenderer != null)
-			glRenderer.resume();
+	}
+
+	/**
+	 * When this is called the activity is still visible!
+	 * 
+	 * see {@link Activity#onPause}
+	 * 
+	 * @param a
+	 */
+	public void onPause(Activity a) {
+		Log.d(LOG_TAG, "main onPause (setup=" + this + ")");
+	}
+
+	/**
+	 * see {@link Activity#onResume}
+	 * 
+	 * @param a
+	 */
+	public void onResume(Activity a) {
+		Log.d(LOG_TAG, "main onResume (setup=" + this + ")");
+	}
+
+	/**
+	 * When this is called the activity is no longer visible. Camera see
+	 * {@link Activity#onStop}
+	 * 
+	 * @param a
+	 */
+	public void onStop(Activity a) {
+		Log.d(LOG_TAG, "main onStop (setup=" + this + ")");
+		pauseRenderer();
+		pauseUpdater();
+		pauseCameraPreview();
+		pauseEventManager();
+	}
+
+	/**
+	 * see {@link Activity#onRestart}
+	 * 
+	 * @param a
+	 */
+	public void onRestart(Activity a) {
+		Log.d(LOG_TAG, "main onRestart (setup=" + this + ")");
+		resumeRenderer();
+		resumeUpdater();
+		resumeCameraPreview();
+		resumeEventManager();
+	}
+
+	public void pauseEventManager() {
+		EventManager.getInstance().pauseEventListeners();
+	}
+
+	public void resumeEventManager() {
+		EventManager.getInstance().resumeEventListeners(myTargetActivity,
+				useAccelAndMagnetoSensors);
+	}
+
+	public void pauseUpdater() {
+		if (worldUpdater != null) {
+			Log.d(LOG_TAG, "Pausing world updater now");
+			worldUpdater.pauseUpdater();
+		}
+	}
+
+	public void resumeUpdater() {
 		if (worldUpdater != null) {
 			worldUpdater.resumeUpdater();
 		}
 	}
 
-	public void onResume(Activity a) {
-		Log.d(LOG_TAG, "main onResume (setup=" + this + ")");
+	public final void pauseCameraPreview() {
+		if (myCameraView != null) {
+			Log.d(LOG_TAG, "Pausing camera preview " + myCameraView);
+			myCameraView.pause();
+		}
 	}
 
-	public void onRestart(Activity a) {
-		Log.d(LOG_TAG, "main onRestart (setup=" + this + ")");
+	public final void resumeCameraPreview() {
+		if (myCameraView != null) {
+			Log.d(LOG_TAG, "Resuming camera preview " + myCameraView);
+			myCameraView.resumeCamera();
+		}
+	}
+
+	public void pauseRenderer() {
+		if (glRenderer != null) {
+			Log.d(LOG_TAG, "Pausing renderer and GLSurfaceView now");
+			glRenderer.pause();
+			if (myGLSurfaceView != null)
+				myGLSurfaceView.onPause();
+		}
+	}
+
+	public void resumeRenderer() {
+		if (glRenderer != null)
+			Log.d(LOG_TAG, "Resuming renderer and GLSurfaceView now");
+		glRenderer.resume();
+		if (myGLSurfaceView != null)
+			myGLSurfaceView.onResume();
 	}
 
 	public boolean onKeyDown(Activity a, int keyCode, KeyEvent event) {
 		// if the keyAction isnt defined return false:
 		return EventManager.getInstance().onKeyDown(keyCode, event);
-	}
-
-	public void restoreOverlays(Activity a) {
-
-		Log.d(LOG_TAG, "main restoring overlays (setup=" + this + ")");
-
-		Log.d(LOG_TAG, "GLSurfaceView =" + myGLSurfaceView);
-
-		onResume(a);
 	}
 
 	public static float getScreenWidth() {

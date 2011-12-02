@@ -57,7 +57,7 @@ public class ArActivity extends Activity {
 	@Override
 	protected void onResume() {
 		if (mySetupToUse != null)
-			mySetupToUse.restoreOverlays(this);
+			mySetupToUse.onResume(this);
 		super.onResume();
 	}
 

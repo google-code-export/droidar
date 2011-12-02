@@ -157,6 +157,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 	}
 
 	public void onSensorChanged(SensorEvent event) {
+
 		if (onOrientationChangedAction != null) {
 
 			if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
@@ -440,6 +441,20 @@ public class EventManager implements LocationListener, SensorEventListener {
 			zeroPos = new GeoObj(location);
 		else
 			zeroPos.setLocation(location);
+	}
+
+	public void resumeEventListeners(Activity targetActivity,
+			boolean useAccelAndMagnetoSensors) {
+		registerListeners(targetActivity, useAccelAndMagnetoSensors);
+	}
+
+	public void pauseEventListeners() {
+		SensorManager sensorManager = (SensorManager) myTargetActivity
+				.getSystemService(Context.SENSOR_SERVICE);
+		sensorManager.unregisterListener(this);
+		LocationManager locationManager = (LocationManager) myTargetActivity
+				.getSystemService(Context.LOCATION_SERVICE);
+		locationManager.removeUpdates(this);
 	}
 
 }
