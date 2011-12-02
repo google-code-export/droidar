@@ -403,23 +403,40 @@ public class GeoUtils {
 	/**
 	 * @param activity
 	 * @return true if GPS could be enabled without user interaction, else the
-	 *         settings will be started and false is returend
+	 *         settings will be started and false is returned
 	 */
 	public static boolean enableGPS(Activity activity) {
+		return switchGPS(activity, true, true);
+	}
+
+	/**
+	 * @param activity
+	 * @return true if GPS could be disabled without user interaction, else the
+	 *         settings will be started and false is returned
+	 */
+	public static boolean disableGPS(Activity activity) {
+		return switchGPS(activity, false, true);
+	}
+
+	/**
+	 * @param activity
+	 * @return true if GPS could be enabled without user interaction, else the
+	 *         settings will be started and false is returned
+	 */
+	public static boolean switchGPS(Activity activity, boolean enableGPS,
+			boolean showSettingsIfAutoSwitchImpossibel) {
 		if (canTurnOnGPSAutomatically(activity)) {
 			String provider = Settings.Secure.getString(
 					activity.getContentResolver(),
 					Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-			if (!provider.contains("gps")) { // if gps is disabled
-				final Intent poke = new Intent();
-				poke.setClassName("com.android.settings",
-						"com.android.settings.widget.SettingsAppWidgetProvider");
-				poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
-				poke.setData(Uri.parse("3"));
-				activity.sendBroadcast(poke);
-				return true;
+			boolean currentlyEnabled = provider.contains("gps");
+			if (!currentlyEnabled && enableGPS) {
+				pokeGPSButton(activity);
+			} else if (currentlyEnabled && !enableGPS) {
+				pokeGPSButton(activity);
 			}
-		} else {
+			return true;
+		} else if (showSettingsIfAutoSwitchImpossibel) {
 			Log.d(LOG_TAG, "Can't enable GPS automatically, will start "
 					+ "settings for manual enabling!");
 			activity.startActivity(new Intent(
@@ -428,12 +445,21 @@ public class GeoUtils {
 		return false;
 	}
 
+	private static void pokeGPSButton(Activity activity) {
+		final Intent poke = new Intent();
+		poke.setClassName("com.android.settings",
+				"com.android.settings.widget.SettingsAppWidgetProvider");
+		poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
+		poke.setData(Uri.parse("3"));
+		activity.sendBroadcast(poke);
+	}
+
 	/**
 	 * source from
 	 * http://stackoverflow.com/questions/4721449/enable-gps-programatically
 	 * -like-tasker
 	 */
-	private static boolean canTurnOnGPSAutomatically(Context c) {
+	public static boolean canTurnOnGPSAutomatically(Context c) {
 		PackageInfo pacInfo = null;
 		try {
 			pacInfo = c.getPackageManager().getPackageInfo(
