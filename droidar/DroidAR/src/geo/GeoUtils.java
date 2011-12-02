@@ -415,16 +415,29 @@ public class GeoUtils {
 	 *         settings will be started and false is returned
 	 */
 	public static boolean disableGPS(Activity activity) {
-		return switchGPS(activity, false, true);
+		return disableGPS(activity, false);
 	}
 
 	/**
 	 * @param activity
-	 * @return true if GPS could be enabled without user interaction, else the
+	 * @return true if GPS could be disabled without user interaction, else the
 	 *         settings will be started and false is returned
 	 */
+	public static boolean disableGPS(Activity activity,
+			boolean showSettingsIfAutoSwitchImpossible) {
+		return switchGPS(activity, false, showSettingsIfAutoSwitchImpossible);
+	}
+
+	/**
+	 * @param activity
+	 * @param enableGPS
+	 * @param showSettingsIfAutoSwitchImpossible
+	 * @return true if GPS could be switched to the desired value without user
+	 *         interaction, else the settings will be started and false is
+	 *         returned
+	 */
 	public static boolean switchGPS(Activity activity, boolean enableGPS,
-			boolean showSettingsIfAutoSwitchImpossibel) {
+			boolean showSettingsIfAutoSwitchImpossible) {
 		if (canTurnOnGPSAutomatically(activity)) {
 			String provider = Settings.Secure.getString(
 					activity.getContentResolver(),
@@ -436,7 +449,7 @@ public class GeoUtils {
 				pokeGPSButton(activity);
 			}
 			return true;
-		} else if (showSettingsIfAutoSwitchImpossibel) {
+		} else if (showSettingsIfAutoSwitchImpossible) {
 			Log.d(LOG_TAG, "Can't enable GPS automatically, will start "
 					+ "settings for manual enabling!");
 			activity.startActivity(new Intent(
@@ -459,7 +472,7 @@ public class GeoUtils {
 	 * http://stackoverflow.com/questions/4721449/enable-gps-programatically
 	 * -like-tasker
 	 */
-	public static boolean canTurnOnGPSAutomatically(Context c) {
+	private static boolean canTurnOnGPSAutomatically(Context c) {
 		PackageInfo pacInfo = null;
 		try {
 			pacInfo = c.getPackageManager().getPackageInfo(
