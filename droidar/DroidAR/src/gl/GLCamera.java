@@ -807,15 +807,25 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 
 	/**
 	 * @param x
-	 *            positive means east of zero pos (latitude direction)
+	 *            positive means east of zero pos (longitude direction)
 	 * @param y
-	 *            positive means north of zero pos (longitude direction)
+	 *            positive means north of zero pos (latitude direction)
 	 * @param z
 	 *            the height of the camera
 	 */
 	public void setNewPosition(float x, float y, float z) {
 		myMover.myTargetPos.setTo(x, y, z);
 
+	}
+
+	/**
+	 * @param x
+	 *            positive means east of zero pos (longitude direction)
+	 * @param y
+	 *            positive means north of zero pos (latitude direction)
+	 */
+	public void setNewPosition(float x, float y) {
+		myMover.myTargetPos.setTo(x, y);
 	}
 
 	public Vec getNewCameraOffset() {

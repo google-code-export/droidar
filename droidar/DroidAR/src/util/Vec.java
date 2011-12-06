@@ -693,6 +693,11 @@ public class Vec {
 		this.z = z;
 	}
 
+	public void setTo(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+
 	/**
 	 * @param x
 	 * @param y
