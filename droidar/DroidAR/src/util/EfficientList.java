@@ -56,6 +56,9 @@ public class EfficientList<T> {
 		} catch (Exception e) {
 			Log.e(LOG_TAG, "Tryed to add " + x + " at pos " + myLength
 					+ " but myArray.length is only " + myArray.length);
+			Log.e(LOG_TAG,
+					"The thread which caused this was "
+							+ Thread.currentThread().toString());
 			Log.e(LOG_TAG, "The error appeared here:");
 			e.printStackTrace();
 		}

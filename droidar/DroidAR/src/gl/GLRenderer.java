@@ -8,10 +8,10 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import util.EfficientList;
+import util.Log;
 import util.Vec;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
-import util.Log;
 
 /**
  * This is the OpenGL renderer used for the {@link CustomGLSurfaceView}
@@ -144,6 +144,7 @@ public class GLRenderer implements Renderer {
 		Log.d("OpenGL", "Renderer paused");
 		while (pauseRenderer) {
 			try {
+				Log.e(LOG_TAG, "PAUSE RENDERER");
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
