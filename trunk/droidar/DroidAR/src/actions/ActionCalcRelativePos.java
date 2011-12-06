@@ -14,6 +14,10 @@ import util.Log;
  * position. If the distance to the center of the virtual world gets to big, the
  * virtual zero position is reseted and the virtual positions are recalculated
  * 
+ * <br>
+ * latutude is north(+)/south(-)<br>
+ * longitude is east(+)/west(-)<br>
+ * 
  * TODO combine this with the moveCamera action? good idea or not?
  * 
  * @author Spobo
@@ -27,11 +31,10 @@ public class ActionCalcRelativePos extends Action {
 	 */
 	public static boolean USE_ALTITUDE_VALUES = true;
 
-	private static final double MAX_METER_DISTANCE = 500; // 500 meter
+	private static final double MAX_METER_DISTANCE = 1000; // 500 meter
 	private static final String LOG_TAG = "ActionCalcRelativePos";
 
-	private static final boolean LOG_SHOW_POSITION = true; // TODO switch to
-															// false
+	private static final boolean LOG_SHOW_POSITION = false;
 
 	/**
 	 * this could be replaces by the
@@ -71,35 +74,37 @@ public class ActionCalcRelativePos extends Action {
 			final double longitudeDistInMeters = (location.getLongitude() - nullLongitude)
 					* 111319.4917 * Math.cos(nullLatitude * 0.0174532925);
 
-			/*
-			 * if the altitude values should be used calculate the correct
-			 * height else use 0 as the height
-			 */
-			final double relativeHeight = USE_ALTITUDE_VALUES ? location
-					.getAltitude() - nullAltitude : 0;
-
 			if (LOG_SHOW_POSITION) {
-				Log.v(LOG_TAG, "latitudeDistInMeters=" + latitudeDistInMeters);
-				Log.v(LOG_TAG, "longitudeDistInMeters=" + longitudeDistInMeters);
-				Log.v(LOG_TAG, "relativeHeight=" + relativeHeight);
+				Log.v(LOG_TAG, "latutude dist (north(+)/south(-))="
+						+ latitudeDistInMeters);
+				Log.v(LOG_TAG, "longitude dist (east(+)/west(-))="
+						+ longitudeDistInMeters);
 			}
 
 			if (worldShouldBeRecalced(latitudeDistInMeters,
 					longitudeDistInMeters)) {
 				resetWorldZeroPositions(location);
 			} else {
-				updateCamera(latitudeDistInMeters, longitudeDistInMeters,
-						relativeHeight);
+				if (USE_ALTITUDE_VALUES) {
+					/*
+					 * if the altitude values should be used calculate the
+					 * correct height 
+					 */
+					final double relativeHeight = location.getAltitude()
+							- nullAltitude;
+					myCamera.setNewPosition((float) longitudeDistInMeters,
+							(float) latitudeDistInMeters,
+							(float) relativeHeight);
+				} else {
+					// else dont change the z value
+					myCamera.setNewPosition((float) longitudeDistInMeters,
+							(float) latitudeDistInMeters);
+				}
+
 			}
 		}
 
 		return true;
-	}
-
-	private void updateCamera(double latDistMet, double longDistMet,
-			double altDistMet) {
-		myCamera.setNewPosition((float) longDistMet,(float) latDistMet,
-				(float) altDistMet);
 	}
 
 	private void resetCameraToNullPosition() {
