@@ -4,11 +4,11 @@ import gui.CustomGestureListener;
 import listeners.EventListener;
 import system.EventManager;
 import system.TouchEventInterface;
+import util.Log;
 import actions.Action;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-import util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -54,7 +54,7 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 		myGestureDetector = new GestureDetector(context,
 				new CustomGestureListener(this));
 	}
-	
+
 	@Override
 	public boolean dispatchTrackballEvent(MotionEvent event) {
 		if (EventManager.getInstance().onTrackballEvent(event)) {
@@ -137,7 +137,7 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 	public void onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
 		if (onTouchMoveAction != null) {
-			onTouchMoveAction.onTouchMove(e1,e2,distanceX, distanceY);
+			onTouchMoveAction.onTouchMove(e1, e2, distanceX, distanceY);
 		}
 	}
 

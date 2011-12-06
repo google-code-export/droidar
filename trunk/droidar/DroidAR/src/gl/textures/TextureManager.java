@@ -1,13 +1,19 @@
 package gl.textures;
 
+import gl.textures.TextureManager.TexturReloader;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 import javax.microedition.khronos.opengles.GL11Ext;
 
 import util.HasDebugInformation;
+import util.IO;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.opengl.GLUtils;
@@ -15,11 +21,17 @@ import util.Log;
 
 public class TextureManager implements HasDebugInformation {
 
+	public interface TexturReloader {
+		Bitmap reload(String textureName);
+	}
+
 	private static final String LOG_TAG = "Texture Manager";
 
 	private static final int INIT_TEXTURE_MAP_SIZE = 40;
 
 	private static TextureManager instance = new TextureManager();
+
+	public static boolean recycleBitmapsToFreeMemory = false;
 
 	/**
 	 * TODO why am i using ArrayList here...
@@ -28,6 +40,7 @@ public class TextureManager implements HasDebugInformation {
 	private int textureArrayOffset = 0;
 	private int[] textureArray = new int[INIT_TEXTURE_MAP_SIZE];
 	private HashMap<String, Texture> myTextureMap;
+	private TexturReloader myReloader;
 
 	// TODO reuse of same texture not possible this way
 	public void addTexture(TexturedRenderData target, Bitmap bitmap,
@@ -36,22 +49,35 @@ public class TextureManager implements HasDebugInformation {
 		Texture t = loadTextureFromMap(textureName);
 
 		if (t == null) {
-			t = new Texture(target, bitmap, textureName);
-			Log.d(LOG_TAG, "Texture for " + textureName
-					+ " not jet added, so it will get a new texture id");
-			addTextureToMap(t);
-			if (newTexturesToLoad == null) {
-				Log.i(LOG_TAG,
-						"Texture Manage never used before, now its initialized (This message should only appear once!)");
-				newTexturesToLoad = new ArrayList<Texture>();
-			}
-			newTexturesToLoad.add(t);
+			addTexture(new Texture(target, bitmap, textureName));
 		} else {
 			Log.d(LOG_TAG, "Texture for " + textureName
 					+ " already added, so it will get the same texture id");
 			t.addRenderData(target);
 		}
 
+	}
+
+	private void addTexture(Texture t) {
+		Log.d(LOG_TAG, "   > Texture for " + t.getName()
+				+ " not jet added, so it will get a new texture id");
+		addTextureToMap(t);
+		if (newTexturesToLoad == null) {
+			Log.i(LOG_TAG,
+					"   > Texture Manage never used before, now its initialized");
+			newTexturesToLoad = new ArrayList<Texture>();
+		}
+		newTexturesToLoad.add(t);
+	}
+
+	/**
+	 * Dont forget to set {@link TextureManager#recycleBitmapsToFreeMemory} to
+	 * true or the reloader wont be used anyway
+	 * 
+	 * @param reloader
+	 */
+	public void setTextureReloader(TexturReloader reloader) {
+		this.myReloader = reloader;
 	}
 
 	private Texture loadTextureFromMap(String textureName) {
@@ -162,19 +188,9 @@ public class TextureManager implements HasDebugInformation {
 			Log.v(LOG_TAG, "   > Need to resize bitmap: old height=" + height
 					+ ", old width=" + width + ", new height=" + newHeight
 					+ ", new width=" + newWidth);
-			return resizeBitmap(b, newHeight, newWidth);
+			return IO.resizeBitmap(b, newHeight, newWidth);
 		}
 		return b;
-	}
-
-	private Bitmap resizeBitmap(Bitmap bitmap, int newHeight, int newWidth) {
-		int width = bitmap.getWidth();
-		int height = bitmap.getHeight();
-		float scaleWidth = ((float) newWidth) / width;
-		float scaleHeight = ((float) newHeight) / height;
-		Matrix matrix = new Matrix();
-		matrix.postScale(scaleWidth, scaleHeight);
-		return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
 	}
 
 	public static int getNextPowerOfTwoValue(double x) {
@@ -207,6 +223,26 @@ public class TextureManager implements HasDebugInformation {
 
 	public static void resetInstance() {
 		instance = new TextureManager();
+	}
+
+	public static void reloadTexturesIfNeeded() {
+
+		try {
+			Collection<Texture> a = getInstance().myTextureMap.values();
+			resetInstance();
+			Log.d(LOG_TAG, "Restoring " + a.size() + " textures");
+			for (Iterator<Texture> iterator = a.iterator(); iterator.hasNext();) {
+				getInstance().addTexture((Texture) iterator.next());
+			}
+
+		} catch (Exception e) {
+			Log.e(LOG_TAG, "Error while restoring textures");
+			e.printStackTrace();
+		}
+	}
+
+	public TexturReloader getTextureReloader() {
+		return myReloader;
 	}
 
 }

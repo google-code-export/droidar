@@ -29,10 +29,15 @@ public class Texture {
 	}
 
 	public void recycleImage() {
-		myImage.recycle();
+		if (TextureManager.recycleBitmapsToFreeMemory)
+			myImage.recycle();
 	}
 
 	public Bitmap getImage() {
+		if (myImage == null
+				&& TextureManager.getInstance().getTextureReloader() != null)
+			myImage = TextureManager.getInstance().getTextureReloader()
+					.reload(myName);
 		return myImage;
 	}
 

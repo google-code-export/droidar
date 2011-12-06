@@ -7,6 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 import listeners.EventListener;
 import system.EventManager;
 import system.ParentStack;
+import util.Calculus;
 import util.HasDebugInformation;
 import util.Log;
 import util.Vec;
@@ -524,9 +525,14 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		// }
 	}
 
+	float[] initDir = new float[4];
+
 	private void calcOrientation() {
-		Matrix.invertM(invRotMatrix, 0, rotationMatrix, matrixOffset);
-		float[] initDir = { 0, 0, -GLRenderer.minViewDistance, 0.0f };
+		Calculus.invertM(invRotMatrix, 0, rotationMatrix, matrixOffset);
+		initDir[0] = 0;
+		initDir[1] = 0;
+		initDir[2] = -GLRenderer.minViewDistance;
+		initDir[3] = 0;
 		// TODO not a good idea to use myAnglesInRadians2 here, maybe additional
 		// helper var?:
 		Matrix.multiplyMV(rotDirection, 0, invRotMatrix, 0, initDir, 0);

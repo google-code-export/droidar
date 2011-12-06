@@ -707,6 +707,11 @@ public abstract class Setup {
 		resumeUpdater();
 		resumeCameraPreview();
 		resumeEventManager();
+		reloadTextures();
+	}
+
+	private void reloadTextures() {
+		TextureManager.reloadTexturesIfNeeded();
 	}
 
 	public void pauseEventManager() {
