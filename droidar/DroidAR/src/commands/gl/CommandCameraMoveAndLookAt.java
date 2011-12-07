@@ -50,7 +50,9 @@ public class CommandCameraMoveAndLookAt extends UndoableCommand {
 		myTargetCamera = targetCamera;
 		myOffset = null;
 		myPos = cameraPos;
-		myRotation = Vec.calcAngleVec(cameraPos, targetPos);
+		myRotation = new Vec();
+		myRotation.toAngleVec(cameraPos, targetPos);
+		myRotation.x*=-1;
 	}
 
 	/**
