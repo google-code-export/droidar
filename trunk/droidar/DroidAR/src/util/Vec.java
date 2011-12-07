@@ -13,6 +13,9 @@ public class Vec {
 
 	private static final float SMALLEST_DISTANCE = 0.0001f;
 	private static final String LOG_TAG = "Vec";
+	public static final float deg2rad = 0.01745329238474369f;
+	final public static float rad2deg = (float) (180.0f / Math.PI);
+
 	/**
 	 * @param x
 	 *            value on red axis (east direction=longitude)
@@ -302,6 +305,11 @@ public class Vec {
 		return new Vec(x, y, z);
 	}
 
+	/**
+	 * @param a
+	 * @param b
+	 * @return a-b
+	 */
 	public static Vec sub(Vec a, Vec b) {
 		float x = a.x - b.x;
 		float y = a.y - b.y;
@@ -493,102 +501,91 @@ public class Vec {
 		return ((x == 0) && (y == 0) && (z == 0));
 	}
 
-	public static final float deg2rad = 0.01745329238474369f;
-	final public static float rad2deg = (float) (180.0f / Math.PI);
-
 	/**
-	 * This calculates 2 angles and returns them in a new {@link Vec}. the angle
-	 * ranges go from 0 to 360 and one is always the z angle (compass angle) and
-	 * the other one the gradient (sometimes stored in the x value sometimes in
-	 * the y, depends on the input, see method implementation for more details)
-	 * you can use this resulting angle to easily rotate the camera for example
-	 * and center it on e specific target (target would be the to-Vec, camera
-	 * position the from-Vec). <br>
+	 * see {@link Vec#toAngleVec()} <br>
+	 * <br>
 	 * 
-	 * If this does not behave as you want it to, try calculating 360-x,y,z
+	 * After this method there are some common adjustments.<br>
+	 * The following is for object rotation: <br>
+	 * v.x -= 90;<br>
+	 * v.z *= -1;<br>
+	 * obj.setRotation(v); <br>
+	 * <br>
+	 * The other one is for camera rotation: <br>
+	 * v.x*=-1; <br>
+	 * camera.setRotation(v); <br>
+	 * <br>
+	 * The reason is that OpenGL e.g. needs negative x rotation values, or the
+	 * -90 is because the object should not be rotated when the rotation is
+	 * parallel to the ground
+	 * 
 	 * 
 	 * @param from
-	 *            the Vec where you are standing
+	 *            the position where you are standing
 	 * @param to
-	 *            the Vec where you want to look at
-	 * @return
+	 *            the position where you want to look at
 	 */
-	public static Vec calcAngleVec(Vec from, Vec to) {
-		final Vec source = to.copy();
-		source.sub(from);
-		return calcAngleVec(source);
+	public void toAngleVec(Vec from, Vec to) {
+		this.setToVec(to);
+		sub(from);
+		toAngleVec();
 	}
 
 	/**
-	 * If this does not behave as you want it to, try calculating 360-x,y,z
+	 * x=0 if the angle is facing to the ground, 90 if it looks to the horizon
+	 * and 180 if it looks in the sky. All the values in between are possible
+	 * too. So x will be between 0 and 180<br>
+	 * <br>
 	 * 
-	 * @param targetVec
-	 *            the Vec is "looking" at something and this function is
-	 *            calculating the angles where it is looking at. for a better
-	 *            explanation see {@link #calcAngleVec(Vec, Vec)}
-	 * @return
+	 * y=always 0<br>
+	 * <br>
+	 * 
+	 * z=the compass angle. 0 is north, 45 is northeast, 90 is east,
 	 */
-	public static Vec calcAngleVec(Vec targetVec) {
-		if ((targetVec.x == 0) && (targetVec.y == 0)) {
-			if (targetVec.z > 0) {
-				// the angle is looking directly in the sky
-				return new Vec(180, 0, 0);
+	public void toAngleVec() {
+		if ((x == 0) && (y == 0)) {
+			if (z > 0) {
+				// the angle is looking directly in the sky (eg 0,0,1)
+				x = 180;
+				y = 0;
+				z = 0;
+				return;
 			} else {
-				// the angle is looking directly on the ground
-				return new Vec();
+				// the angle is looking directly on the ground (eg 0,0,-1)
+				x = 0;
+				y = 0;
+				z = 0;
+				return;
 			}
 		}
 
-		/*
-		 * if the y value is 0 then setting x or z to 0 too would not make
-		 * sense, if y is 0 you have to do the same for x angle (angle between
-		 * red-x-achsis and blue-z-achsis)
-		 * 
-		 * calc the angle between the green and the red axis clockwise (so it
-		 * goes from 0 to 359)
-		 * 
-		 * why "result = source.copy();"? its the first time you set something
-		 * to result so you can use it instead of creating a new Vec() and
-		 * wasting memory
-		 */
-		final Vec result = targetVec.copy();
-		result.z = 0;
 		/*
 		 * arcCos has a value range from -180 to 180 so you have to check on
 		 * which side (east (x>=0) or west (x<0) if it would be a compass) the x
 		 * value is
 		 */
-		if (result.x >= 0) {
-			result.z = (float) Math.acos(result.y / result.getLength())
-					* rad2deg;
+		float zAngle;
+		if (x >= 0) {
+			zAngle = (float) Math.acos(y / Math.sqrt(x * x + y * y)) * rad2deg;
 		} else {
-			result.z = 360.0f
-					- (float) Math.acos(result.y / result.getLength())
+			zAngle = 360.0f - (float) Math.acos(y / Math.sqrt(x * x + y * y))
 					* rad2deg;
 		}
-		// remember to clear other result values again:
-		result.x = 0;
-		result.y = 0;
 
-		if (targetVec.y != 0) {
-			final Vec v = targetVec.copy();
-			v.x = 0;
-			/*
-			 * 0 would be the floor, -90 the horizon, -180 the sky. the values
-			 * are negative because openGL needs them this way
-			 */
-			result.x = -(float) Math.acos(-v.z / v.getLength()) * rad2deg;
+		/*
+		 * if y is 0 the x value cant be set to 0 as well, so check this first
+		 * and if y is 0 use angle between x and z and not y and z as usual
+		 */
+		if (y != 0) {
+			x = 0;
+			x = (float) Math.acos(-z / getLength()) * rad2deg;
 		} else {
-			/*
-			 * y is 0 so you have to rotate around the y achsis and not aroud x
-			 * achsis as usual
-			 * 
-			 * about the resulting angle: 0 would be the floor 180 the sky
-			 */
-			result.x = -(float) Math.acos(-targetVec.z / targetVec.getLength())
-					* rad2deg;
+			x = (float) Math.acos(-z / getLength()) * rad2deg;
 		}
-		return result;
+
+		y = 0;
+		// then set the compass rotation to the z value
+		z = zAngle;
 	}
 
 	public static Vec copy(Vec valueVec) {

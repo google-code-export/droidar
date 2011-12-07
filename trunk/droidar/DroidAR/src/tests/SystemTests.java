@@ -56,6 +56,42 @@ public class SystemTests extends SimpleTesting {
 		x.rotateAroundZAxis(90);
 		assertEquals(x, new Vec(-10, 0, 0));
 
+		{
+			Vec r = new Vec(0, 0, 0);
+			r.toAngleVec();
+			assertEquals(r, new Vec(0, 0, 0));
+		}
+		{
+			Vec r = new Vec(0, 0, 1);
+			r.toAngleVec();
+			assertEquals(r, new Vec(180, 0, 0));
+		}
+		{
+			Vec r = new Vec(12, 12, 0);
+			r.toAngleVec();
+			assertEquals(r, new Vec(90, 0, 45));
+		}
+		{
+			Vec r = new Vec(-10, -10, 0);
+			r.toAngleVec();
+			assertEquals(r, new Vec(90, 0, 180+45));
+		}
+		{
+			Vec r = new Vec(-10, 10, 0);
+			r.toAngleVec();
+			assertEquals(r, new Vec(90, 0, 180+45+90));
+		}
+		{
+			Vec r = new Vec(0, 1, -1);
+			r.toAngleVec();
+			assertEquals(r, new Vec(45, 0, 0));
+		}
+		{
+			Vec r = new Vec(0, 1, 1);
+			r.toAngleVec();
+			assertEquals(r, new Vec(45+90, 0, 0));
+		}
+		
 	}
 
 	private void vecRoundingTest() throws Exception {

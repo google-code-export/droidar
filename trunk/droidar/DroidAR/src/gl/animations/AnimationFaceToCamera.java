@@ -97,25 +97,14 @@ public class AnimationFaceToCamera implements GLAnimation {
 		if (parent instanceof MeshComponent) {
 			Vec pos = ((MeshComponent) parent).getAbsolutePosition();
 			// Log.d("face camera animation", "mesh position: "+pos);
-			newRotationVec = Vec.calcAngleVec(pos, myTargetCameraPosition);
+			newRotationVec.toAngleVec(pos, myTargetCameraPosition);
 			/*
-			 * x has to be adjusted because the Vec.calcAngleVec has its
-			 * relative 0-vector facing to the ground. the 0,0,0 vec of all
-			 * objects in relation to this ground-facing-vec is -90,0,0 so if
-			 * you would rise the x 90 degree it would be the same vec. so for
-			 * example if you want to face 0 0 0 you would have get -90 0 0 from
-			 * the Vec.calcAngleVec() function and you would have to invert the
-			 * -90 to 90 and subtract 90 to get 0,0,0
-			 * 
-			 * its better to do this adjustments here where they are not so
-			 * often needed as in Vec.calcAngleVec() which was designed for fast
-			 * GLCamera angle adjustments.
-			 * 
-			 * z has to be inverted because calcAngleVec returns a negative
-			 * value (needed in GlCamera):
+			 * substract 90 from the x value becaute calcanglevec returns 90 if
+			 * the rotation should be the horizon (which would mean no object
+			 * rotation)
 			 */
-			newRotationVec.x = (-newRotationVec.x) - 90;
-			newRotationVec.z = -newRotationVec.z;
+			newRotationVec.x -= 90;
+			newRotationVec.z *= -1;
 		}
 	}
 

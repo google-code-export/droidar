@@ -31,7 +31,8 @@ public abstract class SimpleTesting {
 
 	public void assertEquals(Object a, Object b) throws Exception {
 		if (!a.equals(b)) {
-			throw new Exception("Two objects were not equal!");
+			throw new Exception("Two objects were not equal! a=" + a + ", b="
+					+ b);
 		}
 	}
 

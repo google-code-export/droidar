@@ -67,12 +67,12 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	// private Vec myNewPosition = new Vec(0, 0, 0);
 
 	/**
+	 * y is always the angle from floor to top (rotation around green achsis
+	 * counterclockwise) and x always the clockwise rotation (like when you lean
+	 * to the side on a motorcycle) angle of the camera.
+	 * 
 	 * to move from the green to the red axis (clockwise) you would have to add
 	 * 90 degree.
-	 * 
-	 * y is rotation around green achsis counterclockwise
-	 * 
-	 * TODO complete this description
 	 */
 	private Vec myRotationVec = new Vec(0, 0, 0);
 	@Deprecated
@@ -588,10 +588,11 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		 * 
 		 * so remember this oder when doing own rotations.
 		 * 
-		 * TODO find out why y is always the angle from floot to top and x
-		 * always the clockwise rotation angle of the camera. does this make
-		 * sense for example when y=0 and x=90 the camera is rotated clockwise
-		 * and doesnt look at the horizon is this correct?
+		 * y is always the angle from floor to top and x always the clockwise
+		 * rotation (like when you lean to the side on a motorcycle) angle of
+		 * the camera. does this make sense for example when y=0 and x=90 the
+		 * camera is rotated clockwise and doesnt look at the horizon is this
+		 * correct?
 		 */
 		if (vec != null) {
 			gl.glRotatef(vec.y, 0, 1, 0);
