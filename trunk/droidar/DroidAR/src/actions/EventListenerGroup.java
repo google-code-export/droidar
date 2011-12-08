@@ -55,6 +55,7 @@ public class EventListenerGroup extends Action implements
 		}
 	}
 
+	@Override
 	public boolean onLocationChanged(Location location) {
 		for (int i = 0; i < myActions.myLength; i++) {
 			myActions.get(i).onLocationChanged(location);
@@ -94,6 +95,7 @@ public class EventListenerGroup extends Action implements
 		return true;
 	}
 
+	@Override
 	public boolean onTouchMove(MotionEvent e1, MotionEvent e2, float deltaX,
 			float deltaY) {
 		for (int i = 0; i < myActions.myLength; i++) {

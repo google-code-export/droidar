@@ -4,18 +4,14 @@ import system.ArActivity;
 import system.ErrorHandler;
 import system.Setup;
 import tests.SimpleTesting;
-import worldData.LargeWorld;
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
 import commands.ui.CommandShowToast;
-import components.TooFarAwayComp;
-
 import de.rwth.setups.CollectItemsSetup;
 import de.rwth.setups.DebugSetup;
 import de.rwth.setups.FarAwayPOIScenarioSetup;
@@ -60,6 +56,7 @@ public class TechDemoLauncher extends Activity {
 		showSetup("Position tests", new PositionTestsSetup());
 
 		l.addView(new SimpleButton("Run tests") {
+			@Override
 			public void onButtonPressed() {
 				runTests();
 			}
@@ -69,6 +66,7 @@ public class TechDemoLauncher extends Activity {
 	private void showSetup(String string, final Setup aSetupInstance) {
 		((LinearLayout) findViewById(R.id.demoScreenLinView))
 				.addView(new SimpleButton(string) {
+					@Override
 					public void onButtonPressed() {
 						Activity theCurrentActivity = TechDemoLauncher.this;
 						ArActivity.startWithSetup(theCurrentActivity,

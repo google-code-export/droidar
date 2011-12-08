@@ -6,7 +6,6 @@ import geo.GeoGraph;
 import geo.GeoObj;
 import gl.GLCamera;
 import gl.GLFactory;
-import gl.HasPosition;
 import util.Vec;
 import worldData.World;
 import actions.ActionCalcRelativePos;

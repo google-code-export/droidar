@@ -19,6 +19,7 @@ public abstract class TextModifier extends AbstractModifier {
 
 	public abstract boolean save(String newValue);
 
+	@Override
 	public View getView(Context context) {
 
 		LinearLayout l = new LinearLayout(context);

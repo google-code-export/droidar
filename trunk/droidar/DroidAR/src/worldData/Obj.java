@@ -54,6 +54,7 @@ public class Obj extends AbstractObj implements HasPosition, HasColor {
 	 * @param timeDelta
 	 *            how many ms have passed since last update
 	 */
+	@Override
 	public boolean update(float timeDelta, Updateable parent,
 			ParentStack<Updateable> stack) {
 		final int lenght = myComponents.myLength;

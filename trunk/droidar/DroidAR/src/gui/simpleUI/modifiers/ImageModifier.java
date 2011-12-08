@@ -23,6 +23,7 @@ public abstract class ImageModifier extends AbstractModifier {
 	private int selectedItemNr = -1;
 	private ArrayList<Integer> r;
 
+	@Override
 	public View getView(final Context context) {
 		LayoutParams p = new LinearLayout.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT, 1);
@@ -106,6 +107,7 @@ public abstract class ImageModifier extends AbstractModifier {
 		return l;
 	}
 
+	@Override
 	public boolean save() {
 		if (selectedItemNr == -1)
 			return true;

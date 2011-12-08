@@ -132,7 +132,7 @@ public class TaskManager implements Runnable, ProcessListener {
 			onProcessStep(i, myTasks.getMyHighPrioTasks().myLength, l.get(i));
 			// dont use if to better find possible errors:
 			// if (l.myArray[i] != null)
-			((Command) l.get(i)).execute();
+			(l.get(i)).execute();
 			l.remove(l.get(i));
 		}
 		resetGui();
@@ -141,6 +141,7 @@ public class TaskManager implements Runnable, ProcessListener {
 
 	private void initGui(final int listLength) {
 		mHandler.post(new Runnable() {
+			@Override
 			public void run() {
 				if (myProgressWheel != null) {
 					myProgressWheel.setVisibility(View.VISIBLE);
@@ -154,6 +155,7 @@ public class TaskManager implements Runnable, ProcessListener {
 	private void resetGui() {
 
 		mHandler.post(new Runnable() {
+			@Override
 			public void run() {
 				resetProgressText();
 				resetProgressWheel();
@@ -166,6 +168,7 @@ public class TaskManager implements Runnable, ProcessListener {
 		if (isRunning()) {
 			if (myProgressWheel != null) {
 				mHandler.post(new Runnable() {
+					@Override
 					public void run() {
 						myProgressWheel.setMax(newListSize);
 					}
@@ -173,6 +176,7 @@ public class TaskManager implements Runnable, ProcessListener {
 			}
 			if (myProgressSizeText != null) {
 				mHandler.post(new Runnable() {
+					@Override
 					public void run() {
 						myProgressSizeText.setText(myWorkingMiddle
 								+ newListSize + myWorkingSuffix);
@@ -261,6 +265,7 @@ public class TaskManager implements Runnable, ProcessListener {
 
 		// Update the progress bar
 		mHandler.post(new Runnable() {
+			@Override
 			public void run() {
 				if (myProgressWheel != null) {
 					myProgressWheel.setMax(max);

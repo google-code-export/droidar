@@ -1,7 +1,5 @@
 package util;
 
-import android.widget.TextView;
-
 /**
  * A wrapper for log-output. Useful to disable log output before shipping the
  * application (the debug information can still be collected internally and send

@@ -1,14 +1,10 @@
 package gl.animations;
 
 import gl.Renderable;
-import gl.scenegraph.MeshComponent;
-
 import javax.microedition.khronos.opengles.GL10;
 
 import system.ParentStack;
 import util.Vec;
-import worldData.Obj;
-import worldData.RenderableEntity;
 import worldData.Updateable;
 import worldData.Visitor;
 

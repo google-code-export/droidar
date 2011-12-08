@@ -3,7 +3,6 @@ package gl;
 import javax.microedition.khronos.opengles.GL10;
 
 import system.ParentStack;
-import worldData.Updateable;
 
 /**
  * Use this interface for custom rendering

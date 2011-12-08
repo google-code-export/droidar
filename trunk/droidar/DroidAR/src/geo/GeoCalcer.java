@@ -3,7 +3,6 @@ package geo;
 import system.Container;
 import worldData.LargeWorld;
 import worldData.Visitor;
-import worldData.World;
 import util.Log;
 
 public class GeoCalcer extends Visitor {

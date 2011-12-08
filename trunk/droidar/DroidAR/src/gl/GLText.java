@@ -11,7 +11,6 @@ import javax.microedition.khronos.opengles.GL10;
 import system.ParentStack;
 import util.Vec;
 import worldData.Visitor;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;

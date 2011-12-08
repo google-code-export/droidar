@@ -22,6 +22,7 @@ public class SensorAlgo1 extends Algo {
 		myBarrier = barrier;
 	}
 
+	@Override
 	public float[] execute(float[] v) {
 		oldV[0] = checkAndCalc(oldV[0], v[0], myBarrier);
 		oldV[1] = checkAndCalc(oldV[1], v[1], myBarrier);

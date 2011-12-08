@@ -1,6 +1,5 @@
 package system;
 
-import gl.HasPosition;
 import worldData.Obj;
 
 public class ParentStack<T> {

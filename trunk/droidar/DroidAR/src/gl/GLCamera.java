@@ -157,6 +157,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		return result;
 	}
 
+	@Override
 	public boolean update(float timeDelta, Updateable parent,
 			ParentStack<Updateable> stack) {
 
@@ -413,6 +414,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 * @param
 	 * @param parent
 	 */
+	@Override
 	public synchronized void render(GL10 gl, Renderable parent,
 			ParentStack<Renderable> stack) {
 
@@ -851,6 +853,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 *         y positive means north of zero pos (longitude direction) <br>
 	 *         z the height of the camera
 	 */
+	@Override
 	public Vec getPosition() {
 		return myPosition;
 	}

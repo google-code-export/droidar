@@ -46,6 +46,7 @@ public class Headline extends AbstractModifier {
 		myTextSize = manualTextSize;
 	}
 
+	@Override
 	public View getView(Context myContext) {
 
 		int bottomAndTopPadding = 4;

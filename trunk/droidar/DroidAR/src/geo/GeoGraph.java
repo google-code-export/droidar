@@ -1,6 +1,5 @@
 package geo;
 
-import gl.GLCamera;
 import gl.Renderable;
 import gl.scenegraph.MeshComponent;
 
@@ -161,7 +160,7 @@ public class GeoGraph extends AbstractObj implements Container<GeoObj> {
 			int candLength = canidateSet.myLength;
 
 			for (int i2 = 0; i2 < candLength; i2++) {
-				GeoObj g = (GeoObj) canidateSet.get(i2);
+				GeoObj g = canidateSet.get(i2);
 				if (specialPathLength[g.dijkstraId] < lightest) {
 					n = g;
 					lightest = specialPathLength[g.dijkstraId];
@@ -288,6 +287,7 @@ public class GeoGraph extends AbstractObj implements Container<GeoObj> {
 		return false;
 	}
 
+	@Override
 	public void insert(int pos, GeoObj geoObj) {
 		if (myNodes == null)
 			myNodes = new EfficientListQualified<GeoObj>();
@@ -369,7 +369,7 @@ public class GeoGraph extends AbstractObj implements Container<GeoObj> {
 			return null;
 		}
 		Log.d("GeoGraph", "  -> Found item that matches");
-		return (GeoObj) searchResults.getAllItems().get(0);
+		return searchResults.getAllItems().get(0);
 	}
 
 	/**

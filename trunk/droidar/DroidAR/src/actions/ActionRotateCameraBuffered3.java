@@ -2,7 +2,6 @@ package actions;
 
 import gl.GLCamera;
 import actions.algos.Algo;
-import actions.algos.BufferAlgo1;
 import actions.algos.BufferAlgo3;
 import actions.algos.SensorAlgo1;
 import android.view.MotionEvent;

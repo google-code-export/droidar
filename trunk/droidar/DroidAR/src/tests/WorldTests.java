@@ -7,7 +7,6 @@ import gl.scenegraph.MeshComponent;
 import gl.scenegraph.Shape;
 import system.Container;
 import worldData.Obj;
-import worldData.RenderableEntity;
 import worldData.World;
 
 public class WorldTests extends SimpleTesting {

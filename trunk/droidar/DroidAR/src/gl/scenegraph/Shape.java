@@ -96,6 +96,7 @@ public class Shape extends MeshComponent {
 		myRenderData.drawMode = GL10.GL_LINE_LOOP;
 	}
 
+	@Override
 	public boolean accept(Visitor visitor) {
 		return visitor.default_visit(this);
 	}

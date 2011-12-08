@@ -2,7 +2,6 @@ package actions;
 
 import system.EventManager;
 import geo.GeoCalcer;
-import geo.GeoObj;
 import gl.GLCamera;
 import worldData.World;
 import android.location.Location;

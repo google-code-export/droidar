@@ -109,6 +109,7 @@ public class GuiSetup {
 			// b.setBackgroundResource(BUTTON_BACKGROUND);
 			b.setImageResource(imageId);
 			b.setOnClickListener(new OnClickListener() {
+				@Override
 				public void onClick(View v) {
 					if (isVibrationFeedbackEnabled() && vibrateCommand != null) {
 						vibrateCommand.execute();
@@ -136,6 +137,7 @@ public class GuiSetup {
 			// b.setTextColor(gl.Color.blackTransparent().toIntRGB());
 			b.setText(buttonText);
 			b.setOnClickListener(new OnClickListener() {
+				@Override
 				public void onClick(View v) {
 					if (isVibrationFeedbackEnabled() && vibrateCommand != null) {
 						vibrateCommand.execute();

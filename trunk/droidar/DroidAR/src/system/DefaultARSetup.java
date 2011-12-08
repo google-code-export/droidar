@@ -6,7 +6,6 @@ import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gui.GuiSetup;
-import gui.InfoScreenSettings;
 import util.Log;
 import util.Vec;
 import worldData.SystemUpdater;
@@ -20,8 +19,6 @@ import actions.ActionWaitForAccuracy;
 import android.R;
 import android.app.Activity;
 import android.location.Location;
-import android.widget.ImageView;
-
 import commands.Command;
 
 /**

@@ -1,7 +1,5 @@
 package worldData;
 
-import components.Visitable;
-
 import gl.LightSource;
 import gl.Renderable;
 import gl.scenegraph.MeshComponent;

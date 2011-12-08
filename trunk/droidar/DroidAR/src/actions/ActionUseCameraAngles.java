@@ -121,6 +121,7 @@ public abstract class ActionUseCameraAngles extends Action implements
 		return true;
 	}
 
+	@Override
 	public void updateAnglesByCamera(float[] anglesInRadians,
 			Vec cameraRotationVec) {
 

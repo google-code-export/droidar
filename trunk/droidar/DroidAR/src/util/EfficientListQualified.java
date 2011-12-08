@@ -55,6 +55,7 @@ public class EfficientListQualified<T> extends EfficientList<T> {
 		return super.resizeArray(oldSize, a);
 	}
 
+	@Override
 	public boolean insert(int pos, T item) {
 		boolean insterOk = super.insert(pos, item);
 		if (insterOk && quali != null) {
@@ -80,6 +81,7 @@ public class EfficientListQualified<T> extends EfficientList<T> {
 		super.removeItemFromArray(a, pos);
 	}
 
+	@Override
 	public boolean add(T x) {
 		boolean result = super.add(x);
 		if (quali != null)
