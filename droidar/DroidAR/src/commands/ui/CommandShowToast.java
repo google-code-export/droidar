@@ -32,6 +32,7 @@ public class CommandShowToast extends Command {
 	public boolean execute() {
 
 		new Handler(Looper.getMainLooper()).post(new Runnable() {
+			@Override
 			public void run() {
 				Toast.makeText(myContext, myTextToDisplay, Toast.LENGTH_LONG)
 						.show();
@@ -48,6 +49,7 @@ public class CommandShowToast extends Command {
 			final String s = myEditText.getText().toString();
 
 			new Handler(Looper.getMainLooper()).post(new Runnable() {
+				@Override
 				public void run() {
 					Toast.makeText(myLinLayout.getContext(), s,
 							Toast.LENGTH_LONG).show();

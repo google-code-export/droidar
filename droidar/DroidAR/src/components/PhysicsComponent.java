@@ -25,10 +25,12 @@ public class PhysicsComponent implements Entity {
 	private Vec accel = new Vec();
 	private float mass = 1;
 
+	@Override
 	public boolean accept(Visitor visitor) {
 		return visitor.default_visit(this);
 	}
 
+	@Override
 	public boolean update(float timeDelta, Updateable parent,
 			ParentStack<Updateable> stack) {
 		if (physicsActive) {

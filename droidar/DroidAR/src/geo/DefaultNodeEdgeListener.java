@@ -10,11 +10,13 @@ public class DefaultNodeEdgeListener extends SimpleNodeEdgeListener {
 		super(glCamera);
 	}
 
+	@Override
 	public MeshComponent getEdgeMesh(GeoGraph targetGraph, GeoObj startPoint,
 			GeoObj endPoint) {
 		return Edge.getDefaultMesh(targetGraph, startPoint, endPoint, null);
 	}
 
+	@Override
 	public MeshComponent getNodeMesh() {
 		return GLFactory.getInstance().newDiamond(null);
 	}

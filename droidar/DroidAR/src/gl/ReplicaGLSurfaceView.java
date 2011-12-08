@@ -479,6 +479,7 @@ public class ReplicaGLSurfaceView extends SurfaceView implements
 	 * This method is part of the SurfaceHolder.Callback interface, and is not
 	 * normally called or subclassed by clients of GLSurfaceView.
 	 */
+	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		mGLThread.surfaceCreated();
 	}
@@ -487,6 +488,7 @@ public class ReplicaGLSurfaceView extends SurfaceView implements
 	 * This method is part of the SurfaceHolder.Callback interface, and is not
 	 * normally called or subclassed by clients of GLSurfaceView.
 	 */
+	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// Surface will be destroyed when we return
 		mGLThread.surfaceDestroyed();
@@ -496,6 +498,7 @@ public class ReplicaGLSurfaceView extends SurfaceView implements
 	 * This method is part of the SurfaceHolder.Callback interface, and is not
 	 * normally called or subclassed by clients of GLSurfaceView.
 	 */
+	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
 		mGLThread.onWindowResize(w, h);
 	}
@@ -719,6 +722,7 @@ public class ReplicaGLSurfaceView extends SurfaceView implements
 	private class DefaultContextFactory implements EGLContextFactory {
 		private int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
 
+		@Override
 		public EGLContext createContext(EGL10 egl, EGLDisplay display,
 				EGLConfig config) {
 			int[] attrib_list = { EGL_CONTEXT_CLIENT_VERSION,
@@ -728,6 +732,7 @@ public class ReplicaGLSurfaceView extends SurfaceView implements
 					mEGLContextClientVersion != 0 ? attrib_list : null);
 		}
 
+		@Override
 		public void destroyContext(EGL10 egl, EGLDisplay display,
 				EGLContext context) {
 			egl.eglDestroyContext(display, context);
@@ -751,12 +756,14 @@ public class ReplicaGLSurfaceView extends SurfaceView implements
 	private static class DefaultWindowSurfaceFactory implements
 			EGLWindowSurfaceFactory {
 
+		@Override
 		public EGLSurface createWindowSurface(EGL10 egl, EGLDisplay display,
 				EGLConfig config, Object nativeWindow) {
 			return egl.eglCreateWindowSurface(display, config, nativeWindow,
 					null);
 		}
 
+		@Override
 		public void destroySurface(EGL10 egl, EGLDisplay display,
 				EGLSurface surface) {
 			egl.eglDestroySurface(display, surface);
@@ -792,6 +799,7 @@ public class ReplicaGLSurfaceView extends SurfaceView implements
 			mConfigSpec = filterConfigSpec(configSpec);
 		}
 
+		@Override
 		public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
 			int[] num_config = new int[1];
 			if (!egl.eglChooseConfig(display, mConfigSpec, null, 0, num_config)) {

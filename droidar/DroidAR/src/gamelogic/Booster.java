@@ -39,6 +39,7 @@ public class Booster extends GameElement {
 		return myTargetStat;
 	}
 
+	@Override
 	public void generateEditGUI(ModifierGroup s) {
 		s.addModifier(new PlusMinusModifier(R.drawable.minuscirclegray,
 				R.drawable.pluscirclegray) {

@@ -19,6 +19,7 @@ public class Edge extends GeoObj implements Comparable<Edge> {
 		this.setComp(edgeMesh);
 	}
 
+	@Override
 	public int compareTo(final Edge argEdge) {
 		return weight - argEdge.weight;
 	}

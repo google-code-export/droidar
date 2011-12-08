@@ -6,7 +6,6 @@ import system.ParentStack;
 import util.EfficientList;
 import util.QuadTree;
 import util.Vec;
-import worldData.AbstractObj;
 import worldData.Entity;
 import worldData.LargeWorld;
 import worldData.Obj;

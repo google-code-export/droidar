@@ -1,7 +1,6 @@
 package util;
 
 import gl.GLCamera;
-import gl.GLCamera.CameraAngleUpdateListener;
 
 /**
  * see {@link Vec#Vec(float, float, float)}

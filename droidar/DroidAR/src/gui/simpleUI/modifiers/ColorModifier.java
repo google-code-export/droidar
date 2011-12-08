@@ -17,6 +17,7 @@ public abstract class ColorModifier extends AbstractModifier {
 	private EditText eGreen;
 	private EditText eBlue;
 
+	@Override
 	public View getView(Context context) {
 
 		LinearLayout l = new LinearLayout(context);

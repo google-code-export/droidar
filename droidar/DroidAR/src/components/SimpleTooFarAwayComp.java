@@ -3,15 +3,12 @@ package components;
 import gl.Color;
 import gl.GLCamera;
 import gl.GLFactory;
-import gl.animations.AnimationColorBounce;
 import gl.scenegraph.MeshComponent;
 import gl.scenegraph.Shape;
 import util.Vec;
 import worldData.MoveComp;
 import worldData.Updateable;
 import android.app.Activity;
-import android.content.Context;
-
 import commands.Command;
 import commands.ui.CommandShowToast;
 

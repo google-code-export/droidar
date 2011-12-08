@@ -43,7 +43,7 @@ public class CommandSetWrapperToValue2 extends UndoableCommand {
 				+ myObjectToSelect);
 		if (myObjectToSelect != null) {
 			// backup the current selected object:
-			mySelectionBackup = (Wrapper) mySelectionTarget.getObject();
+			mySelectionBackup = mySelectionTarget.getObject();
 			mySelectionTarget.setTo(myObjectToSelect);
 			return true;
 		}
@@ -55,13 +55,13 @@ public class CommandSetWrapperToValue2 extends UndoableCommand {
 		Log.d("Commands", "Trying to set selection (is="
 				+ mySelectionTarget.getObject() + ") to " + transfairObject);
 		if (transfairObject instanceof Wrapper) {
-			mySelectionBackup = ((Wrapper) mySelectionTarget).getObject();
+			mySelectionBackup = (mySelectionTarget).getObject();
 			mySelectionTarget.setTo(((Wrapper) transfairObject).getObject());
 			Log.d("Commands", "    Selection set correctly.");
 			return true;
 		}
 		if (transfairObject instanceof AbstractObj) {
-			mySelectionBackup = ((Wrapper) mySelectionTarget).getObject();
+			mySelectionBackup = (mySelectionTarget).getObject();
 			mySelectionTarget.setTo(transfairObject);
 			return true;
 		}

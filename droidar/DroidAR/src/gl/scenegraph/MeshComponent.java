@@ -21,7 +21,6 @@ import util.EfficientList;
 import util.Vec;
 import util.Wrapper;
 import worldData.AbstractObj;
-import worldData.Entity;
 import worldData.Obj;
 import worldData.RenderableEntity;
 import worldData.Updateable;
@@ -212,6 +211,7 @@ public abstract class MeshComponent implements RenderableEntity, ParentMesh,
 			gl.glScalef(myScale.x, myScale.y, myScale.z);
 	}
 
+	@Override
 	public synchronized void render(GL10 gl, Renderable parent,
 			ParentStack<Renderable> stack) {
 		// store current matrix and then modify it:
@@ -291,11 +291,13 @@ public abstract class MeshComponent implements RenderableEntity, ParentMesh,
 		Log.v(LOG_TAG, "   > myPickColor=" + myPickColor);
 	}
 
+	@Override
 	@Deprecated
 	public ParentMesh getMyParentMesh() {
 		return myParentMesh;
 	}
 
+	@Override
 	@Deprecated
 	public AbstractObj getMyParentObj() {
 		if (myParentObj == null) {
@@ -316,6 +318,7 @@ public abstract class MeshComponent implements RenderableEntity, ParentMesh,
 	}
 
 	// TODO dont remove, just reimplement with parameter ParentStack
+	@Override
 	public Vec getAbsolutePosition() {
 		Vec pos;
 		if (myPosition != null) {
@@ -330,6 +333,7 @@ public abstract class MeshComponent implements RenderableEntity, ParentMesh,
 		return pos;
 	}
 
+	@Override
 	public Command getOnClickCommand() {
 
 		// if (myOnClickCommand == null)
@@ -337,12 +341,14 @@ public abstract class MeshComponent implements RenderableEntity, ParentMesh,
 		return myOnClickCommand;
 	}
 
+	@Override
 	public Command getOnLongClickCommand() {
 		// if (myOnLongClickCommand == null)
 		// return getMyParentObj().getOnLongClickCommand();
 		return myOnLongClickCommand;
 	}
 
+	@Override
 	public Command getOnMapClickCommand() {
 		// if (myOnMapClickCommand == null)
 		// return getMyParentObj().getOnMapClickCommand();
@@ -395,10 +401,12 @@ public abstract class MeshComponent implements RenderableEntity, ParentMesh,
 		myOnLongClickCommand = c;
 	}
 
+	@Override
 	public void setOnMapClickCommand(Command c) {
 		myOnMapClickCommand = c;
 	}
 
+	@Override
 	public MeshComponent clone() throws CloneNotSupportedException {
 		Log.e("", "MeshComponent.clone() subclass missed, add it there");
 		return null;

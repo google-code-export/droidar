@@ -1,14 +1,10 @@
 package actions;
 
 import gl.GLCamera;
-import gl.HasPosition;
-import gl.scenegraph.MeshComponent;
 import util.Vec;
 import util.Wrapper;
 import worldData.MoveComp;
 import worldData.Obj;
-import android.R.integer;
-import android.view.MotionEvent;
 
 public class ActionMoveObject extends ActionDoAlongAxis {
 

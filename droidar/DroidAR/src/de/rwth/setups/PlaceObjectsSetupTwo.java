@@ -42,6 +42,7 @@ public class PlaceObjectsSetupTwo extends Setup {
 		camera = new GLCamera(new Vec(0, 0, 15));
 		world = new World(camera);
 		viewPosCalcer = new ViewPosCalcerComp(camera, 150, 0.1f) {
+			@Override
 			public void onPositionUpdate(worldData.Updateable parent,
 					Vec targetVec) {
 				if (parent instanceof Obj) {

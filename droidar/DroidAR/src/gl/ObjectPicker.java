@@ -11,7 +11,6 @@ import javax.microedition.khronos.opengles.GL10;
 import listeners.SelectionListener;
 import system.Setup;
 import util.Wrapper;
-import android.app.Activity;
 import util.Log;
 
 import commands.Command;

@@ -2,7 +2,6 @@ package de.rwth.setups;
 
 import gl.Color;
 import gl.CustomGLSurfaceView;
-import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.LightSource;

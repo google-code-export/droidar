@@ -1,7 +1,5 @@
 package de.rwth.setups;
 
-import java.util.HashMap;
-
 import geo.GeoObj;
 import gl.Color;
 import gl.CustomGLSurfaceView;
@@ -25,7 +23,6 @@ import util.IO;
 import util.Vec;
 import util.Wrapper;
 import worldData.Obj;
-import worldData.RenderableEntity;
 import worldData.SystemUpdater;
 import worldData.World;
 import actions.ActionCalcRelativePos;

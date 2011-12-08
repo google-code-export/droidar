@@ -33,6 +33,7 @@ public class InfoText extends AbstractModifier {
 		myGravity = gravity;
 	}
 
+	@Override
 	public View getView(Context context) {
 
 		if (myName != null) {

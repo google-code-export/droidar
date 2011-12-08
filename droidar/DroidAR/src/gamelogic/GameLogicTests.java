@@ -2,7 +2,6 @@ package gamelogic;
 
 import system.ParentStack;
 import tests.SimpleTesting;
-import worldData.Obj;
 import worldData.Updateable;
 import worldData.Visitor;
 import de.rwth.R;

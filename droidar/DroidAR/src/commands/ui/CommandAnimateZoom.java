@@ -20,7 +20,7 @@ public class CommandAnimateZoom extends Command {
 		int from = 1;
 		int to = 3;
 		a = new ScaleAnimation(from, to, from, to, Animation.RELATIVE_TO_SELF,
-				(float) 1, Animation.RELATIVE_TO_SELF, (float) 1);
+				1, Animation.RELATIVE_TO_SELF, 1);
 		a.setDuration(500);
 		a.setAnimationListener(new AnimListener());
 

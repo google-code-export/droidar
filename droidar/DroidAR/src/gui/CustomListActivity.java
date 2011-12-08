@@ -247,7 +247,7 @@ public class CustomListActivity extends ListActivity {
 		}
 		if (item.getListLongClickCommand() instanceof Command) {
 			// TODO maybe let ListItem implement MetaInfoInterface ??
-			menu.add(((Command) item.getListLongClickCommand()).getInfoObject()
+			menu.add((item.getListLongClickCommand()).getInfoObject()
 					.getShortDescr());
 			return true;
 		}

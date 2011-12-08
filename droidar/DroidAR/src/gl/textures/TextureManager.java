@@ -1,9 +1,6 @@
 package gl.textures;
 
-import gl.textures.TextureManager.TexturReloader;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,7 +12,6 @@ import javax.microedition.khronos.opengles.GL11Ext;
 import util.HasDebugInformation;
 import util.IO;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.opengl.GLUtils;
 import util.Log;
 
@@ -232,7 +228,7 @@ public class TextureManager implements HasDebugInformation {
 			resetInstance();
 			Log.d(LOG_TAG, "Restoring " + a.size() + " textures");
 			for (Iterator<Texture> iterator = a.iterator(); iterator.hasNext();) {
-				getInstance().addTexture((Texture) iterator.next());
+				getInstance().addTexture(iterator.next());
 			}
 
 		} catch (Exception e) {

@@ -45,6 +45,7 @@ public class FactorBooster extends Booster {
 		return (finalValue - originalValue) + originalValue * myValue / 100;
 	}
 
+	@Override
 	public void generateEditGUI(ModifierGroup s) {
 		s.addModifier(new PlusMinusModifier(R.drawable.minuscirclegray,
 				R.drawable.pluscirclegray) {

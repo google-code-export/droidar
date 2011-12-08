@@ -5,7 +5,6 @@ import gl.HasColor;
 import gl.HasPosition;
 import gl.scenegraph.Shape;
 import system.ParentStack;
-import system.Setup;
 import util.EfficientList;
 import util.Vec;
 import worldData.Obj;

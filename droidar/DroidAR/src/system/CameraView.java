@@ -33,6 +33,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 	}
 	
+	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		// The Surface has been created, acquire the camera and tell it
 		// where to draw.
@@ -45,6 +46,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
+	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
 		// Now that the size is known, set up the camera parameters and
 		// begin the preview.
@@ -55,6 +57,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		resumeCamera();
 	}
 
+	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// Surface will be destroyed when we return, so stop the
 		// preview.

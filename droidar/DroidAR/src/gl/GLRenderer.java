@@ -76,6 +76,7 @@ public class GLRenderer implements Renderer {
 	private boolean pauseRenderer;
 	private boolean readyToPickPixel;
 
+	@Override
 	public void onDrawFrame(GL10 gl) {
 
 		if (pauseRenderer)
@@ -174,6 +175,7 @@ public class GLRenderer implements Renderer {
 		}
 	}
 
+	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 
 		Log.d("Activity", "GLSurfaceView.onSurfaceChanged");
@@ -230,6 +232,7 @@ public class GLRenderer implements Renderer {
 			addFog(gl);
 	}
 
+	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
 		Log.d("Activity", "GLSurfaceView.onSurfaceCreated");

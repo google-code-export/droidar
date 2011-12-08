@@ -152,10 +152,12 @@ public class EventManager implements LocationListener, SensorEventListener {
 		}
 	}
 
+	@Override
 	public void onAccuracyChanged(Sensor s, int accuracy) {
 		// Log.d("sensor onAccuracyChanged", arg0 + " " + arg1);
 	}
 
+	@Override
 	public void onSensorChanged(SensorEvent event) {
 
 		if (onOrientationChangedAction != null) {
@@ -174,20 +176,24 @@ public class EventManager implements LocationListener, SensorEventListener {
 		}
 	}
 
+	@Override
 	public void onLocationChanged(Location location) {
 		if (onLocationChangedAction != null) {
 			onLocationChangedAction.onLocationChanged(location);
 		}
 	}
 
+	@Override
 	public void onProviderDisabled(String provider) {
 		Log.w(LOG_TAG, "Didnt handle onProviderDisabled of " + provider);
 	}
 
+	@Override
 	public void onProviderEnabled(String provider) {
 		Log.w(LOG_TAG, "Didnt handle onProviderEnabled of " + provider);
 	}
 
+	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		Log.w(LOG_TAG, "Didnt handle onStatusChanged of " + provider
 				+ "(status=" + status + ")");
