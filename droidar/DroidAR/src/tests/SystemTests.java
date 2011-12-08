@@ -91,6 +91,16 @@ public class SystemTests extends SimpleTesting {
 			r.toAngleVec();
 			assertEquals(r, new Vec(45+90, 0, 0));
 		}
+		{
+			Vec r = new Vec(13, 0, 0);
+			r.toAngleVec();
+			assertEquals(r, new Vec(90, 0, 90));
+		}
+		{
+			Vec r = new Vec(-0.2f, 0, 0);
+			r.toAngleVec();
+			assertEquals(r, new Vec(90, 0, 180+90));
+		}
 		
 	}
 
