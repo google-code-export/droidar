@@ -62,7 +62,7 @@ public class ARActivityPlusMaps extends MapActivity {
 	@Override
 	protected void onResume() {
 		if (mySetupToUse != null)
-			mySetupToUse.restoreOverlays(this);
+			mySetupToUse.onResume(this);
 		super.onResume();
 	}
 

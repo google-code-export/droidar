@@ -81,7 +81,7 @@ public class GMap extends MapView implements TouchEventInterface {
 		super(c, apiKey);
 
 		setLayoutParams(new android.view.ViewGroup.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+				android.view.ViewGroup.LayoutParams.FILL_PARENT, android.view.ViewGroup.LayoutParams.FILL_PARENT));
 
 		// create a GestureDetector:
 		myGestureDetector = new GestureDetector(c, new CustomGestureListener(
@@ -108,6 +108,7 @@ public class GMap extends MapView implements TouchEventInterface {
 		// thread):
 		final GMap map = this;
 		myHandler.post(new Runnable() {
+			@Override
 			public void run() {
 				Log.d(LOG_TAG, "Adding map overlay: " + mapOverlay);
 				map.getOverlays().add(mapOverlay);

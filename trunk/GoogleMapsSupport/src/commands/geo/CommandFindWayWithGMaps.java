@@ -1,6 +1,5 @@
 package commands.geo;
 
-import geo.GMap;
 import geo.GeoObj;
 import geo.GeoUtils;
 import system.EventManager;

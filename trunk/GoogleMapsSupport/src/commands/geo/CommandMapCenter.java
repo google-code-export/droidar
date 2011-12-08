@@ -29,20 +29,13 @@ public class CommandMapCenter extends Command {
 			return false;
 		}
 		if (myGeoWrapper.getObject() instanceof GeoGraph) {
-			// System.out.println("myGeoWrapper.getObject()="
-			// + myGeoWrapper.getObject());
-			// System.out.println("myGeoWrapper.getObject()).getMyItems()="
-			// + ((GeoGraph) myGeoWrapper.getObject()).getMyItems());
-			// System.out
-			// .println("((GeoGraph) myGeoWrapper.getObject()).getMyItems()="
-			// + ((GeoGraph) myGeoWrapper.getObject())
-			// .getMyItems());
-			if (((GeoGraph) myGeoWrapper.getObject()).getNodes().get(0) != null) {
-				final GeoObj fistPointInGraph = (GeoObj) ((GeoGraph) myGeoWrapper
-						.getObject()).getNodes().get(0);
+			if (((GeoGraph) myGeoWrapper.getObject()).getAllItems().get(0) != null) {
+				final GeoObj fistPointInGraph = ((GeoGraph) myGeoWrapper
+						.getObject()).getAllItems().get(0);
 
 				// migth not be called from main thread so use handler
 				mHandler.post(new Runnable() {
+					@Override
 					public void run() {
 						myMap.setCenterTo(fistPointInGraph);
 					}

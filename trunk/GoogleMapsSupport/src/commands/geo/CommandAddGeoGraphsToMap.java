@@ -4,10 +4,10 @@ import geo.CustomItemizedOverlay;
 import geo.CustomPathOverlay;
 import geo.GMap;
 import geo.GeoGraph;
+import gl.scenegraph.RenderList;
 import util.EfficientList;
 import util.Wrapper;
-import worldData.AbstractObj;
-import worldData.ObjGroup;
+import worldData.RenderableEntity;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
@@ -39,9 +39,9 @@ public class CommandAddGeoGraphsToMap extends UndoableCommand {
 			addGraphToMap((GeoGraph) myGeoGraphWrapper.getObject());
 			return true;
 		}
-		if (myGeoGraphWrapper.getObject() instanceof ObjGroup) {
-			ObjGroup group = (ObjGroup) myGeoGraphWrapper.getObject();
-			EfficientList<AbstractObj> graphs = group.getNodes();
+		if (myGeoGraphWrapper.getObject() instanceof RenderList) {
+			RenderList group = (RenderList) myGeoGraphWrapper.getObject();
+			EfficientList<RenderableEntity> graphs = group.getAllItems();
 			for (int i = 0; i < graphs.myLength; i++) {
 				if (graphs.get(i) instanceof GeoGraph) {
 					addGraphToMap((GeoGraph) graphs.get(i));

@@ -63,7 +63,7 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 		 * your datastructure here and access the OverlayItems directly in the
 		 * createItem method. that way it will work as fast as possible
 		 */
-		EfficientListQualified<GeoObj> nodes = graph.getNodes();
+		EfficientListQualified<GeoObj> nodes = graph.getAllItems();
 		for (int i = 0; i < nodes.myLength; i++) {
 			myItemList.add(new GeoObjWrapper(nodes.get(i)));
 		}

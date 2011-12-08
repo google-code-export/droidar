@@ -52,13 +52,13 @@ public class CustomPathOverlay extends com.google.android.maps.Overlay {
 	public boolean draw(Canvas canvas, MapView mapView, boolean shadow,
 			long when) {
 
-		EfficientListQualified<GeoObj> nodes = myGraph.getNodes();
+		EfficientListQualified<GeoObj> nodes = myGraph.getAllItems();
 
 		Path path = null;
 		Point lastPoint = null;
 		GeoObj lastGeoObj = null;
 		for (int i = 0; i < nodes.myLength; i++) {
-			GeoObj x = (GeoObj) nodes.get(i);
+			GeoObj x = nodes.get(i);
 			// ---translate the GeoPoint to screen pixels---
 			Point currentPoint = new Point();
 			mapView.getProjection().toPixels(GMap.toGeoPoint(x), currentPoint);
