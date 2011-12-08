@@ -1,6 +1,6 @@
 package geo;
 
-import gl.MeshComponent;
+import gl.scenegraph.MeshComponent;
 import android.graphics.drawable.Drawable;
 
 import com.google.android.maps.GeoPoint;
@@ -46,7 +46,7 @@ public class GeoObjWrapper extends OverlayItem {
 	 */
 	public boolean onTab() {
 		if (myGeoObj.getGraphicsComponent() instanceof MeshComponent) {
-			Command command = ((MeshComponent) myGeoObj.getGraphicsComponent())
+			Command command = (myGeoObj.getGraphicsComponent())
 					.getOnMapClickCommand();
 			if (command != null) {
 				return command.execute(myGeoObj);

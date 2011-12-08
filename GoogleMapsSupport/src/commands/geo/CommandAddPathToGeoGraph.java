@@ -3,7 +3,7 @@ package commands.geo;
 import geo.Edge;
 import geo.GeoGraph;
 import geo.GeoObj;
-import gl.MeshComponent;
+import gl.scenegraph.MeshComponent;
 import util.Wrapper;
 
 import commands.undoable.UndoableCommand;

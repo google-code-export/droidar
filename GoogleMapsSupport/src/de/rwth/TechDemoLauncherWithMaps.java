@@ -13,12 +13,6 @@ import android.widget.LinearLayout;
 import commands.ui.CommandShowToast;
 
 import de.rwth.setups.ARNavigatorSetup;
-import de.rwth.setups.CollectItemsSetup;
-import de.rwth.setups.DebugSetup;
-import de.rwth.setups.IndoorSetup;
-import de.rwth.setups.PlaceObjectsSetup;
-import de.rwth.setups.PositionTestsSetup;
-import de.rwth.setups.SensorTestSetup;
 
 public class TechDemoLauncherWithMaps extends Activity {
 	@Override
@@ -41,6 +35,7 @@ public class TechDemoLauncherWithMaps extends Activity {
 		LinearLayout l = ((LinearLayout) findViewById(R.id.demoScreenLinView));
 
 		l.addView(new SimpleButton("Run tests") {
+			@Override
 			public void onButtonPressed() {
 				runTests();
 			}
@@ -54,6 +49,7 @@ public class TechDemoLauncherWithMaps extends Activity {
 	private void showSetup(String string, final Setup aSetupInstance) {
 		((LinearLayout) findViewById(R.id.demoScreenLinView))
 				.addView(new SimpleButton(string) {
+					@Override
 					public void onButtonPressed() {
 						Activity theCurrentActivity = TechDemoLauncherWithMaps.this;
 						ARActivityPlusMaps.startWithSetup(theCurrentActivity,

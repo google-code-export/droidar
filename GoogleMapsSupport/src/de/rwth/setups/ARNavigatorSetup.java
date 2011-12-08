@@ -11,14 +11,14 @@ import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
-import gl.MeshComponent;
 import gl.animations.AnimationRotate;
+import gl.scenegraph.MeshComponent;
+import gl.scenegraph.RenderList;
 import gui.GuiSetup;
 import gui.InfoScreenSettings;
 import gui.MetaInfos;
 import listeners.ItemSelectedListener;
 import listeners.ObjectCreateListener;
-import listeners.ObjectEditListener;
 import system.ErrorHandler;
 import system.EventManager;
 import system.Setup;
@@ -26,7 +26,6 @@ import util.EfficientListQualified;
 import util.IO;
 import util.Vec;
 import util.Wrapper;
-import worldData.ObjGroup;
 import worldData.SystemUpdater;
 import worldData.World;
 import actions.ActionBufferedCameraAR;
@@ -52,19 +51,13 @@ import commands.logic.CommandIfThenElse;
 import commands.logic.CommandSetWrapperToValue;
 import commands.logic.CommandSetWrapperToValue2;
 import commands.logic.CommandWrapperEqualsCondition;
-import commands.obj.CommandAddObjToObjGroup;
-import commands.obj.CommandChangeObjInWrapper;
-import commands.obj.CommandCreateObjectInWrapper;
 import commands.system.CommandAddHighPrioTask;
-import commands.system.CommandClearWrapperObject;
-import commands.system.CommandRemoveEmptyItemsInWrapper;
 import commands.system.CommandShowCameraPreview;
 import commands.system.CommandShowRendering;
 import commands.system.CommandShowWorldAnimation;
 import commands.ui.CommandAnimateZoom;
 import commands.ui.CommandMapEnlargeToFullScreen;
 import commands.ui.CommandMinimizeMap;
-import commands.ui.CommandSetSelected;
 import commands.ui.CommandShowListActivity;
 import commands.ui.CommandShowToast;
 
@@ -83,11 +76,11 @@ public class ARNavigatorSetup extends Setup {
 	private GMap map;
 	private GLRenderer myRenderer;
 
-	private ObjGroup searches;
+	private RenderList searches;
 
 	private Wrapper searchesW;
 
-	private ObjGroup customGraphs;
+	private RenderList customGraphs;
 	private Wrapper customsW;
 	private Wrapper currentCustomGraphW;
 
@@ -127,7 +120,7 @@ public class ARNavigatorSetup extends Setup {
 		selGraphInfo = new MetaInfos();
 		selGraphInfo.setColor(new Color(1, 0, 0.2f, 0.6f));
 		notSelGraphInfo = new MetaInfos();
-		notSelGraphInfo.setColor(new Color(0.8f, 0.8f, 0.8f, 0.6f));
+		// notSelGraphInfo.setColor(new Color(0.8f, 0.8f, 0.8f, 0.6f));
 
 		// store the device-position in a geo-graph:
 		ownPosition = new GeoGraph();
@@ -135,12 +128,12 @@ public class ARNavigatorSetup extends Setup {
 		ownPositionW = new Wrapper(ownPosition);
 
 		// the searches wrapper to store the found graph:
-		searches = new ObjGroup();
+		searches = new RenderList();
 		searchesW = new Wrapper(searches);
 
 		// the wrapper to hold all custom graphs (to be displayed in the
 		// listview e.g.):
-		customGraphs = new ObjGroup();
+		customGraphs = new RenderList();
 		GeoGraph defaultCustomGraph = newCustomGraph();
 		customGraphs.add(defaultCustomGraph);
 		customsW = new Wrapper(customGraphs);
@@ -210,7 +203,7 @@ public class ARNavigatorSetup extends Setup {
 					Object passedObject) {
 				if (wrapper.getObject() instanceof GeoGraph) {
 					EfficientListQualified<GeoObj> geoObjs = ((GeoGraph) wrapper
-							.getObject()).getNodes();
+							.getObject()).getAllItems();
 					for (int i = 0; i < geoObjs.myLength; i++) {
 						GeoObj o = geoObjs.get(i);
 						o.setComp(GLFactory.getInstance().newDiamond(
@@ -266,7 +259,7 @@ public class ARNavigatorSetup extends Setup {
 
 		MeshComponent diamond = objectFactory.newDiamond(Color
 				.blueTransparent());
-		diamond.myPosition = new Vec(0, 0, -3.8f);
+		diamond.setPosition(new Vec(0, 0, -3.8f));
 		diamond.addAnimation(new AnimationRotate(40, new Vec(0, 0, 1)));
 
 		if (currentPosition == null)
@@ -380,25 +373,27 @@ public class ARNavigatorSetup extends Setup {
 
 	private Command showCustomsList() {
 		CommandGroup selectGraph = new CommandGroup("Custom graphs..");
-		selectGraph.add(new CommandSetSelected(selectedGraphW, null));
-		selectGraph.add(new CommandSetWrapperToValue(selectedGraphW));
-		selectGraph.add(new CommandSetWrapperToValue(currentCustomGraphW));
-		selectGraph.add(new CommandSetSelected(selectedGraphW, myItemSelected));
+		// selectGraph.add(new CommandSetSelected(selectedGraphW, null));
+		// selectGraph.add(new CommandSetWrapperToValue(selectedGraphW));
+		// selectGraph.add(new CommandSetWrapperToValue(currentCustomGraphW));
+		// selectGraph.add(new CommandSetSelected(selectedGraphW,
+		// myItemSelected));
 		selectGraph.add(showSelectedGraphAndAllCustomGraphsOnMap());
 
 		CommandGroup deleteSelectedGraph = new CommandGroup(
 				"Delete selected graph");
-		deleteSelectedGraph.add(new CommandClearWrapperObject(selectedGraphW,
-				true));
-		deleteSelectedGraph.add(new CommandRemoveEmptyItemsInWrapper(customsW));
-
+		// deleteSelectedGraph.add(new CommandClearWrapperObject(selectedGraphW,
+		// true));
+		// deleteSelectedGraph.add(new
+		// CommandRemoveEmptyItemsInWrapper(customsW));
+		//
 		CommandGroup longPressCommands = new CommandGroup();
-		longPressCommands.add(deleteSelectedGraph);
+		// longPressCommands.add(deleteSelectedGraph);
 
 		CommandGroup menuCommands = new CommandGroup();
 		menuCommands.add(createNewCustomGraph());
-		menuCommands.add(new CommandClearWrapperObject(customsW,
-				"Clear my graphes"));
+		// menuCommands.add(new CommandClearWrapperObject(customsW,
+		// "Clear my graphes"));
 
 		return new CommandShowListActivity(customsW, myTargetActivity, false,
 				selectGraph, longPressCommands, null, null, menuCommands,
@@ -408,31 +403,31 @@ public class ARNavigatorSetup extends Setup {
 	private Command createNewCustomGraph() {
 		CommandGroup g = new CommandGroup("Add graph");
 		Wrapper newGraphW = new Wrapper();
-		g.add(new CommandCreateObjectInWrapper(newGraphW,
-				newCustomGraphListener));
+//		g.add(new CommandCreateObjectInWrapper(newGraphW,
+//				newCustomGraphListener));
 		g.add(commandAddGraphToObjectGroup(newGraphW, customsW));
 		return g;
 	}
 
 	private Command showSearchesList() {
 		CommandGroup selectGraph = new CommandGroup("Searches..");
-		selectGraph.add(new CommandSetSelected(selectedGraphW, null));
+//		selectGraph.add(new CommandSetSelected(selectedGraphW, null));
 		selectGraph.add(new CommandSetWrapperToValue(selectedGraphW));
-		selectGraph.add(new CommandSetSelected(selectedGraphW, myItemSelected));
+//		selectGraph.add(new CommandSetSelected(selectedGraphW, myItemSelected));
 		selectGraph.add(showSelectedGraphAndAllCustomGraphsOnMap());
 
 		CommandGroup deleteSelectedGraph = new CommandGroup(
 				"Delete selected Graph");
-		deleteSelectedGraph.add(new CommandClearWrapperObject(selectedGraphW,
-				true));
-		deleteSelectedGraph
-				.add(new CommandRemoveEmptyItemsInWrapper(searchesW));
+//		deleteSelectedGraph.add(new CommandClearWrapperObject(selectedGraphW,
+//				true));
+//		deleteSelectedGraph
+//				.add(new CommandRemoveEmptyItemsInWrapper(searchesW));
 		CommandGroup longPressCommands = new CommandGroup();
 		longPressCommands.add(deleteSelectedGraph);
 
 		CommandGroup menuCommands = new CommandGroup();
-		menuCommands.add(new CommandClearWrapperObject(searchesW,
-				"Clear Searches"));
+//		menuCommands.add(new CommandClearWrapperObject(searchesW,
+//				"Clear Searches"));
 
 		return new CommandShowListActivity(searchesW, myTargetActivity, false,
 				selectGraph, longPressCommands, null, null, menuCommands,
@@ -442,10 +437,10 @@ public class ARNavigatorSetup extends Setup {
 	private Command ifMaximizedAddItemToCurrentCustomGraph() {
 		CommandGroup g = new CommandGroup();
 		// sets the metainfos of the current selected item to unselected:
-		g.add(new CommandSetSelected(selectedItemW, null));
+//		g.add(new CommandSetSelected(selectedItemW, null));
 		g.add(new CommandSetWrapperToValue2(selectedItemW));
 		g.add(new CommandSetWrapperToValue(lastAddedItemW, selectedItemW));
-		g.add(new CommandSetSelected(selectedItemW, myItemSelected));
+//		g.add(new CommandSetSelected(selectedItemW, myItemSelected));
 
 		g.add(new CommandAddGeoObjToGeoGraph(selectedItemW,
 				currentCustomGraphW, addNewGeoObjToCustomGraphListener));
@@ -495,10 +490,10 @@ public class ARNavigatorSetup extends Setup {
 	}
 
 	private Command addPathToCurrentCustomGraph() {
-		CommandGroup g = new CommandGroup("addPathToCrrntCGraph");
-		g.add(new CommandSetSelected(selectedItemW, null));
+		CommandGroup g = new CommandGroup("addPathToCurrentCustomGraph");
+//		g.add(new CommandSetSelected(selectedItemW, null));
 		g.add(new CommandSetWrapperToValue2(selectedItemW));
-		g.add(new CommandSetSelected(selectedItemW, myItemSelected));
+//		g.add(new CommandSetSelected(selectedItemW, myItemSelected));
 		g.add(new CommandAddGeoObjToGeoGraph(selectedItemW,
 				currentCustomGraphW, addNewGeoObjToCustomGraphListener));
 		g.add(new CommandAddPathToGeoGraph(lastAddedItemW, selectedItemW,
@@ -519,8 +514,8 @@ public class ARNavigatorSetup extends Setup {
 
 		CommandGroup addGraphCommand = commandAddGraphToObjectGroup(sresults,
 				searchesW);
-		addGraphCommand.add(new CommandChangeObjInWrapper(sresults,
-				listenerSetEventsToClicksForSearchGraph));
+		// addGraphCommand.add(new CommandChangeObjInWrapper(sresults,
+		//		listenerSetEventsToClicksForSearchGraph));
 
 		CommandIfThenElse mapsearchAndDisplay = new CommandIfThenElse(
 				mapsearch, addGraphCommand, new CommandShowToast(
@@ -541,7 +536,7 @@ public class ARNavigatorSetup extends Setup {
 			Wrapper groupWrapper) {
 		CommandGroup g = new CommandGroup("addGraphToObjectGroup");
 		g.add(setSelectedGraphTo(sresults));
-		g.add(new CommandAddObjToObjGroup(selectedGraphW, groupWrapper));
+//		g.add(new CommandAddObjToObjGroup(selectedGraphW, groupWrapper));
 		g.add(new CommandMapCenter(map, sresults));
 		return g;
 	}
@@ -549,10 +544,10 @@ public class ARNavigatorSetup extends Setup {
 	private Command setSelectedGraphTo(
 			Wrapper wrapperOfGraphThatShouldBeSelected) {
 		CommandGroup g = new CommandGroup("setSelectedGraphTo");
-		g.add(new CommandSetSelected(selectedGraphW, null));
+//		g.add(new CommandSetSelected(selectedGraphW, null));
 		g.add(new CommandSetWrapperToValue(selectedGraphW,
 				wrapperOfGraphThatShouldBeSelected));
-		g.add(new CommandSetSelected(selectedGraphW, myItemSelected));
+//		g.add(new CommandSetSelected(selectedGraphW, myItemSelected));
 		g.add(showSelectedGraphAndAllCustomGraphsOnMap());
 		return g;
 	}

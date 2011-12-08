@@ -2,10 +2,10 @@ package commands.geo;
 
 import geo.GeoGraph;
 import geo.GeoObj;
+import gl.scenegraph.RenderList;
 import util.EfficientList;
 import util.Wrapper;
-import worldData.AbstractObj;
-import worldData.ObjGroup;
+import worldData.RenderableEntity;
 import android.util.Log;
 
 import commands.Command;
@@ -63,11 +63,12 @@ public class CommandFindWayInGraph extends Command {
 			return ((GeoGraph) mySource.getObject()).findPath(myStartPos,
 					target);
 		}
-		if (mySource.getObject() instanceof ObjGroup) {
-			EfficientList<AbstractObj> a = ((ObjGroup) mySource.getObject())
-					.getNodes();
-			final int l = ((ObjGroup) mySource.getObject()).getNodes().myLength;
-			for (int i = 0; i < l; i++) {
+		if (mySource.getObject() instanceof RenderList) {
+			EfficientList<RenderableEntity> a = ((RenderList) mySource
+					.getObject()).getAllItems();
+			final int length = ((RenderList) mySource.getObject())
+					.getAllItems().myLength;
+			for (int i = 0; i < length; i++) {
 				if (a.get(i) instanceof GeoGraph) {
 					GeoObj target = ((GeoGraph) a.get(i))
 							.findBestPointFor(searchTerm);
