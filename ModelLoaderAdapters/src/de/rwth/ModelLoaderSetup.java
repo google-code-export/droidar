@@ -1,7 +1,6 @@
 package de.rwth;
 
 import gl.CustomGLSurfaceView;
-import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.LightSource;
@@ -18,6 +17,7 @@ import util.Vec;
 import util.Wrapper;
 import worldData.MoveComp;
 import worldData.Obj;
+import worldData.SystemUpdater;
 import worldData.World;
 import actions.ActionMoveObject;
 import android.app.Activity;
@@ -97,8 +97,8 @@ public class ModelLoaderSetup extends DefaultARSetup {
 
 	@Override
 	public void _c_addActionsToEvents(EventManager eventManager,
-			CustomGLSurfaceView arView) {
-		super._c_addActionsToEvents(eventManager, arView);
+			CustomGLSurfaceView arView, SystemUpdater updater) {
+		super._c_addActionsToEvents(eventManager, arView, updater);
 
 		// clear some inputs set in default methods
 		eventManager.onLocationChangedAction = null;
