@@ -1,9 +1,9 @@
 package actions;
 
-import android.hardware.SensorManager;
 import gl.GLCamera;
-import gl.GLCamera.CameraAngleUpdateListener;
-import util.Vec;
+import system.ParentStack;
+import worldData.Updateable;
+import android.hardware.SensorManager;
 
 /**
  * Children of this class can access the angles of the specified camera
@@ -11,18 +11,22 @@ import util.Vec;
  * @author Spobo
  * 
  */
-public abstract class ActionUseCameraAngles extends Action implements
-		CameraAngleUpdateListener {
+public abstract class ActionUseCameraAngles extends Action {
 
+	@Deprecated
 	private int accelCounter;
+	@Deprecated
 	private int accelThreshold = 10;
 	/**
 	 * sould represent {@link SensorManager#getOrientation(float[], float[])}
 	 */
+	@Deprecated
 	private float[] myAngles = new float[3];
+	private GLCamera myCamera;
 
-	// private int magnetCounter;
-	// private int magnetThreshold = 10;
+	public ActionUseCameraAngles(GLCamera camera) {
+		myCamera = camera;
+	}
 
 	/**
 	 * this affects how often the updatePitch() and updateRoll() methods are
@@ -36,46 +40,22 @@ public abstract class ActionUseCameraAngles extends Action implements
 		this.accelThreshold = threshold;
 	}
 
-	public ActionUseCameraAngles(GLCamera camera) {
-		// myCamera = camera;
-		registerAtCamera(camera);
-		camera.setAngleUpdateListener(this);
-	}
-
 	@Override
 	public boolean onAccelChanged(float[] values) {
-		return true;
-	}
-
-	@Override
-	public boolean onMagnetChanged(float[] values) {
-		return true;
-	}
-
-	@Override
-	public boolean onCamMagnetometerUpdate(float[] target, float[] values,
-			float timeDelta) {
-		return true;
-	}
-
-	@Override
-	public boolean onCamAccelerationUpdate(float[] target, float[] values,
-			float timeDelta) {
 		accelCounter++;
 		if (accelCounter > accelThreshold) {
 			accelCounter = 0;
 			/*
 			 * missing documentation for the following calculations.. TODO
 			 */
-			float pitch = (float) Math.toDegrees(Math.atan2(-target[1],
-					Math.sqrt(target[2] * target[2] + target[0] * target[0])));
+			float pitch = (float) Math.toDegrees(Math.atan2(-values[1],
+					Math.sqrt(values[2] * values[2] + values[0] * values[0])));
 			myAngles[1] = pitch;
 			updatePitch(pitch);
-			float roll = 180 + (float) -Math.toDegrees(Math.atan2(target[0],
-					-target[2]));
+			float roll = 180 + (float) -Math.toDegrees(Math.atan2(values[0],
+					-values[2]));
 			myAngles[2] = pitch;
 			updateRoll(roll);
-
 		}
 		return true;
 	}
@@ -122,30 +102,19 @@ public abstract class ActionUseCameraAngles extends Action implements
 	}
 
 	@Override
-	public void updateAnglesByCamera(float[] anglesInRadians,
-			Vec cameraRotationVec) {
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
+		float[] v = myCamera.getCameraAnglesInDegree();
 
-		/*
-		 * this is used to extract the azimuth because it is the easiest way to
-		 * access it. The pitch and roll wont be used because they are
-		 * calculated in a different way where the results are more accurate and
-		 * reliable
-		 */
-
-		// float pitch = anglesInRadians[1] * rad2deg;
-		// float roll = anglesInRadians[2] * -rad2deg;
-
-		float azimuth = anglesInRadians[0];
-		azimuth += cameraRotationVec.z;
+		float azimuth = v[0];
+		if (myCamera.getRotation() != null)
+			azimuth += myCamera.getRotation().z;
 		if (azimuth >= 360)
 			azimuth -= 360;
 		myAngles[0] = azimuth;
 		updateCompassAzimuth(azimuth);
-	}
 
-	@Override
-	public float[] getCurrentAngles() {
-		return myAngles;
+		return true;
 	}
 
 }

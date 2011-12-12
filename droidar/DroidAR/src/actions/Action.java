@@ -2,12 +2,14 @@ package actions;
 
 import gl.GLCamera;
 import listeners.EventListener;
+import system.ParentStack;
 import util.Vec;
 import android.location.Location;
 import util.Log;
+import worldData.Updateable;
 import android.view.MotionEvent;
 
-public abstract class Action implements EventListener {
+public abstract class Action implements EventListener, Updateable {
 
 	// protected static final float BUFFER_SPEED_ACCEL_SENSOR = 500;
 	// protected static final float BUFFER_SPEED_MAGNET_SENSOR = 1500;
@@ -18,20 +20,6 @@ public abstract class Action implements EventListener {
 
 	private boolean accelNotCatchedOutputFlag;
 	private boolean magnetNotCatchedOutputFlag;
-
-	protected void registerAtCamera(GLCamera camera) {
-		EventListener u = camera.getUpdateListener();
-		if (u instanceof EventListenerGroup) {
-			((EventListenerGroup) u).add(this);
-		} else if (u != null) {
-			EventListenerGroup g = new EventListenerGroup();
-			g.add(u);
-			g.add(this);
-			camera.setUpdateListener(g);
-		} else {
-			camera.setUpdateListener(this);
-		}
-	}
 
 	@Override
 	public boolean onOrientationChanged(float[] values) {
@@ -103,26 +91,15 @@ public abstract class Action implements EventListener {
 	}
 
 	@Override
-	public boolean onCamAccelerationUpdate(float[] target, float[] values,
-			float timeDelta) {
-		Log.e(LOG_TAG, "onAccelerationUpdate requested by glCamera not "
-				+ "catched by defined action: " + this.getClass());
-		return false;
-	}
-
-	@Override
-	public boolean onCamMagnetometerUpdate(float[] target, float[] values,
-			float timeDelta) {
-		Log.e(LOG_TAG, "onMagnetometerUpdate requested by glCamera not "
-				+ "catched by defined action: ");
-		return false;
-	}
-
-	@Override
-	public boolean onCamOrientationUpdate(float[] myOrientValues,
-			float[] myNewOrientValues, float timeDelta) {
-		Log.e(LOG_TAG, "onCamOrientationUpdate requested by glCamera not "
-				+ "catched by defined action: ");
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
+		Log.e(LOG_TAG,
+				"update event was not handeld correctly by this action type:"
+						+ this.getClass().toString());
+		Log.e(LOG_TAG,
+				"    > As a reaction to this, the action will now be removed from "
+						+ "the update cycle! Impelemnt the update method in the specified "
+						+ "action and return true to fix this error!");
 		return false;
 	}
 

@@ -1,5 +1,6 @@
 package system;
 
+import listeners.EventListener;
 import geo.GeoObj;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
@@ -10,6 +11,7 @@ import util.Log;
 import util.Vec;
 import worldData.SystemUpdater;
 import worldData.World;
+import actions.Action;
 import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
@@ -41,17 +43,17 @@ public abstract class DefaultARSetup extends Setup {
 	protected static final int ZDELTA = 5;
 	private static final String LOG_TAG = "DefaultARSetup";
 
-	private GLCamera camera;
-	private World myWorld;
+	public GLCamera camera;
+	public World world;
 	private ActionWASDMovement wasdAction;
 	private GLRenderer myRenderer;
 	private boolean addObjCalledOneTieme;
 	private ActionWaitForAccuracy minAccuracyAction;
+	private Action rotateGLCameraAction;
 
 	public DefaultARSetup() {
 		camera = new GLCamera(new Vec(0, 0, 2));
-		myWorld = new World(camera);
-		wasdAction = new ActionWASDMovement(camera, 25, 50, 20);
+		world = new World(camera);
 	}
 
 	@Override
@@ -60,7 +62,7 @@ public abstract class DefaultARSetup extends Setup {
 	}
 
 	public World getWorld() {
-		return myWorld;
+		return world;
 	}
 
 	public GLCamera getCamera() {
@@ -81,20 +83,21 @@ public abstract class DefaultARSetup extends Setup {
 	public void _b_addWorldsToRenderer(GLRenderer renderer,
 			GLFactory objectFactory, GeoObj currentPosition) {
 		myRenderer = renderer;
-		renderer.addRenderElement(myWorld);
+		renderer.addRenderElement(world);
 	}
 
 	@Override
 	public void _c_addActionsToEvents(final EventManager eventManager,
-			CustomGLSurfaceView arView) {
+			CustomGLSurfaceView arView, SystemUpdater updater) {
+		wasdAction = new ActionWASDMovement(camera, 25, 50, 20);
+		rotateGLCameraAction = new ActionRotateCameraBuffered(camera);
+		
 		arView.onTouchMoveAction = wasdAction;
-		eventManager
-				.addOnOrientationChangedAction(new ActionRotateCameraBuffered(
-						camera));
+		eventManager.addOnOrientationChangedAction(rotateGLCameraAction);
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera,
 				5, 25));
 		eventManager.addOnLocationChangedAction(new ActionCalcRelativePos(
-				myWorld, camera));
+				world, camera));
 		minAccuracyAction = new ActionWaitForAccuracy(myTargetActivity, 24.0f,
 				10) {
 			@Override
@@ -111,7 +114,7 @@ public abstract class DefaultARSetup extends Setup {
 
 	protected void callAddObjectsToWorldIfNotCalledAlready() {
 		if (!addObjCalledOneTieme)
-			addObjectsTo(myRenderer, myWorld, GLFactory.getInstance());
+			addObjectsTo(myRenderer, world, GLFactory.getInstance());
 		else
 			Log.w(LOG_TAG, "callAddObjectsToWorldIfNotCalledAlready() "
 					+ "called more then one time!");
@@ -120,8 +123,9 @@ public abstract class DefaultARSetup extends Setup {
 
 	@Override
 	public void _d_addElementsToUpdateThread(SystemUpdater updater) {
-		updater.addObjectToUpdateCycle(myWorld);
+		updater.addObjectToUpdateCycle(world);
 		updater.addObjectToUpdateCycle(wasdAction);
+		updater.addObjectToUpdateCycle(rotateGLCameraAction);
 	}
 
 	@Override
@@ -129,7 +133,7 @@ public abstract class DefaultARSetup extends Setup {
 		guiSetup.setRightViewAllignBottom();
 
 		guiSetup.addViewToTop(minAccuracyAction.getView());
-		
+
 		guiSetup.addImangeButtonToRightView(R.drawable.arrow_up_float,
 				new Command() {
 					@Override
@@ -146,9 +150,7 @@ public abstract class DefaultARSetup extends Setup {
 						return false;
 					}
 				});
-		
-	}
 
-	
+	}
 
 }

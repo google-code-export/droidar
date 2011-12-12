@@ -222,12 +222,14 @@ public abstract class Setup {
 		initializeCamera();
 
 		debugLogDoSetupStep(STEP8);
+
 		// set sensorinput actions:
-		_c_addActionsToEvents(EventManager.getInstance(), myGLSurfaceView);
+		worldUpdater = new SystemUpdater();
+		_c_addActionsToEvents(EventManager.getInstance(), myGLSurfaceView,
+				worldUpdater);
 
 		debugLogDoSetupStep(STEP9);
-		// and then create the worldupdater to be able to animate the world:
-		worldUpdater = new SystemUpdater();
+		// and then init the worldupdater to be able to animate the world:
 		_d_addElementsToUpdateThread(worldUpdater);
 
 		// World Update Thread:
@@ -506,9 +508,10 @@ public abstract class Setup {
 	 * @param arView
 	 *            The {@link CustomGLSurfaceView#addOnTouchMoveAction(Action)}
 	 *            -method can be used to react on touch-screen input
+	 * @param worldUpdater
 	 */
 	public abstract void _c_addActionsToEvents(EventManager eventManager,
-			CustomGLSurfaceView arView);
+			CustomGLSurfaceView arView, SystemUpdater updater);
 
 	/**
 	 * All elements (normally that should only be {@link World}s) which should

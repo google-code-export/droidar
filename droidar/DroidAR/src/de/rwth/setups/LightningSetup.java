@@ -20,6 +20,7 @@ import util.Wrapper;
 import worldData.Entity;
 import worldData.MoveComp;
 import worldData.Obj;
+import worldData.SystemUpdater;
 import worldData.World;
 import actions.ActionMoveObject;
 import android.app.Activity;
@@ -120,8 +121,8 @@ public class LightningSetup extends DefaultARSetup {
 
 	@Override
 	public void _c_addActionsToEvents(EventManager eventManager,
-			CustomGLSurfaceView arView) {
-		super._c_addActionsToEvents(eventManager, arView);
+			CustomGLSurfaceView arView, SystemUpdater updater) {
+		super._c_addActionsToEvents(eventManager, arView, updater);
 
 		// clear some inputs set in default methods
 		eventManager.onLocationChangedAction = null;

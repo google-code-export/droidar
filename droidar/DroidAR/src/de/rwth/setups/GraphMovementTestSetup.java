@@ -10,6 +10,7 @@ import system.DefaultARSetup;
 import system.EventManager;
 import util.EfficientList;
 import util.Vec;
+import worldData.SystemUpdater;
 import worldData.World;
 
 public class GraphMovementTestSetup extends DefaultARSetup {
@@ -46,9 +47,9 @@ public class GraphMovementTestSetup extends DefaultARSetup {
 
 	@Override
 	public void _c_addActionsToEvents(EventManager eventManager,
-			CustomGLSurfaceView arView) {
+			CustomGLSurfaceView arView, SystemUpdater updater) {
 
-		super._c_addActionsToEvents(eventManager, arView);
+		super._c_addActionsToEvents(eventManager, arView, updater);
 		eventManager.onLocationChangedAction = null;
 	}
 

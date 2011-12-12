@@ -21,34 +21,6 @@ public class EventListenerGroup extends Action implements
 	}
 
 	@Override
-	public boolean onCamOrientationUpdate(float[] myOrientValues,
-			float[] myNewOrientValues, float timeDelta) {
-		for (int i = 0; i < myActions.myLength; i++) {
-			myActions.get(i).onCamOrientationUpdate(myOrientValues,
-					myNewOrientValues, timeDelta);
-		}
-		return true;
-	}
-
-	@Override
-	public boolean onCamAccelerationUpdate(float[] target, float[] values,
-			float timeDelta) {
-		for (int i = 0; i < myActions.myLength; i++) {
-			myActions.get(i).onCamAccelerationUpdate(target, values, timeDelta);
-		}
-		return true;
-	}
-
-	@Override
-	public boolean onCamMagnetometerUpdate(float[] target, float[] values,
-			float timeDelta) {
-		for (int i = 0; i < myActions.myLength; i++) {
-			myActions.get(i).onCamMagnetometerUpdate(target, values, timeDelta);
-		}
-		return true;
-	}
-
-	@Override
 	public void onCamRotationVecUpdate(Vec target, Vec values, float timeDelta) {
 		for (int i = 0; i < myActions.myLength; i++) {
 			myActions.get(i).onCamRotationVecUpdate(target, values, timeDelta);

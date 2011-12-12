@@ -36,16 +36,17 @@ public class QuadTree<T> {
 	}
 
 	private void getAllItems(ResultListener r, TreeNode node) {
-		if (node != null)
+		if (node != null) {
 			r.onResult(node.myValue);
-		if (node.quadrant1 != null)
-			getAllItems(r, node.quadrant1);
-		if (node.quadrant2 != null)
-			getAllItems(r, node.quadrant2);
-		if (node.quadrant3 != null)
-			getAllItems(r, node.quadrant3);
-		if (node.quadrant4 != null)
-			getAllItems(r, node.quadrant4);
+			if (node.quadrant1 != null)
+				getAllItems(r, node.quadrant1);
+			if (node.quadrant2 != null)
+				getAllItems(r, node.quadrant2);
+			if (node.quadrant3 != null)
+				getAllItems(r, node.quadrant3);
+			if (node.quadrant4 != null)
+				getAllItems(r, node.quadrant4);
+		}
 	}
 
 	/**

@@ -16,6 +16,7 @@ import util.Wrapper;
 import worldData.Obj;
 import worldData.SystemUpdater;
 import worldData.World;
+import actions.Action;
 import actions.ActionBufferedCameraAR;
 import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
@@ -60,13 +61,16 @@ public class PlaceObjectsSetup extends Setup {
 
 	@Override
 	public void _c_addActionsToEvents(EventManager eventManager,
-			CustomGLSurfaceView arView) {
+			CustomGLSurfaceView arView, SystemUpdater updater) {
 		arView.addOnTouchMoveAction(new ActionBufferedCameraAR(camera));
-		eventManager
-				.addOnOrientationChangedAction(new ActionRotateCameraBuffered(
-						camera));
-		eventManager.addOnOrientationChangedAction(new ActionPlaceObject(
-				camera, placeObjectWrapper, 50));
+		Action rot1 = new ActionRotateCameraBuffered(camera);
+		Action rot2 = new ActionPlaceObject(camera, placeObjectWrapper, 50);
+
+		updater.addObjectToUpdateCycle(rot1);
+		updater.addObjectToUpdateCycle(rot2);
+
+		eventManager.addOnOrientationChangedAction(rot1);
+		eventManager.addOnOrientationChangedAction(rot2);
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera,
 				5, 25));
 		eventManager.addOnLocationChangedAction(new ActionCalcRelativePos(

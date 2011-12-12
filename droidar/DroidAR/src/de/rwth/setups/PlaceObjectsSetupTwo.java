@@ -16,6 +16,7 @@ import worldData.MoveComp;
 import worldData.Obj;
 import worldData.SystemUpdater;
 import worldData.World;
+import actions.Action;
 import actions.ActionBufferedCameraAR;
 import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
@@ -66,11 +67,11 @@ public class PlaceObjectsSetupTwo extends Setup {
 
 	@Override
 	public void _c_addActionsToEvents(EventManager eventManager,
-			CustomGLSurfaceView arView) {
+			CustomGLSurfaceView arView, SystemUpdater updater) {
 		arView.addOnTouchMoveAction(new ActionBufferedCameraAR(camera));
-		eventManager
-				.addOnOrientationChangedAction(new ActionRotateCameraBuffered(
-						camera));
+		Action rot = new ActionRotateCameraBuffered(camera);
+		updater.addObjectToUpdateCycle(rot);
+		eventManager.addOnOrientationChangedAction(rot);
 
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera,
 				5, 25));
@@ -85,7 +86,6 @@ public class PlaceObjectsSetupTwo extends Setup {
 
 	@Override
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity context) {
-
 		guiSetup.addButtonToTopView(new Command() {
 
 			@Override
@@ -102,7 +102,7 @@ public class PlaceObjectsSetupTwo extends Setup {
 	private Obj newObject() {
 		final Obj obj = new Obj();
 		Color c = Color.getRandomRGBColor();
-		c.alpha = 0.5f;
+		c.alpha = 0.7f;
 		MeshComponent diamond = GLFactory.getInstance().newDiamond(c);
 		obj.setComp(diamond);
 		setComps(obj);
