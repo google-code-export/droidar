@@ -62,7 +62,6 @@ public class DebugSetup extends Setup {
 	private Wrapper selection;
 
 	private ActionCalcRelativePos geoupdater;
-	private ActionWASDMovement wasdAction;
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
@@ -81,8 +80,6 @@ public class DebugSetup extends Setup {
 
 		camera = new GLCamera(new Vec(0, 0, 1));
 		world = new World(camera);
-
-		wasdAction = new ActionWASDMovement(camera, 25f, 50f, 20f);
 
 		initWorld(world);
 		initI9Tests(world);
@@ -299,12 +296,16 @@ public class DebugSetup extends Setup {
 
 	@Override
 	public void _c_addActionsToEvents(EventManager eventManager,
-			CustomGLSurfaceView arView) {
+			CustomGLSurfaceView arView, SystemUpdater updater) {
+
+		ActionWASDMovement wasdAction = new ActionWASDMovement(camera, 25f, 50f, 20f);
+		ActionRotateCameraBuffered rotateAction = new ActionRotateCameraBuffered(camera);
+
+		updater.addObjectToUpdateCycle(wasdAction);
+		updater.addObjectToUpdateCycle(rotateAction);
 
 		arView.addOnTouchMoveAction(wasdAction);
-		eventManager
-				.addOnOrientationChangedAction(new ActionRotateCameraBuffered(
-						camera));
+		eventManager.addOnOrientationChangedAction(rotateAction);
 
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera,
 				5, 25));
@@ -317,7 +318,6 @@ public class DebugSetup extends Setup {
 	public void _d_addElementsToUpdateThread(SystemUpdater worldUpdater) {
 		// add the created world to be updated:
 		worldUpdater.addObjectToUpdateCycle(world);
-		worldUpdater.addObjectToUpdateCycle(wasdAction);
 	}
 
 	@Override
@@ -447,67 +447,5 @@ public class DebugSetup extends Setup {
 			guiSetup.addButtonToBottomView(g, "God Cam");
 		}
 	}
-
-	// private void addMapView(Context context, GuiSetup guiSetup) {
-	// GMap map = guiSetup.addMapToBottomRight(MAPS_KEY, 3, 100);
-	// map.setClickable(true);
-	// map.setZoomLevel(20);
-	// // map.enableZoomButtons(true);
-	// // EventManager.getInstance().addOnLocationChangedAction(new
-	// // ActionUpdateMapCenter(map));
-	// map.setCenterTo(GeoObj.rwthI9);
-	//
-	// condMapState = new Wrapper(STATE_MAP_MINIMIZED);
-	// CommandGroup maximizeMinimap = new CommandGroup();
-	// maximizeMinimap
-	// .add(new CommandAnimateZoom(guiSetup.getMainContainerView(),
-	// new CommandMapEnlargeToFullScreen(map)));
-	// maximizeMinimap.add(new CommandShowCameraPreview(this, false));
-	// maximizeMinimap.add(new CommandShowWorldAnimation(theWorldUpdater,
-	// false));
-	// maximizeMinimap.add(new CommandShowRendering(renderer, false));
-	// maximizeMinimap.add(new CommandSetWrapperToValue(condMapState,
-	// STATE_MAP_MAXIMIZED));
-	//
-	// map.setOnTabCommand(new CommandWrapperEqualsCondition(condMapState,
-	// STATE_MAP_MINIMIZED, maximizeMinimap));
-	//
-	// GeoGraph l = new GeoGraph();
-	// l.setIsPath(true);
-	// l.add(GeoObj.iPark1);
-	// l.add(GeoObj.iPark2);
-	// l.add(GeoObj.iPark3);
-	// l.add(GeoObj.iPark4);
-	// try {
-	// CustomItemizedOverlay o = new CustomItemizedOverlay(l,
-	// myTargetActivity.getResources()
-	// .getDrawable(R.drawable.icon));
-	// CustomPathOverlay o2 = new CustomPathOverlay(l, false);
-	// map.addOverlay(o2);
-	// map.addOverlay(o);
-	// } catch (Exception e) {
-	// Log.e("Gmaps", "An itemized overlay could be created but "
-	// + "not added to the Google-Maps view. A reason might "
-	// + "be that the mapview could not determine its "
-	// + "position. Check if the phone is in airplane-mode!");
-	// e.printStackTrace();
-	// }
-	//
-	// CommandGroup minimizeMap = new CommandGroup();
-	// minimizeMap.add(new CommandMinimizeMap(map, 2, 130));
-	// minimizeMap.add(new CommandShowCameraPreview(this, true));
-	// minimizeMap.add(new CommandShowWorldAnimation(theWorldUpdater, true));
-	// minimizeMap.add(new CommandShowRendering(renderer, true));
-	// minimizeMap.add(new CommandSetWrapperToValue(condMapState,
-	// STATE_MAP_MINIMIZED));
-	//
-	// // if the minimap is maximised and the user presses back then it will be
-	// // minimized instead of exiting the app:
-	// EventManager.getInstance().addOnKeyPressedCommand(
-	// KeyEvent.KEYCODE_BACK,
-	// new CommandWrapperEqualsCondition(condMapState,
-	// STATE_MAP_MAXIMIZED, minimizeMap));
-	//
-	// }
 
 }

@@ -21,6 +21,7 @@ import util.EfficientListQualified;
 import util.Vec;
 import worldData.SystemUpdater;
 import worldData.World;
+import actions.Action;
 import actions.ActionBufferedCameraAR;
 import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
@@ -69,11 +70,11 @@ public class GraphCreationSetup extends Setup {
 
 	@Override
 	public void _c_addActionsToEvents(EventManager eventManager,
-			CustomGLSurfaceView arView) {
+			CustomGLSurfaceView arView, SystemUpdater updater) {
 		arView.addOnTouchMoveAction(new ActionBufferedCameraAR(camera));
-		eventManager
-				.addOnOrientationChangedAction(new ActionRotateCameraBuffered(
-						camera));
+		Action rot = new ActionRotateCameraBuffered(camera);
+		updater.addObjectToUpdateCycle(rot);
+		eventManager.addOnOrientationChangedAction(rot);
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera,
 				5, 25));
 		eventManager.addOnLocationChangedAction(new ActionCalcRelativePos(

@@ -2,6 +2,7 @@ package worldData;
 
 import util.EfficientList;
 import android.os.SystemClock;
+import android.util.Log;
 
 public class SystemUpdater implements Runnable {
 
@@ -19,7 +20,7 @@ public class SystemUpdater implements Runnable {
 	 */
 	private static final long GAME_THREAD_NOT_KILLED_DELAY = 700;
 	private boolean notKilled = true;
-	private long lastTimeInMs = SystemClock.uptimeMillis();
+	private long lastTimeInMs;
 
 	private EfficientList<Updateable> myObjectsToUpdate = new EfficientList<Updateable>();
 
@@ -35,7 +36,7 @@ public class SystemUpdater implements Runnable {
 			if (myObjectsToUpdate.get(i) instanceof UpdatableWithInit)
 				((UpdatableWithInit) myObjectsToUpdate.get(i)).init();
 		}
-
+		lastTimeInMs = SystemClock.uptimeMillis();
 		while (notKilled) {
 			while (running) {
 				final long currentTime = SystemClock.uptimeMillis();
@@ -52,18 +53,25 @@ public class SystemUpdater implements Runnable {
 					Thread.sleep(GAME_THREAD_DELAY);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
+					killUpdaterThread();
 				}
 			}
 			try {
 				Thread.sleep(GAME_THREAD_NOT_KILLED_DELAY);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+				killUpdaterThread();
 			}
 		}
 	}
 
 	public void addObjectToUpdateCycle(Updateable updateableObject) {
-		myObjectsToUpdate.add(updateableObject);
+		if (myObjectsToUpdate.contains(updateableObject) == -1)
+			myObjectsToUpdate.add(updateableObject);
+		else
+			Log.e(LOG_TAG, "The object " + updateableObject
+					+ " will not be added twice to the Updater! "
+					+ "Only add it once, check the code!");
 	}
 
 	public boolean removeObjectFromUpdateCylce(Updateable updateableObject) {
@@ -85,6 +93,7 @@ public class SystemUpdater implements Runnable {
 	 */
 	public void killUpdaterThread() {
 		notKilled = false;
+		running=false;
 	}
 
 }

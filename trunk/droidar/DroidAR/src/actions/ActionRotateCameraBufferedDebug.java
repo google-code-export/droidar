@@ -17,8 +17,6 @@ public class ActionRotateCameraBufferedDebug extends Action {
 
 	public ActionRotateCameraBufferedDebug(GLCamera camera) {
 		myCamera = camera;
-		// myCamera.setUpdateListener(this);
-		registerAtCamera(camera);
 	}
 
 	@Override

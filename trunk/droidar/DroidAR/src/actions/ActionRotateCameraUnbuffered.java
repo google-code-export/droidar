@@ -1,38 +1,22 @@
 package actions;
 
+import system.ParentStack;
+import worldData.Updateable;
+import android.util.Log;
 import android.view.MotionEvent;
 import gl.GLCamera;
 
-public class ActionRotateCameraUnbuffered extends Action {
-	private GLCamera myTargetCamera;
+public class ActionRotateCameraUnbuffered extends ActionWithSensorProcessing {
+
+	private static final String LOG_TAG = "ActionRotateCameraUnbuffered";
 
 	public ActionRotateCameraUnbuffered(GLCamera targetCamera) {
-		myTargetCamera = targetCamera;
+		super(targetCamera);
 	}
 
 	@Override
-	public boolean onOrientationChanged(float[] newValues) {
-		myTargetCamera.setOrientationValues(newValues);
-		return true;
-	}
-
-	@Override
-	public boolean onTouchMove(MotionEvent e1, MotionEvent e2,
-			float screenDeltaX, float screenDeltaY) {
-		myTargetCamera.changeZAngleUnbuffered(screenDeltaY);
-		return true;
-	}
-
-	@Override
-	public boolean onAccelChanged(float[] values) {
-		myTargetCamera.setAccelValues(values);
-		return true;
-	}
-
-	@Override
-	public boolean onMagnetChanged(float[] values) {
-		myTargetCamera.setMagnetValues(values);
-		return true;
+	protected void initAlgos() {
+		// no buffering at all so dont init any algos
 	}
 
 }

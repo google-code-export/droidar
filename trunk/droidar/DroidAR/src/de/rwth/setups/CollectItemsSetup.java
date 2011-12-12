@@ -17,6 +17,7 @@ import util.Vec;
 import worldData.Obj;
 import worldData.SystemUpdater;
 import worldData.World;
+import actions.Action;
 import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
@@ -83,14 +84,14 @@ public class CollectItemsSetup extends Setup {
 
 	@Override
 	public void _c_addActionsToEvents(EventManager eventManager,
-			CustomGLSurfaceView arView) {
+			CustomGLSurfaceView arView, SystemUpdater updater) {
 		ActionMoveCameraBuffered move = new ActionMoveCameraBuffered(camera, 5,
 				25);
 		arView.addOnTouchMoveAction(move);
 		eventManager.addOnTrackballAction(move);
-		eventManager
-				.addOnOrientationChangedAction(new ActionRotateCameraBuffered(
-						camera));
+		Action rot = new ActionRotateCameraBuffered(camera);
+		updater.addObjectToUpdateCycle(rot);
+		eventManager.addOnOrientationChangedAction(rot);
 		eventManager.addOnLocationChangedAction(new ActionCalcRelativePos(
 				world, camera));
 	}

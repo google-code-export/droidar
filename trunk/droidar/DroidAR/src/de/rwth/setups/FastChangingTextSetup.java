@@ -34,6 +34,7 @@ public class FastChangingTextSetup extends DefaultARSetup {
 
 	@Override
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity activity) {
+		super._e2_addElementsToGuiSetup(guiSetup, activity);
 		guiSetup.addSearchbarToView(guiSetup.getBottomView(), new Command() {
 
 			@Override
@@ -45,7 +46,8 @@ public class FastChangingTextSetup extends DefaultARSetup {
 			public boolean execute(Object transfairObject) {
 				if (transfairObject instanceof String) {
 					String s = (String) transfairObject;
-					text.changeTextTo(s);
+					if (text != null)
+						text.changeTextTo(s);
 				}
 				return true;
 			}

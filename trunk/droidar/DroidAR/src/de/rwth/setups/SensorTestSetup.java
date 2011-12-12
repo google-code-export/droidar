@@ -10,17 +10,18 @@ import gl.animations.AnimationRotate;
 import gl.scenegraph.MeshComponent;
 import gl.scenegraph.Shape;
 import gui.GuiSetup;
-import listeners.EventListener;
 import system.ErrorHandler;
 import system.EventManager;
 import system.Setup;
 import util.Vec;
 import worldData.SystemUpdater;
 import worldData.World;
+import actions.Action;
 import actions.ActionBufferedCameraAR;
 import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
+import actions.ActionRotateCameraBufferedDirect;
 import actions.ActionRotateCameraBuffered3;
 import actions.ActionRotateCameraBuffered4;
 import actions.ActionRotateCameraBufferedDebug;
@@ -35,13 +36,14 @@ public class SensorTestSetup extends Setup {
 
 	private GLCamera camera;
 	private World world;
-	private EventListener rotAction1;
-	private EventListener rotAction2;
-	private EventListener rotAction3;
-	private EventListener rotAction4;
-	private EventListener rotAction5;
-	private EventListener rotAction6;
-	private EventListener rotAction7;
+	private Action rotActionB1;
+	private Action rotActionB3;
+	private Action rotActionB4;
+	private Action rotActionDebug;
+	private Action rotActionDirBuff;
+	private Action rotActionUnB;
+	private Action rotActionUnB2;
+	private Action rotActionB2;
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
@@ -55,13 +57,14 @@ public class SensorTestSetup extends Setup {
 		 */
 
 		camera = new GLCamera();
-		rotAction1 = new ActionRotateCameraBuffered(camera);
-		rotAction2 = new ActionRotateCameraBuffered3(camera);
-		rotAction3 = new ActionRotateCameraBuffered4(camera);
-		rotAction4 = new ActionRotateCameraBufferedDebug(camera);
-		rotAction5 = new ActionRotateCameraDirectlyBuffered(camera);
-		rotAction6 = new ActionRotateCameraUnbuffered(camera);
-		rotAction7 = new ActionRotateCameraUnbuffered2(camera);
+		rotActionB1 = new ActionRotateCameraBuffered(camera);
+		rotActionB2 = new ActionRotateCameraBufferedDirect(camera);
+		rotActionB3 = new ActionRotateCameraBuffered3(camera);
+		rotActionB4 = new ActionRotateCameraBuffered4(camera);
+		rotActionDebug = new ActionRotateCameraBufferedDebug(camera);
+		rotActionDirBuff = new ActionRotateCameraDirectlyBuffered(camera);
+		rotActionUnB = new ActionRotateCameraUnbuffered(camera);
+		rotActionUnB2 = new ActionRotateCameraUnbuffered2(camera);
 
 	}
 
@@ -123,50 +126,53 @@ public class SensorTestSetup extends Setup {
 
 	@Override
 	public void _c_addActionsToEvents(EventManager eventManager,
-			CustomGLSurfaceView arView) {
+			CustomGLSurfaceView arView, SystemUpdater updater) {
 		arView.addOnTouchMoveAction(new ActionBufferedCameraAR(camera));
-		eventManager.addOnOrientationChangedAction(rotAction1);
-		camera.setUpdateListener(rotAction1);
+		eventManager.addOnOrientationChangedAction(rotActionB1);
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera,
 				5, 25));
-		eventManager.addOnLocationChangedAction(new ActionCalcRelativePos(
-				world, camera));
 
 	}
 
 	@Override
 	public void _d_addElementsToUpdateThread(SystemUpdater worldUpdater) {
 		worldUpdater.addObjectToUpdateCycle(world);
+		worldUpdater.addObjectToUpdateCycle(rotActionB1);
+		worldUpdater.addObjectToUpdateCycle(rotActionB3);
+		worldUpdater.addObjectToUpdateCycle(rotActionB4);
+		worldUpdater.addObjectToUpdateCycle(rotActionDebug);
+		worldUpdater.addObjectToUpdateCycle(rotActionDirBuff);
+		worldUpdater.addObjectToUpdateCycle(rotActionUnB);
+		worldUpdater.addObjectToUpdateCycle(rotActionUnB2);
 	}
 
 	@Override
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity activity) {
-		guiSetup.addButtonToBottomView(new myRotateAction(rotAction1),
+		guiSetup.addButtonToBottomView(new myRotateAction(rotActionB1),
 				"Camera Buffered 1");
-		guiSetup.addButtonToBottomView(new myRotateAction(rotAction2),
+		guiSetup.addButtonToBottomView(new myRotateAction(rotActionB2),
 				"Camera Buffered 2");
-		guiSetup.addButtonToBottomView(new myRotateAction(rotAction3),
+		guiSetup.addButtonToBottomView(new myRotateAction(rotActionB3),
 				"Camera Buffered 3");
-		guiSetup.addButtonToBottomView(new myRotateAction(rotAction6),
+		guiSetup.addButtonToBottomView(new myRotateAction(rotActionB4),
+				"Camera Buffered 4");
+		guiSetup.addButtonToBottomView(new myRotateAction(rotActionUnB),
 				"Camera Unbuffered 1");
-		guiSetup.addButtonToBottomView(new myRotateAction(rotAction7),
+		guiSetup.addButtonToBottomView(new myRotateAction(rotActionUnB2),
 				"Camera Unbuffered 2");
 	}
 
 	class myRotateAction extends Command {
 
-		private EventListener myAction;
+		private Action myAction;
 
-		public myRotateAction(EventListener a) {
+		public myRotateAction(Action a) {
 			myAction = a;
 		}
 
 		@Override
 		public boolean execute() {
 			EventManager.getInstance().onOrientationChangedAction = myAction;
-			// to use always the correct update method replace the old update
-			// listeners for the camera:
-			camera.setUpdateListener(myAction);
 			return true;
 		}
 

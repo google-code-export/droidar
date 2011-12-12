@@ -4,7 +4,6 @@ import geo.GeoObj;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import listeners.EventListener;
 import system.EventManager;
 import system.ParentStack;
 import util.Calculus;
@@ -13,8 +12,6 @@ import util.Log;
 import util.Vec;
 import worldData.MoveComp;
 import worldData.Updateable;
-import actions.DefaultUpdateListener;
-import android.hardware.SensorManager;
 import android.location.Location;
 import android.opengl.Matrix;
 
@@ -29,26 +26,6 @@ import android.opengl.Matrix;
  */
 public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		HasPosition, HasRotation {
-
-	@Deprecated
-	public interface CameraAngleUpdateListener {
-
-		/**
-		 * @param myAnglesInDegrees
-		 *            0 = north, 90 = east
-		 * @param myRotationVec
-		 *            These values are additional rotation values which might be
-		 *            set by the developer/user so they have to be considered
-		 *            even if they are normally 0.
-		 */
-		void updateAnglesByCamera(float[] myAnglesInDegrees, Vec myRotationVec);
-
-		/**
-		 * @return see {@link SensorManager#getOrientation(float[], float[])}
-		 */
-		float[] getCurrentAngles();
-
-	}
 
 	private static final String LOG_TAG = "GLCamera";
 
@@ -82,43 +59,19 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 * set to false if you want the camera not to react on sensor events
 	 */
 	private boolean sensorInputEnabled = true;
-	/**
-	 * this enshures that the rotation matrix is only recalculated if the
-	 * acceleration or magnetometer values have changed
-	 */
-	private boolean accelOrMagChanged = false;
-	/**
-	 * same as for {@link GLCamera#accelOrMagChanged} only for the orientation
-	 * values
-	 */
-	private boolean orientationValuesChanged = false;
-
-	private float[] myAccelValues = new float[3];
-	private float[] myMagnetValues = new float[3];
-	private float[] myOrientValues;
-	private float[] myNewAccelValues;
-	private float[] myNewMagnetValues;
-	// private float[] myNewOrientValues;
-
-	private float[] unrotatedMatrix = createIdentityMatrix();
 
 	/**
 	 * http://www.songho.ca/opengl/gl_transform.html
 	 */
-	private float[] rotationMatrix = createIdentityMatrix();
+	private float[] rotationMatrix = Calculus.createIdentityMatrix();
+	/**
+	 * This lock has to be used to not override the matrix while it is displayed
+	 * by opengl
+	 */
+	private Object rotMatrLock = new Object();
 	private int matrixOffset = 0;
-	private float[] invRotMatrix = createIdentityMatrix();
+	private float[] invRotMatrix = Calculus.createIdentityMatrix();
 
-	/**
-	 * The update listener is used to do all the buffered rotation caused by the
-	 * sensor data (magentometer,..) eg
-	 */
-	private EventListener updateListener;
-
-	/**
-	 * this can be used to to extract the angles how the camera is held
-	 */
-	private CameraAngleUpdateListener myAngleUpdateListener;
 	/**
 	 * The order is z,x,y achses.
 	 * 
@@ -128,6 +81,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 * {@link GLCamera#forceAngleCalculation} is set to true
 	 */
 	private float[] cameraAnglesInDegree = new float[3];
+	float[] initDir = new float[4];
 	private float[] rotDirection = new float[4];
 	// public boolean forceAngleCalculation = false;
 
@@ -140,57 +94,13 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		setNewPosition(initialCameraPosition);
 	}
 
-	public void setUpdateListener(EventListener updateListener) {
-		this.updateListener = updateListener;
-	}
-
-	public EventListener getUpdateListener() {
-		return updateListener;
-	}
-
-	public static float[] createIdentityMatrix() {
-		float[] result = new float[16];
-		result[0] = 1;
-		result[5] = 1;
-		result[10] = 1;
-		result[15] = 1;
-		return result;
-	}
-
 	@Override
 	public boolean update(float timeDelta, Updateable parent,
 			ParentStack<Updateable> stack) {
 
-		if (updateListener == null) {
-			Log.w(LOG_TAG,
-					"There where no updateListener set! Using default one..");
-			updateListener = new DefaultUpdateListener();
-		}
-
 		if ((myRotationVec != null) && (myNewRotationVec != null)) {
-			updateListener.onCamRotationVecUpdate(myRotationVec,
-					myNewRotationVec, timeDelta);
+			Vec.morphToNewAngleVec(myRotationVec, myNewRotationVec, timeDelta);
 		}
-
-		/*
-		 * TODO if you change the camera rotation type from buffered to
-		 * unbuffered on runtime, then the myNewRotation vec wouldnt be null and
-		 * the camera would always try to rotate to the newRotation, so you have
-		 * to reset it to null or rework this method..
-		 */
-
-		if ((myNewAccelValues != null) && (myNewMagnetValues != null)
-				&& sensorInputEnabled) {
-			accelOrMagChanged = updateListener.onCamAccelerationUpdate(
-					myAccelValues, myNewAccelValues, timeDelta);
-			accelOrMagChanged |= updateListener.onCamMagnetometerUpdate(
-					myMagnetValues, myNewMagnetValues, timeDelta);
-		}
-
-		// if (myNewOrientValues != null) {
-		// orientationValuesChanged = updateListener.onCamOrientationUpdate(
-		// myOrientValues, myNewOrientValues, timeDelta);
-		// }
 
 		if ((myOffset != null) && (myNewOffset != null)) {
 			Vec.morphToNewVec(myOffset, myNewOffset, timeDelta);
@@ -422,7 +332,10 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		// moved out before rotating:
 		glLoadPosition(gl, myOffset);
 
-		glLoadRotationMatrix(gl);
+		synchronized (rotMatrLock) {
+			// load rotation matrix:
+			gl.glMultMatrixf(rotationMatrix, matrixOffset);
+		}
 
 		// rotate Camera TODO use for manual rotation:
 		glLoadRotation(gl, myRotationVec);
@@ -431,105 +344,34 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		glLoadPosition(gl, myPosition);
 	}
 
-	public void setRotationMatrixFromMarkerInput(float[] rotMatrix, int offset) {
-		rotationMatrix = rotMatrix;
-		matrixOffset = offset;
-
-		// if (myPosition == null)
-		// myPosition = new Vec();
-		// myPosition.x = rotMatrix[12 + offset];
-		// myPosition.y = rotMatrix[13 + offset];
-		// myPosition.z = rotMatrix[14 + offset];
-		// System.out.println(toString(rotMatrix, offset, 16));
-	}
-
-	// private static String toString(float[] rotMatrix, int offset, int length)
-	// {
-	// String s = "";
-	// for (int i = 0; i < length; i++) {
-	// s += rotMatrix[i + offset] + "  ";
-	// }
-	// return s;
-	// }
-
-	private synchronized void glLoadRotationMatrix(GL10 gl) {
-		if (sensorInputEnabled) {
-			if (accelOrMagChanged) {
-				udateRotationMatrixFromAccelAndMagnetSensorValues();
-			} else if (orientationValuesChanged) {
-				udateRotationMatrixFromOrientationSensorValues();
-			}
+	/**
+	 * This method can be used to set the rotation matrix received from the
+	 * sensor data or from any other source (like a marker tracker -> see marker
+	 * tracker extension)
+	 * 
+	 * @param rotMatrix
+	 * @param offset
+	 */
+	public void setRotationMatrix(float[] rotMatrix, int offset) {
+		synchronized (rotMatrLock) {
+			rotationMatrix = rotMatrix;
+			matrixOffset = offset;
 		}
-
-		gl.glMultMatrixf(rotationMatrix, matrixOffset);
-
 	}
 
-	private void udateRotationMatrixFromAccelAndMagnetSensorValues() {
-		// first calc the unrotated matrix:
-		SensorManager.getRotationMatrix(unrotatedMatrix, null, myAccelValues,
-				myMagnetValues);
-
-		// showMatrix("magAccel", unrotatedMatrix);
-
-		// then rotate it according to the screen rotation:
-		SensorManager.remapCoordinateSystem(unrotatedMatrix,
-				SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X,
-				rotationMatrix);
-
+	/**
+	 * Currently only the azimuth is calculated here
+	 * 
+	 * @return [0]=azimuth (0 is north and 90 is east)
+	 */
+	public float[] getCameraAnglesInDegree() {
+		// TODO only call when angles changed. boolean helper war needed
+		// therefore
 		updateCameraAngles();
-
-		accelOrMagChanged = false;
-		matrixOffset = 0;
-	}
-
-	private void udateRotationMatrixFromOrientationSensorValues() {
-
-		// first calc the unrotated matrix:
-		GLUtilityClass.getRotationMatrixFromVector(unrotatedMatrix,
-				myOrientValues);
-
-		// showMatrix("orientData", unrotatedMatrix);
-
-		// then rotate it according to the screen rotation:
-		SensorManager.remapCoordinateSystem(unrotatedMatrix,
-				SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X,
-				rotationMatrix);
-
-		updateCameraAngles();
-
-		orientationValuesChanged = false;
-		matrixOffset = 0;
-	}
-
-	private void showMatrix(String string, float[] m) {
-		System.out.println(string);
-		System.out.println("" + m[0] + ", >" + m[1] + ", >" + m[2] + ", >"
-				+ m[3]);
-		System.out.println("" + m[4] + ", >" + m[5] + ", >" + m[6] + ", >"
-				+ m[7]);
-		System.out.println("" + m[8] + ", >" + m[9] + ", >" + m[10] + ", >"
-				+ m[11]);
-		System.out.println("" + m[12] + ", >" + m[13] + ", >" + m[14] + ", >"
-				+ m[15]);
-
+		return cameraAnglesInDegree;
 	}
 
 	private void updateCameraAngles() {
-		calcOrientation();
-		if (myAngleUpdateListener != null) {
-			myAngleUpdateListener.updateAnglesByCamera(cameraAnglesInDegree,
-					myRotationVec);
-		}
-		// else if (forceAngleCalculation) {
-		// SensorManager.getOrientation(rotationMatrix, cameraAnglesInDegree);
-		// // TODO convert to degree
-		// }
-	}
-
-	float[] initDir = new float[4];
-
-	private void calcOrientation() {
 		Calculus.invertM(invRotMatrix, 0, rotationMatrix, matrixOffset);
 		initDir[0] = 0;
 		initDir[1] = 0;
@@ -540,37 +382,6 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		Matrix.multiplyMV(rotDirection, 0, invRotMatrix, 0, initDir, 0);
 		cameraAnglesInDegree[0] = Vec.getRotationAroundZAxis(rotDirection[1],
 				rotDirection[0]);
-	}
-
-	/**
-	 * Currently only the azimuth is calculated here
-	 * 
-	 * @return [0]=azimuth (0 is north and 90 is east)
-	 */
-	public float[] getCameraAnglesInDegree() {
-		return cameraAnglesInDegree;
-	}
-
-	/**
-	 * The alternative to this way of extracting the values is to use the view
-	 * matrix directly(via {@link GLCamera#getRotationMatrix()}. There are
-	 * several helper methods available to extract the rotation etc (eg
-	 * {@link GLCamera#getPickingRay(Vec, Vec, float, float)}
-	 * 
-	 * @param myAngleUpdateListener
-	 */
-	public void setAngleUpdateListener(
-			CameraAngleUpdateListener myAngleUpdateListener) {
-		if (this.myAngleUpdateListener != null) {
-			Log.w(LOG_TAG,
-					"The myAngleUpdateListener was just replaced which will "
-							+ "cause some other listener to get now more events");
-		}
-		this.myAngleUpdateListener = myAngleUpdateListener;
-	}
-
-	public CameraAngleUpdateListener getAngleUpdateListener() {
-		return myAngleUpdateListener;
 	}
 
 	private void glLoadPosition(GL10 gl, Vec vec) {
@@ -601,38 +412,6 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 			gl.glRotatef(vec.x, 1, 0, 0);
 			gl.glRotatef(vec.z, 0, 0, 1);
 		}
-	}
-
-	public synchronized void setAccelValuesBuffered(float[] newValues) {
-		if (myNewAccelValues == null)
-			myNewAccelValues = new float[3];
-		myNewAccelValues[0] = newValues[0];
-		myNewAccelValues[1] = newValues[1];
-		myNewAccelValues[2] = newValues[2];
-	}
-
-	public synchronized void setAccelValueBuffered(float a, float b, float c) {
-		if (myNewAccelValues == null)
-			myNewAccelValues = new float[3];
-		myNewAccelValues[0] = a;
-		myNewAccelValues[1] = b;
-		myNewAccelValues[2] = c;
-	}
-
-	public synchronized void setMagnetValuesBuffered(float[] newValues) {
-		if (myNewMagnetValues == null)
-			myNewMagnetValues = new float[3];
-		myNewMagnetValues[0] = newValues[0];
-		myNewMagnetValues[1] = newValues[1];
-		myNewMagnetValues[2] = newValues[2];
-	}
-
-	public synchronized void setMagnetValuesBuffered(float a, float b, float c) {
-		if (myNewMagnetValues == null)
-			myNewMagnetValues = new float[3];
-		myNewMagnetValues[0] = a;
-		myNewMagnetValues[1] = b;
-		myNewMagnetValues[2] = c;
 	}
 
 	/**
@@ -680,47 +459,6 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		myPosition.y += deltaY;
 	}
 
-	public synchronized boolean setAccelValues(float[] values) {
-		if (values == null)
-			return false;
-		myNewAccelValues = null; // switches of update buffer method
-		if (myAccelValues == null)
-			myAccelValues = new float[3];
-		myAccelValues[0] = values[0];
-		myAccelValues[1] = values[1];
-		myAccelValues[2] = values[2];
-		accelOrMagChanged = true;
-		return true;
-	}
-
-	public synchronized boolean setMagnetValues(float[] values) {
-		if (values == null)
-			return false;
-		myNewMagnetValues = null; // switches of update buffer method
-		if (myMagnetValues == null)
-			myMagnetValues = new float[3];
-
-		myMagnetValues[0] = values[0];
-		myMagnetValues[1] = values[1];
-		myMagnetValues[2] = values[2];
-		accelOrMagChanged = true;
-		return true;
-	}
-
-	public synchronized boolean setOrientationValues(float[] values) {
-		if (values == null)
-			return false;
-
-		if (myOrientValues == null)
-			myOrientValues = new float[3];
-
-		myOrientValues[0] = values[0];
-		myOrientValues[1] = values[1];
-		myOrientValues[2] = values[2];
-		orientationValuesChanged = true;
-		return true;
-	}
-
 	/**
 	 * This will reset the rotation vector of the virtual camera
 	 */
@@ -765,27 +503,6 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 */
 	public void changeZPositionBuffered(float deltaZ) {
 		myMover.myTargetPos.add(0, 0, deltaZ);
-	}
-
-	/**
-	 * @param sensorInputEnabled
-	 *            set false tell the camera to ignore sensor input. You can
-	 *            still use the methods like
-	 *            {@link GLCamera#setNewPosition(Vec)}
-	 *            {@link GLCamera#setNewRotation(Vec)} to move the camera but
-	 *            the AR impression will be lost. Use this for games and defined
-	 *            movement through a virtual world.
-	 */
-	public void setSensorInputEnabled(boolean sensorInputEnabled) {
-		this.sensorInputEnabled = sensorInputEnabled;
-		if (!sensorInputEnabled) {
-			rotationMatrix = createIdentityMatrix();
-			// myAccelValues = null;
-			// myMagnetValues = null;
-		} else {
-			myAccelValues = new float[3];
-			myMagnetValues = new float[3];
-		}
 	}
 
 	/**
@@ -932,11 +649,27 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		Log.w(LOG_TAG, "   > myRotationVec=" + myRotationVec);
 		Log.w(LOG_TAG, "   > myNewRotationVec=" + myNewRotationVec);
 		Log.w(LOG_TAG, "   > rotationMatrix=" + rotationMatrix);
-		Log.w(LOG_TAG, "   > unrotatedMatrix=" + unrotatedMatrix);
 	}
 
 	public boolean isSensorInputEnabled() {
 		return sensorInputEnabled;
+	}
+
+	/**
+	 * @param sensorInputEnabled
+	 *            set false tell the camera to ignore sensor input. You can
+	 *            still use the methods like
+	 *            {@link GLCamera#setNewPosition(Vec)}
+	 *            {@link GLCamera#setNewRotation(Vec)} to move the camera but
+	 *            the AR impression will be lost. Use this for games and defined
+	 *            movement through a virtual world.
+	 */
+	public void setSensorInputEnabled(boolean sensorInputEnabled) {
+		this.sensorInputEnabled = sensorInputEnabled;
+		if (!sensorInputEnabled) {
+			// reset rotation matrix
+			rotationMatrix = Calculus.createIdentityMatrix();
+		}
 	}
 
 }

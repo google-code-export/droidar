@@ -18,7 +18,7 @@ import android.view.MotionEvent;
  * @author Spobo
  * 
  */
-public class ActionWASDMovement extends Action implements Updateable {
+public class ActionWASDMovement extends Action {
 
 	protected GLCamera myTargetCamera;
 	private final float xReduction;
