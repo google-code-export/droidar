@@ -17,6 +17,7 @@ import util.Vec;
 import worldData.Obj;
 import worldData.SystemUpdater;
 import worldData.World;
+import actions.Action;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
@@ -86,11 +87,11 @@ public class MultiMarkerSetup extends MarkerDetectionSetup {
 
 	@Override
 	public void _c_addActionsToEvents(EventManager eventManager,
-			CustomGLSurfaceView arView) {
+			CustomGLSurfaceView arView, SystemUpdater updater) {
 		arView.onTouchMoveAction = new ActionMoveCameraBuffered(camera, 5, 25);
-		eventManager
-				.addOnOrientationChangedAction(new ActionRotateCameraBuffered(
-						camera));
+		Action rot = new ActionRotateCameraBuffered(camera);
+		updater.addObjectToUpdateCycle(rot);
+		eventManager.addOnOrientationChangedAction(rot);
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera,
 				1, 25));
 

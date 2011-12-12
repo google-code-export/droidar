@@ -104,7 +104,7 @@ public class ExampleMarkerRenderSetup extends MarkerDetectionSetup {
 
 	@Override
 	public void _c_addActionsToEvents(EventManager eventManager,
-			CustomGLSurfaceView arView) {
+			CustomGLSurfaceView arView, SystemUpdater updater) {
 		arView.onTouchMoveAction = new ActionBufferedCameraAR(camera);
 
 	}
