@@ -1,8 +1,6 @@
 package gamelogic;
 
-import de.rwth.R;
 import system.ParentStack;
-import util.IO;
 import worldData.UpdateTimer;
 import worldData.Updateable;
 import android.content.Context;
@@ -14,20 +12,20 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
+import de.rwth.R;
 
 public class GameElementView extends SimpleCustomView implements Updateable {
 
 	private static final int DEFAULT_VIEW_SIZE = 250;
 	private static final int MARGIN = 4;
 	private static final float DEFAULT_UPDATE_SPEED = 0.3f;
+	private static final String LOG_TAG = "GameElementView";
 
 	private Paint paint;
 	private Paint loadingPaint;
 	private Paint loadingLinePaint;
-
-	private int mySize;
-	private int myHalfSize;
 
 	float myLoadingAngle = 160;
 
@@ -37,6 +35,11 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 	private Bitmap myIcon;
 	private Bitmap mutable;
 	private Canvas stampCanvas;
+
+	private int myWidth;
+	private int myHalfWidth;
+	private int myHeight;
+	private int myHalfHeight;
 
 	// private String debug;
 
@@ -52,8 +55,7 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 
 	@Override
 	public void editorInit(Context context) {
-		init(DEFAULT_VIEW_SIZE,
-				loadBitmapFromId(context, R.drawable.spaceship));
+		init(DEFAULT_VIEW_SIZE, loadBitmapFromId(context, R.drawable.spaceship));
 	}
 
 	public void setUpdateSpeed(float myUpdateSpeed) {
@@ -67,15 +69,16 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 
 	private void resizeIconToViewSize() {
 		if (myIcon != null) {
-			myIcon = resizeBitmap(myIcon, mySize, mySize);
+			myIcon = resizeBitmap(myIcon, myHeight, myWidth);
 			myIcon = addRoundCornersToBitmap(myIcon, 3f);
 		}
 
 	}
 
-	private void drawLoadingCircle(Canvas canvas, int size, Paint paint) {
-		float x = size * 0.2f;
-		RectF arcRect = new RectF(-x, -x, size + x, size + x);
+	private void drawLoadingCircle(Canvas canvas, int width, int heigth,
+			Paint paint) {
+		float x = width * 0.5f;
+		RectF arcRect = new RectF(-x, -x, width + x, heigth + x);
 		// Draw the Minutes-Arc into that rectangle
 		canvas.drawArc(arcRect, -90, myLoadingAngle, true, paint);
 	}
@@ -94,7 +97,7 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 		loadingLinePaint.setStyle(Paint.Style.STROKE);
 		loadingLinePaint.setStrokeWidth(3);
 
-		setSize(viewSize);
+		setSize(viewSize, icon);
 
 		if (isInEditMode())
 			loadDemoValues();
@@ -102,12 +105,38 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 		setIcon(icon);
 	}
 
-	public void setSize(int viewSize) {
-		mySize = viewSize;
-		myHalfSize = viewSize / 2;
-		mutable = Bitmap.createBitmap(mySize, mySize, Bitmap.Config.ARGB_8888);
+	public int setSize(int recommendedWidth, Bitmap icon) {
+		myWidth = recommendedWidth;
+		myHalfWidth = myWidth / 2;
+		if (icon != null) {
+			myHeight = (int) ((float) (icon.getHeight())
+					/ (float) (icon.getWidth()) * (float) (myWidth));
+		} else {
+			myHeight = myWidth;
+		}
+		myHalfHeight = myHeight / 2;
+
+		if (myHeight <= 0 || myWidth <= 0) {
+			Log.e(LOG_TAG, "height or width were 0!");
+			Log.w(LOG_TAG, "   > icon=" + icon);
+			Log.w(LOG_TAG, "   > icon.getHeight()=" + icon.getHeight());
+			Log.w(LOG_TAG, "   > icon.getWidth()=" + icon.getWidth());
+			Log.w(LOG_TAG, "   > recommendedWidth=" + recommendedWidth);
+			showDebugInfos();
+		}
+
+		mutable = Bitmap.createBitmap(myWidth, myHeight,
+				Bitmap.Config.ARGB_8888);
 		stampCanvas = new Canvas(mutable);
 		resizeIconToViewSize();
+		return myHeight;
+	}
+
+	public void showDebugInfos() {
+		Log.w(LOG_TAG, "   > myHeight=" + myHeight);
+		Log.w(LOG_TAG, "   > myWidth=" + myWidth);
+		Log.w(LOG_TAG, "   > myIcon=" + myIcon);
+		Log.w(LOG_TAG, "   > myLoadingAngle=" + myLoadingAngle);
 	}
 
 	/**
@@ -125,9 +154,9 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 
 	@Override
 	public void onResizeEvent(int recommendedHeight, int recommendedWidth) {
-		int min = Math.min(recommendedHeight, recommendedWidth);
-		setSize(min);
-		setMeasuredDimension(min, min);
+		int width = Math.min(recommendedHeight, recommendedHeight);
+		int height = setSize(width, myIcon);
+		setMeasuredDimension(width, height);
 	}
 
 	@Override
@@ -137,8 +166,8 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 		stampCanvas.drawBitmap(myIcon, 0, 0, paint);
 		// Bitmap i2 = generateDebugImage2(getContext());
 		// canvas.drawBitmap(i2, 0, 0, paint);
-		drawLoadingCircle(stampCanvas, mySize, loadingPaint);
-		drawLoadingCircle(stampCanvas, mySize, loadingLinePaint);
+		drawLoadingCircle(stampCanvas, myWidth, myHeight, loadingPaint);
+		drawLoadingCircle(stampCanvas, myWidth, myHeight, loadingLinePaint);
 		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
 		stampCanvas.drawBitmap(myIcon, 0, 0, paint);
 		paint.setXfermode(null);
@@ -153,7 +182,7 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		return onTouch(event.getX() - myHalfSize, event.getY() - myHalfSize);
+		return onTouch(event.getX() - myHalfWidth, event.getY() - myHalfHeight);
 	}
 
 	private boolean onTouch(float x, float y) {
