@@ -1,6 +1,9 @@
 package util;
 
+import android.content.Context;
 import android.opengl.Matrix;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 public class Calculus {
 
@@ -115,6 +118,28 @@ public class Calculus {
 			mInv[j + mInvOffset] = dst[j] * det;
 
 		return true;
+	}
+
+	public interface TermResultListener {
+		public void returnResult(String result);
+	}
+
+	/**
+	 * TODO doesn't work
+	 * 
+	 * @param context
+	 * @param inputTerm
+	 *            e.g. "(1+3)/4 * 2 - 7"
+	 * @param resultListener
+	 */
+	@Deprecated
+	public static void calculateTermResult(Context context, String inputTerm,
+			TermResultListener resultListener) {
+		WebView webView = new WebView(context);
+		webView.getSettings().setJavaScriptEnabled(true);
+		webView.addJavascriptInterface(resultListener, "JavaCallback");		
+		webView.loadUrl("javascript:window.JavaCallback" + ".returnResult("
+				+ inputTerm + ")");
 	}
 
 	public static float[] createIdentityMatrix() {

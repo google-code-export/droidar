@@ -89,7 +89,7 @@ public class IO {
 		return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
 	}
 
-	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
+	public static Bitmap createRoundedCornerBitmap(Bitmap bitmap, int pixels) {
 		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
 				bitmap.getHeight(), Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(output);

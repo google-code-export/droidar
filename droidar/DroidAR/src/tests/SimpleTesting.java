@@ -56,6 +56,7 @@ public abstract class SimpleTesting {
 		new GeoTests().run();
 		new IOTests(myTargetActivity).run();
 		new WorldTests().run();
+		new AndroidDeviceOnlyTests(myTargetActivity).run();
 
 	}
 }

@@ -1,5 +1,6 @@
 package gamelogic;
 
+import gui.SimpleCustomView;
 import system.ParentStack;
 import worldData.UpdateTimer;
 import worldData.Updateable;
@@ -20,7 +21,7 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 
 	private static final int DEFAULT_VIEW_SIZE = 250;
 	private static final int MARGIN = 4;
-	private static final float DEFAULT_UPDATE_SPEED = 0.3f;
+	private static final float DEFAULT_UPDATE_SPEED = 0.1f;
 	private static final String LOG_TAG = "GameElementView";
 
 	private Paint paint;
@@ -55,7 +56,7 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 
 	@Override
 	public void editorInit(Context context) {
-		init(DEFAULT_VIEW_SIZE, loadBitmapFromId(context, R.drawable.spaceship));
+		init(DEFAULT_VIEW_SIZE, loadBitmapFromId(context, R.drawable.hippopotamus64));
 	}
 
 	public void setUpdateSpeed(float myUpdateSpeed) {
@@ -70,9 +71,8 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 	private void resizeIconToViewSize() {
 		if (myIcon != null) {
 			myIcon = resizeBitmap(myIcon, myHeight, myWidth);
-			myIcon = addRoundCornersToBitmap(myIcon, 3f);
+			myIcon = addRoundCornersToBitmap(myIcon, 8f);
 		}
-
 	}
 
 	private void drawLoadingCircle(Canvas canvas, int width, int heigth,
