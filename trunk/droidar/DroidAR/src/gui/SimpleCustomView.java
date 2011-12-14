@@ -1,4 +1,4 @@
-package gamelogic;
+package gui;
 
 import util.IO;
 import de.rwth.R;
@@ -21,8 +21,8 @@ import android.view.View;
  * <br>
  * 
  * //add @deprecated to remember not to use this constructor later<br>
- * public YourSubclassOfSimpleCustomView(Context context, int iconid){<br>
- * super();<br>
+ * public YourSimpleCustomViewSubclass(Context context, AttributeSet attrs) {<br>
+ * super(context, attrs);<br>
  * }<br>
  * 
  * <br>
@@ -91,7 +91,6 @@ public abstract class SimpleCustomView extends View {
 
 	public SimpleCustomView(Context context) {
 		super(context);
-		editorInit(context);
 	}
 
 	public SimpleCustomView(Context context, AttributeSet attrs) {

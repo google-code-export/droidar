@@ -22,7 +22,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class RadarView extends View implements Updateable {
+public class RadarView extends SimpleCustomView implements Updateable {
 
 	private static final int DEFAULT_VIEW_SIZE = 250;
 	private static final int MARGIN = 4;
@@ -34,6 +34,7 @@ public class RadarView extends View implements Updateable {
 	private Paint paint;
 	private Paint linePaint;
 
+	private int minimumSize = 100;
 	private int mySize;
 	private int myHalfSize;
 	private Vec myRotVec;
@@ -50,11 +51,12 @@ public class RadarView extends View implements Updateable {
 
 	// private String debug;
 
-	public RadarView(Context context, GLCamera camera, int radarViewSize,
-			int displRadiusInMeters, float updateSpeed, boolean rotateNeedle,
+	public RadarView(Context context, GLCamera camera,
+			int minimumRadarViewSize, int displRadiusInMeters,
+			float updateSpeed, boolean rotateNeedle,
 			boolean displayOutOfRadarArea, EfficientList<RenderableEntity> items) {
 		super(context);
-		init(radarViewSize);
+		init(minimumRadarViewSize);
 		myCamera = camera;
 		setRotateNeedle(rotateNeedle);
 		setRadarDisplRadius(displRadiusInMeters);
@@ -84,21 +86,8 @@ public class RadarView extends View implements Updateable {
 	}
 
 	@Deprecated
-	public RadarView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-		init(DEFAULT_VIEW_SIZE);
-	}
-
-	@Deprecated
-	public RadarView(Context context) {
-		super(context);
-		init(DEFAULT_VIEW_SIZE);
-	}
-
-	@Deprecated
 	public RadarView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init(DEFAULT_VIEW_SIZE);
 	}
 
 	/**
@@ -114,11 +103,11 @@ public class RadarView extends View implements Updateable {
 	public RadarView(Activity myTargetActivity, int radarViewSize,
 			GLCamera camera, EfficientList<RenderableEntity> items) {
 		this(myTargetActivity, camera, radarViewSize,
-				DEFAULT_RADAR_MAX_DISTANCE, DEFAULT_UPDATE_SPEED, false, true,
+				DEFAULT_RADAR_MAX_DISTANCE, DEFAULT_UPDATE_SPEED, true, true,
 				items);
 	}
 
-	private void init(int viewSize) {
+	private void init(int minimumViewSize) {
 		paint = new Paint();
 		paint.setAntiAlias(true);
 		paint.setColor(Color.WHITE);
@@ -126,18 +115,22 @@ public class RadarView extends View implements Updateable {
 		linePaint = new Paint();
 		linePaint.setStyle(Paint.Style.STROKE);
 		linePaint.setStrokeWidth(2);
-
-		setSize(viewSize);
+		this.minimumSize = minimumViewSize;
+		setSize(minimumViewSize);
 		if (isInEditMode())
 			loadDemoValues();
 		myTimer = new UpdateTimer(myUpdateSpeed, null);
 	}
 
 	public void setSize(int viewSize) {
+		if (viewSize < minimumSize)
+			viewSize = minimumSize;
 		mySize = viewSize;
 		myHalfSize = viewSize / 2;
-		myRotVec = new Vec(myHalfSize / 2.5f, 0, 0);
-		background = null; // reset
+		
+		setRotation(myRotation);
+		background = null;
+		getBackGround();
 	}
 
 	/**
@@ -145,10 +138,12 @@ public class RadarView extends View implements Updateable {
 	 * xml layout editor
 	 */
 	private void loadDemoValues() {
+		setRotateNeedle(true);
 		setRotation(45);
 		setDisplayedAreaSize(200);
 		setElementsOutOfRadarAreaVisible(true);
-		setCompassNeedleShouldBeRotated(true);
+		
+		
 		myCamera = new GLCamera();
 		myCamera.setPosition(new Vec(40, 40, 0));
 		items = new EfficientList<RenderableEntity>();
@@ -166,10 +161,6 @@ public class RadarView extends View implements Updateable {
 		return o;
 	}
 
-	public void setCompassNeedleShouldBeRotated(boolean b) {
-		rotateNeedle = b;
-	}
-
 	public void setElementsOutOfRadarAreaVisible(boolean b) {
 		displayOutOfRadarArea = b;
 	}
@@ -180,20 +171,9 @@ public class RadarView extends View implements Updateable {
 
 	public void setRotation(double rotation) {
 		myRotation = rotation;
+		myRotVec = new Vec(myHalfSize / 2.5f, 0, 0);
 		myRotVec.rotateAroundZAxis(rotation - 90);
 		this.postInvalidate();
-	}
-
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		int measuredWidth = getDefaultSize(getSuggestedMinimumWidth(),
-				widthMeasureSpec);
-		int measuredHeigth = getDefaultSize(getSuggestedMinimumHeight(),
-				heightMeasureSpec);
-		int min = Math.min(measuredWidth, measuredHeigth);
-		this.setMeasuredDimension(min, min);
-		setSize(min);
 	}
 
 	@Override
@@ -207,15 +187,17 @@ public class RadarView extends View implements Updateable {
 		if (items != null)
 			drawItems(canvas);
 
-		drawCompassNeedle(canvas);
+		
 
 		paint.setColor(Color.BLACK);
-		canvas.drawCircle(myHalfSize, myHalfSize, myHalfSize / 30, paint);
+		drawCircle(canvas, myHalfSize, myHalfSize, myHalfSize / 30, paint);
 
 		linePaint.setColor(Color.BLACK);
-		canvas.drawCircle(myHalfSize, myHalfSize, myHalfSize - MARGIN,
+		drawCircle(canvas, myHalfSize, myHalfSize, myHalfSize - MARGIN,
 				linePaint);
 
+		drawCompassNeedle(canvas);
+		
 		// if (debug != null) { // TODO remove this
 		// paint.setColor(Color.RED);
 		// canvas.drawText(debug, 0, myHalfSize, paint);
@@ -230,9 +212,11 @@ public class RadarView extends View implements Updateable {
 	private boolean onTouch(float x, float y) {
 		double distFromCenter = Math.sqrt(x * x + y * y);
 		distFromCenter *= myTouchScaleFactor;
+		System.out.println("distFromCenter=" + distFromCenter);
 		myDisplRadius = (int) distFromCenter;
 		if (myDisplRadius < MIN_DISP_RADIUS)
 			myDisplRadius = MIN_DISP_RADIUS;
+		System.out.println("myDisplRadius=" + myDisplRadius);
 		return true;
 	}
 
@@ -295,7 +279,7 @@ public class RadarView extends View implements Updateable {
 			if (c != null)
 				paint.setColor(c.toIntARGB());
 		}
-		canvas.drawCircle(eastPos, northPos, 6, paint);
+		drawCircle(canvas, eastPos, northPos, 6, paint);
 	}
 
 	private void drawBackGround(Canvas canvas) {
@@ -316,7 +300,7 @@ public class RadarView extends View implements Updateable {
 	 * @param halfSize
 	 * @return
 	 */
-	private static Bitmap createBackground(int size, int halfSize) {
+	private Bitmap createBackground(int size, int halfSize) {
 
 		Bitmap b = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
 		Canvas c = new Canvas(b);
@@ -326,7 +310,7 @@ public class RadarView extends View implements Updateable {
 
 		p.setColor(Color.WHITE);
 		p.setAlpha(150);
-		c.drawCircle(halfSize, halfSize, halfSize - MARGIN, p);
+		drawCircle(c, halfSize, halfSize, halfSize - MARGIN, p);
 
 		// shadow
 		p.setColor(Color.BLACK);
@@ -334,12 +318,12 @@ public class RadarView extends View implements Updateable {
 		p.setStyle(Paint.Style.STROKE);
 		p.setStrokeWidth(4);
 		int shadowOffset = 2;
-		c.drawCircle(halfSize + shadowOffset, halfSize + shadowOffset, halfSize
-				- MARGIN, p);
+		drawCircle(c, halfSize + shadowOffset, halfSize + shadowOffset,
+				halfSize - MARGIN, p);
 
 		p.setColor(Color.BLACK);
 		p.setStrokeWidth(2);
-		c.drawCircle(halfSize, halfSize, halfSize - MARGIN, p);
+		drawCircle(c, halfSize, halfSize, halfSize - MARGIN, p);
 
 		return b;
 	}
@@ -354,6 +338,18 @@ public class RadarView extends View implements Updateable {
 		 * TODO if view was removed from parent it can return false here!
 		 */
 		return true;
+	}
+
+	@Override
+	public void editorInit(Context context) {
+		init(DEFAULT_VIEW_SIZE);
+	}
+
+	@Override
+	public void onResizeEvent(int recommendedHeight, int recommendedWidth) {
+		int min = Math.min(recommendedHeight, recommendedWidth);
+		setSize(min);
+		this.setMeasuredDimension(mySize, mySize);
 	}
 
 }

@@ -47,8 +47,8 @@ public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 
 	@Override
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity activity) {
-		guiSetup.addViewToTop(radar);
 		super._e2_addElementsToGuiSetup(guiSetup, activity);
+		guiSetup.addViewToTop(radar);
 		guiSetup.addButtonToBottomView(new Command() {
 
 			@Override
