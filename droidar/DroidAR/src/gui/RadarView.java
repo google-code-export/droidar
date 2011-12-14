@@ -26,7 +26,7 @@ public class RadarView extends SimpleCustomView implements Updateable {
 
 	private static final int DEFAULT_VIEW_SIZE = 250;
 	private static final int MARGIN = 4;
-	private static final float DEFAULT_UPDATE_SPEED = 0.3f;
+	private static final float DEFAULT_UPDATE_SPEED = 0.1f;
 	private static final int DEFAULT_RADAR_MAX_DISTANCE = 200;
 	private static final String LOG_TAG = "RadarView";
 	private static final int MIN_DISP_RADIUS = 20;
@@ -89,6 +89,7 @@ public class RadarView extends SimpleCustomView implements Updateable {
 	@Deprecated
 	public RadarView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		init(DEFAULT_VIEW_SIZE);
 	}
 
 	/**
@@ -104,11 +105,13 @@ public class RadarView extends SimpleCustomView implements Updateable {
 	public RadarView(Activity myTargetActivity, int radarViewSize,
 			GLCamera camera, EfficientList<RenderableEntity> items) {
 		this(myTargetActivity, camera, radarViewSize,
-				DEFAULT_RADAR_MAX_DISTANCE, DEFAULT_UPDATE_SPEED, true, true,
+				DEFAULT_RADAR_MAX_DISTANCE, DEFAULT_UPDATE_SPEED, false, true,
 				items);
 	}
 
 	private void init(int minimumViewSize) {
+		myTimer = new UpdateTimer(myUpdateSpeed, null);
+
 		paint = new Paint();
 		paint.setAntiAlias(true);
 		paint.setColor(Color.WHITE);
@@ -116,11 +119,13 @@ public class RadarView extends SimpleCustomView implements Updateable {
 		linePaint = new Paint();
 		linePaint.setStyle(Paint.Style.STROKE);
 		linePaint.setStrokeWidth(2);
+
 		this.minimumSize = minimumViewSize;
 		setSize(minimumViewSize);
+
 		if (isInEditMode())
 			loadDemoValues();
-		myTimer = new UpdateTimer(myUpdateSpeed, null);
+
 	}
 
 	public void setSize(int viewSize) {
@@ -336,11 +341,6 @@ public class RadarView extends SimpleCustomView implements Updateable {
 		 * TODO if view was removed from parent it can return false here!
 		 */
 		return true;
-	}
-
-	@Override
-	public void editorInit(Context context) {
-		init(DEFAULT_VIEW_SIZE);
 	}
 
 	@Override

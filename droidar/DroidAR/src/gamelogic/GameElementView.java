@@ -52,11 +52,8 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 	@Deprecated
 	public GameElementView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-	}
-
-	@Override
-	public void editorInit(Context context) {
-		init(DEFAULT_VIEW_SIZE, loadBitmapFromId(context, R.drawable.hippopotamus64));
+		init(DEFAULT_VIEW_SIZE,
+				loadBitmapFromId(context, R.drawable.hippopotamus64));
 	}
 
 	public void setUpdateSpeed(float myUpdateSpeed) {
