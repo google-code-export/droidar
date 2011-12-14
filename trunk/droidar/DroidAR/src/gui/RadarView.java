@@ -127,12 +127,17 @@ public class RadarView extends View implements Updateable {
 		linePaint.setStyle(Paint.Style.STROKE);
 		linePaint.setStrokeWidth(2);
 
-		mySize = viewSize;
-		myHalfSize = viewSize / 2;
-		myRotVec = new Vec(myHalfSize / 2.5f, 0, 0);
+		setSize(viewSize);
 		if (isInEditMode())
 			loadDemoValues();
 		myTimer = new UpdateTimer(myUpdateSpeed, null);
+	}
+
+	public void setSize(int viewSize) {
+		mySize = viewSize;
+		myHalfSize = viewSize / 2;
+		myRotVec = new Vec(myHalfSize / 2.5f, 0, 0);
+		background = null; // reset
 	}
 
 	/**
@@ -182,7 +187,13 @@ public class RadarView extends View implements Updateable {
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		this.setMeasuredDimension(mySize, mySize);
+		int measuredWidth = getDefaultSize(getSuggestedMinimumWidth(),
+				widthMeasureSpec);
+		int measuredHeigth = getDefaultSize(getSuggestedMinimumHeight(),
+				heightMeasureSpec);
+		int min = Math.min(measuredWidth, measuredHeigth);
+		this.setMeasuredDimension(min, min);
+		setSize(min);
 	}
 
 	@Override
@@ -219,11 +230,9 @@ public class RadarView extends View implements Updateable {
 	private boolean onTouch(float x, float y) {
 		double distFromCenter = Math.sqrt(x * x + y * y);
 		distFromCenter *= myTouchScaleFactor;
-		System.out.println("distFromCenter=" + distFromCenter);
 		myDisplRadius = (int) distFromCenter;
 		if (myDisplRadius < MIN_DISP_RADIUS)
 			myDisplRadius = MIN_DISP_RADIUS;
-		System.out.println("myDisplRadius=" + myDisplRadius);
 		return true;
 	}
 

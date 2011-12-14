@@ -42,22 +42,6 @@ public class LargeWorld extends World {
 		};
 	}
 
-	@Override
-	public EfficientList<RenderableEntity> getAllItems() {
-		EfficientList<RenderableEntity> allItems = super.getAllItems();
-		if (allItems != null) {
-			final EfficientList<RenderableEntity> result = allItems.copy();
-			tree.getAllItems(tree.new ResultListener() {
-				@Override
-				public void onResult(RenderableEntity myValue) {
-					result.add(myValue);
-				}
-			});
-			return result;
-		}
-		return null;
-	}
-
 	public EfficientList<RenderableEntity> getItems(Vec position,
 			float maxDistance) {
 
@@ -74,9 +58,10 @@ public class LargeWorld extends World {
 
 	@Override
 	public boolean add(RenderableEntity x) {
-		if (x instanceof HasPosition && add((HasPosition) x))
-			return true;
-		return super.add(x);
+		boolean result = super.add(x);
+		if (result && x instanceof HasPosition)
+			return add((HasPosition) x);
+		return result;
 	}
 
 	private boolean add(HasPosition x) {
@@ -92,9 +77,10 @@ public class LargeWorld extends World {
 
 	@Override
 	public boolean remove(RenderableEntity x) {
+		boolean result = super.remove(x);
 		if (tree.remove(x))
 			return true;
-		return super.remove(x);
+		return result;
 	}
 
 	/**
@@ -126,7 +112,7 @@ public class LargeWorld extends World {
 			if (obj != null)
 				obj.render(gl, this, stack);
 		}
-		super.drawElements(camera, gl, stack);
+		// super.drawElements(camera, gl, stack);
 	}
 
 	@Override
@@ -139,7 +125,7 @@ public class LargeWorld extends World {
 			if (obj != null)
 				obj.update(timeDelta, this, stack);
 		}
-		return super.update(timeDelta, parent, stack);
+		return true;
 	}
 
 	@SuppressWarnings("unchecked")

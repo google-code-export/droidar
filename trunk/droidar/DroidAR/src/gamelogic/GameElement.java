@@ -1,5 +1,6 @@
 package gamelogic;
 
+import util.IO;
 import gui.ListItem;
 import gui.simpleUI.ModifierGroup;
 import android.content.Context;
@@ -42,7 +43,8 @@ public abstract class GameElement implements ListItem {
 	@Override
 	public View getMyListItemView(View viewToUseIfNotNull, ViewGroup parentView) {
 		if (viewToUseIfNotNull instanceof GameElementListItemView) {
-			((GameElementListItemView) viewToUseIfNotNull).updateContent();
+			((GameElementListItemView) viewToUseIfNotNull)
+					.updateContent(parentView.getContext());
 			return viewToUseIfNotNull;
 		}
 		return new GameElementListItemView(parentView.getContext());
@@ -63,22 +65,22 @@ public abstract class GameElement implements ListItem {
 
 	private class GameElementListItemView extends LinearLayout {
 
-		private ImageView myIconView;
+		private GameElementView myIconView;
 		private TextView myDescriptionView;
 
 		public GameElementListItemView(Context context) {
 			super(context);
-			myIconView = new ImageView(context);
+			myIconView = new GameElementView(context, myIconid);
 			myDescriptionView = new TextView(context);
 			addView(myIconView);
 			addView(myDescriptionView);
-			updateContent();
+			updateContent(context);
 		}
 
-		public void updateContent() {
+		public void updateContent(Context context) {
 			myDescriptionView.setText(myName);
 			if (myIconid != 0)
-				myIconView.setBackgroundResource(myIconid);
+				myIconView.setIcon(IO.loadBitmapFromId(context, myIconid));
 		}
 
 	}

@@ -22,12 +22,15 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import util.Log;
@@ -75,7 +78,8 @@ public class IO {
 		return null;
 	}
 
-	public static Bitmap resizeBitmap(Bitmap bitmap, int newHeight, int newWidth) {
+	public static Bitmap resizeBitmap(Bitmap bitmap, float newHeight,
+			float newWidth) {
 		int width = bitmap.getWidth();
 		int height = bitmap.getHeight();
 		float scaleWidth = ((float) newWidth) / width;
@@ -84,7 +88,7 @@ public class IO {
 		matrix.postScale(scaleWidth, scaleHeight);
 		return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
 	}
-	
+
 	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
 		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
 				bitmap.getHeight(), Bitmap.Config.RGB_565);
@@ -315,4 +319,9 @@ public class IO {
 		}
 		return null;
 	}
+
+	
+
+	
+
 }
