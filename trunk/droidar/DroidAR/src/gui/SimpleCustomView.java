@@ -34,14 +34,6 @@ import android.view.View;
 public abstract class SimpleCustomView extends View {
 
 	/**
-	 * This will be called by the Eclipse UI Editor and here you have to init
-	 * your demo values
-	 * 
-	 * @param context
-	 */
-	public abstract void editorInit(Context context);
-
-	/**
 	 * The Eclipse UI editor cant preview ressources loaded from the assets
 	 * folder so a dummy bitmap is used instead
 	 * 
@@ -91,13 +83,10 @@ public abstract class SimpleCustomView extends View {
 
 	public SimpleCustomView(Context context) {
 		super(context);
-		if (isInEditMode())
-			editorInit(context);
 	}
 
 	public SimpleCustomView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		editorInit(context);
 	}
 
 	@Override
