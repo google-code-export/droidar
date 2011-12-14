@@ -75,6 +75,7 @@ public class RadarView extends SimpleCustomView implements Updateable {
 
 	public void setRotateNeedle(boolean rotateNeedle) {
 		this.rotateNeedle = rotateNeedle;
+		setRotation(myRotation);
 	}
 
 	public void setDisplayOutOfRadarArea(boolean displayOutOfRadarArea) {
@@ -127,7 +128,7 @@ public class RadarView extends SimpleCustomView implements Updateable {
 			viewSize = minimumSize;
 		mySize = viewSize;
 		myHalfSize = viewSize / 2;
-		
+
 		setRotation(myRotation);
 		background = null;
 		getBackGround();
@@ -142,8 +143,7 @@ public class RadarView extends SimpleCustomView implements Updateable {
 		setRotation(45);
 		setDisplayedAreaSize(200);
 		setElementsOutOfRadarAreaVisible(true);
-		
-		
+
 		myCamera = new GLCamera();
 		myCamera.setPosition(new Vec(40, 40, 0));
 		items = new EfficientList<RenderableEntity>();
@@ -187,8 +187,6 @@ public class RadarView extends SimpleCustomView implements Updateable {
 		if (items != null)
 			drawItems(canvas);
 
-		
-
 		paint.setColor(Color.BLACK);
 		drawCircle(canvas, myHalfSize, myHalfSize, myHalfSize / 30, paint);
 
@@ -197,7 +195,7 @@ public class RadarView extends SimpleCustomView implements Updateable {
 				linePaint);
 
 		drawCompassNeedle(canvas);
-		
+
 		// if (debug != null) { // TODO remove this
 		// paint.setColor(Color.RED);
 		// canvas.drawText(debug, 0, myHalfSize, paint);

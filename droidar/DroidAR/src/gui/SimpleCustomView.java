@@ -91,6 +91,8 @@ public abstract class SimpleCustomView extends View {
 
 	public SimpleCustomView(Context context) {
 		super(context);
+		if (isInEditMode())
+			editorInit(context);
 	}
 
 	public SimpleCustomView(Context context, AttributeSet attrs) {
