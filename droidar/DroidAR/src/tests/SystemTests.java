@@ -1,5 +1,6 @@
 package tests;
 
+import gl.ObjectPicker;
 import gl.scenegraph.MeshComponent;
 import gl.scenegraph.Shape;
 import util.Calculus;
@@ -20,6 +21,23 @@ public class SystemTests extends SimpleTesting {
 		vecTests();
 		objTests();
 		utilTests();
+		colorTests();
+	}
+
+	private void colorTests() throws Exception {
+
+		float input = 0x000001;
+		//TODO
+		System.out.println("" + input + " is converted to " + convInput(input));
+
+		
+		
+	}
+
+	private byte convInput(float input) {
+		byte r = ObjectPicker.floatToByteColorValue(
+				ObjectPicker.rgb565to888(input), false);
+		return r;
 	}
 
 	private void utilTests() throws Exception {
@@ -74,12 +92,12 @@ public class SystemTests extends SimpleTesting {
 		{
 			Vec r = new Vec(-10, -10, 0);
 			r.toAngleVec();
-			assertEquals(r, new Vec(90, 0, 180+45));
+			assertEquals(r, new Vec(90, 0, 180 + 45));
 		}
 		{
 			Vec r = new Vec(-10, 10, 0);
 			r.toAngleVec();
-			assertEquals(r, new Vec(90, 0, 180+45+90));
+			assertEquals(r, new Vec(90, 0, 180 + 45 + 90));
 		}
 		{
 			Vec r = new Vec(0, 1, -1);
@@ -89,7 +107,7 @@ public class SystemTests extends SimpleTesting {
 		{
 			Vec r = new Vec(0, 1, 1);
 			r.toAngleVec();
-			assertEquals(r, new Vec(45+90, 0, 0));
+			assertEquals(r, new Vec(45 + 90, 0, 0));
 		}
 		{
 			Vec r = new Vec(13, 0, 0);
@@ -99,9 +117,9 @@ public class SystemTests extends SimpleTesting {
 		{
 			Vec r = new Vec(-0.2f, 0, 0);
 			r.toAngleVec();
-			assertEquals(r, new Vec(90, 0, 180+90));
+			assertEquals(r, new Vec(90, 0, 180 + 90));
 		}
-		
+
 	}
 
 	private void vecRoundingTest() throws Exception {

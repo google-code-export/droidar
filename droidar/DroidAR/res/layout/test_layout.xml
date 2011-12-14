@@ -11,9 +11,34 @@
         android:layout_height="wrap_content"
         android:text="Button" />
 
-    <gui.RadarView
-        android:id="@+id/radarView1"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <gamelogic.GameElementView
+            android:id="@+id/gameElementView1"
+            android:layout_width="61dp"
+            android:layout_height="97dp"
+            android:layout_weight="0.14"
+            android:src="@drawable/down2" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button" />
+
+        <gui.RadarView
+            android:id="@+id/radarView1"
+            android:layout_width="178dp"
+            android:layout_height="149dp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    
+        android:layout_height="wrap_content"
+        android:text="Button" />
+
 </LinearLayout>

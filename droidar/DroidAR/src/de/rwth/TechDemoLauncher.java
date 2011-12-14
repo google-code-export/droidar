@@ -61,6 +61,14 @@ public class TechDemoLauncher extends Activity {
 				runTests();
 			}
 		});
+
+		l.addView(new SimpleButton("Load test UI") {
+			@Override
+			public void onButtonPressed() {
+				setContentView(R.layout.test_layout);
+			}
+		});
+
 	}
 
 	private void showSetup(String string, final Setup aSetupInstance) {

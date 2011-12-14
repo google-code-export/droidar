@@ -275,10 +275,11 @@ public class ObjectPicker {
 
 	public static byte[] getByteArrayFromColor(Color c) {
 		final byte[] b = new byte[4];
-		b[0] = floatToByteColorValue(c.red);
-		b[1] = floatToByteColorValue(c.green);
-		b[2] = floatToByteColorValue(c.blue);
-		b[3] = floatToByteColorValue(c.alpha);
+		boolean isOld = Setup.isOldDeviceWhereNothingWorksAsExpected;
+		b[0] = floatToByteColorValue(c.red, isOld);
+		b[1] = floatToByteColorValue(c.green, isOld);
+		b[2] = floatToByteColorValue(c.blue, isOld);
+		b[3] = floatToByteColorValue(c.alpha, isOld);
 		return b;
 	}
 
@@ -289,7 +290,7 @@ public class ObjectPicker {
 	 * @param f
 	 * @return
 	 */
-	public static byte floatToByteColorValue(float f) {
+	public static byte floatToByteColorValue(float f, boolean oldDevice) {
 
 		/*
 		 * TODO:
@@ -302,7 +303,7 @@ public class ObjectPicker {
 		 * fix this and get -27 returned instead of -28
 		 */
 
-		if (Setup.isOldDeviceWhereNothingWorksAsExpected) {
+		if (oldDevice) {
 			/*
 			 * this is a bug-fix which is necessary due to rounding errors on
 			 * older devices another part of this bugfix is the
@@ -323,6 +324,18 @@ public class ObjectPicker {
 	public static void resetInstance(Command feedbackCommand) {
 		myInstance = new ObjectPicker();
 		myInstance.setMyFeedbackCommand(feedbackCommand);
+	}
+
+	/**
+	 * 565 format: RRRR RGGG GGGB BBBB <br>
+	 * 
+	 * @param f
+	 * @return
+	 */
+	public static float rgb565to888(float f) {
+		
+
+		return 1 << 1;
 	}
 
 }
