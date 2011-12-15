@@ -20,21 +20,19 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 
 public class RadarView extends SimpleCustomView implements Updateable {
 
-	private static final int DEFAULT_VIEW_SIZE = 250;
+	private static final int DEFAULT_VIEW_SIZE = 100;
 	private static final int MARGIN = 4;
 	private static final float DEFAULT_UPDATE_SPEED = 0.1f;
 	private static final int DEFAULT_RADAR_MAX_DISTANCE = 200;
-	private static final String LOG_TAG = "RadarView";
 	private static final int MIN_DISP_RADIUS = 20;
 
 	private Paint paint;
 	private Paint linePaint;
 
-	private int minimumSize = 100;
+	private int minimumSize = DEFAULT_VIEW_SIZE;
 	private int mySize;
 	private int myHalfSize;
 	private Vec myRotVec;
@@ -49,7 +47,7 @@ public class RadarView extends SimpleCustomView implements Updateable {
 	private float myUpdateSpeed = DEFAULT_UPDATE_SPEED;
 	private double myTouchScaleFactor = 5;
 
-	// private String debug;
+	private String debug;
 
 	public RadarView(Context context, GLCamera camera,
 			int minimumRadarViewSize, int displRadiusInMeters,
@@ -201,10 +199,10 @@ public class RadarView extends SimpleCustomView implements Updateable {
 
 		drawCompassNeedle(canvas);
 
-		// if (debug != null) { // TODO remove this
-		// paint.setColor(Color.RED);
-		// canvas.drawText(debug, 0, myHalfSize, paint);
-		// }
+		if (debug != null) {
+			paint.setColor(Color.RED);
+			canvas.drawText(debug, 0, myHalfSize, paint);
+		}
 	}
 
 	@Override
@@ -214,12 +212,12 @@ public class RadarView extends SimpleCustomView implements Updateable {
 
 	private boolean onTouch(float x, float y) {
 		double distFromCenter = Math.sqrt(x * x + y * y);
+		// TODO use the myHalfSize to calculate percent value. important to stay
+		// size independent!
 		distFromCenter *= myTouchScaleFactor;
-		System.out.println("distFromCenter=" + distFromCenter);
 		myDisplRadius = (int) distFromCenter;
 		if (myDisplRadius < MIN_DISP_RADIUS)
 			myDisplRadius = MIN_DISP_RADIUS;
-		System.out.println("myDisplRadius=" + myDisplRadius);
 		return true;
 	}
 

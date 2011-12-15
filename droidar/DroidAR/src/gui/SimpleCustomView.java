@@ -1,7 +1,6 @@
 package gui;
 
 import util.IO;
-import de.rwth.R;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -23,6 +22,7 @@ import android.view.View;
  * //add @deprecated to remember not to use this constructor later<br>
  * public YourSimpleCustomViewSubclass(Context context, AttributeSet attrs) {<br>
  * super(context, attrs);<br>
+ * yourInitStuffHere();<br>
  * }<br>
  * 
  * <br>
@@ -64,8 +64,7 @@ public abstract class SimpleCustomView extends View {
 		return b;
 	}
 
-	public Bitmap generateDebugImage2(Context context) {
-
+	public Bitmap createDummyBitmap2() {
 		int size = 128;
 		Bitmap b = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
 		Canvas c = new Canvas(b);
@@ -73,12 +72,8 @@ public abstract class SimpleCustomView extends View {
 		p.setColor(Color.BLUE);
 		p.setStyle(Paint.Style.FILL);
 		p.setStrokeWidth(10);
-		// c.drawCircle(size / 2, size / 2, size * 0.4f, p);
-
 		drawCircle(c, size / 2, size / 2, size / 2, p);
-
 		return b;
-
 	}
 
 	public SimpleCustomView(Context context) {
@@ -131,24 +126,11 @@ public abstract class SimpleCustomView extends View {
 			RectF arcRect = new RectF(cx - radius, cy - radius, cx + radius, cy
 					+ radius);
 			// Draw the Minutes-Arc into that rectangle
-			canvas.drawArc(arcRect, -90, 360, true, paint);
+			canvas.drawArc(arcRect, -90, 360, false, paint);
 		} else {
 			canvas.drawCircle(cx, cy, radius, paint);
 		}
 
-	}
-
-	public static Bitmap rotateBitmap(Bitmap bitmap, int angle) {
-		int width = bitmap.getWidth();
-		int height = bitmap.getHeight();
-		Bitmap result = Bitmap.createBitmap(width, height, bitmap.getConfig());
-		Canvas canvas = new Canvas(result);
-		Matrix matrix = new Matrix();
-		matrix.setRotate(angle, width / 2, height / 2);
-		Paint p = new Paint();
-		p.setAntiAlias(true);
-		canvas.drawBitmap(bitmap, matrix, p);
-		return result;
 	}
 
 	/**
@@ -159,7 +141,8 @@ public abstract class SimpleCustomView extends View {
 	 *            (nearly no round corners)
 	 * @return the result
 	 */
-	public static Bitmap addRoundCornersToBitmap(Bitmap bitmap, float factor) {
+	public static Bitmap createBitmapWithRoundCorners(Bitmap bitmap,
+			float factor) {
 		int width = bitmap.getWidth();
 		int height = bitmap.getHeight();
 
@@ -182,7 +165,7 @@ public abstract class SimpleCustomView extends View {
 	 * @param bitmap
 	 * @param angle
 	 * @param smoothingFactor
-	 *            try 1.5f;
+	 *            try 1.5f; (1 would be no smoothing at all)
 	 * @return
 	 */
 	public static Bitmap rotateBitmap(Bitmap bitmap, int angle,
@@ -192,6 +175,19 @@ public abstract class SimpleCustomView extends View {
 		result = rotateBitmap(result, angle);
 		result = IO.resizeBitmap(result, result.getHeight() / smoothingFactor,
 				result.getWidth() / smoothingFactor);
+		return result;
+	}
+
+	public static Bitmap rotateBitmap(Bitmap bitmap, int angle) {
+		int width = bitmap.getWidth();
+		int height = bitmap.getHeight();
+		Bitmap result = Bitmap.createBitmap(width, height, bitmap.getConfig());
+		Canvas canvas = new Canvas(result);
+		Matrix matrix = new Matrix();
+		matrix.setRotate(angle, width / 2, height / 2);
+		Paint p = new Paint();
+		p.setAntiAlias(true);
+		canvas.drawBitmap(bitmap, matrix, p);
 		return result;
 	}
 
