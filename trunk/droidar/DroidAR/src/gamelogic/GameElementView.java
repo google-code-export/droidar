@@ -68,7 +68,7 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 	private void resizeIconToViewSize() {
 		if (myIcon != null) {
 			myIcon = resizeBitmap(myIcon, myHeight, myWidth);
-			myIcon = addRoundCornersToBitmap(myIcon, 8f);
+			myIcon = createBitmapWithRoundCorners(myIcon, 8f);
 		}
 	}
 
