@@ -288,10 +288,10 @@ public class GeoGraph extends AbstractObj implements Container<GeoObj> {
 	}
 
 	@Override
-	public void insert(int pos, GeoObj geoObj) {
+	public boolean insert(int pos, GeoObj geoObj) {
 		if (myNodes == null)
 			myNodes = new EfficientListQualified<GeoObj>();
-		myNodes.insert(pos, geoObj);
+		return myNodes.insert(pos, geoObj);
 	}
 
 	/**

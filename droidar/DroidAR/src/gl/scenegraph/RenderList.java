@@ -94,7 +94,7 @@ public class RenderList implements RenderableEntity,
 	}
 
 	@Override
-	public void insert(int pos, RenderableEntity item) {
-		myItems.insert(pos, item);
+	public boolean insert(int pos, RenderableEntity item) {
+		return myItems.insert(pos, item);
 	}
 }

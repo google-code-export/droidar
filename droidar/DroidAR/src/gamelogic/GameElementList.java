@@ -85,8 +85,8 @@ public abstract class GameElementList<T> implements Container<T> {
 	}
 
 	@Override
-	public void insert(int pos, T item) {
-		myList.insert(pos, item);
+	public boolean insert(int pos, T item) {
+		return myList.insert(pos, item);
 	};
 
 	public void generateEditGUI(ModifierGroup s) {

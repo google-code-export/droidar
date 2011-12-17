@@ -14,6 +14,7 @@ import system.Setup;
 import util.Vec;
 import worldData.AbstractObj;
 import worldData.LargeWorld;
+import worldData.RenderableEntity;
 import worldData.SystemUpdater;
 import worldData.World;
 import actions.ActionCalcRelativePos;
@@ -28,26 +29,10 @@ public class LargeWorldsSetup extends DefaultARSetup {
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
+		super._a_initFieldsIfNecessary();
 		// allow the user to send error reports to the developer:
 		ErrorHandler.enableEmailReports("droidar.rwth@gmail.com",
 				"Error in LargeWorldsSetup");
-	}
-
-	@Override
-	public void _b_addWorldsToRenderer(GLRenderer renderer,
-			GLFactory objectFactory, GeoObj currentPosition) {
-
-		camera = new GLCamera(new Vec(0, 0, 1));
-		world = new LargeWorld(camera, 60f, 5f);// new World(camera);
-
-		renderer.addRenderElement(world);
-	}
-
-	private AbstractObj newObj(int x, int y) {
-		String name = "x=" + x + ",y=" + y;
-		return GLFactory.getInstance().newTextObject(name, new Vec(x, y, 0),
-				getActivity(), camera);
-
 	}
 
 	@Override
@@ -62,11 +47,20 @@ public class LargeWorldsSetup extends DefaultARSetup {
 	@Override
 	public void addObjectsTo(GLRenderer renderer, World world,
 			GLFactory objectFactory) {
+		RenderQuadList list = new RenderQuadList(getCamera(), 100, 10);
 		for (int x = (int) Math.sqrt(NUMBER_OF_OBJECTS); x >= 0; x--) {
 			for (int y = (int) Math.sqrt(NUMBER_OF_OBJECTS); y >= 0; y--) {
-				world.add(newObj(x * 5, y * 5));
+				list.add(newObj(x * 5, y * 5));
 			}
 		}
+		// when the quad-list is created, add it to the world:
+		world.add(list);
 	}
 
+	private AbstractObj newObj(int x, int y) {
+		String name = "x=" + x + ",y=" + y;
+		return GLFactory.getInstance().newTextObject(name, new Vec(x, y, 0),
+				getActivity(), camera);
+
+	}
 }

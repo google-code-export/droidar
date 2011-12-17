@@ -110,8 +110,8 @@ public class EventListenerGroup extends Action implements
 	}
 
 	@Override
-	public void insert(int pos, EventListener item) {
-		myActions.insert(pos, item);
+	public boolean insert(int pos, EventListener item) {
+		return myActions.insert(pos, item);
 	}
 
 	@Override
