@@ -82,9 +82,10 @@ public class RenderQuadList implements RenderableEntity,
 
 	@Override
 	public boolean accept(Visitor visitor) {
-		for (int i = 0; i < allItems.myLength; i++) {
-			allItems.get(i).accept(visitor);
-		}
+		if (allItems != null)
+			for (int i = 0; i < allItems.myLength; i++) {
+				allItems.get(i).accept(visitor);
+			}
 		return true;
 	}
 
@@ -115,9 +116,14 @@ public class RenderQuadList implements RenderableEntity,
 				itemsInRange.clear();
 			oldX = x;
 			oldY = y;
-			tree.findInArea(itemsListener, x, y, myRenderDistance);
+			refreshItemsInRangeList();
 			return itemsInRange;
 		}
+	}
+
+	private void refreshItemsInRangeList() {
+		if (tree != null && itemsInRange != null)
+			tree.findInArea(itemsListener, oldX, oldY, myRenderDistance);
 	}
 
 	private boolean needsNoRecalculation(float v, float min, float max) {
@@ -126,30 +132,41 @@ public class RenderQuadList implements RenderableEntity,
 
 	@Override
 	public void clear() {
-		allItems.clear();
-		tree.clear();
-		wasClearedAtLeastOnce = true;
+		if (tree != null) {
+			allItems.clear();
+			tree.clear();
+			wasClearedAtLeastOnce = true;
+			refreshItemsInRangeList();
+		}
 	}
 
 	@Override
 	public void removeEmptyItems() {
-		for (int i = 0; i < allItems.myLength; i++) {
-			if (allItems.get(i) instanceof Container) {
-				Container c = (Container) allItems.get(i);
-				if (c.isCleared())
-					remove((RenderableEntity) c);
+		if (allItems != null) {
+			for (int i = 0; i < allItems.myLength; i++) {
+				if (allItems.get(i) instanceof Container) {
+					Container c = (Container) allItems.get(i);
+					if (c.isCleared())
+						remove((RenderableEntity) c);
+				}
 			}
 		}
 	}
 
 	@Override
 	public boolean isCleared() {
-		return allItems.isEmpty() && wasClearedAtLeastOnce;
+		if (allItems != null) {
+			return allItems.isEmpty() && wasClearedAtLeastOnce;
+		}
+		return false;
 	}
 
 	@Override
 	public int length() {
-		return allItems.myLength;
+		if (allItems != null) {
+			return allItems.myLength;
+		}
+		return 0;
 	}
 
 	@Override
@@ -190,17 +207,21 @@ public class RenderQuadList implements RenderableEntity,
 		if (tree == null)
 			tree = new QuadTree<RenderableEntity>();
 		tree.add(pos.x, pos.y, (RenderableEntity) x);
+		refreshItemsInRangeList();
 	}
 
 	@Override
 	public boolean remove(RenderableEntity x) {
-		boolean rt = tree.remove(x);
-		boolean rl = allItems.remove(x);
-		if ((rt && !rl) || (rl && !rt))
-			Log.e(LOG_TAG,
-					"Inconsistency in tree und allItems list while removing!");
-		if (rt && rl)
-			return true;
+		if (tree != null) {
+			boolean rt = tree.remove(x);
+			boolean rl = allItems.remove(x);
+			refreshItemsInRangeList();
+			if ((rt && !rl) || (rl && !rt))
+				Log.e(LOG_TAG,
+						"Inconsistency in tree und allItems-list while removing!");
+			if (rt && rl)
+				return true;
+		}
 		return false;
 	}
 
@@ -209,9 +230,11 @@ public class RenderQuadList implements RenderableEntity,
 	 * expensive so do not call this too often!
 	 */
 	public void rebuildTree() {
-		tree.clear();
-		for (int i = 0; i < allItems.myLength; i++) {
-			this.add(allItems.get(i));
+		if (tree != null) {
+			tree.clear();
+			for (int i = 0; i < allItems.myLength; i++) {
+				this.add(allItems.get(i));
+			}
 		}
 	}
 
