@@ -6,10 +6,16 @@ public interface Container<T> {
 
 	public void clear();
 
+	/**
+	 * A child which is a {@link Container} can be checked if it is cleared (use
+	 * {@link Container#isCleared()}). If this is true it can be removed it can
+	 * be removed from the container
+	 */
 	public void removeEmptyItems();
 
 	/**
-	 * @return true if this object was cleared at least once
+	 * @return true if this object was cleared at least once and is currently
+	 *         empty
 	 */
 	public boolean isCleared();
 
@@ -17,10 +23,10 @@ public interface Container<T> {
 
 	public EfficientList<T> getAllItems();
 
-	boolean add(T newElement);
+	public boolean add(T newElement);
 
-	boolean remove(T x);
+	public boolean remove(T x);
 
-	void insert(int pos, T item);
+	public boolean insert(int pos, T item);
 
 }

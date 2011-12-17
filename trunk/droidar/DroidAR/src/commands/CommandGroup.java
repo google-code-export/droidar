@@ -134,7 +134,7 @@ public class CommandGroup extends UndoableCommand implements Container<Command> 
 	}
 
 	@Override
-	public void insert(int pos, Command item) {
-		myList.insert(pos, item);
+	public boolean insert(int pos, Command item) {
+		return myList.insert(pos, item);
 	}
 }

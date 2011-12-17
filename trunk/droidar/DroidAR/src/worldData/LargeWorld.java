@@ -6,12 +6,21 @@ import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import de.rwth.setups.RenderQuadList;
+
 import system.ParentStack;
 import util.EfficientList;
 import util.QuadTree;
 import util.QuadTree.ResultListener;
 import util.Vec;
 
+/**
+ * Use {@link RenderQuadList} instead!
+ * 
+ * @author Spobo
+ * 
+ */
+@Deprecated
 public class LargeWorld extends World {
 
 	private float myRenderDistance;
