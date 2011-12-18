@@ -73,6 +73,7 @@ public class AnimationFaceToCamera implements GLAnimation {
 		 * TODO use mesh instead of assigning a mesh while creating this
 		 * animation!
 		 */
+		timeDelta = Math.abs(timeDelta);
 		lastUpdateAway += timeDelta;
 		if (lastUpdateAway > myUpdateDelay) {
 			updateRotation(parent);

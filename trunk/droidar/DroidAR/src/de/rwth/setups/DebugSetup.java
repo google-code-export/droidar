@@ -14,6 +14,7 @@ import gl.animations.AnimationRotate;
 import gl.animations.AnimationSwingRotate;
 import gl.animations.GLAnimation;
 import gl.scenegraph.MeshComponent;
+import gl.scenegraph.RenderList;
 import gl.scenegraph.Shape;
 import gui.GuiSetup;
 import system.ErrorHandler;
@@ -23,6 +24,7 @@ import util.IO;
 import util.Vec;
 import util.Wrapper;
 import worldData.Obj;
+import worldData.RenderableEntity;
 import worldData.SystemUpdater;
 import worldData.World;
 import actions.ActionCalcRelativePos;
@@ -62,6 +64,7 @@ public class DebugSetup extends Setup {
 	private Wrapper selection;
 
 	private ActionCalcRelativePos geoupdater;
+	private TimeModifier timeModifier;
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
@@ -81,7 +84,12 @@ public class DebugSetup extends Setup {
 		camera = new GLCamera(new Vec(0, 0, 1));
 		world = new World(camera);
 
-		initWorld(world);
+		timeModifier = new TimeModifier(1);
+		RenderList l = new RenderList();
+		timeModifier.setChild(l);
+		initWorld(l);
+		world.add(timeModifier);
+
 		initI9Tests(world);
 		initNTest(world);
 
@@ -206,10 +214,10 @@ public class DebugSetup extends Setup {
 
 	}
 
-	private synchronized void initWorld(World world) {
+	private synchronized void initWorld(RenderList l) {
 
-		world.add(GLFactory.getInstance().newSolarSystem(new Vec(0, 0, 5)));
-		world.add(GLFactory.getInstance().newHexGroupTest(new Vec(0, 0, -0.1f)));
+		l.add(GLFactory.getInstance().newSolarSystem(new Vec(0, 0, 5)));
+		l.add(GLFactory.getInstance().newHexGroupTest(new Vec(0, 0, -0.1f)));
 
 		CommandSetWrapperToValue2 commandSelectObj = new CommandSetWrapperToValue2(
 				selection);
@@ -220,7 +228,7 @@ public class DebugSetup extends Setup {
 		c.setOnClickCommand(new CommandPlaySound("/sdcard/train.mp3"));
 		Obj geoC = new Obj();
 		geoC.setComp(c);
-		world.add(geoC);
+		l.add(geoC);
 
 		MeshComponent c2 = GLFactory.getInstance().newCube(null);
 		c2.setPosition(new Vec(3, 3, 0));
@@ -228,7 +236,7 @@ public class DebugSetup extends Setup {
 		// GeoObj geoC = new GeoObj(GeoObj.normaluhr, c);
 		Obj geoC2 = new Obj();
 		geoC2.setComp(c2);
-		world.add(geoC2);
+		l.add(geoC2);
 
 		Obj hex = new Obj();
 		Shape hexMesh = GLFactory.getInstance().newHexagon(
@@ -238,13 +246,13 @@ public class DebugSetup extends Setup {
 		hex.setComp(hexMesh);
 
 		hexMesh.setOnClickCommand(commandSelectObj);
-		world.add(hex);
+		l.add(hex);
 
 		Obj grid = new Obj();
 		MeshComponent gridMesh = GLFactory.getInstance().newGrid(Color.blue(),
 				1, 10);
 		grid.setComp(gridMesh);
-		world.add(grid);
+		l.add(grid);
 
 		Obj treangle = new Obj();
 		MeshComponent treangleMesh = GLFactory.getInstance().newTexturedSquare(
@@ -254,7 +262,7 @@ public class DebugSetup extends Setup {
 		treangleMesh.setRotation(new Vec(0, 0, 0));
 		treangleMesh.addChild(new AnimationFaceToCamera(camera, 0.5f));
 		treangle.setComp(treangleMesh);
-		world.add(treangle);
+		l.add(treangle);
 
 		// Obj x = new Obj();
 		// Shape s = F.f().newSquare(new Color(1, 0, 0, 0.8f));
@@ -298,8 +306,10 @@ public class DebugSetup extends Setup {
 	public void _c_addActionsToEvents(EventManager eventManager,
 			CustomGLSurfaceView arView, SystemUpdater updater) {
 
-		ActionWASDMovement wasdAction = new ActionWASDMovement(camera, 25f, 50f, 20f);
-		ActionRotateCameraBuffered rotateAction = new ActionRotateCameraBuffered(camera);
+		ActionWASDMovement wasdAction = new ActionWASDMovement(camera, 25f,
+				50f, 20f);
+		ActionRotateCameraBuffered rotateAction = new ActionRotateCameraBuffered(
+				camera);
 
 		updater.addObjectToUpdateCycle(wasdAction);
 		updater.addObjectToUpdateCycle(rotateAction);
@@ -329,6 +339,25 @@ public class DebugSetup extends Setup {
 		guiSetup.setBottomViewCentered();
 
 		// addMapView(activity, guiSetup);
+
+		guiSetup.addButtonToLeftView(new Command() {
+
+			@Override
+			public boolean execute() {
+				timeModifier.setTimeFactor(timeModifier
+						.getTimeFactor() + 1);
+				return false;
+			}
+		}, "T+1");
+		guiSetup.addButtonToLeftView(new Command() {
+
+			@Override
+			public boolean execute() {
+				timeModifier.setTimeFactor(timeModifier
+						.getTimeFactor() - 1);
+				return false;
+			}
+		}, "T-1");
 
 		AnimationRotate rotateAnimation = new AnimationRotate(10, new Vec(0, 0,
 				1));
