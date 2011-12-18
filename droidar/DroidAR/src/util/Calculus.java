@@ -137,7 +137,7 @@ public class Calculus {
 			TermResultListener resultListener) {
 		WebView webView = new WebView(context);
 		webView.getSettings().setJavaScriptEnabled(true);
-		webView.addJavascriptInterface(resultListener, "JavaCallback");		
+		webView.addJavascriptInterface(resultListener, "JavaCallback");
 		webView.loadUrl("javascript:window.JavaCallback" + ".returnResult("
 				+ inputTerm + ")");
 	}
@@ -149,6 +149,10 @@ public class Calculus {
 		result[10] = 1;
 		result[15] = 1;
 		return result;
+	}
+
+	public static float morphToNewValue(float factor, float newX, float currentX) {
+		return currentX + (factor * (newX - currentX));
 	}
 
 }

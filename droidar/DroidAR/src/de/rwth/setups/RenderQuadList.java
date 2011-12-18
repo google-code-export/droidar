@@ -178,6 +178,8 @@ public class RenderQuadList implements RenderableEntity,
 	public boolean add(RenderableEntity newElement) {
 		if (newElement instanceof HasPosition)
 			return add((HasPosition) newElement);
+		Log.w(LOG_TAG, "Object was not added to the RenderQuadList "
+				+ "because it had no HasPosition interface!");
 		return false;
 	}
 
@@ -247,6 +249,8 @@ public class RenderQuadList implements RenderableEntity,
 						((HasPosition) item).getPosition());
 			return result;
 		}
+		Log.w(LOG_TAG, "Object was not inserted into the RenderQuadList "
+				+ "because it had no HasPosition interface!");
 		return false;
 	}
 
