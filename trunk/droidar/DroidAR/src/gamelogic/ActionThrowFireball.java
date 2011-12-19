@@ -1,5 +1,7 @@
 package gamelogic;
 
+import system.ParentStack;
+import worldData.Updateable;
 import gui.simpleUI.ModifierGroup;
 import gui.simpleUI.modifiers.InfoText;
 import gui.simpleUI.modifiers.PlusMinusModifier;
@@ -24,16 +26,23 @@ public class ActionThrowFireball extends GameAction {
 	public ActionFeedback doAction(GameParticipant initiator,
 			GameParticipant target) {
 		ActionFeedback feedback = new ActionFeedback("Fireball");
+		if (target == null) {
+			feedback.addInfo("Can't attack, no enemy selected!");
+			return feedback;
+		}
+
 		Stat i = initiator.getStatList().get(Stat.INTELLIGENCE);
 		float damage = 0;
 		if (i != null)
 			damage = myLevel * i.getValue();
 		feedback.addInfo("damage", damage);
-		Stat f = target.getStatList().get(Stat.FIRE_RESISTANCE);
+
 		float defence = 0;
+		Stat f = target.getStatList().get(Stat.FIRE_RESISTANCE);
 		if (f != null)
 			defence = f.getValue();
 		feedback.addInfo("fire resistance of target", defence);
+
 		damage -= defence;
 		if (damage < 0)
 			damage = 0;
@@ -90,4 +99,5 @@ public class ActionThrowFireball extends GameAction {
 			}
 		});
 	}
+
 }

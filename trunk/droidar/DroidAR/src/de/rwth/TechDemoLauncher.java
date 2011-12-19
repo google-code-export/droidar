@@ -15,6 +15,7 @@ import commands.ui.CommandShowToast;
 import de.rwth.setups.CollectItemsSetup;
 import de.rwth.setups.DebugSetup;
 import de.rwth.setups.FarAwayPOIScenarioSetup;
+import de.rwth.setups.GameDemoSetup;
 import de.rwth.setups.GraphMovementTestSetup;
 import de.rwth.setups.GraphCreationSetup;
 import de.rwth.setups.LargeWorldsSetup;
@@ -42,8 +43,9 @@ public class TechDemoLauncher extends Activity {
 		LinearLayout l = ((LinearLayout) findViewById(R.id.demoScreenLinView));
 		l.removeAllViews();
 
-		showSetup("'Too far away' scenario", new FarAwayPOIScenarioSetup());
 		showSetup("Animation Demo", new DebugSetup());
+		showSetup("Game Demo", new GameDemoSetup());
+		showSetup("'Too far away' scenario", new FarAwayPOIScenarioSetup());
 		showSetup("Large worlds", new LargeWorldsSetup());
 		showSetup("Changing text Demo", new FastChangingTextSetup());
 		showSetup("Lightning Demo", new LightningSetup());

@@ -1,5 +1,7 @@
 package gamelogic;
 
+import system.ParentStack;
+import worldData.Updateable;
 import gui.simpleUI.ModifierGroup;
 import gui.simpleUI.modifiers.InfoText;
 import gui.simpleUI.modifiers.PlusMinusModifier;
@@ -83,5 +85,6 @@ public class Booster extends GameElement {
 			s.addModifier(new InfoText(" " + myValue + " by " + myName,
 					Gravity.RIGHT));
 	}
+
 
 }

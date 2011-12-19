@@ -137,6 +137,7 @@ public class NetworkTests extends SimpleTesting {
 		final String text = "some text";
 		final Server server = new UDP.Server(targetPort);
 		server.receivePackage(new UDP.ReceiveListener() {
+			@SuppressWarnings("null")
 			@Override
 			public void onReceive(String message) {
 				System.out.println("UDP: recieved " + message);

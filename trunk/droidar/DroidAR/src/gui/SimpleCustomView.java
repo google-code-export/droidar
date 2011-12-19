@@ -2,6 +2,7 @@ package gui;
 
 import util.IO;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,6 +13,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 
 /**
@@ -92,6 +94,17 @@ public abstract class SimpleCustomView extends View {
 		int measuredHeigth = getDefaultSize(getSuggestedMinimumHeight(),
 				heightMeasureSpec);
 		onResizeEvent(measuredHeigth, measuredWidth);
+	}
+
+	/**
+	 * Converts the dip into its equivalent pixel size
+	 * 
+	 * @param sizeInDip
+	 * @return size in pixels
+	 */
+	public float dipToPixels(float sizeInDip) {
+		return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+				sizeInDip, getResources().getDisplayMetrics());
 	}
 
 	/**

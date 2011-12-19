@@ -1,7 +1,13 @@
-package gamelogic;
+package tests;
 
+import gamelogic.ActionList;
+import gamelogic.ActionThrowFireball;
+import gamelogic.Booster;
+import gamelogic.BoosterList;
+import gamelogic.GameParticipant;
+import gamelogic.Stat;
+import gamelogic.StatList;
 import system.ParentStack;
-import tests.SimpleTesting;
 import worldData.Updateable;
 import worldData.Visitor;
 import de.rwth.R;
@@ -14,32 +20,8 @@ public class GameLogicTests extends SimpleTesting {
 	}
 
 	private void newPlayerTest() throws Exception {
-		GameParticipant p = new GameParticipant("Player", "P A", 0) {
-
-			@Override
-			public boolean update(float timeDelta, Updateable parent,
-					ParentStack<Updateable> stack) {
-				return true;
-			}
-
-			@Override
-			public boolean accept(Visitor visitor) {
-				return false;
-			}
-		};
-
-		GameParticipant enemy = new GameParticipant("Player", "P Enemy", 0) {
-			@Override
-			public boolean update(float timeDelta, Updateable parent,
-					ParentStack<Updateable> stack) {
-				return true;
-			}
-
-			@Override
-			public boolean accept(Visitor visitor) {
-				return false;
-			}
-		};
+		GameParticipant p = new GameParticipant("Player", "P A", 0);
+		GameParticipant enemy = new GameParticipant("Player", "P Enemy", 0);
 
 		StatList stats = p.getStatList();
 		assertNotNull(stats);
@@ -53,8 +35,6 @@ public class GameLogicTests extends SimpleTesting {
 				R.drawable.hippopotamus64, -10));
 		assertTrue(stats.applyBoosterList(boosterList));
 
-		System.out.println(stats.get(Stat.MAX_HP).getValue());
-
 		assertTrue(stats.get(Stat.MAX_HP).getValue() == 25);
 
 		ActionList actions = p.getActionList();
@@ -66,6 +46,11 @@ public class GameLogicTests extends SimpleTesting {
 
 		assertTrue(p.doAction(ActionThrowFireball.FIREBALL_ACTION, enemy)
 				.actionCorrectlyExecuted());
+
+		// when target null it should not crash!
+		assertFalse(p.doAction(ActionThrowFireball.FIREBALL_ACTION, null)
+				.actionCorrectlyExecuted());
+
 	}
 
 }

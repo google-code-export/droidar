@@ -1,6 +1,8 @@
 package gamelogic;
 
+import system.ParentStack;
 import util.IO;
+import worldData.Updateable;
 import gui.ListItem;
 import gui.simpleUI.ModifierGroup;
 import android.content.Context;
@@ -12,7 +14,7 @@ import android.widget.TextView;
 
 import commands.Command;
 
-public abstract class GameElement implements ListItem {
+public abstract class GameElement implements ListItem, Updateable {
 
 	/**
 	 * if this boolean in true a {@link GameElementList#removeEmptyItems()} call
@@ -22,17 +24,41 @@ public abstract class GameElement implements ListItem {
 	private boolean shouldBeRemoved;
 	public String myName;
 	public int myIconid;
-	public Command myListClickCommand;
-	public Command myListLongClickCommand;
+	private Command myOnClickCommand;
+	private Command myListLongClickCommand;
 
 	public GameElement(String uniqueName, int iconId) {
 		myName = uniqueName;
 		myIconid = iconId;
 	}
 
+	/**
+	 * Will do the same as {@link GameElement#setOnListClickCommand(Command)} on
+	 * default
+	 * 
+	 * @param myOnClickCommand
+	 */
+	public void setOnClickCommand(Command myOnClickCommand) {
+		this.myOnClickCommand = myOnClickCommand;
+	}
+
+	/**
+	 * Will do the same as {@link GameElement#setOnClickCommand(Command)} on
+	 * default
+	 * 
+	 * @param myOnClickCommand
+	 */
+	public void setOnListClickCommand(Command myOnClickCommand) {
+		this.myOnClickCommand = myOnClickCommand;
+	}
+
+	public Command getOnClickCommand() {
+		return myOnClickCommand;
+	}
+
 	@Override
 	public Command getListClickCommand() {
-		return myListClickCommand;
+		return myOnClickCommand;
 	}
 
 	@Override
@@ -88,4 +114,28 @@ public abstract class GameElement implements ListItem {
 	public abstract void generateViewGUI(ModifierGroup s);
 
 	public abstract void generateEditGUI(ModifierGroup s);
+
+	@Override
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	/**
+	 * TODO
+	 * @param context 
+	 * 
+	 * @return
+	 */
+	public View getNewDefaultView(Context context) {
+		View v=new GameElementView(context, myIconid);
+		registerNewListener(v);
+		return v;
+	}
+
+	private void registerNewListener(View v) {
+		// TODO Auto-generated method stub
+		
+	}
 }

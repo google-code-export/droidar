@@ -5,16 +5,21 @@ import gui.simpleUI.ModifierGroup;
 
 import java.util.Arrays;
 
+import commands.Command;
+
+import system.ParentStack;
 import util.EfficientList;
 import worldData.Entity;
+import worldData.Updateable;
+import worldData.Visitor;
 import util.Log;
 
-
-public abstract class GameParticipant implements Entity, EditItem {
+public class GameParticipant implements Entity, EditItem {
 
 	private static final String LOG_TAG = "GameParticipant";
 	private StatList myStatList;
 	private ActionList myActionList;
+	private GameItemList myGameItemList;
 	private String myType;
 	private String myName;
 	private int myIconId;
@@ -64,6 +69,12 @@ public abstract class GameParticipant implements Entity, EditItem {
 		return myActionList;
 	}
 
+	public GameItemList getGameItemList() {
+		if (myGameItemList == null)
+			myGameItemList = new GameItemList();
+		return myGameItemList;
+	}
+
 	public ActionFeedback doAction(String actionName, GameParticipant target) {
 		if (actionName == null)
 			return null;
@@ -80,17 +91,13 @@ public abstract class GameParticipant implements Entity, EditItem {
 
 	public void generateEditGUI(ModifierGroup s) {
 		if (myStatList != null) {
-			EfficientList<Stat> statList = myStatList.getAllItems();
-			int l = myStatList.getAllItems().myLength;
-			for (int i = 0; i < l; i++) {
-				Stat o = statList.get(i);
-				o.generateEditGUI(s);
-				if (o.getMyBoosterList() != null)
-					o.getMyBoosterList().generateViewGUI(s);
-			}
+			myStatList.generateEditGUI(s);
 		}
 		if (myActionList != null)
 			myActionList.generateEditGUI(s);
+
+		if (myGameItemList != null)
+			myGameItemList.generateEditGUI(s);
 	}
 
 	public void generateViewGUI(ModifierGroup s) {
@@ -98,14 +105,45 @@ public abstract class GameParticipant implements Entity, EditItem {
 			myStatList.generateViewGUI(s);
 		if (myActionList != null)
 			myActionList.generateViewGUI(s);
+		if (myGameItemList != null)
+			myGameItemList.generateViewGUI(s);
+	}
+
+	@Override
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
+		if (myActionList != null)
+			myActionList.update(timeDelta, parent, stack);
+		if (myStatList != null)
+			myStatList.update(timeDelta, parent, stack);
+		if (myGameItemList != null)
+			myGameItemList.update(timeDelta, parent, stack);
+		return true;
+	}
+
+	@Override
+	public boolean accept(Visitor visitor) {
+		return visitor.default_visit(this);
 	}
 
 	public boolean addStat(Stat stat) {
 		return getStatList().add(stat);
 	}
 
-	public boolean addAction(GameAction attackAction) {
-		return getActionList().add(attackAction);
+	public boolean addAction(GameAction action) {
+		if (action.getOnClickCommand() == null)
+			setDefaultExecuteAction(action);
+		return getActionList().add(action);
+	}
+
+	private void setDefaultExecuteAction(final GameAction action) {
+		action.setOnClickCommand(new Command() {
+			@Override
+			public boolean execute() {
+				return action.doAction(GameParticipant.this, null)
+						.actionCorrectlyExecuted();
+			}
+		});
 	}
 
 	@Override
