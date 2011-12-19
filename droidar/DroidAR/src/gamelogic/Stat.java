@@ -1,5 +1,7 @@
 package gamelogic;
 
+import system.ParentStack;
+import worldData.Updateable;
 import gui.simpleUI.ModifierGroup;
 import gui.simpleUI.modifiers.InfoText;
 import gui.simpleUI.modifiers.PlusMinusModifier;
@@ -147,5 +149,13 @@ public class Stat extends GameElement {
 	 */
 	public void incValue(float incrValue) {
 		setValue(getValue() + incrValue);
+	}
+
+	@Override
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
+		super.update(timeDelta, parent, stack);
+		myBoosterList.update(timeDelta, parent, stack);
+		return true;
 	}
 }

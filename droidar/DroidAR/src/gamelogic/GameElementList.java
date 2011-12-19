@@ -4,11 +4,17 @@ import gui.simpleUI.ModifierGroup;
 
 import java.util.HashMap;
 
+import android.util.Log;
+
 import system.Container;
+import system.ParentStack;
 import util.EfficientList;
+import worldData.Updateable;
 
-public abstract class GameElementList<T> implements Container<T> {
+public abstract class GameElementList<T extends GameElement> implements
+		Updateable, Container<T> {
 
+	private static final String LOG_TAG = "GameElementList";
 	private EfficientList<T> myList = new EfficientList<T>();
 	/**
 	 * an additional structure for fast searching for special GameElements
@@ -19,6 +25,20 @@ public abstract class GameElementList<T> implements Container<T> {
 	public void clear() {
 		myList.clear();
 		mySearchIndex.clear();
+	}
+
+	@Override
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
+		for (int i = 0; i < myList.myLength; i++) {
+			if (!myList.get(i).update(timeDelta, this, stack)) {
+				Log.w(LOG_TAG, "Removing " + myList.get(i)
+						+ " from list because it returned"
+						+ " false on update()");
+				myList.remove(myList.get(i));
+			}
+		}
+		return true;
 	}
 
 	@Override
@@ -39,20 +59,16 @@ public abstract class GameElementList<T> implements Container<T> {
 	@Override
 	public void removeEmptyItems() {
 		for (int i = 0; i < myList.myLength; i++) {
-			if (myList.get(i) instanceof GameElement) {
-				GameElement e = (GameElement) myList.get(i);
-				if (e.shouldBeRemoved())
-					myList.remove(e);
-			}
+			GameElement e = myList.get(i);
+			if (e.shouldBeRemoved())
+				myList.remove(e);
+
 		}
 	}
 
 	@Override
 	public boolean add(T item) {
-
-		if (item instanceof GameElement) {
-			mySearchIndex.put(((GameElement) item).myName, item);
-		}
+		mySearchIndex.put(item.myName, item);
 		return myList.add(item);
 	}
 
@@ -61,26 +77,20 @@ public abstract class GameElementList<T> implements Container<T> {
 	}
 
 	public boolean remove(String uniqueName) {
-		T itemToDelete = mySearchIndex.get(uniqueName);
+		GameElement itemToDelete = mySearchIndex.get(uniqueName);
 		mySearchIndex.remove(uniqueName);
 		return myList.remove(itemToDelete);
 	}
 
 	@Override
 	public boolean remove(T item) {
-		if (item instanceof GameElement) {
-			mySearchIndex.remove(((GameElement) item).myName);
-		}
+		mySearchIndex.remove(item.myName);
 		return myList.remove(item);
 	}
 
 	public void generateViewGUI(ModifierGroup s) {
 		for (int i = 0; i < myList.myLength; i++) {
-			Object o = myList.get(i);
-			if (o instanceof GameElement) {
-				GameElement g = (GameElement) o;
-				g.generateViewGUI(s);
-			}
+			myList.get(i).generateViewGUI(s);
 		}
 	}
 
@@ -91,11 +101,7 @@ public abstract class GameElementList<T> implements Container<T> {
 
 	public void generateEditGUI(ModifierGroup s) {
 		for (int i = 0; i < myList.myLength; i++) {
-			Object o = myList.get(i);
-			if (o instanceof GameElement) {
-				GameElement g = (GameElement) o;
-				g.generateEditGUI(s);
-			}
+			myList.get(i).generateEditGUI(s);
 		}
 	}
 

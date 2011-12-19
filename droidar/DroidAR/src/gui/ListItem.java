@@ -21,6 +21,10 @@ public interface ListItem {
 	 */
 	View getMyListItemView(View viewToUseIfNotNull, ViewGroup parentView);
 
+	/**
+	 * @return normally this should return the default onClick command if the
+	 *         class already has one
+	 */
 	Command getListClickCommand();
 
 	Command getListLongClickCommand();

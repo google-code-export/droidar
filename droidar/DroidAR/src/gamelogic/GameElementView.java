@@ -19,7 +19,7 @@ import de.rwth.R;
 
 public class GameElementView extends SimpleCustomView implements Updateable {
 
-	private static final int DEFAULT_VIEW_SIZE = 250;
+	private static final int DEFAULT_VIEW_SIZE_IN_DIP = 80;
 	private static final int MARGIN = 4;
 	private static final float DEFAULT_UPDATE_SPEED = 0.1f;
 	private static final String LOG_TAG = "GameElementView";
@@ -46,13 +46,13 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 
 	public GameElementView(Context context, int iconid) {
 		super(context);
-		init(DEFAULT_VIEW_SIZE, loadBitmapFromId(context, iconid));
+		init((int) dipToPixels(DEFAULT_VIEW_SIZE_IN_DIP), loadBitmapFromId(context, iconid));
 	}
 
 	@Deprecated
 	public GameElementView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init(DEFAULT_VIEW_SIZE,
+		init((int) dipToPixels(DEFAULT_VIEW_SIZE_IN_DIP),
 				loadBitmapFromId(context, R.drawable.hippopotamus64));
 	}
 
@@ -80,7 +80,7 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 		canvas.drawArc(arcRect, -90, myLoadingAngle, true, paint);
 	}
 
-	private void init(int viewSize, Bitmap icon) {
+	private void init(int viewSizeInPixels, Bitmap icon) {
 
 		paint = new Paint();
 
@@ -94,7 +94,7 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 		loadingLinePaint.setStyle(Paint.Style.STROKE);
 		loadingLinePaint.setStrokeWidth(3);
 
-		setSize(viewSize, icon);
+		setSize(viewSizeInPixels, icon);
 
 		if (isInEditMode())
 			loadDemoValues();

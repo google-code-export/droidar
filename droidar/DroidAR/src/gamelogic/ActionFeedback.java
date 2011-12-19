@@ -20,6 +20,11 @@ public class ActionFeedback {
 		// TODO store in list
 	}
 
+	public void addInfo(String infoText) {
+		Log.v("Feedback", infoText);
+		myLog += SPACES + infoText + "\n";
+	}
+
 	public void setActionCorrectExecuted(boolean actionCorrectExecuted) {
 		this.actionCorrectExecuted = actionCorrectExecuted;
 	}

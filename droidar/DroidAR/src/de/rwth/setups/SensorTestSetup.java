@@ -18,14 +18,12 @@ import worldData.SystemUpdater;
 import worldData.World;
 import actions.Action;
 import actions.ActionBufferedCameraAR;
-import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
-import actions.ActionRotateCameraBufferedDirect;
 import actions.ActionRotateCameraBuffered3;
 import actions.ActionRotateCameraBuffered4;
 import actions.ActionRotateCameraBufferedDebug;
-import actions.ActionRotateCameraDirectlyBuffered;
+import actions.ActionRotateCameraBufferedDirect;
 import actions.ActionRotateCameraUnbuffered;
 import actions.ActionRotateCameraUnbuffered2;
 import android.app.Activity;
@@ -40,7 +38,6 @@ public class SensorTestSetup extends Setup {
 	private Action rotActionB3;
 	private Action rotActionB4;
 	private Action rotActionDebug;
-	private Action rotActionDirBuff;
 	private Action rotActionUnB;
 	private Action rotActionUnB2;
 	private Action rotActionB2;
@@ -62,7 +59,6 @@ public class SensorTestSetup extends Setup {
 		rotActionB3 = new ActionRotateCameraBuffered3(camera);
 		rotActionB4 = new ActionRotateCameraBuffered4(camera);
 		rotActionDebug = new ActionRotateCameraBufferedDebug(camera);
-		rotActionDirBuff = new ActionRotateCameraDirectlyBuffered(camera);
 		rotActionUnB = new ActionRotateCameraUnbuffered(camera);
 		rotActionUnB2 = new ActionRotateCameraUnbuffered2(camera);
 
@@ -141,7 +137,6 @@ public class SensorTestSetup extends Setup {
 		worldUpdater.addObjectToUpdateCycle(rotActionB3);
 		worldUpdater.addObjectToUpdateCycle(rotActionB4);
 		worldUpdater.addObjectToUpdateCycle(rotActionDebug);
-		worldUpdater.addObjectToUpdateCycle(rotActionDirBuff);
 		worldUpdater.addObjectToUpdateCycle(rotActionUnB);
 		worldUpdater.addObjectToUpdateCycle(rotActionUnB2);
 	}

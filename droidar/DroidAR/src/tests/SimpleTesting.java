@@ -57,6 +57,7 @@ public abstract class SimpleTesting {
 		new IOTests(myTargetActivity).run();
 		new WorldTests().run();
 		new AndroidDeviceOnlyTests(myTargetActivity).run();
+		new GameLogicTests().run();
 
 	}
 }

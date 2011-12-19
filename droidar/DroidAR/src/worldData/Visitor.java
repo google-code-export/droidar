@@ -77,15 +77,25 @@ public abstract class Visitor {
 		return false;
 	}
 
+	public boolean default_visit(Entity entity) {
+		return visit(entity);
+	}
+
+	public boolean visit(Entity x) {
+		Log.w(LOG_TAG,
+				this.getClass().toString() + "Entity: no visit action defined "
+						+ "for classtype " + x.getClass());
+		return false;
+	}
+
 	public boolean default_visit(RenderableEntity renderEntity) {
 		return visit(renderEntity);
 	}
 
 	public boolean visit(RenderableEntity x) {
-		Log.w(LOG_TAG,
-				this.getClass().toString()
-						+ "Shape: no visit action defined for classtype "
-						+ x.getClass());
+		Log.w(LOG_TAG, this.getClass().toString()
+				+ "RenderableEntity: no visit action defined for classtype "
+				+ x.getClass());
 		return false;
 	}
 
