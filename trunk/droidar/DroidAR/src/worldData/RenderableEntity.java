@@ -23,4 +23,6 @@ import gl.scenegraph.Shape;
  */
 public interface RenderableEntity extends Entity, Renderable {
 
+	//public RenderableEntity getParent();
+	
 }

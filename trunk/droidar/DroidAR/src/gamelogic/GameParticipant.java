@@ -48,6 +48,10 @@ public class GameParticipant implements Entity, EditItem {
 		return myStatList;
 	}
 
+	/**
+	 * @param statName
+	 * @return {@link Float#NaN} if the stat could not be found!
+	 */
 	public float getStatValue(String statName) {
 		if (myStatList == null) {
 			Log.e(LOG_TAG, "Tryed to get " + statName
@@ -61,6 +65,16 @@ public class GameParticipant implements Entity, EditItem {
 			return Float.NaN;
 		}
 		return s.getValue();
+	}
+
+	public boolean setStatValue(String statName, float newStatValue) {
+		if (myStatList == null)
+			return false;
+		Stat s = getStatList().get(statName);
+		if (s == null)
+			return false;
+		s.setValue(newStatValue);
+		return true;
 	}
 
 	public ActionList getActionList() {
@@ -77,8 +91,6 @@ public class GameParticipant implements Entity, EditItem {
 
 	public ActionFeedback doAction(String actionName, GameParticipant target) {
 		if (actionName == null)
-			return null;
-		if (target == null)
 			return null;
 		GameAction a = getActionList().get(actionName);
 		if (a != null) {

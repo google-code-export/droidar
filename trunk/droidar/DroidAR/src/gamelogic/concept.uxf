@@ -29,7 +29,7 @@
 --
 </panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>1519</x><y>56</y><w>147</w><h>49</h></coordinates><panel_attributes>*ExampleSetup*
 --
-fg=red</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>1491</x><y>84</y><w>118</w><h>237</h></coordinates><panel_attributes>lt=&lt;-
+fg=red</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>1491</x><y>84</y><w>112</w><h>231</h></coordinates><panel_attributes>lt=&lt;-
 myPlayer</panel_attributes><additional_attributes>21;224;105;21</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>693</x><y>196</y><w>147</w><h>49</h></coordinates><panel_attributes>*GameElementList*
 --
 </panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>406</x><y>371</y><w>168</w><h>49</h></coordinates><panel_attributes>/*GameElement*/
@@ -79,8 +79,8 @@ if fireResistance!=null
 *GameParticipant*
 --
 
-update all game-elements</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>1092</x><y>203</y><w>146</w><h>132</h></coordinates><panel_attributes>lt=&lt;-
-myStatList</panel_attributes><additional_attributes>133;21;21;119</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>1344</x><y>203</y><w>111</w><h>118</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>21;21;98;105</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>1288</x><y>203</y><w>55</w><h>272</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>21;21;42;259</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>1204</x><y>203</y><w>62</w><h>195</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>49;21;21;182</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>343</x><y>959</y><w>168</w><h>77</h></coordinates><panel_attributes>*GetDefencePoints*
+update all game-elements</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>1092</x><y>203</y><w>139</w><h>132</h></coordinates><panel_attributes>lt=-&gt;
+myStatList</panel_attributes><additional_attributes>126;21;21;119</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>1344</x><y>203</y><w>111</w><h>118</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>21;21;98;105</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>1288</x><y>203</y><w>55</w><h>272</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>21;21;42;259</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>1204</x><y>203</y><w>62</w><h>195</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>49;21;21;182</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>343</x><y>959</y><w>168</w><h>77</h></coordinates><panel_attributes>*GetDefencePoints*
 --
  
 --
@@ -107,7 +107,7 @@ m1=  *
 </panel_attributes><additional_attributes>21;21;98;161</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>798</x><y>308</y><w>119</w><h>77</h></coordinates><panel_attributes>*ActiontList*
 --
 
-</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>798</x><y>224</y><w>34</w><h>97</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>21;21;21;84</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>868</x><y>168</y><w>349</w><h>153</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>798</x><y>224</y><w>34</w><h>97</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>21;21;21;84</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>868</x><y>168</y><w>349</w><h>153</h></coordinates><panel_attributes>lt=-&gt;
 myActionList</panel_attributes><additional_attributes>336;21;21;140</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>616</x><y>371</y><w>112</w><h>63</h></coordinates><panel_attributes>*BoosterList*
 --
 
@@ -132,10 +132,11 @@ String target
 --
 </panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>532</x><y>399</y><w>209</w><h>139</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>21;21;196;126</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>910</x><y>105</y><w>175</w><h>77</h></coordinates><panel_attributes>*GameItemList*
 --
-</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>1064</x><y>119</y><w>153</w><h>62</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>1064</x><y>119</y><w>153</w><h>62</h></coordinates><panel_attributes>lt=-&gt;
 myItemList</panel_attributes><additional_attributes>140;49;21;21</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>819</x><y>56</y><w>132</w><h>160</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>21;147;49;147;49;21;119;21;119;49</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>777</x><y>525</y><w>97</w><h>49</h></coordinates><panel_attributes>lt=&lt;-
 
         </panel_attributes><additional_attributes>84;35;21;35</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>728</x><y>644</y><w>133</w><h>77</h></coordinates><panel_attributes>*ActionFeedback*
 </panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>518</x><y>35</y><w>168</w><h>49</h></coordinates><panel_attributes>*Updatable*
 --
-</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>511</x><y>63</y><w>83</w><h>321</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>70;21;21;308</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>637</x><y>63</y><w>83</w><h>146</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>21;21;70;133</additional_attributes></element></umlet_diagram>
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>511</x><y>63</y><w>83</w><h>321</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>70;21;21;308</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>637</x><y>63</y><w>83</w><h>146</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>21;21;70;133</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>637</x><y>378</y><w>475</w><h>279</h></coordinates><panel_attributes>lt=&lt;-
+myStatList</panel_attributes><additional_attributes>462;21;378;238;56;238;21;266</additional_attributes></element></umlet_diagram>

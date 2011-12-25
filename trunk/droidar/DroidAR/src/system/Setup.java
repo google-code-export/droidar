@@ -77,9 +77,12 @@ public abstract class Setup {
 	private static final String STEP_DONE = "All Setup-steps done!";
 
 	/**
+	 * use {@link Setup#getActivity()} instead
+	 * 
 	 * This is the activity which is created to display the AR content (camera
 	 * preview, opengl-layer and UI-layer)
 	 */
+	@Deprecated
 	public Activity myTargetActivity;
 	private CommandGroup myOptionsMenuCommands;
 	public CustomGLSurfaceView myGLSurfaceView;

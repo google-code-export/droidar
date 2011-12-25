@@ -6,6 +6,7 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
 
 import util.EfficientList;
 import util.Log;
@@ -257,12 +258,20 @@ public class GLRenderer implements Renderer {
 		// gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 
-		// Transparancy
-		// important: transparent objects have to be drawn last!
+		/*
+		 * Transparancy
+		 * 
+		 * "The only sure way to achieve visually correct results is to sort and
+		 * render your primitives from back to front."
+		 * 
+		 * http://www.opengl.org/sdk/docs/man/xhtml/glBlendFunc.xml
+		 * 
+		 */
 		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-
+		// gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_DST_ALPHA);
+		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		// Enable smooth shading for nice light effects
+
 		gl.glShadeModel(GL10.GL_SMOOTH);
 	}
 
