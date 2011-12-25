@@ -6,10 +6,9 @@ import java.util.Date;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import system.ParentStack;
+import util.Log;
 import util.Vec;
 import worldData.Visitor;
-import util.Log;
 
 /**
  * Great tutorials:
@@ -254,7 +253,7 @@ public class LightSource extends MeshComponent {
 	}
 
 	@Override
-	public void draw(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+	public void draw(GL10 gl, Renderable parent) {
 		/*
 		 * the lightsource can be added as a normal mesh to the world to allow
 		 * movements

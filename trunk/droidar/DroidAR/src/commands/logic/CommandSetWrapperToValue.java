@@ -1,9 +1,9 @@
 package commands.logic;
 
+import util.Log;
 import util.Wrapper;
 import util.Wrapper.Type;
 import worldData.Obj;
-import util.Log;
 
 import commands.undoable.UndoableCommand;
 

@@ -3,8 +3,8 @@ package commands;
 import gui.ListItem;
 import gui.MetaInfos;
 import listeners.ItemGuiListener;
-import worldData.HasInfosInterface;
 import util.Log;
+import worldData.HasInfosInterface;
 import android.view.View;
 import android.view.ViewGroup;
 

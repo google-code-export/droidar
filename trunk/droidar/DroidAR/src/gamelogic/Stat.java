@@ -1,9 +1,9 @@
 package gamelogic;
 
-import worldData.Updateable;
 import gui.simpleUI.ModifierGroup;
 import gui.simpleUI.modifiers.InfoText;
 import gui.simpleUI.modifiers.PlusMinusModifier;
+import worldData.Updateable;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;

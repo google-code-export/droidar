@@ -1,24 +1,16 @@
 package de.rwth.setups;
 
-import de.rwth.R;
-import actions.Action;
-import android.app.Activity;
-import android.content.Context;
-import android.view.View;
-import gamelogic.ActionFeedback;
 import gamelogic.ActionThrowFireball;
 import gamelogic.GameAction;
-import gamelogic.GameElement;
-import gamelogic.GameElementView;
 import gamelogic.GameParticipant;
 import gamelogic.Stat;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gui.GuiSetup;
-import gui.simpleUI.ModifierGroup;
-import gui.simpleUI.ModifierInterface;
 import system.DefaultARSetup;
 import worldData.World;
+import android.app.Activity;
+import de.rwth.R;
 
 public class GameDemoSetup extends DefaultARSetup {
 	private GameAction e;

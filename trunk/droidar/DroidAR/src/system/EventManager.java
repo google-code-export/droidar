@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import listeners.EventListener;
+import util.Log;
 import actions.EventListenerGroup;
 import android.app.Activity;
 import android.content.Context;
@@ -20,7 +21,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 

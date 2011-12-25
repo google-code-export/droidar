@@ -1,7 +1,5 @@
 package tests;
 
-import commands.DebugCommandPositionEvent;
-
 import geo.GeoGraph;
 import geo.GeoObj;
 import gl.GLCamera;
@@ -10,6 +8,8 @@ import util.Vec;
 import worldData.World;
 import actions.ActionCalcRelativePos;
 import android.util.Log;
+
+import commands.DebugCommandPositionEvent;
 
 public class GeoTests extends SimpleTesting {
 

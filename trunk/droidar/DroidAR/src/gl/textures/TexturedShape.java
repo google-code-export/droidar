@@ -4,9 +4,9 @@ import gl.scenegraph.Shape;
 
 import java.util.ArrayList;
 
+import util.Log;
 import util.Vec;
 import android.graphics.Bitmap;
-import util.Log;
 
 public class TexturedShape extends Shape {
 

@@ -5,7 +5,6 @@ import geo.GeoObj;
 import javax.microedition.khronos.opengles.GL10;
 
 import system.EventManager;
-import system.ParentStack;
 import util.Calculus;
 import util.HasDebugInformation;
 import util.Log;
@@ -320,12 +319,11 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	 * parameters like the position and the rotation
 	 * 
 	 * @param gl
-	 * @param
 	 * @param parent
+	 * @param
 	 */
 	@Override
-	public synchronized void render(GL10 gl, Renderable parent,
-			ParentStack<Renderable> stack) {
+	public synchronized void render(GL10 gl, Renderable parent) {
 
 		// if the camera sould not be in the center of the rotation it has to be
 		// moved out before rotating:

@@ -1,8 +1,8 @@
 package gl.textures;
 
 import util.EfficientList;
-import android.graphics.Bitmap;
 import util.Log;
+import android.graphics.Bitmap;
 
 public class Texture {
 

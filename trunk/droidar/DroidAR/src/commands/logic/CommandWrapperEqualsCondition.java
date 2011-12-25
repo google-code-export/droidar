@@ -1,7 +1,7 @@
 package commands.logic;
 
-import util.Wrapper;
 import util.Log;
+import util.Wrapper;
 
 import commands.Command;
 

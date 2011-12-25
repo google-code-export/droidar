@@ -1,6 +1,5 @@
 package system;
 
-import listeners.EventListener;
 import geo.GeoObj;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
@@ -16,11 +15,12 @@ import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
 import actions.ActionWASDMovement;
-import actions.EventListenerGroup;
 import actions.ActionWaitForAccuracy;
+import actions.EventListenerGroup;
 import android.R;
 import android.app.Activity;
 import android.location.Location;
+
 import commands.Command;
 
 /**

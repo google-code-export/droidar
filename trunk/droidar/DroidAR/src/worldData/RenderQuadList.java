@@ -7,7 +7,6 @@ import gl.Renderable;
 import javax.microedition.khronos.opengles.GL10;
 
 import system.Container;
-import system.ParentStack;
 import util.EfficientList;
 import util.QuadTree;
 import util.QuadTree.ResultListener;
@@ -98,13 +97,13 @@ public class RenderQuadList implements RenderableEntity,
 	}
 
 	@Override
-	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+	public void render(GL10 gl, Renderable parent) {
 		Vec p = myGlCamera.getPosition();
 		EfficientList<RenderableEntity> list = getList(p.x, p.y);
 		for (int i = 0; i < list.myLength; i++) {
 			RenderableEntity obj = list.get(i);
 			if (obj != null)
-				obj.render(gl, this, stack);
+				obj.render(gl, this);
 		}
 	}
 

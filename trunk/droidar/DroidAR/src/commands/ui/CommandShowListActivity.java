@@ -5,9 +5,9 @@ import gui.CustomListActivity;
 import gui.ListSettings;
 import system.ActivityConnector;
 import system.Container;
+import util.Log;
 import util.Wrapper;
 import android.app.Activity;
-import util.Log;
 import android.widget.BaseAdapter;
 
 import commands.Command;

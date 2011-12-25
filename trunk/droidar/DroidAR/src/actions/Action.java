@@ -1,11 +1,10 @@
 package actions;
 
-import gl.GLCamera;
 import listeners.EventListener;
-import util.Vec;
-import android.location.Location;
 import util.Log;
+import util.Vec;
 import worldData.Updateable;
+import android.location.Location;
 import android.view.MotionEvent;
 
 public abstract class Action implements EventListener, Updateable {

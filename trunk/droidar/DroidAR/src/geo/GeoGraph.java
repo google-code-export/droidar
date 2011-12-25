@@ -7,16 +7,15 @@ import java.util.Arrays;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import system.EventManager;
 import system.Container;
-import system.ParentStack;
+import system.EventManager;
 import util.EfficientList;
 import util.EfficientListQualified;
+import util.Log;
 import worldData.AbstractObj;
 import worldData.Updateable;
 import worldData.Visitor;
 import worldData.World;
-import util.Log;
 
 /**
  * A {@link GeoGraph} is a simple graph which holds {@link GeoObj}s and supports
@@ -512,21 +511,18 @@ public class GeoGraph extends AbstractObj implements Container<GeoObj> {
 	}
 
 	@Override
-	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+	public void render(GL10 gl, Renderable parent) {
 		if (myNodes == null)
 			return;
-		if (stack != null) {
-			stack.add(this);
-		}
 		{
 			for (int i = 0; i < myNodes.myLength; i++) {
-				myNodes.get(i).render(gl, this, stack);
+				myNodes.get(i).render(gl, this);
 			}
 		}
 		{
 			if ((isPath || useEdges) && myEdges != null) {
 				for (int i = 0; i < myEdges.myLength; i++) {
-					myEdges.get(i).render(gl, this, stack);
+					myEdges.get(i).render(gl, this);
 				}
 			}
 		}

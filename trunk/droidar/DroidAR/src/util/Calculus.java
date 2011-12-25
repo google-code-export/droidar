@@ -2,7 +2,6 @@ package util;
 
 import android.content.Context;
 import android.opengl.Matrix;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 public class Calculus {

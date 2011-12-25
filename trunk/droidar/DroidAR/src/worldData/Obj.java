@@ -9,7 +9,6 @@ import gl.scenegraph.MeshComponent;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import system.ParentStack;
 import util.EfficientList;
 import util.Vec;
 
@@ -93,7 +92,7 @@ public class Obj extends AbstractObj implements HasPosition, HasColor {
 	}
 
 	@Override
-	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+	public void render(GL10 gl, Renderable parent) {
 		// final Component myGraphicsComponent = myComponents
 		// .get(Consts.COMP_GRAPHICS);
 		if (myGraphicsComponent == null)
@@ -118,7 +117,7 @@ public class Obj extends AbstractObj implements HasPosition, HasColor {
 			gl.glColor4f(1, 1, 1, 1);
 		}
 
-		myGraphicsComponent.render(gl, this, stack);
+		myGraphicsComponent.render(gl, this);
 	}
 
 	@Override

@@ -1,9 +1,5 @@
 package actions;
 
-import system.ParentStack;
-import worldData.Updateable;
-import android.util.Log;
-import android.view.MotionEvent;
 import gl.GLCamera;
 
 public class ActionRotateCameraUnbuffered extends ActionWithSensorProcessing {

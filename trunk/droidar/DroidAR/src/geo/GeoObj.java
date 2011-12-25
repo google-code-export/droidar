@@ -6,6 +6,7 @@ import gui.MetaInfos;
 import system.EventManager;
 import util.EfficientList;
 import util.HasDebugInformation;
+import util.Log;
 import util.Vec;
 import worldData.Entity;
 import worldData.Obj;
@@ -13,7 +14,6 @@ import worldData.Visitor;
 import actions.ActionCalcRelativePos;
 import android.location.Address;
 import android.location.Location;
-import util.Log;
 
 /**
  * This is a subclass of {@link Obj} which has a fixed GPS position in the

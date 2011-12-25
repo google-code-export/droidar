@@ -1,11 +1,11 @@
 package actions;
 
-import system.EventManager;
 import geo.GeoCalcer;
 import gl.GLCamera;
+import system.EventManager;
+import util.Log;
 import worldData.World;
 import android.location.Location;
-import util.Log;
 
 /**
  * This action is the basic action for virtual camera movement in relation to

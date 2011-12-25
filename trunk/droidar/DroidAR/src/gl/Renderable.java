@@ -2,7 +2,6 @@ package gl;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import system.ParentStack;
 
 /**
  * Use this interface for custom rendering
@@ -11,5 +10,5 @@ import system.ParentStack;
  * 
  */
 public interface Renderable {
-	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack);
+	public void render(GL10 gl, Renderable parent);
 }

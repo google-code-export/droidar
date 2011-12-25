@@ -5,13 +5,12 @@ import gui.simpleUI.ModifierGroup;
 
 import java.util.Arrays;
 
-import commands.Command;
-
-import util.EfficientList;
+import util.Log;
 import worldData.Entity;
 import worldData.Updateable;
 import worldData.Visitor;
-import util.Log;
+
+import commands.Command;
 
 public class GameParticipant implements Entity, EditItem {
 

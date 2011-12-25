@@ -5,12 +5,11 @@ import gl.Renderable;
 import javax.microedition.khronos.opengles.GL10;
 
 import system.Container;
-import system.ParentStack;
 import util.EfficientList;
+import util.Log;
 import worldData.RenderableEntity;
 import worldData.Updateable;
 import worldData.Visitor;
-import util.Log;
 
 public class RenderList implements RenderableEntity,
 		Container<RenderableEntity> {
@@ -21,9 +20,9 @@ public class RenderList implements RenderableEntity,
 	private Updateable myParent;
 
 	@Override
-	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+	public void render(GL10 gl, Renderable parent) {
 		for (int i = 0; i < myItems.myLength; i++) {
-			myItems.get(i).render(gl, parent, stack);
+			myItems.get(i).render(gl, parent);
 		}
 	}
 

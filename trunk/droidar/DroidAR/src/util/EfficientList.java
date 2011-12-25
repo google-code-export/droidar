@@ -1,6 +1,5 @@
 package util;
 
-import util.Log;
 
 /**
  * collections are realy expensive so dont use them if performance is important!

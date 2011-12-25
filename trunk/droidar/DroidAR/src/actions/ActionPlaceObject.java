@@ -1,13 +1,14 @@
 package actions;
 
-import components.ViewPosCalcerComp;
-import de.rwth.setups.PlaceObjectsSetupTwo;
-
 import gl.GLCamera;
 import util.Vec;
 import util.Wrapper;
 import worldData.MoveComp;
 import worldData.Obj;
+
+import components.ViewPosCalcerComp;
+
+import de.rwth.setups.PlaceObjectsSetupTwo;
 
 /**
  * Don't use this {@link Action} anymore, instead use a

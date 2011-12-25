@@ -11,15 +11,14 @@ import gl.textures.TexturedShape;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import system.ParentStack;
 import util.IO;
+import util.Log;
 import util.Vec;
 import worldData.Obj;
 import worldData.Visitor;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import util.Log;
 import android.widget.TextView;
 
 /**
@@ -538,8 +537,7 @@ public class GLFactory {
 			}
 
 			@Override
-			public void draw(GL10 gl, Renderable parent,
-					ParentStack<Renderable> stack) {
+			public void draw(GL10 gl, Renderable parent) {
 				CordinateAxis.draw(gl);
 			}
 

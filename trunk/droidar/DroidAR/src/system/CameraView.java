@@ -2,10 +2,10 @@ package system;
 
 import java.io.IOException;
 
+import util.Log;
 import android.content.Context;
 import android.hardware.Camera;
 import android.util.AttributeSet;
-import util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 

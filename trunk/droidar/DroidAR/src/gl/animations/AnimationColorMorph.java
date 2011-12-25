@@ -3,11 +3,10 @@ package gl.animations;
 import gl.Color;
 import gl.HasColor;
 import gl.Renderable;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import util.Log;
-
-import system.ParentStack;
 import util.Vec;
 import worldData.Updateable;
 import worldData.Visitor;
@@ -24,7 +23,7 @@ public class AnimationColorMorph extends GLAnimation {
 	}
 
 	@Override
-	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+	public void render(GL10 gl, Renderable parent) {
 		// TODO Auto-generated method stub
 
 	}

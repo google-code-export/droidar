@@ -2,8 +2,8 @@ package gui.simpleUI.modifiers;
 
 import gui.simpleUI.AbstractModifier;
 import gui.simpleUI.SimpleUI;
-import android.content.Context;
 import util.Log;
+import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;

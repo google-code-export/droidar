@@ -1,19 +1,19 @@
 package de.rwth.setups;
 
-import java.util.HashMap;
-
-import commands.Command;
-
-import android.app.Activity;
-
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.GLText;
 import gl.scenegraph.MeshComponent;
 import gui.GuiSetup;
+
+import java.util.HashMap;
+
 import system.DefaultARSetup;
 import worldData.Obj;
 import worldData.World;
+import android.app.Activity;
+
+import commands.Command;
 
 public class FastChangingTextSetup extends DefaultARSetup {
 

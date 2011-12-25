@@ -1,18 +1,18 @@
 package components;
 
-import util.Log;
 import gl.scenegraph.MeshComponent;
 import util.EfficientList;
+import util.Log;
 import util.QuadTree;
 import util.Vec;
 import worldData.Entity;
 import worldData.LargeWorld;
 import worldData.Obj;
+import worldData.RenderableEntity;
 import worldData.UpdateTimer;
 import worldData.Updateable;
 import worldData.Visitor;
 import worldData.World;
-import worldData.RenderableEntity;
 
 import commands.Command;
 
