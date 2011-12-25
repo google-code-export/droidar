@@ -6,7 +6,6 @@ import gl.scenegraph.MeshComponent;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import system.ParentStack;
 import worldData.Updateable;
 import worldData.Visitor;
 import android.util.Log;
@@ -42,7 +41,7 @@ public class GDXMesh extends MeshComponent {
 	}
 
 	@Override
-	public void draw(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+	public void draw(GL10 gl, Renderable parent) {
 
 		gl.glEnable(GL10.GL_CULL_FACE);
 
@@ -63,15 +62,19 @@ public class GDXMesh extends MeshComponent {
 	}
 
 	@Override
-	public synchronized boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
-		super.update(timeDelta, parent, stack);
+	public synchronized boolean update(float timeDelta, Updateable parent) {
+		super.update(timeDelta, parent);
 		if (anim != null) {
 			animTime += timeDelta;
 			if (animTime > anim.totalDuration - anim.frameDuration) {
 				animTime = 0;
 			}
-			((KeyframedModel) model).setAnimation(anim.name, animTime, true);
+			try {
+				((KeyframedModel) model)
+						.setAnimation(anim.name, animTime, true);
+			} catch (Exception e) {
+			}
+
 		}
 		return true;
 	}
