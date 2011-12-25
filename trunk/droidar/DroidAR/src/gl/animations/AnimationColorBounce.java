@@ -10,7 +10,7 @@ import util.Vec;
 import worldData.Updateable;
 import worldData.Visitor;
 
-public class AnimationColorBounce implements GLAnimation {
+public class AnimationColorBounce extends GLAnimation {
 
 	private float mySpeed;
 	private Color myLowerColor;
@@ -43,8 +43,7 @@ public class AnimationColorBounce implements GLAnimation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 
 		final Vec distance = Color.morphToNewColor(myCurrentColor,
 				myTargetColor, timeDelta * mySpeed);

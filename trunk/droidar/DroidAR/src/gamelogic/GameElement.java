@@ -2,7 +2,6 @@ package gamelogic;
 
 import gui.ListItem;
 import gui.simpleUI.ModifierGroup;
-import system.ParentStack;
 import util.IO;
 import worldData.Entity;
 import worldData.EntityList;
@@ -119,10 +118,9 @@ public abstract class GameElement implements ListItem, Updateable {
 	public abstract void generateEditGUI(ModifierGroup s);
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		if (myListeners != null) {
-			return myListeners.update(timeDelta, this, stack);
+			return myListeners.update(timeDelta, this);
 		}
 		return false;
 	}

@@ -21,6 +21,7 @@ public class TimeModifier implements RenderableEntity {
 	private float myCurrentFactor;
 	private float myNewFactor;
 	private float myAdjustmentSpeed;
+	private Updateable myParent;
 
 	public TimeModifier(float timeFactor) {
 		this(timeFactor, DEFAULT_ADJUSTMENT_SPEED);
@@ -33,8 +34,19 @@ public class TimeModifier implements RenderableEntity {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public Updateable getMyParent() {
+		return myParent;
+	}
+
+	@Override
+	public void setMyParent(Updateable parent) {
+		myParent = parent;
+
+	}
+
+	@Override
+	public boolean update(float timeDelta, Updateable parent) {
+		setMyParent(parent);
 		if (different(myCurrentFactor, myNewFactor))
 			myCurrentFactor = Calculus.morphToNewValue(timeDelta
 					* myAdjustmentSpeed, myNewFactor, myCurrentFactor);
@@ -43,7 +55,7 @@ public class TimeModifier implements RenderableEntity {
 		if (myCurrentFactor == 0)
 			return true;
 		if (myChild != null)
-			return myChild.update(timeDelta * myCurrentFactor, parent, stack);
+			return myChild.update(timeDelta * myCurrentFactor, parent);
 
 		Log.e(LOG_TAG, "Child was not set");
 		return false;

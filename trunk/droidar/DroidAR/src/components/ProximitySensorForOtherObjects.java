@@ -2,7 +2,6 @@ package components;
 
 import util.Log;
 import gl.scenegraph.MeshComponent;
-import system.ParentStack;
 import util.EfficientList;
 import util.QuadTree;
 import util.Vec;
@@ -34,10 +33,23 @@ public class ProximitySensorForOtherObjects implements Entity {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public Updateable getMyParent() {
+		Log.e(LOG_TAG, "Get parent called which is not "
+				+ "implemented for this component!");
+		return null;
+	}
 
-		if (myTimer.update(timeDelta, this, stack)) {
+	@Override
+	public void setMyParent(Updateable parent) {
+		// can't have children so the parent does not have to be stored
+		Log.e(LOG_TAG, "Set parent called which is not "
+				+ "implemented for this component!");
+	}
+
+	@Override
+	public boolean update(float timeDelta, Updateable parent) {
+
+		if (myTimer.update(timeDelta, this)) {
 			if (parent instanceof Obj) {
 				Obj obj = (Obj) parent;
 				MeshComponent myMesh = obj.getGraphicsComponent();

@@ -8,7 +8,7 @@ import util.Vec;
 import worldData.Updateable;
 import worldData.Visitor;
 
-public class AnimationBounce implements GLAnimation {
+public class AnimationBounce extends GLAnimation {
 
 	private final int mySpeed;
 	private final Vec dEnd;
@@ -37,8 +37,7 @@ public class AnimationBounce implements GLAnimation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 
 		// TODO this does not bounce nice, better use sort of gravity version
 

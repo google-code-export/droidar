@@ -2,7 +2,6 @@ package actions;
 
 import gl.GLCamera;
 import gl.GLUtilityClass;
-import system.ParentStack;
 import util.Calculus;
 import worldData.Updateable;
 import actions.algos.Algo;
@@ -85,8 +84,7 @@ public abstract class ActionWithSensorProcessing extends Action {
 	}
 
 	@Override
-	public synchronized boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public synchronized boolean update(float timeDelta, Updateable parent) {
 		if (magnetoChanged || accelChanged || orientationDataChanged) {
 			if (magnetoChanged || accelChanged) {
 				// if accel or magnet changed:

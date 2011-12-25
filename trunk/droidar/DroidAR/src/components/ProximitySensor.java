@@ -3,7 +3,6 @@ package components;
 import geo.GeoObj;
 import gl.GLCamera;
 import gl.scenegraph.MeshComponent;
-import system.ParentStack;
 import util.Vec;
 import worldData.Entity;
 import worldData.Obj;
@@ -40,10 +39,9 @@ public abstract class ProximitySensor implements Entity {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 
-		if (myTimer.update(timeDelta, this, stack)) {
+		if (myTimer.update(timeDelta, this)) {
 			if (parent instanceof Obj) {
 				Obj obj = (Obj) parent;
 				MeshComponent m = obj.getGraphicsComponent();
@@ -67,6 +65,20 @@ public abstract class ProximitySensor implements Entity {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public Updateable getMyParent() {
+		Log.e(LOG_TAG, "Get parent called which is not "
+				+ "implemented for this component!");
+		return null;
+	}
+
+	@Override
+	public void setMyParent(Updateable parent) {
+		// can't have children so the parent does not have to be stored
+		Log.e(LOG_TAG, "Set parent called which is not "
+				+ "implemented for this component!");
 	}
 
 	private void checkCurrentDistance(Obj obj, MeshComponent m,

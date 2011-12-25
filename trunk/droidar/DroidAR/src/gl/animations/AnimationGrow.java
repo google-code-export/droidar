@@ -10,7 +10,7 @@ import worldData.UpdateTimer;
 import worldData.Updateable;
 import worldData.Visitor;
 
-public class AnimationGrow implements GLAnimation {
+public class AnimationGrow extends GLAnimation {
 
 	private static final String LOG_TAG = "Grow Animation";
 	private float myGrothSize;
@@ -32,9 +32,8 @@ public class AnimationGrow implements GLAnimation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
-		if (myStopCondition.update(timeDelta, parent, stack)) {
+	public boolean update(float timeDelta, Updateable parent) {
+		if (myStopCondition.update(timeDelta, parent)) {
 			return false;
 		}
 		myGrothSize += myGrothFactor * timeDelta;

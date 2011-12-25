@@ -16,7 +16,7 @@ import worldData.Visitor;
  * @author Spobo
  * 
  */
-public class AnimationRotate implements GLAnimation {
+public class AnimationRotate extends GLAnimation {
 
 	private float angle = 0;
 	private final float speed;
@@ -33,8 +33,7 @@ public class AnimationRotate implements GLAnimation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		if (angle > 360) {
 			angle = 0;
 		}

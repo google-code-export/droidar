@@ -1,7 +1,6 @@
 package gamelogic;
 
 import gui.SimpleCustomView;
-import system.ParentStack;
 import worldData.Entity;
 import worldData.UpdateTimer;
 import worldData.Updateable;
@@ -16,8 +15,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.ViewParent;
 import de.rwth.R;
 
 public class GameElementView extends SimpleCustomView implements Entity {
@@ -195,9 +193,8 @@ public class GameElementView extends SimpleCustomView implements Entity {
 	// }
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
-		if (myTimer.update(timeDelta, parent, stack)) {
+	public boolean update(float timeDelta, Updateable parent) {
+		if (myTimer.update(timeDelta, parent)) {
 			if (parent instanceof GameAction) {
 				GameAction a = (GameAction) parent;
 				float prog = a
@@ -225,6 +222,20 @@ public class GameElementView extends SimpleCustomView implements Entity {
 		 * TODO if view was removed from parent it can return false here!
 		 */
 		return true;
+	}
+
+	@Override
+	public Updateable getMyParent() {
+		Log.e(LOG_TAG, "Get parent called which is not "
+				+ "implemented for this component!");
+		return null;
+	}
+
+	@Override
+	public void setMyParent(Updateable parent) {
+		// can't have children so the parent does not have to be stored
+		Log.e(LOG_TAG, "Set parent called which is not "
+				+ "implemented for this component!");
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import geo.GeoObj;
 import gl.GLCamera;
 import gl.HasPosition;
 import gl.scenegraph.MeshComponent;
-import system.ParentStack;
 import util.Vec;
 import worldData.Entity;
 import worldData.Obj;
@@ -54,14 +53,27 @@ public abstract class TooFarAwayComp implements Entity {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public Updateable getMyParent() {
+		Log.e(LOG_TAG, "Get parent called which is not "
+				+ "implemented for this component!");
+		return null;
+	}
+
+	@Override
+	public void setMyParent(Updateable parent) {
+		// can't have children so the parent does not have to be stored
+		Log.e(LOG_TAG, "Set parent called which is not "
+				+ "implemented for this component!");
+	}
+
+	@Override
+	public boolean update(float timeDelta, Updateable parent) {
 		/*
 		 * as long as the parent is not a HasPosition subclass object the timer
 		 * wont be updated
 		 */
 		if (parent instanceof HasPosition) {
-			if (timer.update(timeDelta, parent, stack)) {
+			if (timer.update(timeDelta, parent)) {
 				Vec pos = ((HasPosition) parent).getPosition();
 				if (pos == null && parent instanceof GeoObj) {
 					pos = ((GeoObj) parent).getVirtualPosition();

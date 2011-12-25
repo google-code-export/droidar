@@ -8,7 +8,7 @@ import util.Vec;
 import worldData.Updateable;
 import worldData.Visitor;
 
-public class AnimationMove implements GLAnimation {
+public class AnimationMove extends GLAnimation {
 
 	private final float MIN_DISTANCE = 0.01f;
 	private float timeToMove;
@@ -28,8 +28,7 @@ public class AnimationMove implements GLAnimation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		if (!done) {
 			Vec.morphToNewVec(pos, relativeTargetPos, timeDelta / timeToMove);
 			if (Vec.distance(pos, relativeTargetPos) < MIN_DISTANCE) {

@@ -9,7 +9,7 @@ import worldData.Updateable;
 import worldData.Visitor;
 import util.Log;
 
-public class AnimationShrink implements GLAnimation {
+public class AnimationShrink extends GLAnimation {
 
 	private static final String LOG_TAG = "Grow Animation";
 	private float myGrothSize = 1;
@@ -26,8 +26,7 @@ public class AnimationShrink implements GLAnimation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		if (myGrothSize > 0) {
 			myGrothSize -= myShrinkFactor * timeDelta;
 		} else {

@@ -125,14 +125,13 @@ public class LargeWorld extends World {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		EfficientList<RenderableEntity> list = getList(getMyCamera()
 				.getPosition().x, getMyCamera().getPosition().y);
 		for (int i = 0; i < list.myLength; i++) {
 			RenderableEntity obj = list.get(i);
 			if (obj != null)
-				obj.update(timeDelta, this, stack);
+				obj.update(timeDelta, this);
 		}
 		return true;
 	}
