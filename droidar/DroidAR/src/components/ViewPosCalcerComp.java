@@ -1,7 +1,7 @@
 package components;
 
+import android.util.Log;
 import gl.GLCamera;
-import system.ParentStack;
 import util.Vec;
 import worldData.Entity;
 import worldData.UpdateTimer;
@@ -29,10 +29,9 @@ public abstract class ViewPosCalcerComp implements Entity {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 
-		if (timer.update(timeDelta, this, stack)) {
+		if (timer.update(timeDelta, this)) {
 
 			Vec targetVec = myCamera
 					.getPositionOnGroundWhereTheCameraIsLookingAt();
@@ -46,6 +45,20 @@ public abstract class ViewPosCalcerComp implements Entity {
 		return true;
 	}
 
+	@Override
+	public Updateable getMyParent() {
+		Log.e(LOG_TAG, "Get parent called which is not "
+				+ "implemented for this component!");
+		return null;
+	}
+
+	@Override
+	public void setMyParent(Updateable parent) {
+		// can't have children so the parent does not have to be stored
+		Log.e(LOG_TAG, "Set parent called which is not "
+				+ "implemented for this component!");
+	}
+	
 	/**
 	 * This will be called in constant time intervals 
 	 * 

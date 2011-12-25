@@ -4,7 +4,6 @@ import gl.GLCamera;
 import gl.HasColor;
 import gl.HasPosition;
 import gl.scenegraph.Shape;
-import system.ParentStack;
 import util.EfficientList;
 import util.Vec;
 import worldData.Obj;
@@ -330,9 +329,8 @@ public class RadarView extends SimpleCustomView implements Updateable {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
-		if (myTimer.update(timeDelta, parent, stack)) {
+	public boolean update(float timeDelta, Updateable parent) {
+		if (myTimer.update(timeDelta, parent)) {
 			setRotation(myCamera.getCameraAnglesInDegree()[0]);
 		}
 		/*

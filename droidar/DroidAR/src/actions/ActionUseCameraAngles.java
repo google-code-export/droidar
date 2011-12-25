@@ -1,7 +1,6 @@
 package actions;
 
 import gl.GLCamera;
-import system.ParentStack;
 import worldData.Updateable;
 import android.hardware.SensorManager;
 
@@ -102,8 +101,7 @@ public abstract class ActionUseCameraAngles extends Action {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		float[] v = myCamera.getCameraAnglesInDegree();
 
 		float azimuth = v[0];

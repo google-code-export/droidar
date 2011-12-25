@@ -11,7 +11,7 @@ import util.Vec;
 import worldData.Updateable;
 import worldData.Visitor;
 
-public class AnimationFaceToCamera implements GLAnimation {
+public class AnimationFaceToCamera extends GLAnimation {
 
 	private GLCamera myTargetCamera;
 	private float lastUpdateAway = 0;
@@ -66,8 +66,7 @@ public class AnimationFaceToCamera implements GLAnimation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 
 		/*
 		 * TODO use mesh instead of assigning a mesh while creating this
@@ -94,7 +93,7 @@ public class AnimationFaceToCamera implements GLAnimation {
 
 	private void updateRotation(Updateable parent) {
 		if (parent instanceof MeshComponent) {
-			Vec pos = ((MeshComponent) parent).getAbsolutePosition();
+			Vec pos = ((MeshComponent) parent).getAbsoluteMeshPosition();
 			// Log.d("face camera animation", "mesh position: "+pos);
 			newRotationVec.toAngleVec(pos, myTargetCameraPosition);
 			/*

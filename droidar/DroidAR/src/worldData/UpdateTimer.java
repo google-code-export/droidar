@@ -1,6 +1,5 @@
 package worldData;
 
-import system.ParentStack;
 import commands.Command;
 
 public class UpdateTimer implements Updateable {
@@ -60,8 +59,7 @@ public class UpdateTimer implements Updateable {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		time += timeDelta;
 		if (time > myTriggerValue) {
 

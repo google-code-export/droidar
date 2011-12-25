@@ -533,20 +533,18 @@ public class GeoGraph extends AbstractObj implements Container<GeoObj> {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		if (myNodes == null)
 			return true;
-		if (stack != null)
-			stack.add(this);
+		setMyParent(parent);
 		{
 			for (int i = 0; i < myNodes.myLength; i++) {
-				myNodes.get(i).update(timeDelta, this, stack);
+				myNodes.get(i).update(timeDelta, this);
 			}
 		}
 		if (useEdges && myEdges != null) {
 			for (int i = 0; i < myEdges.myLength; i++) {
-				myEdges.get(i).update(timeDelta, this, stack);
+				myEdges.get(i).update(timeDelta, this);
 			}
 		}
 		return true;

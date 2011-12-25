@@ -1,6 +1,5 @@
 package gamelogic;
 
-import system.ParentStack;
 import util.Log;
 import worldData.Updateable;
 
@@ -29,10 +28,9 @@ public abstract class GameAction extends GameElement {
 			GameParticipant target);
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
-		super.update(timeDelta, parent, stack);
-		myStatList.update(timeDelta, this, stack);
+	public boolean update(float timeDelta, Updateable parent) {
+		super.update(timeDelta, parent);
+		myStatList.update(timeDelta, this);
 		return true;
 	}
 

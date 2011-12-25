@@ -1,6 +1,5 @@
 package gamelogic;
 
-import system.ParentStack;
 import worldData.Updateable;
 import gui.simpleUI.ModifierGroup;
 import gui.simpleUI.modifiers.InfoText;
@@ -32,14 +31,13 @@ public class ActionThrowFireball extends GameAction {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		float newStatValue = getStatValue(COOLDOWN_PROGRESS) + timeDelta;
 		float max = getStatValue(COOLDOWN_TIME);
 		if (newStatValue > max)
 			newStatValue = max;
 		setStatValue(COOLDOWN_PROGRESS, newStatValue);
-		return super.update(timeDelta, parent, stack);
+		return super.update(timeDelta, parent);
 	}
 
 	@Override

@@ -8,24 +8,25 @@ import gl.HasRotation;
 import gl.HasScale;
 import gl.LightSource;
 import gl.ObjectPicker;
-import gl.ParentMesh;
 import gl.Renderable;
 import gl.animations.GLAnimation;
 
+import javax.crypto.spec.OAEPParameterSpec;
 import javax.microedition.khronos.opengles.GL10;
 
 import listeners.SelectionListener;
 import system.Container;
 import system.ParentStack;
 import util.EfficientList;
+import util.Log;
 import util.Vec;
 import util.Wrapper;
 import worldData.AbstractObj;
+import worldData.Entity;
 import worldData.Obj;
 import worldData.RenderableEntity;
 import worldData.Updateable;
 import android.opengl.Matrix;
-import util.Log;
 
 import commands.Command;
 import commands.undoable.UndoableCommand;
@@ -43,7 +44,7 @@ import commands.undoable.UndoableCommand;
  * @author Spobo
  * 
  */
-public abstract class MeshComponent implements RenderableEntity, ParentMesh,
+public abstract class MeshComponent implements RenderableEntity,
 		SelectionListener, HasPosition, HasColor, HasRotation, HasScale {
 
 	private static final String LOG_TAG = "MeshComp";
@@ -67,10 +68,8 @@ public abstract class MeshComponent implements RenderableEntity, ParentMesh,
 	private boolean graficAnimationActive = true;
 	private RenderableEntity myChildren;
 
-	@Deprecated
-	private AbstractObj myParentObj;
-	@Deprecated
-	private ParentMesh myParentMesh;
+	private Updateable myParent;
+
 	private Command myOnClickCommand;
 	private Command myOnLongClickCommand;
 	private Command myOnMapClickCommand;
@@ -243,12 +242,11 @@ public abstract class MeshComponent implements RenderableEntity, ParentMesh,
 			ParentStack<Renderable> stack);
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		if ((myChildren != null) && (graficAnimationActive)) {
 
 			// if the animation does not need to be animated anymore..
-			if (!myChildren.update(timeDelta, this, stack)) {
+			if (!myChildren.update(timeDelta, this)) {
 				// ..remove it:
 				Log.d(LOG_TAG, myChildren
 						+ " will now be removed from mesh because it "
@@ -292,43 +290,25 @@ public abstract class MeshComponent implements RenderableEntity, ParentMesh,
 	}
 
 	@Override
-	@Deprecated
-	public ParentMesh getMyParentMesh() {
-		return myParentMesh;
+	public Updateable getMyParent() {
+		return myParent;
 	}
 
 	@Override
-	@Deprecated
-	public AbstractObj getMyParentObj() {
-		if (myParentObj == null) {
-			final ParentMesh p = myParentMesh;
-			if (p != null)
-				return p.getMyParentObj();
-		}
-		return myParentObj;
+	public void setMyParent(Updateable parent) {
+		myParent = parent;
 	}
 
-	@Deprecated
-	public void setMyParentMesh(ParentMesh parent) {
-		if (myParentMesh != null) {
-			Log.w(LOG_TAG, "The parentObject (" + myParentMesh + ") of " + this
-					+ " was changed to " + parent);
-		}
-		myParentMesh = parent;
-	}
-
-	// TODO dont remove, just reimplement with parameter ParentStack
-	@Override
-	public Vec getAbsolutePosition() {
+	public Vec getAbsoluteMeshPosition() {
 		Vec pos;
 		if (myPosition != null) {
 			pos = myPosition.copy();
 		} else {
 			pos = new Vec();
 		}
-		final ParentMesh p = getMyParentMesh();
-		if (p != null) {
-			pos.add(p.getAbsolutePosition());
+		Updateable p = getMyParent();
+		if (p instanceof MeshComponent) {
+			pos.add(((MeshComponent) p).getAbsoluteMeshPosition());
 		}
 		return pos;
 	}
@@ -410,11 +390,6 @@ public abstract class MeshComponent implements RenderableEntity, ParentMesh,
 	public MeshComponent clone() throws CloneNotSupportedException {
 		Log.e("", "MeshComponent.clone() subclass missed, add it there");
 		return null;
-	}
-
-	@Deprecated
-	public void setMyParentObj(AbstractObj obj) {
-		myParentObj = obj;
 	}
 
 	/**

@@ -2,7 +2,6 @@ package actions;
 
 import gl.GLCamera;
 import listeners.EventListener;
-import system.ParentStack;
 import util.Vec;
 import android.location.Location;
 import util.Log;
@@ -91,8 +90,7 @@ public abstract class Action implements EventListener, Updateable {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		Log.e(LOG_TAG,
 				"update event was not handeld correctly by this action type:"
 						+ this.getClass().toString());

@@ -36,6 +36,7 @@ public class RenderQuadList implements RenderableEntity,
 
 	private GLCamera myGlCamera;
 	private boolean wasClearedAtLeastOnce = false;
+	private Updateable myParent;
 
 	public RenderQuadList(GLCamera glCamera, float renderDistance,
 			float recalcDistance) {
@@ -68,14 +69,24 @@ public class RenderQuadList implements RenderableEntity,
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public Updateable getMyParent() {
+		return myParent;
+	}
+
+	@Override
+	public void setMyParent(Updateable parent) {
+		myParent = parent;
+	}
+
+	@Override
+	public boolean update(float timeDelta, Updateable parent) {
+		setMyParent(parent);
 		Vec p = myGlCamera.getPosition();
 		EfficientList<RenderableEntity> list = getList(p.x, p.y);
 		for (int i = 0; i < list.myLength; i++) {
 			RenderableEntity obj = list.get(i);
 			if (obj != null)
-				obj.update(timeDelta, this, stack);
+				obj.update(timeDelta, this);
 		}
 		return true;
 	}

@@ -23,6 +23,7 @@ public abstract class AbstractObj implements HasInfosInterface, ListItem,
 	private Command myOnDoubleClickCommand;
 	private Command myOnLongClickCommand;
 	private Command myOnMapClickCommand;
+	private Updateable myParent;
 
 	@Override
 	public MetaInfos getInfoObject() {
@@ -38,6 +39,16 @@ public abstract class AbstractObj implements HasInfosInterface, ListItem,
 		return false;
 	}
 
+	@Override
+	public Updateable getMyParent() {
+		return myParent;
+	}
+	
+	@Override
+	public void setMyParent(Updateable parent) {
+		myParent=parent;
+	}
+	
 	@Override
 	public Command getListClickCommand() {
 		return myListClickCommand;

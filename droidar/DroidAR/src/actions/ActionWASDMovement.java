@@ -1,7 +1,6 @@
 package actions;
 
 import gl.GLCamera;
-import system.ParentStack;
 import util.Vec;
 import worldData.Updateable;
 import android.view.MotionEvent;
@@ -67,8 +66,7 @@ public class ActionWASDMovement extends Action {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		if (xFactor != 0 || yFactor != 0) {
 
 			float[] rayDir = new float[4];

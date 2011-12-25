@@ -12,7 +12,7 @@ import util.Vec;
 import worldData.Updateable;
 import worldData.Visitor;
 
-public class AnimationColorMorph implements GLAnimation {
+public class AnimationColorMorph extends GLAnimation {
 
 	private static final float MIN_DISTANCE = 0.001f;
 	private float myDurationInMS;
@@ -30,8 +30,7 @@ public class AnimationColorMorph implements GLAnimation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 
 		if (parent instanceof HasColor) {
 			Vec colorDistance = Color.morphToNewColor(

@@ -1,7 +1,6 @@
 package worldData;
 
 import system.Container;
-import system.ParentStack;
 import util.EfficientList;
 import util.Log;
 
@@ -10,12 +9,23 @@ public class EntityList implements Entity, Container<Entity> {
 	private static final String LOG_TAG = "RenderList";
 	EfficientList<Entity> myItems = new EfficientList<Entity>();
 	private boolean isClearedAtLeastOnce;
+	private Updateable myParent;
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public Updateable getMyParent() {
+		return myParent;
+	}
+
+	@Override
+	public void setMyParent(Updateable parent) {
+		myParent = parent;
+	}
+
+	@Override
+	public boolean update(float timeDelta, Updateable parent) {
+		setMyParent(parent);
 		for (int i = 0; i < myItems.myLength; i++) {
-			if (!myItems.get(i).update(timeDelta, parent, stack)) {
+			if (!myItems.get(i).update(timeDelta, parent)) {
 				Log.d(LOG_TAG, "Item " + myItems.get(i)
 						+ " will now be removed from RenderList because it "
 						+ "is finished (returned false on update())");

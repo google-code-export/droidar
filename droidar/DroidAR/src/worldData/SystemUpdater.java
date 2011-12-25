@@ -44,7 +44,7 @@ public class SystemUpdater implements Runnable {
 				final float timeDelta = (currentTime - lastTimeInMs) / 1000.0f;
 				lastTimeInMs = currentTime;
 				for (int i = 0; i < myObjectsToUpdate.myLength; i++) {
-					if (!myObjectsToUpdate.get(i).update(timeDelta, null, null)) {
+					if (!myObjectsToUpdate.get(i).update(timeDelta, null)) {
 						myObjectsToUpdate.remove(myObjectsToUpdate.get(i));
 					}
 				}

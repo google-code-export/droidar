@@ -95,8 +95,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 
 		if ((myRotationVec != null) && (myNewRotationVec != null)) {
 			Vec.morphToNewAngleVec(myRotationVec, myNewRotationVec, timeDelta);
@@ -107,7 +106,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		}
 
 		if (myPosition != null) {
-			myMover.update(timeDelta, this, stack);
+			myMover.update(timeDelta, this);
 		}
 
 		return true;

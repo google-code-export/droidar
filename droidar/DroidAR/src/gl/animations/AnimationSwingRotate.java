@@ -15,7 +15,7 @@ import worldData.Visitor;
  * @author Spobo
  * 
  */
-public class AnimationSwingRotate implements GLAnimation {
+public class AnimationSwingRotate extends GLAnimation {
 
 	private final float speed;
 	private final Vec dEnd;
@@ -51,8 +51,7 @@ public class AnimationSwingRotate implements GLAnimation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		Vec.morphToNewVec(currentPos, targetPos, timeDelta * speed);
 		final Vec distance = Vec.sub(currentPos, targetPos);
 		if ((Vec.abs(distance.x) < accuracy)

@@ -17,7 +17,7 @@ import worldData.Visitor;
  * @author Spobo
  * 
  */
-public class AnimationAlphaBlend implements GLAnimation {
+public class AnimationAlphaBlend extends GLAnimation {
 
 	private float mySpeed;
 	private Color myLowerColor;
@@ -50,8 +50,7 @@ public class AnimationAlphaBlend implements GLAnimation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		final Vec distance = Color.morphToNewColor(myCurrentColor,
 				myTargetColor, timeDelta * mySpeed);
 

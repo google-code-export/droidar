@@ -9,7 +9,7 @@ import util.Vec;
 import worldData.Updateable;
 import worldData.Visitor;
 
-public class AnimationPulse implements GLAnimation {
+public class AnimationPulse extends GLAnimation {
 
 	private final float speed;
 	private final Vec myLowerEnd;
@@ -38,8 +38,7 @@ public class AnimationPulse implements GLAnimation {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		Vec.morphToNewVec(currentScale, targetScale, timeDelta * speed);
 		final Vec distance = Vec.sub(currentScale, targetScale);
 		if ((Vec.abs(distance.x) < accuracy)

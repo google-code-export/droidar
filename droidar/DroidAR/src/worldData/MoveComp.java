@@ -23,6 +23,7 @@ public class MoveComp implements RenderableEntity {
 	 */
 	public Vec myTargetPos = new Vec();
 	private float mySpeedFactor;
+	private Updateable myParent;
 
 	/**
 	 * @param speedFactor
@@ -40,16 +41,22 @@ public class MoveComp implements RenderableEntity {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
-		Vec pos = null;
+	public Updateable getMyParent() {
+		return myParent;
+	}
 
+	@Override
+	public void setMyParent(Updateable parent) {
+		myParent = parent;
+	}
+
+	@Override
+	public boolean update(float timeDelta, Updateable parent) {
+		setMyParent(parent);
+		Vec pos = null;
 		// TODO remove these 2 lines later:
 		if (parent instanceof HasPosition)
 			pos = ((HasPosition) parent).getPosition();
-
-		if (pos == null && stack != null)
-			pos = stack.getFirst(HasPosition.class).getPosition();
 
 		if (pos != null) {
 			Vec.morphToNewVec(pos, myTargetPos, timeDelta * mySpeedFactor);

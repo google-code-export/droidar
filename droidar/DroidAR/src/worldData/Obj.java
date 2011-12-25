@@ -55,18 +55,19 @@ public class Obj extends AbstractObj implements HasPosition, HasColor {
 	 *            how many ms have passed since last update
 	 */
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		final int lenght = myComponents.myLength;
 		for (int i = 0; i < lenght; i++) {
 			if (myComponents.get(i) != null)
-				if (!myComponents.get(i).update(timeDelta, this, stack)) {
+				if (!myComponents.get(i).update(timeDelta, this)) {
 					remove(myComponents.get(i));
 				}
 		}
 		return true;
 	}
 
+	
+	
 	/**
 	 * @param uniqueCompName
 	 *            look into {@link Consts} and there the COMP_.. strings for
@@ -85,7 +86,6 @@ public class Obj extends AbstractObj implements HasPosition, HasColor {
 
 	public void setMyGraphicsComponent(MeshComponent myGraphicsComponent) {
 		this.myGraphicsComponent = myGraphicsComponent;
-		myGraphicsComponent.setMyParentObj(this);
 	}
 
 	public EfficientList<Entity> getMyComponents() {

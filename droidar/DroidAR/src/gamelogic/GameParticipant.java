@@ -7,7 +7,6 @@ import java.util.Arrays;
 
 import commands.Command;
 
-import system.ParentStack;
 import util.EfficientList;
 import worldData.Entity;
 import worldData.Updateable;
@@ -23,6 +22,7 @@ public class GameParticipant implements Entity, EditItem {
 	private String myType;
 	private String myName;
 	private int myIconId;
+	private Updateable myParent;
 
 	public GameParticipant(String type, String participantName, int iconId) {
 		myType = type;
@@ -122,14 +122,24 @@ public class GameParticipant implements Entity, EditItem {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public Updateable getMyParent() {
+		return myParent;
+	}
+
+	@Override
+	public void setMyParent(Updateable parent) {
+		myParent = parent;
+	}
+
+	@Override
+	public boolean update(float timeDelta, Updateable parent) {
+		setMyParent(parent);
 		if (myActionList != null)
-			myActionList.update(timeDelta, parent, stack);
+			myActionList.update(timeDelta, parent);
 		if (myStatList != null)
-			myStatList.update(timeDelta, parent, stack);
+			myStatList.update(timeDelta, parent);
 		if (myGameItemList != null)
-			myGameItemList.update(timeDelta, parent, stack);
+			myGameItemList.update(timeDelta, parent);
 		return true;
 	}
 

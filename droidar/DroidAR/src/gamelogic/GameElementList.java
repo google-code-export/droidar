@@ -7,7 +7,6 @@ import java.util.HashMap;
 import android.util.Log;
 
 import system.Container;
-import system.ParentStack;
 import util.EfficientList;
 import worldData.Updateable;
 
@@ -28,10 +27,9 @@ public abstract class GameElementList<T extends GameElement> implements
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
+	public boolean update(float timeDelta, Updateable parent) {
 		for (int i = 0; i < myList.myLength; i++) {
-			if (!myList.get(i).update(timeDelta, this, stack)) {
+			if (!myList.get(i).update(timeDelta, this)) {
 				Log.w(LOG_TAG, "Removing " + myList.get(i)
 						+ " from list because it returned"
 						+ " false on update()");

@@ -33,6 +33,7 @@ public class World implements RenderableEntity, Container<RenderableEntity> {
 	 */
 	private GLCamera myCamera;
 	private boolean wasBeenClearedAtLeastOnce;
+	private Updateable myParent;
 
 	public World(GLCamera glCamera) {
 		myCamera = glCamera;
@@ -109,12 +110,23 @@ public class World implements RenderableEntity, Container<RenderableEntity> {
 	}
 
 	@Override
-	public boolean update(float timeDelta, Updateable parent,
-			ParentStack<Updateable> stack) {
-		myCamera.update(timeDelta, this, stack);
+	public Updateable getMyParent() {
+		return myParent;
+	}
+
+	@Override
+	public void setMyParent(Updateable parent) {
+		myParent = parent;
+
+	}
+
+	@Override
+	public boolean update(float timeDelta, Updateable parent) {
+		setMyParent(parent);
+		myCamera.update(timeDelta, this);
 		if (container != null) {
 			for (int i = 0; i < container.myLength; i++) {
-				if (!container.get(i).update(timeDelta, this, stack)) {
+				if (!container.get(i).update(timeDelta, this)) {
 					Log.w(LOG_TAG, "Object " + container.get(i)
 							+ " was removed from the world on "
 							+ "update (because it returned false)!");
