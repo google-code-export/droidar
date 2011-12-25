@@ -3,7 +3,6 @@ package de.rwth;
 import gl.GLRenderer;
 import gl.Renderable;
 import gl.scenegraph.MeshComponent;
-import system.ParentStack;
 import system.Setup;
 import worldData.World;
 import android.opengl.GLSurfaceView.Renderer;
@@ -119,7 +118,7 @@ public abstract class ModelLoader implements gl.Renderable {
 
 	@Override
 	public void render(javax.microedition.khronos.opengles.GL10 gl,
-			gl.Renderable parent, ParentStack stack) {
+			gl.Renderable parent) {
 
 		Log.d(LOGTAG, "Trying to load " + fileName);
 

@@ -5,7 +5,6 @@ import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import system.ParentStack;
 import android.app.Activity;
 
 import com.badlogic.gdx.Gdx;
@@ -197,7 +196,7 @@ public class GDXConnection implements Renderable {
 
 	@Override
 	public void render(javax.microedition.khronos.opengles.GL10 gl,
-			gl.Renderable parent, ParentStack stack) {
+			gl.Renderable parent) {
 		if (!initGLStuff) {
 			setupGL(gl);
 			initGLStuff = true;
