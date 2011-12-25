@@ -14,6 +14,7 @@ import system.Setup;
 import util.Vec;
 import worldData.AbstractObj;
 import worldData.LargeWorld;
+import worldData.RenderQuadList;
 import worldData.RenderableEntity;
 import worldData.SystemUpdater;
 import worldData.World;

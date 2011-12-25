@@ -238,6 +238,17 @@ public abstract class MeshComponent implements RenderableEntity,
 		gl.glPopMatrix();
 	}
 
+	/**
+	 * Don't override the
+	 * {@link Renderable#render(GL10, Renderable, ParentStack)} method if you
+	 * are creating a subclass of {@link MeshComponent}. Instead implement this
+	 * method and all the translation and rotation abilities of the
+	 * {@link MeshComponent} will be applied automatically
+	 * 
+	 * @param gl
+	 * @param parent
+	 * @param stack
+	 */
 	public abstract void draw(GL10 gl, Renderable parent,
 			ParentStack<Renderable> stack);
 

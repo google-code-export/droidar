@@ -1,4 +1,4 @@
-package de.rwth.setups;
+package worldData;
 
 import gl.GLCamera;
 import gl.HasPosition;
@@ -12,9 +12,6 @@ import util.EfficientList;
 import util.QuadTree;
 import util.QuadTree.ResultListener;
 import util.Vec;
-import worldData.RenderableEntity;
-import worldData.Updateable;
-import worldData.Visitor;
 import android.util.Log;
 
 public class RenderQuadList implements RenderableEntity,
