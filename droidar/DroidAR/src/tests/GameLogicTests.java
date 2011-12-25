@@ -7,9 +7,6 @@ import gamelogic.BoosterList;
 import gamelogic.GameParticipant;
 import gamelogic.Stat;
 import gamelogic.StatList;
-import system.ParentStack;
-import worldData.Updateable;
-import worldData.Visitor;
 import de.rwth.R;
 
 public class GameLogicTests extends SimpleTesting {

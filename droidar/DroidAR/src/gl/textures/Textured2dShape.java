@@ -6,8 +6,6 @@ import gl.scenegraph.Shape;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11Ext;
 
-import system.ParentStack;
-
 import android.graphics.Bitmap;
 
 /**
@@ -34,7 +32,7 @@ public class Textured2dShape extends Shape {
 	}
 
 	@Override
-	public void draw(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+	public void draw(GL10 gl, Renderable parent) {
 		if (myRenderData != null) {
 			gl.glBindTexture(GL10.GL_TEXTURE_2D,
 					((TexturedRenderData) myRenderData).myTextureId);

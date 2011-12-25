@@ -2,12 +2,9 @@ package worldData;
 
 import gl.GLCamera;
 import gl.HasPosition;
-import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
-
-import system.ParentStack;
 import util.EfficientList;
 import util.QuadTree;
 import util.QuadTree.ResultListener;
@@ -110,15 +107,14 @@ public class LargeWorld extends World {
 	}
 
 	@Override
-	public void drawElements(GLCamera camera, GL10 gl,
-			ParentStack<Renderable> stack) {
+	public void drawElements(GLCamera camera, GL10 gl) {
 
 		EfficientList<RenderableEntity> list = getList(camera.getPosition().x,
 				camera.getPosition().y);
 		for (int i = 0; i < list.myLength; i++) {
 			RenderableEntity obj = list.get(i);
 			if (obj != null)
-				obj.render(gl, this, stack);
+				obj.render(gl, this);
 		}
 		// super.drawElements(camera, gl, stack);
 	}

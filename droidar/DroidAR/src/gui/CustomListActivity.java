@@ -2,9 +2,9 @@ package gui;
 
 import system.ActivityConnector;
 import util.EfficientList;
+import util.Log;
 import android.app.ListActivity;
 import android.os.Bundle;
-import util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;

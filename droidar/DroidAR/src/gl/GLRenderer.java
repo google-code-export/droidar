@@ -6,7 +6,6 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-import javax.microedition.khronos.opengles.GL11;
 
 import util.EfficientList;
 import util.Log;
@@ -117,7 +116,7 @@ public class GLRenderer implements Renderer {
 			for (int i = 0; i < elementsToRender.myLength; i++) {
 				// Reset the modelview matrix
 				gl.glLoadIdentity();
-				elementsToRender.get(i).render(gl, null, null);
+				elementsToRender.get(i).render(gl, null);
 			}
 
 			repeat = false;

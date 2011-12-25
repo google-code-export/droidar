@@ -1,9 +1,9 @@
 package commands;
 
-import util.Log;
 import geo.GeoObj;
 import listeners.EventListener;
 import system.EventManager;
+import util.Log;
 
 
 public class DebugCommandPositionEvent extends Command {

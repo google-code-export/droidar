@@ -1,11 +1,11 @@
 package worldData;
 
-import javax.microedition.khronos.opengles.GL10;
-
 import gl.HasPosition;
 import gl.Renderable;
 import gl.scenegraph.MeshComponent;
-import system.ParentStack;
+
+import javax.microedition.khronos.opengles.GL10;
+
 import util.Vec;
 
 /**
@@ -66,7 +66,7 @@ public class MoveComp implements RenderableEntity {
 	}
 
 	@Override
-	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+	public void render(GL10 gl, Renderable parent) {
 
 	}
 }

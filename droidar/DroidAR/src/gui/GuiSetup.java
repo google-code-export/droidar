@@ -2,9 +2,9 @@ package gui;
 
 import system.Setup;
 import system.TaskManager;
+import util.Log;
 import util.Wrapper;
 import android.graphics.Color;
-import util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;

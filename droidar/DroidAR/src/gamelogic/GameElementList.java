@@ -4,11 +4,10 @@ import gui.simpleUI.ModifierGroup;
 
 import java.util.HashMap;
 
-import android.util.Log;
-
 import system.Container;
 import util.EfficientList;
 import worldData.Updateable;
+import android.util.Log;
 
 public abstract class GameElementList<T extends GameElement> implements
 		Updateable, Container<T> {

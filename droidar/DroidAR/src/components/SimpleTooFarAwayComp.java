@@ -10,6 +10,7 @@ import util.Vec;
 import worldData.MoveComp;
 import worldData.Updateable;
 import android.app.Activity;
+
 import commands.Command;
 import commands.ui.CommandShowToast;
 

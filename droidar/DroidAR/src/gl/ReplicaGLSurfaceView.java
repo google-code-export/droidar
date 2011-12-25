@@ -13,7 +13,6 @@ import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
 import util.Log;
-
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.opengl.GLDebugHelper;

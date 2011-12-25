@@ -1,7 +1,7 @@
 package actions;
 
-import android.view.MotionEvent;
 import gl.GLCamera;
+import android.view.MotionEvent;
 
 /**
  * This action provides two useful features when using AR. First the virtual

@@ -1,28 +1,14 @@
 package de.rwth.setups;
 
-import geo.GeoObj;
-import gl.CustomGLSurfaceView;
-import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
-import gui.GuiSetup;
 import gui.InfoScreenSettings;
 import system.DefaultARSetup;
 import system.ErrorHandler;
-import system.EventManager;
-import system.Setup;
 import util.Vec;
 import worldData.AbstractObj;
-import worldData.LargeWorld;
 import worldData.RenderQuadList;
-import worldData.RenderableEntity;
-import worldData.SystemUpdater;
 import worldData.World;
-import actions.ActionCalcRelativePos;
-import actions.ActionMoveCameraBuffered;
-import actions.ActionRotateCameraBuffered;
-import actions.ActionWASDMovement;
-import android.app.Activity;
 
 public class LargeWorldsSetup extends DefaultARSetup {
 

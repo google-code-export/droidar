@@ -1,9 +1,9 @@
 package gl.animations;
 
 import gl.Renderable;
+
 import javax.microedition.khronos.opengles.GL10;
 
-import system.ParentStack;
 import util.Vec;
 import worldData.Updateable;
 import worldData.Visitor;
@@ -58,7 +58,7 @@ public class AnimationBounce extends GLAnimation {
 	}
 
 	@Override
-	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+	public void render(GL10 gl, Renderable parent) {
 		gl.glTranslatef(currentPos.x, currentPos.y, currentPos.z);
 	}
 

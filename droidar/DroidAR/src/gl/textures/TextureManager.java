@@ -11,9 +11,9 @@ import javax.microedition.khronos.opengles.GL11Ext;
 
 import util.HasDebugInformation;
 import util.IO;
+import util.Log;
 import android.graphics.Bitmap;
 import android.opengl.GLUtils;
-import util.Log;
 
 public class TextureManager implements HasDebugInformation {
 

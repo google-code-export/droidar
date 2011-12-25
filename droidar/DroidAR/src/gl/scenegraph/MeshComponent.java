@@ -11,18 +11,14 @@ import gl.ObjectPicker;
 import gl.Renderable;
 import gl.animations.GLAnimation;
 
-import javax.crypto.spec.OAEPParameterSpec;
 import javax.microedition.khronos.opengles.GL10;
 
 import listeners.SelectionListener;
 import system.Container;
-import system.ParentStack;
 import util.EfficientList;
 import util.Log;
 import util.Vec;
 import util.Wrapper;
-import worldData.AbstractObj;
-import worldData.Entity;
 import worldData.Obj;
 import worldData.RenderableEntity;
 import worldData.Updateable;
@@ -211,8 +207,7 @@ public abstract class MeshComponent implements RenderableEntity,
 	}
 
 	@Override
-	public synchronized void render(GL10 gl, Renderable parent,
-			ParentStack<Renderable> stack) {
+	public synchronized void render(GL10 gl, Renderable parent) {
 		// store current matrix and then modify it:
 		gl.glPushMatrix();
 		loadPosition(gl);
@@ -230,27 +225,25 @@ public abstract class MeshComponent implements RenderableEntity,
 		}
 
 		if (myChildren != null) {
-			myChildren.render(gl, this, stack);
+			myChildren.render(gl, this);
 		}
 
-		draw(gl, parent, stack);
+		draw(gl, parent);
 		// restore old matrix:
 		gl.glPopMatrix();
 	}
 
 	/**
-	 * Don't override the
-	 * {@link Renderable#render(GL10, Renderable, ParentStack)} method if you
-	 * are creating a subclass of {@link MeshComponent}. Instead implement this
-	 * method and all the translation and rotation abilities of the
+	 * Don't override the {@link Renderable#render(GL10, Renderable)} method if
+	 * you are creating a subclass of {@link MeshComponent}. Instead implement
+	 * this method and all the translation and rotation abilities of the
 	 * {@link MeshComponent} will be applied automatically
 	 * 
 	 * @param gl
 	 * @param parent
 	 * @param stack
 	 */
-	public abstract void draw(GL10 gl, Renderable parent,
-			ParentStack<Renderable> stack);
+	public abstract void draw(GL10 gl, Renderable parent);
 
 	@Override
 	public boolean update(float timeDelta, Updateable parent) {

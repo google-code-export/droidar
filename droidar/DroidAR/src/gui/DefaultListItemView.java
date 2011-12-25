@@ -1,8 +1,8 @@
 package gui;
 
+import util.Log;
 import android.content.Context;
 import android.graphics.Bitmap;
-import util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;

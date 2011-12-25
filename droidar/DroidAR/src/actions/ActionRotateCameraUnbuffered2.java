@@ -1,9 +1,7 @@
 package actions;
 
 import gl.GLCamera;
-import actions.algos.Algo;
 import actions.algos.SensorAlgo1;
-import android.view.MotionEvent;
 
 public class ActionRotateCameraUnbuffered2 extends ActionWithSensorProcessing {
 

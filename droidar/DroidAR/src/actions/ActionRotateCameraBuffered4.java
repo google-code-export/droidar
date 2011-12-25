@@ -1,10 +1,8 @@
 package actions;
 
 import gl.GLCamera;
-import actions.algos.Algo;
 import actions.algos.BufferAlgo2;
 import actions.algos.SensorAlgo1;
-import android.view.MotionEvent;
 
 public class ActionRotateCameraBuffered4 extends ActionWithSensorProcessing {
 

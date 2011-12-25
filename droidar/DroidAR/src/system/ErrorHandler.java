@@ -4,10 +4,10 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
 
+import util.Log;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;

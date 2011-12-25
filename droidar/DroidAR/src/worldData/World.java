@@ -7,10 +7,9 @@ import gl.Renderable;
 import javax.microedition.khronos.opengles.GL10;
 
 import system.Container;
-import system.ParentStack;
 import util.EfficientList;
-import util.Vec;
 import util.Log;
+import util.Vec;
 
 //TODO not the best way to extend ArrayList here..
 public class World implements RenderableEntity, Container<RenderableEntity> {
@@ -84,10 +83,10 @@ public class World implements RenderableEntity, Container<RenderableEntity> {
 	}
 
 	@Override
-	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+	public void render(GL10 gl, Renderable parent) {
 		// TODO reconstruct why this order is important! or wrong..
 		glLoadScreenPosition(gl);
-		myCamera.render(gl, this, stack);
+		myCamera.render(gl, this);
 		// glLoadRotation(gl);
 		glLoadScale(gl);
 
@@ -95,16 +94,15 @@ public class World implements RenderableEntity, Container<RenderableEntity> {
 
 		CordinateAxis.draw(gl);
 
-		drawElements(myCamera, gl, stack);
+		drawElements(myCamera, gl);
 
 	}
 
-	public void drawElements(GLCamera camera, GL10 gl,
-			ParentStack<Renderable> stack) {
+	public void drawElements(GLCamera camera, GL10 gl) {
 		if (container != null) {
 			for (int i = 0; i < container.myLength; i++) {
 				if (container.get(i) != null)
-					container.get(i).render(gl, this, stack);
+					container.get(i).render(gl, this);
 			}
 		}
 	}

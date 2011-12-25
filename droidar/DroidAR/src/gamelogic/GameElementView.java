@@ -15,7 +15,6 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.ViewParent;
 import de.rwth.R;
 
 public class GameElementView extends SimpleCustomView implements Entity {

@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import util.EfficientList;
+import util.Log;
 import util.Vec;
 import android.content.res.Resources;
-import util.Log;
 
 /*
  * TODO

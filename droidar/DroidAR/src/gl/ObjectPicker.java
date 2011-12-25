@@ -10,8 +10,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 import listeners.SelectionListener;
 import system.Setup;
-import util.Wrapper;
 import util.Log;
+import util.Wrapper;
 
 import commands.Command;
 import commands.system.CommandDeviceVibrate;

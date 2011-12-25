@@ -8,13 +8,12 @@ import java.util.HashMap;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import system.ParentStack;
+import util.Log;
 import util.Vec;
 import worldData.Visitor;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import util.Log;
 import android.widget.TextView;
 
 /**
@@ -67,7 +66,7 @@ public class GLText extends MeshComponent {
 	}
 
 	@Override
-	public void draw(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+	public void draw(GL10 gl, Renderable parent) {
 		if (!textLoaded) {
 			loadText(myText);
 			textLoaded = true;

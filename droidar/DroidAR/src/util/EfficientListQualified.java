@@ -1,6 +1,5 @@
 package util;
 
-import util.Log;
 
 /**
  * this {@link EfficientList} subclass should work like the default

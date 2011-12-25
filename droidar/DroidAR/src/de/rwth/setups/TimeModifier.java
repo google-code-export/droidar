@@ -4,9 +4,7 @@ import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import system.ParentStack;
 import util.Calculus;
-import util.Vec;
 import worldData.RenderableEntity;
 import worldData.Updateable;
 import worldData.Visitor;
@@ -75,9 +73,9 @@ public class TimeModifier implements RenderableEntity {
 	}
 
 	@Override
-	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
+	public void render(GL10 gl, Renderable parent) {
 		if (myChild != null)
-			myChild.render(gl, parent, stack);
+			myChild.render(gl, parent);
 		else
 			Log.e(LOG_TAG, "Child was not set");
 	}

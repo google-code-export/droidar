@@ -17,6 +17,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import listeners.SetupListener;
 import util.EfficientList;
+import util.Log;
 import util.Vec;
 import worldData.SystemUpdater;
 import worldData.World;
@@ -26,7 +27,6 @@ import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
 import android.graphics.PixelFormat;
 import android.os.SystemClock;
-import util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;

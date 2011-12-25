@@ -1,9 +1,9 @@
 package commands.logic;
 
 import listeners.SelectionListener;
+import util.Log;
 import util.Wrapper;
 import worldData.AbstractObj;
-import util.Log;
 
 import commands.undoable.UndoableCommand;
 
