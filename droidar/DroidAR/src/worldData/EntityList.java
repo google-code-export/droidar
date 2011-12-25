@@ -1,30 +1,15 @@
-package gl.scenegraph;
-
-import gl.Renderable;
-
-import javax.microedition.khronos.opengles.GL10;
+package worldData;
 
 import system.Container;
 import system.ParentStack;
 import util.EfficientList;
-import worldData.RenderableEntity;
-import worldData.Updateable;
-import worldData.Visitor;
 import util.Log;
 
-public class RenderList implements RenderableEntity,
-		Container<RenderableEntity> {
+public class EntityList implements Entity, Container<Entity> {
 
 	private static final String LOG_TAG = "RenderList";
-	EfficientList<RenderableEntity> myItems = new EfficientList<RenderableEntity>();
+	EfficientList<Entity> myItems = new EfficientList<Entity>();
 	private boolean isClearedAtLeastOnce;
-
-	@Override
-	public void render(GL10 gl, Renderable parent, ParentStack<Renderable> stack) {
-		for (int i = 0; i < myItems.myLength; i++) {
-			myItems.get(i).render(gl, parent, stack);
-		}
-	}
 
 	@Override
 	public boolean update(float timeDelta, Updateable parent,
@@ -43,7 +28,7 @@ public class RenderList implements RenderableEntity,
 	}
 
 	@Override
-	public boolean add(RenderableEntity child) {
+	public boolean add(Entity child) {
 		if (child == this) {
 			Log.e(LOG_TAG, "Not allowed to add object to itself!");
 			return false;
@@ -52,7 +37,7 @@ public class RenderList implements RenderableEntity,
 	}
 
 	@Override
-	public boolean remove(RenderableEntity child) {
+	public boolean remove(Entity child) {
 		return myItems.remove(child);
 	}
 
@@ -82,18 +67,17 @@ public class RenderList implements RenderableEntity,
 	}
 
 	@Override
-	public EfficientList<RenderableEntity> getAllItems() {
+	public EfficientList<Entity> getAllItems() {
 		return myItems;
 	}
-	
-	
+
 	@Override
 	public boolean accept(Visitor visitor) {
 		return visitor.default_visit((Container) this);
 	}
 
 	@Override
-	public boolean insert(int pos, RenderableEntity item) {
+	public boolean insert(int pos, Entity item) {
 		return myItems.insert(pos, item);
 	}
 }

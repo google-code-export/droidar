@@ -1,5 +1,6 @@
 package worldData;
 
+import system.ParentStack;
 import util.EfficientList;
 import android.os.SystemClock;
 import android.util.Log;
@@ -42,7 +43,6 @@ public class SystemUpdater implements Runnable {
 				final long currentTime = SystemClock.uptimeMillis();
 				final float timeDelta = (currentTime - lastTimeInMs) / 1000.0f;
 				lastTimeInMs = currentTime;
-				// final int lenght = myObjectsToUpdate.myLength;
 				for (int i = 0; i < myObjectsToUpdate.myLength; i++) {
 					if (!myObjectsToUpdate.get(i).update(timeDelta, null, null)) {
 						myObjectsToUpdate.remove(myObjectsToUpdate.get(i));
@@ -93,7 +93,7 @@ public class SystemUpdater implements Runnable {
 	 */
 	public void killUpdaterThread() {
 		notKilled = false;
-		running=false;
+		running = false;
 	}
 
 }

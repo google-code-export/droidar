@@ -10,16 +10,36 @@ import de.rwth.R;
 public class ActionThrowFireball extends GameAction {
 
 	private static int myIconId = R.drawable.elephant64;
-	private int myLevel = 1;
 
 	public static final String FIREBALL_ACTION = "Throw fireball";
 
+	public static final String LEVEL = "Level";
+
 	public ActionThrowFireball() {
-		super(FIREBALL_ACTION, myIconId);
+		this(FIREBALL_ACTION);
 	}
 
 	public ActionThrowFireball(String uniqueName) {
 		super(uniqueName, myIconId);
+		addStat(new Stat(LEVEL, R.id.button1, 1));
+		addStat(new Stat(COOLDOWN_PROGRESS, R.id.button1, 5));
+		addStat(new Stat(COOLDOWN_TIME, R.id.button1, 5));
+	}
+
+	@Override
+	public boolean isAllowedToExecuteOnClickAction() {
+		return getStatValue(COOLDOWN_PROGRESS) == getStatValue(COOLDOWN_TIME);
+	}
+
+	@Override
+	public boolean update(float timeDelta, Updateable parent,
+			ParentStack<Updateable> stack) {
+		float newStatValue = getStatValue(COOLDOWN_PROGRESS) + timeDelta;
+		float max = getStatValue(COOLDOWN_TIME);
+		if (newStatValue > max)
+			newStatValue = max;
+		setStatValue(COOLDOWN_PROGRESS, newStatValue);
+		return super.update(timeDelta, parent, stack);
 	}
 
 	@Override
@@ -34,7 +54,7 @@ public class ActionThrowFireball extends GameAction {
 		Stat i = initiator.getStatList().get(Stat.INTELLIGENCE);
 		float damage = 0;
 		if (i != null)
-			damage = myLevel * i.getValue();
+			damage = getStatValue(LEVEL) * i.getValue();
 		feedback.addInfo("damage", damage);
 
 		float defence = 0;
@@ -62,7 +82,7 @@ public class ActionThrowFireball extends GameAction {
 
 	@Override
 	public void generateViewGUI(ModifierGroup s) {
-		s.addModifier(new InfoText("Fireball Level", "" + myLevel));
+		s.addModifier(new InfoText("Fireball Level", "" + getStatValue(LEVEL)));
 	}
 
 	@Override
@@ -72,7 +92,7 @@ public class ActionThrowFireball extends GameAction {
 
 			@Override
 			public boolean save(double currentValue) {
-				myLevel = (int) currentValue;
+				getStatList().get(LEVEL).setValue((int) currentValue);
 				return true;
 			}
 
@@ -83,14 +103,15 @@ public class ActionThrowFireball extends GameAction {
 
 			@Override
 			public double minusEvent(double currentValue) {
-				if (currentValue - 1 < myLevel)
-					return myLevel;
+				float level = getStatValue(LEVEL);
+				if (currentValue - 1 < level)
+					return level;
 				return currentValue - 1;
 			}
 
 			@Override
 			public double load() {
-				return myLevel;
+				return getStatValue(LEVEL);
 			}
 
 			@Override

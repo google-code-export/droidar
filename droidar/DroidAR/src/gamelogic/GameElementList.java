@@ -72,6 +72,10 @@ public abstract class GameElementList<T extends GameElement> implements
 		return myList.add(item);
 	}
 
+	/**
+	 * @param uniqueName
+	 * @return null if the elemtent can't be found
+	 */
 	public T get(String uniqueName) {
 		return mySearchIndex.get(uniqueName);
 	}

@@ -2,8 +2,10 @@ package gamelogic;
 
 import gui.SimpleCustomView;
 import system.ParentStack;
+import worldData.Entity;
 import worldData.UpdateTimer;
 import worldData.Updateable;
+import worldData.Visitor;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,9 +17,10 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import de.rwth.R;
 
-public class GameElementView extends SimpleCustomView implements Updateable {
+public class GameElementView extends SimpleCustomView implements Entity {
 
 	private static final int DEFAULT_VIEW_SIZE_IN_DIP = 80;
 	private static final int MARGIN = 4;
@@ -46,7 +49,8 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 
 	public GameElementView(Context context, int iconid) {
 		super(context);
-		init((int) dipToPixels(DEFAULT_VIEW_SIZE_IN_DIP), loadBitmapFromId(context, iconid));
+		init((int) dipToPixels(DEFAULT_VIEW_SIZE_IN_DIP),
+				loadBitmapFromId(context, iconid));
 	}
 
 	@Deprecated
@@ -177,29 +181,55 @@ public class GameElementView extends SimpleCustomView implements Updateable {
 		// }
 	}
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		return onTouch(event.getX() - myHalfWidth, event.getY() - myHalfHeight);
-	}
-
-	private boolean onTouch(float x, float y) {
-		double distFromCenter = Math.sqrt(x * x + y * y);
-		distFromCenter *= myTouchScaleFactor;
-		setLoadingAngle((float) (Math.random() * 359));
-		postInvalidate();
-		return true;
-	}
+	// @Override
+	// public boolean onTouchEvent(MotionEvent event) {
+	// return onTouch(event.getX() - myHalfWidth, event.getY() - myHalfHeight);
+	// }
+	//
+	// private boolean onTouch(float x, float y) {
+	// double distFromCenter = Math.sqrt(x * x + y * y);
+	// distFromCenter *= myTouchScaleFactor;
+	// setLoadingAngle((float) (Math.random() * 359));
+	// postInvalidate();
+	// return true;
+	// }
 
 	@Override
 	public boolean update(float timeDelta, Updateable parent,
 			ParentStack<Updateable> stack) {
 		if (myTimer.update(timeDelta, parent, stack)) {
+			if (parent instanceof GameAction) {
+				GameAction a = (GameAction) parent;
+				float prog = a
+						.getStatValue(ActionThrowFireball.COOLDOWN_PROGRESS);
+				float max = a.getStatValue(ActionThrowFireball.COOLDOWN_TIME);
+				if (prog != Float.NaN && max != Float.NaN) {
+					if (prog + timeDelta < max) {
+						a.setStatValue(ActionThrowFireball.COOLDOWN_PROGRESS,
+								prog + timeDelta);
+						this.setLoadingAngle((prog + timeDelta) / max * 360);
+					} else {
+						a.setStatValue(ActionThrowFireball.COOLDOWN_PROGRESS,
+								max);
+						this.setLoadingAngle(360);
+					}
+				} else {
+					Log.e(LOG_TAG,
+							"The parent action has not the required values");
+					this.setLoadingAngle(360);
+				}
 
+			}
 		}
 		/*
 		 * TODO if view was removed from parent it can return false here!
 		 */
 		return true;
+	}
+
+	@Override
+	public boolean accept(Visitor visitor) {
+		return false;
 	}
 
 }

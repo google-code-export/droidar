@@ -178,6 +178,11 @@ public class GeoObj extends Obj implements HasDebugInformation {
 			super.setComp(comp);
 	}
 
+	@Override
+	public Vec getPosition() {
+		return getVirtualPosition();
+	}
+
 	public GeoObj(double lati, double longi, double alti,
 			MeshComponent meshToSurround) {
 		this(lati, longi, alti, meshToSurround, true);

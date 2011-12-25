@@ -1,14 +1,16 @@
 package gamelogic;
 
-import system.ParentStack;
-import util.IO;
-import worldData.Updateable;
 import gui.ListItem;
 import gui.simpleUI.ModifierGroup;
+import system.ParentStack;
+import util.IO;
+import worldData.Entity;
+import worldData.EntityList;
+import worldData.Updateable;
 import android.content.Context;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,6 +28,7 @@ public abstract class GameElement implements ListItem, Updateable {
 	public int myIconid;
 	private Command myOnClickCommand;
 	private Command myListLongClickCommand;
+	private EntityList myListeners;
 
 	public GameElement(String uniqueName, int iconId) {
 		myName = uniqueName;
@@ -118,24 +121,49 @@ public abstract class GameElement implements ListItem, Updateable {
 	@Override
 	public boolean update(float timeDelta, Updateable parent,
 			ParentStack<Updateable> stack) {
-		// TODO Auto-generated method stub
+		if (myListeners != null) {
+			return myListeners.update(timeDelta, this, stack);
+		}
 		return false;
 	}
-	
+
 	/**
-	 * TODO
-	 * @param context 
+	 * This will return a {@link View} (on default it is a
+	 * {@link GameElementView}) which will be automatically updated
+	 * 
+	 * Call {@link GameElement#registerNewListener(Entity)} if you are
+	 * overriding this message and want to inform the view (is then has to be an
+	 * {@link Entity}) on updates of this {@link GameElement}
+	 * 
+	 * @param context
 	 * 
 	 * @return
 	 */
 	public View getNewDefaultView(Context context) {
-		View v=new GameElementView(context, myIconid);
+		GameElementView v = new GameElementView(context, myIconid);
+		v.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (myOnClickCommand != null
+						&& isAllowedToExecuteOnClickAction())
+					myOnClickCommand.execute(GameElement.this);
+			}
+		});
 		registerNewListener(v);
 		return v;
 	}
 
-	private void registerNewListener(View v) {
-		// TODO Auto-generated method stub
-		
+	/**
+	 * @return
+	 */
+	public boolean isAllowedToExecuteOnClickAction() {
+		return true;
+	}
+
+	public void registerNewListener(Entity v) {
+		if (myListeners == null)
+			myListeners = new EntityList();
+		myListeners.add(v);
 	}
 }

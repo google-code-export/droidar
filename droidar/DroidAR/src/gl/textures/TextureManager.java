@@ -214,7 +214,6 @@ public class TextureManager implements HasDebugInformation {
 		Log.i(LOG_TAG,
 				"   > newTexturesToLoad.size()=" + newTexturesToLoad.size());
 
-		Log.i(LOG_TAG, "   > myTextureMap=" + myTextureMap);
 	}
 
 	public static void resetInstance() {
