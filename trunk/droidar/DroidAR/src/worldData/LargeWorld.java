@@ -6,7 +6,6 @@ import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import de.rwth.setups.RenderQuadList;
 
 import system.ParentStack;
 import util.EfficientList;
