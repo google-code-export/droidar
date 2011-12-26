@@ -5,13 +5,16 @@ import worldData.Updateable;
 
 public abstract class GameAction extends GameElement {
 
-	public static final String COOLDOWN_PROGRESS = "Cooldown Progress";
-	public static final String COOLDOWN_TIME = "Cooldown Time";
 	private static final String LOG_TAG = "GameAction";
 	private StatList myStatList;
+	private float myCooldownProgress;
+	private float myCooldownTime;
+	private boolean updateListeners;
 
-	public GameAction(String uniqueName, int iconId) {
+	public GameAction(String uniqueName, float cooldownTime, int iconId) {
 		super(uniqueName, iconId);
+		setCooldownTime(cooldownTime);
+		setCooldownProgress(cooldownTime);
 	}
 
 	/**
@@ -24,14 +27,36 @@ public abstract class GameAction extends GameElement {
 	 *         the ActionFeedback should be registered in the FeedBackReports
 	 *         singleton
 	 */
-	public abstract ActionFeedback doAction(GameParticipant initiator,
+	public abstract ActionFeedback onActionStart(GameParticipant initiator,
 			GameParticipant target);
 
 	@Override
+	public boolean updateListeners() {
+		return updateListeners;
+	}
+
+	@Override
 	public boolean update(float timeDelta, Updateable parent) {
-		super.update(timeDelta, parent);
+		if (myCooldownProgress < myCooldownTime) {
+			// update cooldown time:
+			myCooldownProgress = myCooldownProgress + timeDelta;
+			if (myCooldownProgress > myCooldownTime) {
+				myCooldownProgress = myCooldownTime;
+				super.update(timeDelta, parent);
+				updateListeners = false;
+			} else {
+				super.update(timeDelta, parent);
+			}
+		} else {
+			super.update(timeDelta, parent);
+		}
 		myStatList.update(timeDelta, this);
 		return true;
+	}
+
+	@Override
+	public boolean isAllowedToExecuteOnClickAction() {
+		return myCooldownTime == myCooldownProgress;
 	}
 
 	public StatList getStatList() {
@@ -71,6 +96,29 @@ public abstract class GameAction extends GameElement {
 
 	public boolean addStat(Stat stat) {
 		return getStatList().add(stat);
+	}
+
+	public float getCooldownProgress() {
+		return myCooldownProgress;
+	}
+
+	public float getCooldownTime() {
+		return myCooldownTime;
+	}
+
+	public void setCooldownProgress(float cooldownProgress) {
+		myCooldownProgress = cooldownProgress;
+	}
+
+	public void setCooldownTime(float myCooldownTime) {
+		this.myCooldownTime = myCooldownTime;
+	}
+
+	public ActionFeedback doAction(GameParticipant initiator,
+			GameParticipant target) {
+		setCooldownProgress(0);
+		updateListeners = true;
+		return onActionStart(initiator, target);
 	}
 
 }

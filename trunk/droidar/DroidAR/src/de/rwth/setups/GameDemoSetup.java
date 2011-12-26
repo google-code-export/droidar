@@ -8,19 +8,26 @@ import gl.GLFactory;
 import gl.GLRenderer;
 import gui.GuiSetup;
 import system.DefaultARSetup;
+import worldData.SystemUpdater;
 import worldData.World;
 import android.app.Activity;
 import de.rwth.R;
 
 public class GameDemoSetup extends DefaultARSetup {
-	private GameAction e;
+	private GameParticipant p;
+	private ActionThrowFireball e;
 
 	public GameDemoSetup() {
-		GameParticipant p = new GameParticipant("Player", "Karlo",
-				R.drawable.hippopotamus64);
+		p = new GameParticipant("Player", "Karlo", R.drawable.hippopotamus64);
 		p.addStat(new Stat(Stat.INTELLIGENCE, R.drawable.icon, 2));
 		e = new ActionThrowFireball("Fireball");
 		p.addAction(e);
+	}
+
+	@Override
+	public void _d_addElementsToUpdateThread(SystemUpdater updater) {
+		super._d_addElementsToUpdateThread(updater);
+		updater.addObjectToUpdateCycle(p);
 	}
 
 	@Override

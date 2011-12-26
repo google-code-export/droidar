@@ -153,7 +153,8 @@ public class Stat extends GameElement {
 	@Override
 	public boolean update(float timeDelta, Updateable parent) {
 		super.update(timeDelta, parent);
-		myBoosterList.update(timeDelta, parent);
+		if (myBoosterList != null)
+			myBoosterList.update(timeDelta, parent);
 		return true;
 	}
 }
