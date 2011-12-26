@@ -8,7 +8,7 @@ import de.rwth.R;
 
 public class ActionThrowFireball extends GameAction {
 
-	private static int myIconId = R.drawable.elephant64;
+	private static int myIconId = R.drawable.spaceship;
 
 	public static final String FIREBALL_ACTION = "Throw fireball";
 
@@ -19,29 +19,12 @@ public class ActionThrowFireball extends GameAction {
 	}
 
 	public ActionThrowFireball(String uniqueName) {
-		super(uniqueName, myIconId);
+		super(uniqueName, 1, myIconId);
 		addStat(new Stat(LEVEL, R.id.button1, 1));
-		addStat(new Stat(COOLDOWN_PROGRESS, R.id.button1, 5));
-		addStat(new Stat(COOLDOWN_TIME, R.id.button1, 5));
 	}
 
 	@Override
-	public boolean isAllowedToExecuteOnClickAction() {
-		return getStatValue(COOLDOWN_PROGRESS) == getStatValue(COOLDOWN_TIME);
-	}
-
-	@Override
-	public boolean update(float timeDelta, Updateable parent) {
-		float newStatValue = getStatValue(COOLDOWN_PROGRESS) + timeDelta;
-		float max = getStatValue(COOLDOWN_TIME);
-		if (newStatValue > max)
-			newStatValue = max;
-		setStatValue(COOLDOWN_PROGRESS, newStatValue);
-		return super.update(timeDelta, parent);
-	}
-
-	@Override
-	public ActionFeedback doAction(GameParticipant initiator,
+	public ActionFeedback onActionStart(GameParticipant initiator,
 			GameParticipant target) {
 		ActionFeedback feedback = new ActionFeedback("Fireball");
 		if (target == null) {

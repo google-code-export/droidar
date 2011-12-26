@@ -12,6 +12,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -33,6 +34,8 @@ import android.view.View;
  * 
  */
 public abstract class SimpleCustomView extends View {
+
+	private static final String LOG_TAG = "SimpleCustomView";
 
 	/**
 	 * The Eclipse UI editor cant preview ressources loaded from the assets
@@ -91,7 +94,7 @@ public abstract class SimpleCustomView extends View {
 		int measuredWidth = getDefaultSize(getSuggestedMinimumWidth(),
 				widthMeasureSpec);
 		int measuredHeigth = getDefaultSize(getSuggestedMinimumHeight(),
-				heightMeasureSpec);
+				heightMeasureSpec);	
 		onResizeEvent(measuredHeigth, measuredWidth);
 	}
 

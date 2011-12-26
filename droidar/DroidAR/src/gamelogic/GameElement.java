@@ -5,6 +5,7 @@ import gui.simpleUI.ModifierGroup;
 import util.IO;
 import worldData.Entity;
 import worldData.EntityList;
+import worldData.UpdateTimer;
 import worldData.Updateable;
 import android.content.Context;
 import android.view.View;
@@ -119,10 +120,18 @@ public abstract class GameElement implements ListItem, Updateable {
 
 	@Override
 	public boolean update(float timeDelta, Updateable parent) {
-		if (myListeners != null) {
-			return myListeners.update(timeDelta, this);
+		if (myListeners != null && updateListeners()) {
+			myListeners.update(timeDelta, this);
 		}
-		return false;
+		return true;
+	}
+
+	/**
+	 * Override this method and return false when the listeners of this subclass
+	 * of {@link GameElement} do not have to be updated
+	 */
+	public boolean updateListeners() {
+		return true;
 	}
 
 	/**
