@@ -1,6 +1,7 @@
 package geo;
 
 import gl.scenegraph.MeshComponent;
+import gl.scenegraph.RenderList;
 import gl.scenegraph.Shape;
 import gui.MetaInfos;
 import system.EventManager;
@@ -161,10 +162,20 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	}
 
 	@Override
+	public MeshComponent getGraphicsComponent() {
+//		System.out.println("super.getGraphicsComponent()="
+//				+ super.getGraphicsComponent());
+//		System.out.println("super.getGraphicsComponent().getChildren()="
+//				+ super.getGraphicsComponent().getChildren());
+		return (MeshComponent) super.getGraphicsComponent().getChildren();
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
 	public void setComp(Entity comp) {
 		if (comp instanceof MeshComponent) {
 			MeshComponent g = getMySurroundGroup();
-			g.clearChildren();
+			g.removeAllChildren();
 			g.addChild((MeshComponent) comp);
 			setMyGraphicsComponent(g);
 			/*
@@ -178,8 +189,17 @@ public class GeoObj extends Obj implements HasDebugInformation {
 			super.setComp(comp);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see worldData.Obj#getPosition()
+	 */
 	@Override
 	public Vec getPosition() {
+		Vec p = super.getPosition();
+		if (p != null) {
+			return getVirtualPosition().add(p);
+		}
 		return getVirtualPosition();
 	}
 
@@ -524,7 +544,9 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * This will use the current gps values and calculate the virtual position
 	 * in account to the current device gps position
 	 * 
-	 * @return the virtual position (x=longitude, y=latitude, z=altitude)
+	 * @return the virtual position (x=rel. east distance (longitude axis),
+	 *         y=rel. north distance (latitude axis), z=rel. height (altitude
+	 *         axis))
 	 */
 	public Vec getVirtualPosition() {
 		return getVirtualPosition(EventManager.getInstance()
@@ -540,7 +562,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	private boolean refreshVirtualPosition() {
 		Vec pos = getVirtualPosition();
 		if (pos != null) {
-			MeshComponent m = getGraphicsComponent();
+			MeshComponent m = getMySurroundGroup();
 
 			if (m != null) {
 				m.setPosition(pos);

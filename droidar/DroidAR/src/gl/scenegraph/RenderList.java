@@ -102,6 +102,11 @@ public class RenderList implements RenderableEntity,
 	}
 
 	@Override
+	public String toString() {
+		return LOG_TAG + " (" + myItems.myLength + " items)";
+	}
+
+	@Override
 	public boolean insert(int pos, RenderableEntity item) {
 		return myItems.insert(pos, item);
 	}

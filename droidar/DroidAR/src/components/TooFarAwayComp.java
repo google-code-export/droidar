@@ -75,9 +75,6 @@ public abstract class TooFarAwayComp implements Entity {
 		if (parent instanceof HasPosition) {
 			if (timer.update(timeDelta, parent)) {
 				Vec pos = ((HasPosition) parent).getPosition();
-				if (pos == null && parent instanceof GeoObj) {
-					pos = ((GeoObj) parent).getVirtualPosition();
-				}
 				if (pos != null) {
 					return usePosition(parent, pos);
 				}

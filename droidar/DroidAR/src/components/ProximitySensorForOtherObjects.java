@@ -78,7 +78,7 @@ public class ProximitySensorForOtherObjects implements Entity {
 	private void findObjectsCloseTo(Obj obj, MeshComponent myMesh,
 			LargeWorld largeWorld) {
 		EfficientList<RenderableEntity> list = largeWorld.getItems(
-				myMesh.getPosition(), myMaxDistance);
+				obj.getPosition(), myMaxDistance);
 		for (int i = 0; i < list.myLength; i++) {
 			myCommand.execute(list.get(i));
 		}
@@ -89,11 +89,11 @@ public class ProximitySensorForOtherObjects implements Entity {
 		if (list != null) {
 			for (int i = 0; i < list.myLength; i++) {
 				if (list.get(i) != obj && list.get(i) instanceof Obj) {
-					MeshComponent objMesh = ((Obj) list.get(i))
-							.getGraphicsComponent();
-					if (objMesh != null) {
+					Vec objPos = ((Obj) list.get(i))
+							.getPosition();
+					if (objPos != null) {
 						float currentDistance = Vec.distance(
-								myMesh.getPosition(), objMesh.getPosition());
+								myMesh.getPosition(), objPos);
 						if (0 <= currentDistance
 								&& currentDistance < myMaxDistance) {
 							myCommand.execute(list.get(i));

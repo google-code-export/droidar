@@ -231,7 +231,7 @@ public class GLFactory {
 	private void addRotateAnimation(MeshComponent target, int speed,
 			Vec rotationVec) {
 		AnimationRotate a = new AnimationRotate(speed, rotationVec);
-		MeshComponent.addChildToTargetsChildGroup(target, a, true);
+		target.addAnimation(a);
 	}
 
 	public MeshComponent newGrid(Color netColor, float spaceBetweenNetStrings,

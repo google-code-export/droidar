@@ -410,13 +410,19 @@ public abstract class MeshComponent implements RenderableEntity,
 					+ " was denied!");
 			return;
 		}
+		
+		if (target.myChildren==null){
+			target.myChildren=a;
+			return;
+		}
+		
 		if (!(target.myChildren instanceof RenderList)) {
 			RenderList childrenGroup = new RenderList();
 			// keep the old animation:
 			if (target.myChildren != null) {
 				childrenGroup.add(target.myChildren);
 			}
-			// and change animation to the created group:
+			// and change myChildren to the created group:
 			target.myChildren = childrenGroup;
 		}
 
