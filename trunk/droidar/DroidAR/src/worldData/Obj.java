@@ -16,7 +16,6 @@ import commands.Command;
 
 public class Obj extends AbstractObj implements HasPosition, HasColor {
 
-	private static final String LOG_TAG = "Obj";
 	EfficientList<Entity> myComponents = new EfficientList<Entity>();
 
 	public void setMyComponents(EfficientList<Entity> myComponents) {
@@ -28,6 +27,7 @@ public class Obj extends AbstractObj implements HasPosition, HasColor {
 	/**
 	 * @return the same object as {@link Obj#getGraphicsComponent()}
 	 */
+	@Deprecated
 	public MeshComponent getRenderComp() {
 		return getGraphicsComponent();
 	}
@@ -65,8 +65,6 @@ public class Obj extends AbstractObj implements HasPosition, HasColor {
 		return true;
 	}
 
-	
-	
 	/**
 	 * @param uniqueCompName
 	 *            look into {@link Consts} and there the COMP_.. strings for
@@ -83,8 +81,17 @@ public class Obj extends AbstractObj implements HasPosition, HasColor {
 			myComponents.add(comp);
 	}
 
-	public void setMyGraphicsComponent(MeshComponent myGraphicsComponent) {
-		this.myGraphicsComponent = myGraphicsComponent;
+	/**
+	 * This will override the grapics component with the passed
+	 * {@link MeshComponent}. Normally this method should not be used, instead
+	 * use {@link Obj#setComp(Entity)} and pass the {@link MeshComponent} there
+	 * as a parameter!
+	 * 
+	 * @param newGraphicsComponent
+	 */
+	@Deprecated
+	public void setMyGraphicsComponent(MeshComponent newGraphicsComponent) {
+		this.myGraphicsComponent = newGraphicsComponent;
 	}
 
 	public EfficientList<Entity> getMyComponents() {
@@ -93,8 +100,7 @@ public class Obj extends AbstractObj implements HasPosition, HasColor {
 
 	@Override
 	public void render(GL10 gl, Renderable parent) {
-		// final Component myGraphicsComponent = myComponents
-		// .get(Consts.COMP_GRAPHICS);
+
 		if (myGraphicsComponent == null)
 			return;
 
@@ -112,7 +118,7 @@ public class Obj extends AbstractObj implements HasPosition, HasColor {
 			gl.glColor4f(0, 0, 0, 1);
 		} else {
 			/*
-			 * before drawing a new object, reset the color to white
+			 * before drawing a new object, reset the color to white TODO
 			 */
 			gl.glColor4f(1, 1, 1, 1);
 		}
@@ -157,7 +163,7 @@ public class Obj extends AbstractObj implements HasPosition, HasColor {
 		if (componentSubclass.isAssignableFrom(MeshComponent.class)) {
 			// Log.e(LOG_TAG, "Fast access to obj.meshcomp=" +
 			// myGraphicsComponent);
-			return (T) myGraphicsComponent;
+			return (T) getGraphicsComponent();
 		}
 
 		for (int i = 0; i < myComponents.myLength; i++) {
@@ -170,15 +176,17 @@ public class Obj extends AbstractObj implements HasPosition, HasColor {
 
 	@Override
 	public Vec getPosition() {
-		if (myGraphicsComponent != null)
-			return myGraphicsComponent.getPosition();
+		MeshComponent g = getGraphicsComponent();
+		if (g != null)
+			return g.getPosition();
 		return null;
 	}
 
 	@Override
 	public void setPosition(Vec position) {
-		if (myGraphicsComponent != null)
-			myGraphicsComponent.setPosition(position);
+		MeshComponent g = getGraphicsComponent();
+		if (g != null)
+			g.setPosition(position);
 	}
 
 	@Override
@@ -188,16 +196,18 @@ public class Obj extends AbstractObj implements HasPosition, HasColor {
 
 	@Override
 	public Color getColor() {
-		if (myGraphicsComponent != null) {
-			return myGraphicsComponent.getColor();
+		MeshComponent g = getGraphicsComponent();
+		if (g != null) {
+			return g.getColor();
 		}
 		return null;
 	}
 
 	@Override
 	public void setColor(Color c) {
-		if (myGraphicsComponent != null) {
-			myGraphicsComponent.setColor(c);
+		MeshComponent g = getGraphicsComponent();
+		if (g != null) {
+			g.setColor(c);
 		}
 	}
 
