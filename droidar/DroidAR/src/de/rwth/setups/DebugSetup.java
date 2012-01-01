@@ -95,8 +95,23 @@ public class DebugSetup extends Setup {
 		world.add(objectFactory.newTextObject("text Input", new Vec(10, 1, 1),
 				myTargetActivity, camera));
 
+		addTestGeoObj(world, camera);
+
 		renderer.addRenderElement(world);
 
+	}
+
+	private void addTestGeoObj(World w, GLCamera c) {
+		GeoObj o = new GeoObj();
+		MeshComponent s = GLFactory.getInstance().newCube(Color.blue());
+		MeshComponent s2 = GLFactory.getInstance().newCube(Color.red());
+		s2.setPosition(new Vec(5, 0, 0));
+		s2.setRotation(new Vec(0,0,45));
+		s.addChild(s2);
+		s.setRotation(new Vec(0,0,-45));
+		o.setComp(s);
+		o.setVirtualPosition(new Vec(0, 20, 0));
+		w.add(o);
 	}
 
 	private void initNTest(World w) {
@@ -343,8 +358,7 @@ public class DebugSetup extends Setup {
 
 			@Override
 			public boolean execute() {
-				timeModifier.setTimeFactor(timeModifier
-						.getTimeFactor() + 1);
+				timeModifier.setTimeFactor(timeModifier.getTimeFactor() + 1);
 				return false;
 			}
 		}, "T+1");
@@ -352,8 +366,7 @@ public class DebugSetup extends Setup {
 
 			@Override
 			public boolean execute() {
-				timeModifier.setTimeFactor(timeModifier
-						.getTimeFactor() - 1);
+				timeModifier.setTimeFactor(timeModifier.getTimeFactor() - 1);
 				return false;
 			}
 		}, "T-1");
