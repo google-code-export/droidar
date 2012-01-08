@@ -1,6 +1,7 @@
 package gamelogic;
 
 import gui.SimpleCustomView;
+import util.ImageTransform;
 import worldData.Entity;
 import worldData.Updateable;
 import worldData.Visitor;
@@ -63,8 +64,8 @@ public class GameElementView extends SimpleCustomView implements Entity {
 
 	private void resizeIconToViewSize() {
 		if (myIcon != null) {
-			myIcon = resizeBitmap(myIcon, myHeight, myWidth);
-			myIcon = createBitmapWithRoundCorners(myIcon, 8f);
+			myIcon = ImageTransform.resizeBitmap(myIcon, myHeight, myWidth);
+			myIcon = ImageTransform.createBitmapWithRoundCorners(myIcon, 8f);
 		}
 	}
 

@@ -10,7 +10,7 @@ import javax.microedition.khronos.opengles.GL11;
 import javax.microedition.khronos.opengles.GL11Ext;
 
 import util.HasDebugInformation;
-import util.IO;
+import util.ImageTransform;
 import util.Log;
 import android.graphics.Bitmap;
 import android.opengl.GLUtils;
@@ -184,7 +184,7 @@ public class TextureManager implements HasDebugInformation {
 			Log.v(LOG_TAG, "   > Need to resize bitmap: old height=" + height
 					+ ", old width=" + width + ", new height=" + newHeight
 					+ ", new width=" + newWidth);
-			return IO.resizeBitmap(b, newHeight, newWidth);
+			return ImageTransform.resizeBitmap(b, newHeight, newWidth);
 		}
 		return b;
 	}
