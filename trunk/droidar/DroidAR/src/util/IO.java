@@ -22,7 +22,6 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
@@ -72,17 +71,6 @@ public class IO {
 			Log.e(LOG_TAG, "Could not convert input stream to string");
 		}
 		return null;
-	}
-
-	public static Bitmap resizeBitmap(Bitmap bitmap, float newHeight,
-			float newWidth) {
-		int width = bitmap.getWidth();
-		int height = bitmap.getHeight();
-		float scaleWidth = ((float) newWidth) / width;
-		float scaleHeight = ((float) newHeight) / height;
-		Matrix matrix = new Matrix();
-		matrix.postScale(scaleWidth, scaleHeight);
-		return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
 	}
 
 	public static Bitmap createRoundedCornerBitmap(Bitmap bitmap, int pixels) {
