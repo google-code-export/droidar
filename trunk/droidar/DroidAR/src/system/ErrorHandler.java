@@ -256,7 +256,7 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 		a.setTitle(ERROR_ACTIVITY_TITLE);
 		EditText myTextView = (EditText) a.findViewById(ERROR_TEXT_VIEW_ID);
 		myErrorText = addDebugInfosToErrorMessage(myErrorText);
-		if (myErrorText != null)
+		if (myTextView != null && myErrorText != null)
 			myTextView.setText(myErrorText);
 
 		if (myDeveloperMailAdress != null) {

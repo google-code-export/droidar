@@ -81,6 +81,99 @@ public class ImageTransform {
 	}
 
 	/**
+	 * From
+	 * http://android-developers.blogspot.com/2012/01/levels-in-renderscript
+	 * .html
+	 * 
+	 * TODO add description for parameters
+	 * 
+	 * @param sourceBitmap
+	 * @param resultBitmap
+	 * @param filterKernel
+	 *            has to be a 3x3 matrix so float[9]. The kernal which will keep
+	 *            all color values like they are is filterKernel={1,0,0, 0,1,0,
+	 *            0,0,1}. 
+	 * @param mOverInWMinInB from 0 to 1
+	 * @param gammaValue from 0 to 1
+	 * @param mOutWMinOutB from 0 to 1
+	 * @param mInBlack from 0 to 255
+	 * @param mOutBlack from 0 to 255
+	 */
+	public static void improveSaturation(Bitmap sourceBitmap,
+			Bitmap resultBitmap, float[] filterKernel, float mOverInWMinInB,
+			float gammaValue, float mOutWMinOutB, float mInBlack,
+			float mOutBlack) {
+		int[] mInPixels = new int[sourceBitmap.getHeight()
+				* sourceBitmap.getWidth()];
+		int[] mOutPixels = new int[resultBitmap.getHeight()
+				* resultBitmap.getWidth()];
+		sourceBitmap.getPixels(mInPixels, 0, sourceBitmap.getWidth(), 0, 0,
+				sourceBitmap.getWidth(), sourceBitmap.getHeight());
+
+		for (int i = 0; i < mInPixels.length; i++) {
+			float r = (float) (mInPixels[i] & 0xff);
+			float g = (float) ((mInPixels[i] >> 8) & 0xff);
+			float b = (float) ((mInPixels[i] >> 16) & 0xff);
+
+			float tr = r * filterKernel[0] + g * filterKernel[3] + b
+					* filterKernel[6];
+			float tg = r * filterKernel[1] + g * filterKernel[4] + b
+					* filterKernel[7];
+			float tb = r * filterKernel[2] + g * filterKernel[5] + b
+					* filterKernel[8];
+			r = tr;
+			g = tg;
+			b = tb;
+
+			if (r < 0.f)
+				r = 0.f;
+			if (r > 255.f)
+				r = 255.f;
+			if (g < 0.f)
+				g = 0.f;
+			if (g > 255.f)
+				g = 255.f;
+			if (b < 0.f)
+				b = 0.f;
+			if (b > 255.f)
+				b = 255.f;
+
+			r = (r - mInBlack) * mOverInWMinInB;
+			g = (g - mInBlack) * mOverInWMinInB;
+			b = (b - mInBlack) * mOverInWMinInB;
+
+			if (gammaValue != 1.0f) {
+				r = (float) java.lang.Math.pow(r, gammaValue);
+				g = (float) java.lang.Math.pow(g, gammaValue);
+				b = (float) java.lang.Math.pow(b, gammaValue);
+			}
+
+			r = (r * mOutWMinOutB) + mOutBlack;
+			g = (g * mOutWMinOutB) + mOutBlack;
+			b = (b * mOutWMinOutB) + mOutBlack;
+
+			if (r < 0.f)
+				r = 0.f;
+			if (r > 255.f)
+				r = 255.f;
+			if (g < 0.f)
+				g = 0.f;
+			if (g > 255.f)
+				g = 255.f;
+			if (b < 0.f)
+				b = 0.f;
+			if (b > 255.f)
+				b = 255.f;
+
+			mOutPixels[i] = ((int) r) + (((int) g) << 8) + (((int) b) << 16)
+					+ (mInPixels[i] & 0xff000000);
+		}
+
+		resultBitmap.setPixels(mOutPixels, 0, resultBitmap.getWidth(), 0, 0,
+				resultBitmap.getWidth(), resultBitmap.getHeight());
+	}
+
+	/**
 	 * @param targetBitmap
 	 * @param type
 	 *            1 is Green-Blue, 2 is Red-Blue, 3 is Red - Green
