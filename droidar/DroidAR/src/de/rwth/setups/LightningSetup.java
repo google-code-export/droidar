@@ -24,10 +24,13 @@ import worldData.SystemUpdater;
 import worldData.World;
 import actions.ActionMoveObject;
 import android.app.Activity;
+import android.util.Log;
 
 import commands.Command;
 
 public class LightningSetup extends DefaultARSetup {
+
+	protected static final String LOG_TAG = "LightningSetup";
 
 	private static float zMoveFactor = 1f;
 
@@ -140,8 +143,18 @@ public class LightningSetup extends DefaultARSetup {
 			@Override
 			public boolean execute() {
 				if (targetMoveWrapper.getObject() instanceof Obj) {
-					((Obj) targetMoveWrapper.getObject())
-							.getComp(MoveComp.class).myTargetPos.z -= zMoveFactor;
+					MoveComp mover = ((Obj) targetMoveWrapper.getObject())
+							.getComp(MoveComp.class);
+					if (mover != null)
+						mover.myTargetPos.z -= zMoveFactor;
+					else {
+						Vec pos = ((Obj) targetMoveWrapper.getObject())
+								.getPosition();
+						if (pos != null)
+							pos.z -= zMoveFactor;
+						else
+							Log.e(LOG_TAG, "Cant move object, has no position!");
+					}
 					return true;
 				}
 				return false;
@@ -152,8 +165,18 @@ public class LightningSetup extends DefaultARSetup {
 			@Override
 			public boolean execute() {
 				if (targetMoveWrapper.getObject() instanceof Obj) {
-					((Obj) targetMoveWrapper.getObject())
-							.getComp(MoveComp.class).myTargetPos.z += zMoveFactor;
+					MoveComp mover = ((Obj) targetMoveWrapper.getObject())
+							.getComp(MoveComp.class);
+					if (mover != null)
+						mover.myTargetPos.z += zMoveFactor;
+					else {
+						Vec pos = ((Obj) targetMoveWrapper.getObject())
+								.getPosition();
+						if (pos != null)
+							pos.z += zMoveFactor;
+						else
+							Log.e(LOG_TAG, "Cant move object, has no position!");
+					}
 					return true;
 				}
 				return false;

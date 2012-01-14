@@ -1,6 +1,7 @@
 package gui;
 
 import util.IO;
+import util.ImageTransform;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -54,14 +55,31 @@ public abstract class SimpleCustomView extends View {
 		Bitmap b = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
 		Canvas c = new Canvas(b);
 		Paint p = new Paint();
-		p.setColor(Color.BLUE);
+		
 		p.setStyle(Paint.Style.STROKE);
 		p.setStrokeWidth(20);
+		int alpha=255;
+		p.setColor(Color.rgb(50, 0, 0));
+		p.setAlpha(alpha);
 		c.drawLine(0, 0, size, size, p);
+		p.setColor(Color.BLUE);
+		p.setAlpha(alpha);
 		c.drawLine(0, size, size, 0, p);
+		p.setColor(Color.RED);
+		p.setAlpha(alpha);
 		c.drawLine(0, size / 2, size, size / 2, p);
+		p.setColor(Color.YELLOW);
+		p.setAlpha(alpha);
 		c.drawLine(size / 2, 0, size / 2, size, p);
+		
+		float[] filterKernel={1,0,0, 0,1,0, 0,0,1};		
+		//ImageTransform.improveSaturation(b, b, filterKernel, 1, 1, 1, 255, 255);
+
 		return b;
+	}
+
+	private void setRandomColor(Paint p, int alpha) {
+		p.setColor(Color.argb(alpha, (int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255)));
 	}
 
 	public Bitmap createDummyBitmap2() {
@@ -90,7 +108,7 @@ public abstract class SimpleCustomView extends View {
 		int measuredWidth = getDefaultSize(getSuggestedMinimumWidth(),
 				widthMeasureSpec);
 		int measuredHeigth = getDefaultSize(getSuggestedMinimumHeight(),
-				heightMeasureSpec);	
+				heightMeasureSpec);
 		onResizeEvent(measuredHeigth, measuredWidth);
 	}
 
@@ -144,6 +162,4 @@ public abstract class SimpleCustomView extends View {
 
 	}
 
-	
-	
 }

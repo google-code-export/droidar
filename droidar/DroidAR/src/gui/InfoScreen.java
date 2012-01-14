@@ -43,7 +43,8 @@ public class InfoScreen extends Activity {
 	}
 
 	private void addContent(InfoScreenSettings infos, ScrollView s) {
-		s.setBackgroundColor(infos.backgroundColor.toIntARGB());
+		if (infos.backgroundColor != null)
+			s.setBackgroundColor(infos.backgroundColor.toIntARGB());
 		s.addView(infos.getLinLayout());
 		if (!infos.closeInstantly()) {
 			infos.getLinLayout().addView(newCloseButton(infos));
