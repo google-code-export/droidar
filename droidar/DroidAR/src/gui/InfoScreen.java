@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import de.rwth.R;
@@ -44,10 +45,12 @@ public class InfoScreen extends Activity {
 	}
 
 	private void addContent(ScrollView s) {
-		InfoScreenSettings infos = getSettings();
+		InfoScreenSettings infos = getInfoScreenSettings();
 		if (infos.backgroundColor != null)
 			s.setBackgroundColor(infos.backgroundColor.toIntARGB());
-		s.addView(infos.getLinLayout());
+		LinearLayout linLayBox = infos.getLinLayout();
+		fixPossibleParentProblem(linLayBox);
+		s.addView(linLayBox); 
 		if (!infos.closeInstantly()) {
 			infos.getLinLayout().addView(newCloseButton(infos));
 		} else {
@@ -56,10 +59,22 @@ public class InfoScreen extends Activity {
 
 	}
 
-	private InfoScreenSettings getSettings() {
+	private void fixPossibleParentProblem(LinearLayout linLayBox) {
+		if (linLayBox.getParent() != null) {
+			Log.e(LOG_TAG,
+					"The lin.layout of the info screen already had a parent!");
+			if (linLayBox.getParent() instanceof LinearLayout) {
+				((LinearLayout) linLayBox.getParent()).removeView(linLayBox);
+			}
+		}
+	}
+
+	private InfoScreenSettings getInfoScreenSettings() {
 		if (myInfoSettings == null) {
-			Log.e(LOG_TAG, "The info settings where null, created dummy info settings");
+			Log.e(LOG_TAG,
+					"The info settings where null, created dummy info settings");
 			myInfoSettings = new InfoScreenSettings(getApplicationContext());
+			myInfoSettings.setCloseInstantly();
 		}
 		return myInfoSettings;
 	}
@@ -96,7 +111,7 @@ public class InfoScreen extends Activity {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				if (getSettings().closeInstantly())
+				if (getInfoScreenSettings().closeInstantly())
 					InfoScreen.this.finish();
 			}
 		}).start();
