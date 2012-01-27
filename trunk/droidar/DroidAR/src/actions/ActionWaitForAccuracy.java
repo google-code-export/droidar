@@ -122,7 +122,6 @@ public abstract class ActionWaitForAccuracy extends Action {
 				if (GeoUtils.enableGPS(myContext)) {
 					warningText.setVisibility(View.GONE);
 				}
-
 			}
 		});
 
@@ -137,8 +136,18 @@ public abstract class ActionWaitForAccuracy extends Action {
 		});
 
 		steps = (ProgressBar) viewContainer.findViewById(R.id.awfa_steps);
+		
+		showDebugInfosAboutTheUiElements();
 		updateUI();
 		return viewContainer;
+	}
+
+	private void showDebugInfosAboutTheUiElements() {
+		Log.d(LOG_TAG, "viewContainer="+viewContainer);
+		Log.d(LOG_TAG, "   > accText="+accText);
+		Log.d(LOG_TAG, "   > warningText="+warningText);
+		Log.d(LOG_TAG, "   > steps="+steps);
+		Log.d(LOG_TAG, "   > stepCounter="+stepCounter);	
 	}
 
 	private void showSkipPositionDetectionDialog() {
@@ -174,24 +183,12 @@ public abstract class ActionWaitForAccuracy extends Action {
 					showWarningIfGPSOff();
 				}
 
-				private void showWarningIfGPSOff() {
-					if (GeoUtils.isGPSDisabled(myContext)) {
-						Log.d(LOG_TAG, "GPS disabled!");
-						warningText.setVisibility(View.VISIBLE);
-						// warningText.setText("WARNING: GPS disabled!");
-						warningText.setText("Enable GPS");
-					} else {
-						Log.d(LOG_TAG, "GPS enabled!");
-						warningText.setVisibility(View.GONE);
-					}
-				}
 			});
 	}
 
 	private void hideUI() {
 		if (viewContainer != null)
 			myContext.runOnUiThread(new Runnable() {
-
 				@Override
 				public void run() {
 					viewContainer.setVisibility(View.GONE);
@@ -199,4 +196,14 @@ public abstract class ActionWaitForAccuracy extends Action {
 			});
 	}
 
+	private void showWarningIfGPSOff() {
+		if (GeoUtils.isGPSDisabled(myContext)) {
+			Log.d(LOG_TAG, "GPS disabled!");
+			warningText.setVisibility(View.VISIBLE);
+			warningText.setText("Enable GPS");
+		} else {
+			Log.d(LOG_TAG, "GPS enabled!");
+			warningText.setVisibility(View.GONE);
+		}
+	}
 }

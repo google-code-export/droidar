@@ -167,6 +167,15 @@ public class GeoUtils {
 		return null;
 	}
 
+	/**
+	 * This method will try to get the most accurate position currently
+	 * available. This includes also the last known position of the device if no
+	 * current position sources can't be accessed so the returned position might
+	 * be outdated
+	 * 
+	 * @param context
+	 * @return
+	 */
 	public static Location getCurrentLocation(Context context) {
 		Location l = GeoUtils.getCurrentLocation(context,
 				Criteria.ACCURACY_FINE);

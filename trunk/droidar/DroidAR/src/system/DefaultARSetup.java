@@ -98,7 +98,7 @@ public abstract class DefaultARSetup extends Setup {
 				5, 25));
 		eventManager.addOnLocationChangedAction(new ActionCalcRelativePos(
 				world, camera));
-		minAccuracyAction = new ActionWaitForAccuracy(myTargetActivity, 24.0f,
+		minAccuracyAction = new ActionWaitForAccuracy(getActivity(), 24.0f,
 				10) {
 			@Override
 			public void minAccuracyReachedFirstTime(Location l,
