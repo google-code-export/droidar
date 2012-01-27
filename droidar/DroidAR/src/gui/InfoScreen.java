@@ -3,6 +3,7 @@ package gui;
 import system.ActivityConnector;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -23,7 +24,8 @@ import de.rwth.R;
 public class InfoScreen extends Activity {
 
 	protected static final long AUTO_CLOSE_TIME = 3000;
-	private InfoScreenSettings myInfos;
+	private static final String LOG_TAG = "InfoScreen";
+	private InfoScreenSettings myInfoSettings;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +37,14 @@ public class InfoScreen extends Activity {
 				.loadObjFromNewlyCreatedActivity(this);
 
 		if (infos instanceof InfoScreenSettings) {
-			myInfos = (InfoScreenSettings) infos;
-			addContent(myInfos,
-					(ScrollView) findViewById(R.id.infoScreenScrollview));
+			myInfoSettings = (InfoScreenSettings) infos;
+			addContent((ScrollView) findViewById(R.id.infoScreenScrollview));
 		}
 
 	}
 
-	private void addContent(InfoScreenSettings infos, ScrollView s) {
+	private void addContent(ScrollView s) {
+		InfoScreenSettings infos = getSettings();
 		if (infos.backgroundColor != null)
 			s.setBackgroundColor(infos.backgroundColor.toIntARGB());
 		s.addView(infos.getLinLayout());
@@ -52,6 +54,14 @@ public class InfoScreen extends Activity {
 			infos.getLinLayout().addView(newLoadingInfo(infos));
 		}
 
+	}
+
+	private InfoScreenSettings getSettings() {
+		if (myInfoSettings == null) {
+			Log.e(LOG_TAG, "The info settings where null, created dummy info settings");
+			myInfoSettings = new InfoScreenSettings(getApplicationContext());
+		}
+		return myInfoSettings;
 	}
 
 	private View newLoadingInfo(InfoScreenSettings infos) {
@@ -86,11 +96,10 @@ public class InfoScreen extends Activity {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				if (myInfos.closeInstantly())
+				if (getSettings().closeInstantly())
 					InfoScreen.this.finish();
 			}
 		}).start();
-
 	}
 
 }
