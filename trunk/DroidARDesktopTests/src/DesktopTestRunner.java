@@ -1,4 +1,5 @@
 import tests.EfficientListTests;
+import tests.GameLogicTests;
 import tests.GeoTests;
 import tests.SystemTests;
 import tests.WorldTests;
@@ -16,7 +17,9 @@ public class DesktopTestRunner {
 			new SystemTests().run();
 			new EfficientListTests().run();
 			new WorldTests().run();
-			//new GeoTests().run();
+			// new GameLogicTests().run();
+			// new GeoTests().run();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
