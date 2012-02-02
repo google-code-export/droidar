@@ -4,6 +4,7 @@ import gl.ObjectPicker;
 import gl.scenegraph.MeshComponent;
 import gl.scenegraph.Shape;
 import util.Calculus;
+import util.Log;
 import util.Vec;
 import util.Wrapper;
 import worldData.Entity;
@@ -45,6 +46,9 @@ public class SystemTests extends SimpleTesting {
 			assertTrue(Calculus.getRandomFloat(0, 2) >= 0);
 			assertTrue(Calculus.getRandomFloat(0, 2) <= 2);
 		}
+		
+		System.out.println(Log.getCurrentMethod(2));
+		
 	}
 
 	private void objTests() throws Exception {

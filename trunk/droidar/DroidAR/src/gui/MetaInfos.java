@@ -18,7 +18,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
-import android.view.View;
 import android.view.ViewGroup;
 import de.rwth.R;
 
@@ -286,8 +285,8 @@ public class MetaInfos implements EditItem {
 		return myIconURL;
 	}
 
-	public View getDefaultListItemView(View viewToUseIfNotNull,
-			ViewGroup parentView) {
+	public android.view.View getDefaultListItemView(
+			android.view.View viewToUseIfNotNull, ViewGroup parentView) {
 		DefaultListItemView v = null;
 		if (viewToUseIfNotNull instanceof DefaultListItemView) {
 			v = (DefaultListItemView) viewToUseIfNotNull;

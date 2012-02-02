@@ -298,6 +298,11 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 		s += "\n Model (and Product): " + android.os.Build.MODEL + " ("
 				+ android.os.Build.PRODUCT + ")";
 		// TODO add application version!
+		
+		//more from http://developer.android.com/reference/android/os/Build.html :
+		s += "\n Manufacturer: " + android.os.Build.MANUFACTURER;
+		s += "\n Other TAGS: " + android.os.Build.TAGS;
+		
 		s += " \n \n [You can add a description of what you were doing here]:";
 		s += " \n ...";
 		return s;
