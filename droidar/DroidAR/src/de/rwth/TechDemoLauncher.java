@@ -3,7 +3,14 @@ package de.rwth;
 import system.ArActivity;
 import system.ErrorHandler;
 import system.Setup;
+import tests.AndroidDeviceOnlyTests;
+import tests.EfficientListTests;
+import tests.GameLogicTests;
+import tests.GeoTests;
+import tests.IOTests;
 import tests.SimpleTesting;
+import tests.SystemTests;
+import tests.WorldTests;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -104,7 +111,21 @@ public class TechDemoLauncher extends Activity {
 	private void runTests() {
 		// execute all tests defined in the ARTestSuite:
 		try {
-			SimpleTesting.runAllTests(this);
+
+			system.EventManager.getInstance().registerListeners(this, true);
+
+			// new ThreadTest().run();
+			// new MemoryAllocationTests().run();
+			// new NetworkTests().run();
+
+			new SystemTests().run();
+			new EfficientListTests().run();
+			new GeoTests().run();
+			new IOTests(this).run();
+			new WorldTests().run();
+			new AndroidDeviceOnlyTests(this).run();
+			new GameLogicTests().run();
+
 			new CommandShowToast(this, "All tests succeded on this device :)")
 					.execute();
 		} catch (Exception e) {

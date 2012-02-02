@@ -1,8 +1,5 @@
 package tests;
 
-import system.EventManager;
-import android.app.Activity;
-
 public abstract class SimpleTesting {
 
 	public SimpleTesting() {
@@ -36,28 +33,4 @@ public abstract class SimpleTesting {
 		}
 	}
 
-	/**
-	 * add all tests you want to be executed on startup here:
-	 * 
-	 * @param main
-	 * 
-	 * @throws Exception
-	 */
-	public static void runAllTests(Activity myTargetActivity) throws Exception {
-
-		EventManager.getInstance().registerListeners(myTargetActivity, true);
-
-		// new ThreadTest().run();
-		// new MemoryAllocationTests().run();
-		// new NetworkTests().run();
-
-		new SystemTests().run();
-		new EfficientListTests().run();
-		new GeoTests().run();
-		new IOTests(myTargetActivity).run();
-		new WorldTests().run();
-		new AndroidDeviceOnlyTests(myTargetActivity).run();
-		new GameLogicTests().run();
-
-	}
 }

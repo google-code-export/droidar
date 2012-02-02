@@ -26,6 +26,21 @@ public class Log {
 
 	}
 
+	/**
+	 * @param callDepth
+	 *            Normally 2 (or 1 if directly used). This method is calles from
+	 *            a util class like a Log class you dont want the name of the
+	 *            log method but the method which called the log method, so pass
+	 *            2 as the call depth! (1 would be the Log class and 0 would be
+	 *            the Thread.getStackTrace() method)
+	 * @return
+	 */
+	public static String getCurrentMethod(int callDepth) {
+		StackTraceElement x = Thread.currentThread().getStackTrace()[callDepth];
+		return x.getClassName() + "." + x.getMethodName() + "(..): ("
+				+ x.getClassName() + ".java:" + x.getLineNumber() + ")";
+	}
+
 	private static LogInterface instance;
 
 	public static LogInterface getInstance() {
