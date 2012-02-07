@@ -43,6 +43,20 @@ import commands.undoable.CommandProcessor;
 
 import de.rwth.R;
 
+/**
+ * Extend this class and implement all abstract methods to initialize your AR
+ * application. More information can be found in the JavaDoc of the specific
+ * methods and for a simple default AR setup use the {@link DefaultARSetup}
+ * 
+ * <br>
+ * To launch another activity from a setup do something like this: <br>
+ * <br>
+ * getActivity().startActivity(new Intent(getActivity(),
+ * MyOtherActivity.class));
+ * 
+ * @author Spobo
+ * 
+ */
 public abstract class Setup {
 
 	public static int defaultArLayoutId = R.layout.defaultlayout;
