@@ -1,6 +1,4 @@
 import tests.EfficientListTests;
-import tests.GameLogicTests;
-import tests.GeoTests;
 import tests.SystemTests;
 import tests.WorldTests;
 import util.Log;
