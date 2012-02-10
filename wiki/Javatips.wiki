@@ -1,0 +1,3 @@
+This screencast is a collection of tips when using Eclipse for Android or Java development in general to make your life much easier:
+
+<wiki:video url="http://www.youtube.com/watch?v=XYtCOtn8Ccg"/>
