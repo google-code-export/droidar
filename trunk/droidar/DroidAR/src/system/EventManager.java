@@ -372,7 +372,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 	 */
 	public GeoObj getCurrentLocationObject() {
 
-		Location locaction = GeoUtils.getCurrentLocation(myTargetActivity);
+		Location locaction = getCurrentLocation();
 		if (locaction != null) {
 			if (currentLocation == null) {
 				currentLocation = new GeoObj(locaction, false);
@@ -392,6 +392,10 @@ public class EventManager implements LocationListener, SensorEventListener {
 		}
 
 		return currentLocation;
+	}
+
+	public Location getCurrentLocation() {
+		return GeoUtils.getCurrentLocation(myTargetActivity);
 	}
 
 	// /**
@@ -434,7 +438,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 	 */
 	public GeoObj getZeroPositionLocationObject() {
 		if (zeroPos == null) {
-			Log.w(LOG_TAG, "Zero pos was not yet received! "
+			Log.d(LOG_TAG, "Zero pos was not yet received! "
 					+ "The last known position of the device will be used "
 					+ "at the zero position.");
 			zeroPos = getCurrentLocationObject().copy();
