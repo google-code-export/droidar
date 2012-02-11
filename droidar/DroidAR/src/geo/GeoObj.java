@@ -163,10 +163,10 @@ public class GeoObj extends Obj implements HasDebugInformation {
 
 	@Override
 	public MeshComponent getGraphicsComponent() {
-//		System.out.println("super.getGraphicsComponent()="
-//				+ super.getGraphicsComponent());
-//		System.out.println("super.getGraphicsComponent().getChildren()="
-//				+ super.getGraphicsComponent().getChildren());
+		// System.out.println("super.getGraphicsComponent()="
+		// + super.getGraphicsComponent());
+		// System.out.println("super.getGraphicsComponent().getChildren()="
+		// + super.getGraphicsComponent().getChildren());
 		return (MeshComponent) super.getGraphicsComponent().getChildren();
 	}
 
@@ -317,6 +317,13 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		return myAltitude;
 	}
 
+	/**
+	 * dont forget to call {@link GeoObj#refreshVirtualPosition()} afterwards if
+	 * the virtual position should be updated
+	 * 
+	 * @param latitude
+	 * 
+	 */
 	public void setMyLatitude(double latitude) {
 		this.myLatitude = latitude;
 
@@ -325,6 +332,12 @@ public class GeoObj extends Obj implements HasDebugInformation {
 					(int) (getLongitude() * 1E6));
 	}
 
+	/**
+	 * dont forget to call {@link GeoObj#refreshVirtualPosition()} afterwards if
+	 * the virtual position should be updated
+	 * 
+	 * @param longitude
+	 */
 	public void setMyLongitude(double longitude) {
 		this.myLongitude = longitude;
 
@@ -333,6 +346,12 @@ public class GeoObj extends Obj implements HasDebugInformation {
 					(int) (getLongitude() * 1E6));
 	}
 
+	/**
+	 * dont forget to call {@link GeoObj#refreshVirtualPosition()} afterwards if
+	 * the virtual position should be updated
+	 * 
+	 * @param altitude
+	 */
 	public void setMyAltitude(double altitude) {
 		this.myAltitude = altitude;
 
@@ -408,6 +427,11 @@ public class GeoObj extends Obj implements HasDebugInformation {
 			setMyLongitude(zeroLocation.getLongitude());
 			setMyAltitude(zeroLocation.getAltitude());
 		}
+		/*
+		 * does it even make sense to update the virtual position here? has the
+		 * virtual position passed as a parameter to this method to be the
+		 * virtual position of the object?
+		 */
 		return refreshVirtualPosition();
 	}
 
@@ -507,6 +531,12 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		return false;
 	}
 
+	/**
+	 * dont forget to call {@link GeoObj#refreshVirtualPosition()} afterwards if
+	 * the virtual position should be updated
+	 * 
+	 * @param l
+	 */
 	public void setLocation(Location l) {
 		if (l != null) {
 			setMyLatitude(l.getLatitude());
@@ -523,7 +553,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 
 	/**
 	 * This method can also be used to calculate the distance between
-	 * {@link GeoObj} a and {@link GeoObj} b by doing this: <br>
+	 * {@link GeoObj} A and {@link GeoObj} B by doing this: <br>
 	 * aToB_Distance=b.getVirtualPosition(a);
 	 * 
 	 * @param relativeNullPoint
@@ -559,7 +589,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * 
 	 * @return true if it worked
 	 */
-	private boolean refreshVirtualPosition() {
+	public boolean refreshVirtualPosition() {
 		Vec pos = getVirtualPosition();
 		if (pos != null) {
 			MeshComponent m = getMySurroundGroup();
