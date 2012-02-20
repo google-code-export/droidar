@@ -173,6 +173,21 @@ public class GDXConnection implements Renderable {
 			@Override
 			public void setIcon(Pixmap[] pixmaps) {
 			}
+
+			@Override
+			public void setContinuousRendering(boolean isContinuous) {
+
+			}
+
+			@Override
+			public boolean isContinuousRendering() {
+				return true;
+			}
+
+			@Override
+			public void requestRendering() {
+
+			}
 		};
 		if (gl instanceof javax.microedition.khronos.opengles.GL11) {
 			String renderer = gl.glGetString(GL10.GL_RENDERER);
