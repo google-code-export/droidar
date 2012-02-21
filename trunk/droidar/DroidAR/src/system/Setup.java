@@ -12,6 +12,9 @@ import gl.textures.TextureManager;
 import gui.GuiSetup;
 import gui.InfoScreen;
 import gui.InfoScreenSettings;
+import gui.simpleUI.EditItem;
+import gui.simpleUI.ModifierGroup;
+import gui.simpleUI.SimpleUI;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -27,6 +30,7 @@ import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
 import android.graphics.PixelFormat;
 import android.os.SystemClock;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,6 +61,7 @@ import de.rwth.R;
  * @author Spobo
  * 
  */
+@SuppressWarnings("deprecation")
 public abstract class Setup {
 
 	public static int defaultArLayoutId = R.layout.defaultlayout;
@@ -560,7 +565,31 @@ public abstract class Setup {
 		guiSetup = new GuiSetup(this, sourceView);
 
 		_e2_addElementsToGuiSetup(getGuiSetup(), activity);
+		addDroidARInfoBox(activity);
 		overlayView.addView(sourceView);
+	}
+
+	private void addDroidARInfoBox(final Activity currentActivity) {
+		addItemToOptionsMenu(new Command() {
+
+			@Override
+			public boolean execute() {
+				SimpleUI.showInfoScreen(currentActivity, new EditItem() {
+					@Override
+					public void customizeScreen(ModifierGroup group,
+							Object message) {
+						group.addModifier(new gui.simpleUI.modifiers.Headline(
+								R.drawable.logo, "DroidAR"));
+						group.addModifier(new gui.simpleUI.modifiers.InfoText(
+								"This was creat" + "ed with the Droid"
+										+ "AR fram" + "ework", Gravity.CENTER));
+						group.addModifier(new gui.simpleUI.modifiers.InfoText(
+								"droidar.goog" + "lecode.com", Gravity.CENTER));
+					}
+				}, null);
+				return true;
+			}
+		}, "About");
 	}
 
 	public GuiSetup getGuiSetup() {

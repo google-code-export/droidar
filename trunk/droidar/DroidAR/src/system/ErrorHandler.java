@@ -7,7 +7,9 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import util.Log;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -255,7 +257,7 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 		a.setContentView(ERROR_WINDOW_ID);
 		a.setTitle(ERROR_ACTIVITY_TITLE);
 		EditText myTextView = (EditText) a.findViewById(ERROR_TEXT_VIEW_ID);
-		myErrorText = addDebugInfosToErrorMessage(myErrorText);
+		myErrorText = addDebugInfosToErrorMessage(a,myErrorText);
 		if (myTextView != null && myErrorText != null)
 			myTextView.setText(myErrorText);
 
@@ -289,7 +291,7 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 		a.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
 	}
 
-	private static String addDebugInfosToErrorMessage(String s) {
+	private static String addDebugInfosToErrorMessage(Activity a, String s) {
 		s += "\n \n <Debug Infos>";
 		s += "\n OS Version: " + System.getProperty("os.version") + " ("
 				+ android.os.Build.VERSION.INCREMENTAL + ")";
@@ -298,10 +300,21 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 		s += "\n Model (and Product): " + android.os.Build.MODEL + " ("
 				+ android.os.Build.PRODUCT + ")";
 		// TODO add application version!
-		
-		//more from http://developer.android.com/reference/android/os/Build.html :
+
+		// more from
+		// http://developer.android.com/reference/android/os/Build.html :
 		s += "\n Manufacturer: " + android.os.Build.MANUFACTURER;
 		s += "\n Other TAGS: " + android.os.Build.TAGS;
+		
+		s += "\n screenWidth: "+a.getWindow().getWindowManager().getDefaultDisplay().getWidth();
+		s += "\n screenHeigth: "+a.getWindow().getWindowManager().getDefaultDisplay().getHeight();
+		s += "\n Keyboard available: "
+				+ (a.getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS);
+
+		s += "\n Trackball available: "
+			+ (a.getResources().getConfiguration().navigation == Configuration.NAVIGATION_TRACKBALL);
+		s += "\n SD Card state: "
+			+ Environment.getExternalStorageState();
 		
 		s += " \n \n [You can add a description of what you were doing here]:";
 		s += " \n ...";

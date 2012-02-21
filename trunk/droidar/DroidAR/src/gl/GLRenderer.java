@@ -12,6 +12,7 @@ import util.Log;
 import util.Vec;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
+import android.os.SystemClock;
 
 /**
  * This is the OpenGL renderer used for the {@link CustomGLSurfaceView}
@@ -20,6 +21,11 @@ import android.opengl.GLU;
  * 
  */
 public class GLRenderer implements Renderer {
+
+	/**
+	 * The maximum fps rate for the renderer. 40fps to be not so cpu intense
+	 */
+	private static final float MAX_FPS = 40;
 
 	public static float LENSE_ANGLE = 35.0f; // 25 before, marker recog 39 TODO
 	public static float minViewDistance = 0.1f;
@@ -67,20 +73,19 @@ public class GLRenderer implements Renderer {
 			.toFloatBuffer();
 	private static final boolean FLASH_SCREEN = false;
 
-	/**
-	 * TODO change to something more abstract like a GlDrawable interface? would
-	 * loose some speed though..
-	 */
 	private EfficientList<Renderable> elementsToRender = new EfficientList<Renderable>();
 
 	private boolean pauseRenderer;
 	private boolean readyToPickPixel;
+	private long lastTimeInMs = SystemClock.uptimeMillis();
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
 
 		if (pauseRenderer)
 			startPauseLoop();
+
+		final long currentTime = SystemClock.uptimeMillis();
 
 		// if the lightning was recently enabled/disabled
 		if (switchLightning) {
@@ -134,6 +139,21 @@ public class GLRenderer implements Renderer {
 			}
 		} while (repeat);
 
+		final float delta = (currentTime - lastTimeInMs);
+		lastTimeInMs = currentTime;
+
+		if (delta > 0 && 1000 / delta > MAX_FPS) {
+			// System.out.println("delta=" + delta);
+			// System.out.println("FPS=" + 1000 / delta);
+			// System.out.println("1000/MAX_FPS-delta=" + (long) (1000 / MAX_FPS
+			// - delta));
+			try {
+				Thread.sleep((long) (1000 / MAX_FPS - delta));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	/**
@@ -145,7 +165,6 @@ public class GLRenderer implements Renderer {
 		Log.d("OpenGL", "Renderer paused");
 		while (pauseRenderer) {
 			try {
-				Log.e(LOG_TAG, "PAUSE RENDERER");
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -230,6 +249,11 @@ public class GLRenderer implements Renderer {
 
 		if (USE_FOG)
 			addFog(gl);
+
+		/*
+		 * update this here to get a goot init value for lastTimeInMs
+		 */
+		lastTimeInMs = SystemClock.uptimeMillis();
 	}
 
 	@Override
@@ -264,7 +288,6 @@ public class GLRenderer implements Renderer {
 		 * render your primitives from back to front."
 		 * 
 		 * http://www.opengl.org/sdk/docs/man/xhtml/glBlendFunc.xml
-		 * 
 		 */
 		gl.glEnable(GL10.GL_BLEND);
 		// gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_DST_ALPHA);
