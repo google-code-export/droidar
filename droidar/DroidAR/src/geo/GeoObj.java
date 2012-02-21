@@ -1,7 +1,6 @@
 package geo;
 
 import gl.scenegraph.MeshComponent;
-import gl.scenegraph.RenderList;
 import gl.scenegraph.Shape;
 import gui.MetaInfos;
 import system.EventManager;
@@ -26,6 +25,7 @@ import android.location.Location;
  */
 public class GeoObj extends Obj implements HasDebugInformation {
 
+	@Deprecated
 	public interface GeoObjUpdateListener {
 
 		void updateToNewPosition(int i, int j);
@@ -77,7 +77,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * this is the average radius of the earth in meters. polar-radius is
 	 * 6356800 meters and equatorial-radius is 6378100 meters
 	 */
-	public static final int EARTH_RADIUS = 6371000;
+	private static final int EARTH_RADIUS = 6371000;
 
 	// MeshComponent myMesh;
 	private double myLatitude = 0;
@@ -88,8 +88,10 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * is needed for the dijsktra algorithm, dont use it anywhere else, it will
 	 * change when using dijsktra!
 	 */
-	public int dijkstraId;
+	protected int dijkstraId;
 	private MeshComponent mySurroundGroup;
+
+	@Deprecated
 	private GeoObjUpdateListener myUpdateListener;
 	/**
 	 * this flag is used in the {@link CustomItemizedOverlay}-class to
@@ -111,6 +113,7 @@ public class GeoObj extends Obj implements HasDebugInformation {
 
 	}
 
+	@Deprecated
 	public void setUpdateListener(GeoObjUpdateListener myUpdateListener) {
 		this.myUpdateListener = myUpdateListener;
 	}
