@@ -3,6 +3,8 @@ package system;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.Enumeration;
+import java.util.Properties;
 
 import util.Log;
 import android.app.Activity;
@@ -257,7 +259,7 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 		a.setContentView(ERROR_WINDOW_ID);
 		a.setTitle(ERROR_ACTIVITY_TITLE);
 		EditText myTextView = (EditText) a.findViewById(ERROR_TEXT_VIEW_ID);
-		myErrorText = addDebugInfosToErrorMessage(a,myErrorText);
+		myErrorText = addDebugInfosToErrorMessage(a, myErrorText);
 		if (myTextView != null && myErrorText != null)
 			myTextView.setText(myErrorText);
 
@@ -305,17 +307,29 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 		// http://developer.android.com/reference/android/os/Build.html :
 		s += "\n Manufacturer: " + android.os.Build.MANUFACTURER;
 		s += "\n Other TAGS: " + android.os.Build.TAGS;
-		
-		s += "\n screenWidth: "+a.getWindow().getWindowManager().getDefaultDisplay().getWidth();
-		s += "\n screenHeigth: "+a.getWindow().getWindowManager().getDefaultDisplay().getHeight();
+
+		s += "\n screenWidth: "
+				+ a.getWindow().getWindowManager().getDefaultDisplay()
+						.getWidth();
+		s += "\n screenHeigth: "
+				+ a.getWindow().getWindowManager().getDefaultDisplay()
+						.getHeight();
 		s += "\n Keyboard available: "
 				+ (a.getResources().getConfiguration().keyboard != Configuration.KEYBOARD_NOKEYS);
 
 		s += "\n Trackball available: "
-			+ (a.getResources().getConfiguration().navigation == Configuration.NAVIGATION_TRACKBALL);
-		s += "\n SD Card state: "
-			+ Environment.getExternalStorageState();
-		
+				+ (a.getResources().getConfiguration().navigation == Configuration.NAVIGATION_TRACKBALL);
+		s += "\n SD Card state: " + Environment.getExternalStorageState();
+
+		s += " \n \n [More automatically received system infos]:";
+		Properties p = System.getProperties();
+		Enumeration keys = p.keys();
+		String key = "";
+		while (keys.hasMoreElements()) {
+			key = (String) keys.nextElement();
+			s += "\n > " + key + " = " + (String) p.get(key);
+		}
+
 		s += " \n \n [You can add a description of what you were doing here]:";
 		s += " \n ...";
 		return s;
