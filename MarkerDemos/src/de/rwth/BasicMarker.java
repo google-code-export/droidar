@@ -1,27 +1,21 @@
 package de.rwth;
 
+import util.Vec;
+import android.opengl.Matrix;
 import gl.GLCamera;
 import gl.MarkerObject;
 import gl.scenegraph.MeshComponent;
-import util.Vec;
-import android.opengl.Matrix;
 
-public class VirtualObjectMarker implements MarkerObject {
-
-	// final static float rad2deg = (float) (180.0f / Math.PI);
+public abstract class BasicMarker implements MarkerObject {
 
 	private float[] invertedCameraMatrix = new float[16];
 	private float[] resultPosVec = { 0, 0, 0, 1 };
 	private float[] antiCameraMarkerRotMatrix = new float[16];
 
-	private MeshComponent myTargetMesh;
-	private GLCamera myCamera;
-	private int myId;
+	protected GLCamera myCamera;
+	protected int myId;
 
-	// private float[] viewMatrix = null;
-
-	public VirtualObjectMarker(int id, MeshComponent m, GLCamera camera) {
-		myTargetMesh = m;
+	public BasicMarker(int id, GLCamera camera) {
 		myCamera = camera;
 		myId = id;
 	}
@@ -44,8 +38,8 @@ public class VirtualObjectMarker implements MarkerObject {
 				markerCenterPosVec, 0);
 
 		Vec camPos = myCamera.getPosition();
-		myTargetMesh.setPosition(new Vec(resultPosVec[0] + camPos.x,
-				resultPosVec[1] + camPos.y, resultPosVec[2] + camPos.z));
+		setObjectPos(new Vec(resultPosVec[0] + camPos.x, resultPosVec[1]
+				+ camPos.y, resultPosVec[2] + camPos.z));
 
 		Matrix.multiplyMM(antiCameraMarkerRotMatrix, 0, invertedCameraMatrix,
 				0, markerRotMatrix, startOffset);
@@ -58,7 +52,7 @@ public class VirtualObjectMarker implements MarkerObject {
 		// addAngle(antiCameraMarkerRotMatrix, sideAngle);
 		// sideAngle = 0;
 
-		myTargetMesh.setRotationMatrix(antiCameraMarkerRotMatrix);
+		setObjRotation(antiCameraMarkerRotMatrix);
 
 		/*
 		 * alternative method which does not work for now:
@@ -84,28 +78,8 @@ public class VirtualObjectMarker implements MarkerObject {
 		// }
 	}
 
-	// private void getAngles(float[] resultingAngles, float[] rotationMatrix) {
-	// //rotationMatrix = transpose(rotationMatrix);
-	//
-	// resultingAngles[2] = (float) (Math.asin(rotationMatrix[2]));
-	// final float cosB = (float) Math.cos(resultingAngles[2]);
-	// resultingAngles[2] = resultingAngles[2] * rad2deg;
-	// resultingAngles[0] = -(float) (Math.acos(rotationMatrix[0] / cosB))
-	// * rad2deg;
-	// resultingAngles[1] = (float) (Math.acos(rotationMatrix[10] / cosB))
-	// * rad2deg;
-	//
-	// }
-	//
-	// private float[] transpose(float[] source) {
-	// final float[] result = source.clone();
-	// result[1] = source[4];
-	// result[2] = source[8];
-	// result[4] = source[1];
-	// result[6] = source[9];
-	// result[8] = source[2];
-	// result[9] = source[6];
-	// // TODO can be optimized by changing the values in getAngles directly
-	// return result;
-	// }
+	public abstract void setObjRotation(float[] rotMatrix);
+
+	public abstract void setObjectPos(Vec positionVec);
+
 }
