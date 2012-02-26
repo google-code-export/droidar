@@ -65,8 +65,39 @@ public class MultiMarkerSetup extends MarkerDetectionSetup {
 
 	@Override
 	public void _a3_registerMarkerObjects(MarkerObjectMap markerObjectMap) {
-		markerObjectMap.put(new VirtualObjectMarker(0, mesh1, camera));
-		markerObjectMap.put(new VirtualObjectMarker(1, mesh2, camera));
+		markerObjectMap.put(new SimpleMeshPlacer(0, mesh1, camera));
+		markerObjectMap.put(new SimpleMeshPlacer(1, mesh2, camera));
+
+		/*
+		 * example for more complex behavior:
+		 */
+		markerObjectMap.put(new BasicMarker(2, camera) {
+
+			MeshComponent targetMesh;
+			boolean firstTime = true;
+
+			@Override
+			public void setObjectPos(Vec positionVec) {
+				/*
+				 * the first time this method is called an object could be
+				 * created and added to the world
+				 */
+				if (firstTime) {
+					firstTime = false;
+					Obj aNewObject = new Obj();
+					targetMesh = GLFactory.getInstance().newArrow();
+					aNewObject.setComp(targetMesh);
+					world.add(aNewObject);
+				}
+				targetMesh.setPosition(positionVec);
+			}
+
+			@Override
+			public void setObjRotation(float[] rotMatrix) {
+				if (targetMesh != null)
+					targetMesh.setRotationMatrix(rotMatrix);
+			}
+		});
 	}
 
 	@Override
