@@ -398,8 +398,24 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		position.x = (float) ((myLongitude - zeroLongitude) * 111319.4917 * Math
 				.cos(zeroLatitude * 0.0174532925));
 		position.y = (float) ((myLatitude - zeroLatitude) * 111133.3333);
-		if (ActionCalcRelativePos.USE_ALTITUDE_VALUES)
-			position.z = (float) (myAltitude - zeroAltitude);
+
+		/*
+		 * the altitude should be respected as well but altitude = 0 should by
+		 * default mean the current device altitude is used:
+		 */
+		if (ActionCalcRelativePos.USE_ALTITUDE_VALUES) {
+			if (myAltitude == 0
+					&& ActionCalcRelativePos.USE_DEVICE_ALTI_FOR_ZERO) {
+				position.z = 0;
+			} else {
+				position.z = (float) (myAltitude - zeroAltitude);
+			}
+		} else {
+			/*
+			 * else the altitude value is ignored but the height of the meshcomp
+			 * can be still set of course
+			 */
+		}
 		return position;
 	}
 

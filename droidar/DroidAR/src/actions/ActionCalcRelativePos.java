@@ -29,6 +29,12 @@ public class ActionCalcRelativePos extends Action {
 	 * into account
 	 */
 	public static boolean USE_ALTITUDE_VALUES = true;
+	/**
+	 * set this to false if you want to position objects at the real 0 altitude,
+	 * because otherwise if you set altitude to 0 the current device altitude
+	 * will be used
+	 */
+	public static final boolean USE_DEVICE_ALTI_FOR_ZERO = true;
 
 	private static final double MAX_METER_DISTANCE = 1000; // 500 meter
 	private static final String LOG_TAG = "ActionCalcRelativePos";
@@ -87,7 +93,7 @@ public class ActionCalcRelativePos extends Action {
 				if (USE_ALTITUDE_VALUES) {
 					/*
 					 * if the altitude values should be used calculate the
-					 * correct height 
+					 * correct height
 					 */
 					final double relativeHeight = location.getAltitude()
 							- nullAltitude;
