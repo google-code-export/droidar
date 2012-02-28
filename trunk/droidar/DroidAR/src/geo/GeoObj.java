@@ -102,6 +102,16 @@ public class GeoObj extends Obj implements HasDebugInformation {
 
 	// Vec myPosition=new Vec();
 
+	/**
+	 * @param lati
+	 *            the latitude value (e.g. 48.858306)
+	 * @param longi
+	 *            the longitude value (e.g. 2.294496)
+	 * @param alti
+	 *            the altitude value in meters (eg 20 for 20m)
+	 * @param meshToSurround
+	 * @param calcVirtulPos
+	 */
 	private GeoObj(double lati, double longi, double alti,
 			MeshComponent meshToSurround, boolean calcVirtulPos) {
 		// a geoObj itself should not have a color so null:
@@ -206,6 +216,15 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		return getVirtualPosition();
 	}
 
+	/**
+	 * @param lati
+	 *            the latitude value (e.g. 48.858306)
+	 * @param longi
+	 *            the longitude value (e.g. 2.294496)
+	 * @param alti
+	 *            the altitude value in meters (eg 20 for 20m)
+	 * @param meshToSurround
+	 */
 	public GeoObj(double lati, double longi, double alti,
 			MeshComponent meshToSurround) {
 		this(lati, longi, alti, meshToSurround, true);
@@ -236,8 +255,11 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * !Important
 	 * 
 	 * @param lati
+	 *            the latitude value (e.g. 48.858306)
 	 * @param longi
+	 *            the longitude value (e.g. 2.294496)
 	 * @param alti
+	 *            the altitude value in meters (eg 20 for 20m)
 	 */
 	public GeoObj(double lati, double longi, double alti) {
 		this(lati, longi, alti, loadDefaultMesh());
@@ -253,6 +275,15 @@ public class GeoObj extends Obj implements HasDebugInformation {
 				loadDefaultMesh());
 	}
 
+	/**
+	 * @param lati
+	 *            the latitude value (e.g. 48.858306)
+	 * @param longi
+	 *            the longitude value (e.g. 2.294496)
+	 * @param alti
+	 *            the altitude value in meters (eg 20 for 20m)
+	 * @param name
+	 */
 	public GeoObj(double lati, double longi, int alti, String name) {
 		this(lati, longi, alti, loadDefaultMesh());
 		getInfoObject().setShortDescr(name);
@@ -276,7 +307,9 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	 * camera)
 	 * 
 	 * @param latitude
+	 *            the latitude value (e.g. 48.858306)
 	 * @param longitude
+	 *            the longitude value (e.g. 2.294496)
 	 */
 	public GeoObj(double latitude, double longitude) {
 		this(latitude, longitude, getDeviceAltidute());
@@ -308,14 +341,23 @@ public class GeoObj extends Obj implements HasDebugInformation {
 		return x;
 	}
 
+	/**
+	 * @return the latitude value of the GeoObj (e.g. 48.858306)
+	 */
 	public double getLatitude() {
 		return myLatitude;
 	}
 
+	/**
+	 * @return the longitude value of the GeoObj(e.g. 2.294496)
+	 */
 	public double getLongitude() {
 		return myLongitude;
 	}
 
+	/**
+	 * @return the altitude value in meters (e.g. 20 for 20m)
+	 */
 	public double getAltitude() {
 		return myAltitude;
 	}
