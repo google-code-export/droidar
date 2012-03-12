@@ -415,7 +415,22 @@ public class GeoUtils {
 	 *         settings will be started and false is returned
 	 */
 	public static boolean enableGPS(Activity activity) {
+
 		return switchGPS(activity, true, true);
+	}
+
+	public static void enableLocationProvidersIfNeeded(Activity activity) {
+		try {
+			boolean useWifiForLocation = ((LocationManager) activity
+					.getSystemService(Context.LOCATION_SERVICE))
+					.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+			if (isGPSDisabled(activity) && !useWifiForLocation) {
+				openLocationSettingsPage(activity);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -461,10 +476,14 @@ public class GeoUtils {
 		} else if (showSettingsIfAutoSwitchImpossible) {
 			Log.d(LOG_TAG, "Can't enable GPS automatically, will start "
 					+ "settings for manual enabling!");
-			activity.startActivity(new Intent(
-					android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+			openLocationSettingsPage(activity);
 		}
 		return false;
+	}
+
+	public static void openLocationSettingsPage(Activity activity) {
+		activity.startActivity(new Intent(
+				android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 	}
 
 	private static void pokeGPSButton(Activity activity) {
