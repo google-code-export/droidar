@@ -35,7 +35,7 @@ public abstract class ActionWaitForAccuracy extends Action {
 
 	private int stepCounter = 0;
 
-	private Activity myContext;
+	private Activity myActivity;
 
 	private TextView accText;
 
@@ -55,19 +55,23 @@ public abstract class ActionWaitForAccuracy extends Action {
 	 */
 	public ActionWaitForAccuracy(Activity context, float minAccuracy,
 			int maxPosUpdateCount) {
-		myContext = context;
+		myActivity = context;
 		myMinAccuracy = minAccuracy;
 		myMaxPosUpdateCount = maxPosUpdateCount;
 		analyseInitLocation(GeoUtils.getCurrentLocation(context));
 	}
 
 	private void analyseInitLocation(Location l) {
-		myCurrentAccuracy = l.getAccuracy();
-		long passedTime = System.currentTimeMillis() - l.getTime();
-		Log.d(LOG_TAG, "Passed time since last location event="
-				+ (passedTime / 1000f / 10f) + " minutes");
-		if (passedTime <= MAX_TIME_SINCE_LAST_UPDATE_IN_MS)
-			onLocationChanged(l);
+		if (l != null) {
+			myCurrentAccuracy = l.getAccuracy();
+			long passedTime = System.currentTimeMillis() - l.getTime();
+			Log.d(LOG_TAG, "Passed time since last location event="
+					+ (passedTime / 1000f / 10f) + " minutes");
+			if (passedTime <= MAX_TIME_SINCE_LAST_UPDATE_IN_MS)
+				onLocationChanged(l);
+		} else {
+			GeoUtils.enableLocationProvidersIfNeeded(myActivity);
+		}
 	}
 
 	@Override
@@ -111,7 +115,7 @@ public abstract class ActionWaitForAccuracy extends Action {
 			ActionWaitForAccuracy a);
 
 	public View getView() {
-		viewContainer = View.inflate(myContext,
+		viewContainer = View.inflate(myActivity,
 				R.layout.action_wait_for_accuracy_view, null);
 		accText = (TextView) viewContainer.findViewById(R.id.awfa_accText);
 		warningText = (Button) viewContainer.findViewById(R.id.awfa_warning);
@@ -119,7 +123,7 @@ public abstract class ActionWaitForAccuracy extends Action {
 
 			@Override
 			public void onClick(View v) {
-				if (GeoUtils.enableGPS(myContext)) {
+				if (GeoUtils.enableGPS(myActivity)) {
 					warningText.setVisibility(View.GONE);
 				}
 			}
@@ -136,30 +140,30 @@ public abstract class ActionWaitForAccuracy extends Action {
 		});
 
 		steps = (ProgressBar) viewContainer.findViewById(R.id.awfa_steps);
-		
+
 		showDebugInfosAboutTheUiElements();
 		updateUI();
 		return viewContainer;
 	}
 
 	private void showDebugInfosAboutTheUiElements() {
-		Log.d(LOG_TAG, "viewContainer="+viewContainer);
-		Log.d(LOG_TAG, "   > accText="+accText);
-		Log.d(LOG_TAG, "   > warningText="+warningText);
-		Log.d(LOG_TAG, "   > steps="+steps);
-		Log.d(LOG_TAG, "   > stepCounter="+stepCounter);	
+		Log.d(LOG_TAG, "viewContainer=" + viewContainer);
+		Log.d(LOG_TAG, "   > accText=" + accText);
+		Log.d(LOG_TAG, "   > warningText=" + warningText);
+		Log.d(LOG_TAG, "   > steps=" + steps);
+		Log.d(LOG_TAG, "   > stepCounter=" + stepCounter);
 	}
 
 	private void showSkipPositionDetectionDialog() {
-		final Dialog dialog = new Dialog(myContext);
-		Button b = new Button(myContext);
+		final Dialog dialog = new Dialog(myActivity);
+		Button b = new Button(myActivity);
 		b.setText(TEXT_SKIP_ACCURACY_DETECTION);
 		b.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				callFirstTimeAccReachedIfNotYetCalled(GeoUtils
-						.getCurrentLocation(myContext));
+						.getCurrentLocation(myActivity));
 				dialog.dismiss();
 			}
 		});
@@ -171,7 +175,7 @@ public abstract class ActionWaitForAccuracy extends Action {
 
 	private void updateUI() {
 		if (accText != null && steps != null && warningText != null)
-			myContext.runOnUiThread(new Runnable() {
+			myActivity.runOnUiThread(new Runnable() {
 
 				@Override
 				public void run() {
@@ -188,7 +192,7 @@ public abstract class ActionWaitForAccuracy extends Action {
 
 	private void hideUI() {
 		if (viewContainer != null)
-			myContext.runOnUiThread(new Runnable() {
+			myActivity.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
 					viewContainer.setVisibility(View.GONE);
@@ -197,7 +201,7 @@ public abstract class ActionWaitForAccuracy extends Action {
 	}
 
 	private void showWarningIfGPSOff() {
-		if (GeoUtils.isGPSDisabled(myContext)) {
+		if (GeoUtils.isGPSDisabled(myActivity)) {
 			Log.d(LOG_TAG, "GPS disabled!");
 			warningText.setVisibility(View.VISIBLE);
 			warningText.setText("Enable GPS");
