@@ -5,6 +5,7 @@ import geo.GeoObj;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
+import gl.GL1Renderer;
 import gl.GLRenderer;
 import gl.LightSource;
 import gl.ObjectPicker;
@@ -224,8 +225,8 @@ public abstract class Setup {
 		 */
 
 		debugLogDoSetupStep(STEP3);
-		glRenderer = new GLRenderer();
-		myGLSurfaceView = createOpenGlView(glRenderer);
+		glRenderer = initOpenGLRenderer();
+		myGLSurfaceView = initOpenGLView(glRenderer);
 
 		debugLogDoSetupStep(STEP4);
 		// setting up the sensor Listeners:
@@ -235,12 +236,13 @@ public abstract class Setup {
 		debugLogDoSetupStep(STEP5);
 		_a_initFieldsIfNecessary();
 
-		glRenderer.setUseLightning(_a2_initLightning(glRenderer.getMyLights()));
-
 		debugLogDoSetupStep(STEP6);
-		_b_addWorldsToRenderer(glRenderer, GLFactory.getInstance(),
-				EventManager.getInstance().getCurrentLocationObject());
 
+		if (glRenderer instanceof GL1Renderer) {
+			_b_addWorldsToRenderer((GL1Renderer) glRenderer,
+					GLFactory.getInstance(), EventManager.getInstance()
+							.getCurrentLocationObject());
+		}
 		initializeCamera();
 
 		debugLogDoSetupStep(STEP8);
@@ -484,11 +486,11 @@ public abstract class Setup {
 	/**
 	 * first you should create a new {@link GLCamera} and a new {@link World}
 	 * and then you can use the {@link GLFactory} object to add objects to the
-	 * created world. When your world is build, add it to the {@link GLRenderer}
+	 * created world. When your world is build, add it to the {@link GL1Renderer}
 	 * object by calling
-	 * {@link GLRenderer#addRenderElement(worldData.Renderable)}
+	 * {@link GL1Renderer#addRenderElement(worldData.Renderable)}
 	 * 
-	 * @param renderer
+	 * @param glRenderer
 	 *            here you should add your world(s)
 	 * @param objectFactory
 	 *            you could get this object your self wherever you want by
@@ -496,7 +498,7 @@ public abstract class Setup {
 	 * @param currentPosition
 	 *            might be null if no position information is available!
 	 */
-	public abstract void _b_addWorldsToRenderer(GLRenderer renderer,
+	public abstract void _b_addWorldsToRenderer(GL1Renderer glRenderer,
 			GLFactory objectFactory, GeoObj currentPosition);
 
 	/**
@@ -611,9 +613,15 @@ public abstract class Setup {
 	public abstract void _e2_addElementsToGuiSetup(GuiSetup guiSetup,
 			Activity activity);
 
-	private CustomGLSurfaceView createOpenGlView(GLRenderer renderer) {
+	public GLRenderer initOpenGLRenderer() {
+		GL1Renderer r = new GL1Renderer();
+		r.setUseLightning(_a2_initLightning(r.getMyLights()));
+		return r;
+	}
+
+	public CustomGLSurfaceView initOpenGLView(GLRenderer glRenderer2) {
 		CustomGLSurfaceView arView = new CustomGLSurfaceView(myTargetActivity);
-		arView.setRenderer(renderer);
+		arView.setRenderer(glRenderer2);
 		return arView;
 	}
 

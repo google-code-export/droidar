@@ -29,7 +29,7 @@ import android.view.SurfaceView;
  * Auto reloading of opengl context didn't work (textures were gone eg) so this
  * wont be used but would work (if you change the parent of
  * {@link CustomGLSurfaceView} to {@link ReplicaGLSurfaceView} and the parent of
- * {@link GLRenderer} to {@link ReplicaRenderer})
+ * {@link GL1Renderer} to {@link ReplicaRenderer})
  * 
  * 
  * <br>

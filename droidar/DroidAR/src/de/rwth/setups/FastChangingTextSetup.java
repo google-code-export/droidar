@@ -1,8 +1,8 @@
 package de.rwth.setups;
 
 import gl.GLFactory;
-import gl.GLRenderer;
 import gl.GLText;
+import gl.GLRenderer;
 import gl.scenegraph.MeshComponent;
 import gui.GuiSetup;
 

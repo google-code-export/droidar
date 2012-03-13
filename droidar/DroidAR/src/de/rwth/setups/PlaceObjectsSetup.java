@@ -5,7 +5,7 @@ import gl.Color;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
-import gl.GLRenderer;
+import gl.GL1Renderer;
 import gl.scenegraph.MeshComponent;
 import gui.GuiSetup;
 import system.ErrorHandler;
@@ -45,7 +45,7 @@ public class PlaceObjectsSetup extends Setup {
 	}
 
 	@Override
-	public void _b_addWorldsToRenderer(GLRenderer renderer,
+	public void _b_addWorldsToRenderer(GL1Renderer renderer,
 			GLFactory objectFactory, GeoObj currentPosition) {
 		camera = new GLCamera(new Vec(0, 0, 10));
 		world = new World(camera);

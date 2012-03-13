@@ -7,7 +7,7 @@ import gl.Color;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
-import gl.GLRenderer;
+import gl.GL1Renderer;
 import gl.animations.AnimationColorBounce;
 import gl.animations.AnimationPulse;
 import gl.scenegraph.MeshComponent;
@@ -63,7 +63,7 @@ public class GraphCreationSetup extends Setup {
 	}
 
 	@Override
-	public void _b_addWorldsToRenderer(GLRenderer renderer,
+	public void _b_addWorldsToRenderer(GL1Renderer renderer,
 			GLFactory objectFactory, GeoObj currentPosition) {
 		renderer.addRenderElement(world);
 	}
