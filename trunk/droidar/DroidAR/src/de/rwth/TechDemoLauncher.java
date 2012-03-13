@@ -1,8 +1,5 @@
 package de.rwth;
 
-import gl.GLUtilityClass;
-import gl2.GL2Renderer;
-import gl2.GL2SurfaceView;
 import system.ArActivity;
 import system.ErrorHandler;
 import system.Setup;
@@ -11,7 +8,6 @@ import tests.EfficientListTests;
 import tests.GameLogicTests;
 import tests.GeoTests;
 import tests.IOTests;
-import tests.SimpleTesting;
 import tests.SystemTests;
 import tests.WorldTests;
 import android.app.Activity;
@@ -27,7 +23,6 @@ import de.rwth.setups.CollectItemsSetup;
 import de.rwth.setups.DebugSetup;
 import de.rwth.setups.FarAwayPOIScenarioSetup;
 import de.rwth.setups.FastChangingTextSetup;
-import de.rwth.setups.GL2OnlySetup;
 import de.rwth.setups.GameDemoSetup;
 import de.rwth.setups.GraphCreationSetup;
 import de.rwth.setups.GraphMovementTestSetup;
@@ -55,11 +50,7 @@ public class TechDemoLauncher extends Activity {
 		LinearLayout l = ((LinearLayout) findViewById(R.id.demoScreenLinView));
 		l.removeAllViews();
 
-		showSetup("Animation Demo", new DebugSetup());
-		
-		if (GLUtilityClass.isGL2Available(this))
-			showSetup("GL2 Setup", new GL2OnlySetup());
-		
+		showSetup("Animation Demo", new DebugSetup());		
 		showSetup("Game Demo", new GameDemoSetup());
 		showSetup("'Too far away' scenario", new FarAwayPOIScenarioSetup());
 		showSetup("Large worlds", new LargeWorldsSetup());
