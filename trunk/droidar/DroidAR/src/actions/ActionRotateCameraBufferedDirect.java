@@ -1,6 +1,6 @@
 package actions;
 
-import gl.GLCamera;
+import gl.GLCamRotationController;
 import gl.GLUtilityClass;
 import util.Calculus;
 import actions.algos.Algo;
@@ -20,7 +20,7 @@ import android.view.MotionEvent;
 @Deprecated
 public class ActionRotateCameraBufferedDirect extends Action {
 
-	private GLCamera myTargetCamera;
+	private GLCamRotationController myTargetCamera;
 
 	public Algo magnetAlgo;
 	public Algo accelAlgo;
@@ -45,7 +45,7 @@ public class ActionRotateCameraBufferedDirect extends Action {
 
 	private float timeDelta;
 
-	public ActionRotateCameraBufferedDirect(GLCamera targetCamera) {
+	public ActionRotateCameraBufferedDirect(GLCamRotationController targetCamera) {
 		myTargetCamera = targetCamera;
 		accelAlgo = new SensorAlgo1(0.1f);
 		magnetAlgo = new SensorAlgo1(1.4f);

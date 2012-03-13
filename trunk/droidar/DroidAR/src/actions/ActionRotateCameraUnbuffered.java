@@ -1,12 +1,12 @@
 package actions;
 
-import gl.GLCamera;
+import gl.GLCamRotationController;
 
 public class ActionRotateCameraUnbuffered extends ActionWithSensorProcessing {
 
 	private static final String LOG_TAG = "ActionRotateCameraUnbuffered";
 
-	public ActionRotateCameraUnbuffered(GLCamera targetCamera) {
+	public ActionRotateCameraUnbuffered(GLCamRotationController targetCamera) {
 		super(targetCamera);
 	}
 
