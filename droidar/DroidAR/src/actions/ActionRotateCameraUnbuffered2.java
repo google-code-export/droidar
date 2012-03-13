@@ -1,11 +1,11 @@
 package actions;
 
-import gl.GLCamera;
+import gl.GLCamRotationController;
 import actions.algos.SensorAlgo1;
 
 public class ActionRotateCameraUnbuffered2 extends ActionWithSensorProcessing {
 
-	public ActionRotateCameraUnbuffered2(GLCamera targetCamera) {
+	public ActionRotateCameraUnbuffered2(GLCamRotationController targetCamera) {
 		super(targetCamera);
 	}
 

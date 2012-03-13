@@ -1,6 +1,6 @@
 package actions;
 
-import gl.GLCamera;
+import gl.GLCamRotationController;
 import gl.GLUtilityClass;
 import util.Calculus;
 import worldData.Updateable;
@@ -12,7 +12,7 @@ public abstract class ActionWithSensorProcessing extends Action {
 
 	private static final String LOG_TAG = "ActionWithSensorProcessing";
 
-	private GLCamera myTargetCamera;
+	private GLCamRotationController myTargetCamera;
 
 	public Algo magnetAlgo;
 	public Algo accelAlgo;
@@ -35,7 +35,7 @@ public abstract class ActionWithSensorProcessing extends Action {
 	private float[] unrotatedMatrix = Calculus.createIdentityMatrix();
 	private float[] rotationMatrix = Calculus.createIdentityMatrix();
 
-	public ActionWithSensorProcessing(GLCamera targetCamera) {
+	public ActionWithSensorProcessing(GLCamRotationController targetCamera) {
 		myTargetCamera = targetCamera;
 		initAlgos();
 	}

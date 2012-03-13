@@ -24,7 +24,7 @@ import android.opengl.Matrix;
  * 
  */
 public class GLCamera implements Updateable, HasDebugInformation, Renderable,
-		HasPosition, HasRotation {
+		HasPosition, HasRotation, GLCamRotationController {
 
 	private static final String LOG_TAG = "GLCamera";
 
@@ -341,14 +341,10 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		glLoadPosition(gl, myPosition);
 	}
 
-	/**
-	 * This method can be used to set the rotation matrix received from the
-	 * sensor data or from any other source (like a marker tracker -> see marker
-	 * tracker extension)
-	 * 
-	 * @param rotMatrix
-	 * @param offset
+	/* (non-Javadoc)
+	 * @see gl.GLCamRotationController#setRotationMatrix(float[], int)
 	 */
+	@Override
 	public void setRotationMatrix(float[] rotMatrix, int offset) {
 		synchronized (rotMatrLock) {
 			rotationMatrix = rotMatrix;
@@ -456,9 +452,11 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		myPosition.y += deltaY;
 	}
 
-	/**
-	 * This will reset the rotation vector of the virtual camera
+	/* (non-Javadoc)
+	 * @see gl.GLCamRotationController#resetBufferedAngle()
 	 */
+	@Override
+	@Deprecated
 	public void resetBufferedAngle() {
 		Log.d(LOG_TAG, "Reseting camera rotation in resetBufferedAngle()!");
 		if ((myNewRotationVec != null) && (sensorInputEnabled))
@@ -477,12 +475,11 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		myRotationVec.z += deltaZ;
 	}
 
-	/**
-	 * This will change the z value of the camera-rotation by adding/subtracting
-	 * the specified deltaZ value.
-	 * 
-	 * @param deltaZ
+	/* (non-Javadoc)
+	 * @see gl.GLCamRotationController#changeZAngleBuffered(float)
 	 */
+	@Override
+	@Deprecated
 	public void changeZAngleBuffered(float deltaZ) {
 		if (myNewRotationVec == null) {
 			myNewRotationVec = new Vec();
