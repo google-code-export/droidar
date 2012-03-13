@@ -4,6 +4,7 @@ import geo.GeoObj;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
+import gl.GL1Renderer;
 import gl.GLRenderer;
 import gui.GuiSetup;
 import util.Log;
@@ -80,7 +81,7 @@ public abstract class DefaultARSetup extends Setup {
 			GLFactory objectFactory);
 
 	@Override
-	public void _b_addWorldsToRenderer(GLRenderer renderer,
+	public void _b_addWorldsToRenderer(GL1Renderer renderer,
 			GLFactory objectFactory, GeoObj currentPosition) {
 		myRenderer = renderer;
 		renderer.addRenderElement(world);

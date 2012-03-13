@@ -5,7 +5,7 @@ import gl.Color;
 import gl.CustomGLSurfaceView;
 import gl.GLCamera;
 import gl.GLFactory;
-import gl.GLRenderer;
+import gl.GL1Renderer;
 import gl.animations.AnimationRotate;
 import gl.scenegraph.MeshComponent;
 import gl.scenegraph.Shape;
@@ -65,7 +65,7 @@ public class SensorTestSetup extends Setup {
 	}
 
 	@Override
-	public void _b_addWorldsToRenderer(GLRenderer renderer,
+	public void _b_addWorldsToRenderer(GL1Renderer renderer,
 			GLFactory objectFactory, GeoObj currentPosition) {
 
 		world = new World(camera);
