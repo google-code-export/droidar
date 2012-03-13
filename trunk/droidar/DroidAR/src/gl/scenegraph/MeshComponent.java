@@ -208,6 +208,7 @@ public abstract class MeshComponent implements RenderableEntity,
 
 	@Override
 	public synchronized void render(GL10 gl, Renderable parent) {
+
 		// store current matrix and then modify it:
 		gl.glPushMatrix();
 		loadPosition(gl);
@@ -247,6 +248,8 @@ public abstract class MeshComponent implements RenderableEntity,
 
 	@Override
 	public boolean update(float timeDelta, Updateable parent) {
+		setMyParent(parent);
+
 		if ((myChildren != null) && (graficAnimationActive)) {
 
 			// if the animation does not need to be animated anymore..
@@ -303,18 +306,16 @@ public abstract class MeshComponent implements RenderableEntity,
 		myParent = parent;
 	}
 
-	public Vec getAbsoluteMeshPosition() {
-		Vec pos;
+	public void getAbsoluteMeshPosition(Vec pos) {
 		if (myPosition != null) {
-			pos = myPosition.copy();
-		} else {
-			pos = new Vec();
+			pos.add(myPosition);
 		}
+
 		Updateable p = getMyParent();
 		if (p instanceof MeshComponent) {
-			pos.add(((MeshComponent) p).getAbsoluteMeshPosition());
+			((MeshComponent) p).getAbsoluteMeshPosition(pos);
 		}
-		return pos;
+
 	}
 
 	@Override
@@ -410,12 +411,12 @@ public abstract class MeshComponent implements RenderableEntity,
 					+ " was denied!");
 			return;
 		}
-		
-		if (target.myChildren==null){
-			target.myChildren=a;
+
+		if (target.myChildren == null) {
+			target.myChildren = a;
 			return;
 		}
-		
+
 		if (!(target.myChildren instanceof RenderList)) {
 			RenderList childrenGroup = new RenderList();
 			// keep the old animation:

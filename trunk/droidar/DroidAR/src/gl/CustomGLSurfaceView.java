@@ -1,18 +1,27 @@
 package gl;
 
 import gui.CustomGestureListener;
+
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
+import javax.microedition.khronos.egl.EGLDisplay;
+
 import listeners.EventListener;
 import system.EventManager;
 import system.TouchEventInterface;
 import util.Log;
 import actions.Action;
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 import commands.Command;
+import commands.ui.CommandShowToast;
 
 /**
  * This is the custom {@link GLSurfaceView} which is used to render the OpenGL
@@ -50,9 +59,45 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 			// Turn on error-checking and logging
 			setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
 		}
+
 		this.setFocusableInTouchMode(true);
 		myGestureDetector = new GestureDetector(context,
 				new CustomGestureListener(this));
+
+		// Set 8888 pixel format because that's required for
+		// a translucent window:
+		this.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+
+		// Use a surface format with an Alpha channel:
+		this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+	}
+
+	/**
+	 * source:
+	 * 
+	 * http://code.google.com/p/gl2-android/source/browse/trunk/src/com/badlogic
+	 * /gdx/GL2Test.java
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static boolean isGL2Available(Context context) {
+		EGL10 egl = (EGL10) EGLContext.getEGL();
+		EGLDisplay display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+
+		int[] version = new int[2];
+		egl.eglInitialize(display, version);
+
+		int EGL_OPENGL_ES2_BIT = 4;
+		int[] configAttribs = { EGL10.EGL_RED_SIZE, 4, EGL10.EGL_GREEN_SIZE, 4,
+				EGL10.EGL_BLUE_SIZE, 4, EGL10.EGL_RENDERABLE_TYPE,
+				EGL_OPENGL_ES2_BIT, EGL10.EGL_NONE };
+
+		EGLConfig[] configs = new EGLConfig[10];
+		int[] num_config = new int[1];
+		egl.eglChooseConfig(display, configAttribs, configs, 10, num_config);
+		egl.eglTerminate(display);
+		return num_config[0] > 0;
 	}
 
 	@Override

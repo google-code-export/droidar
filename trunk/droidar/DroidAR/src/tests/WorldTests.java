@@ -6,6 +6,7 @@ import gl.animations.GLAnimation;
 import gl.scenegraph.MeshComponent;
 import gl.scenegraph.Shape;
 import system.Container;
+import util.Vec;
 import worldData.Obj;
 import worldData.World;
 
@@ -46,6 +47,23 @@ public class WorldTests extends SimpleTesting {
 		w.remove(o);
 		assertTrue(w.getAllItems().myLength == 0);
 		assertTrue(w.getAllItems().contains(o) == -1);
+
+		absolutePositionTest();
+	}
+
+	private void absolutePositionTest() throws Exception {
+		MeshComponent a = new Shape(null, new Vec(10, 0, 0));
+		MeshComponent b = new Shape(null, new Vec(0, 10, 0));
+		MeshComponent c = new Shape(null, new Vec(0, 0, 10));
+		a.addChild(b);
+		b.addChild(c);
+
+		a.update(1, null);
+
+		Vec pos = new Vec();
+		c.getAbsoluteMeshPosition(pos);
+		System.out.println(pos);
+		assertEquals(pos, new Vec(10, 10, 10));
 	}
 
 }

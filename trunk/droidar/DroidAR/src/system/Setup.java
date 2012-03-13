@@ -612,17 +612,8 @@ public abstract class Setup {
 			Activity activity);
 
 	private CustomGLSurfaceView createOpenGlView(GLRenderer renderer) {
-
 		CustomGLSurfaceView arView = new CustomGLSurfaceView(myTargetActivity);
-
-		// Set 8888 pixel format because that's required for
-		// a translucent window:
-		arView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-
 		arView.setRenderer(renderer);
-
-		// Use a surface format with an Alpha channel:
-		arView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
 		return arView;
 	}
 

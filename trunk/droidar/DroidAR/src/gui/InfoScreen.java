@@ -45,16 +45,20 @@ public class InfoScreen extends Activity {
 	}
 
 	private void addContent(ScrollView s) {
-		InfoScreenSettings infos = getInfoScreenSettings();
-		if (infos.backgroundColor != null)
-			s.setBackgroundColor(infos.backgroundColor.toIntARGB());
-		LinearLayout linLayBox = infos.getLinLayout();
-		fixPossibleParentProblem(linLayBox);
-		s.addView(linLayBox); 
-		if (!infos.closeInstantly()) {
-			infos.getLinLayout().addView(newCloseButton(infos));
-		} else {
-			infos.getLinLayout().addView(newLoadingInfo(infos));
+		try {
+			InfoScreenSettings infos = getInfoScreenSettings();
+			if (infos.backgroundColor != null)
+				s.setBackgroundColor(infos.backgroundColor.toIntARGB());
+			LinearLayout linLayBox = infos.getLinLayout();
+			fixPossibleParentProblem(linLayBox);
+			s.addView(linLayBox); 
+			if (!infos.closeInstantly()) {
+				infos.getLinLayout().addView(newCloseButton(infos));
+			} else {
+				infos.getLinLayout().addView(newLoadingInfo(infos));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}
