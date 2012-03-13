@@ -90,11 +90,13 @@ public class AnimationFaceToCamera extends GLAnimation {
 		return true;
 	}
 
+	Vec absolutePosition = new Vec();
 	private void updateRotation(Updateable parent) {
 		if (parent instanceof MeshComponent) {
-			Vec pos = ((MeshComponent) parent).getAbsoluteMeshPosition();
+			absolutePosition.setToZero();
+			((MeshComponent) parent).getAbsoluteMeshPosition(absolutePosition);
 			// Log.d("face camera animation", "mesh position: "+pos);
-			newRotationVec.toAngleVec(pos, myTargetCameraPosition);
+			newRotationVec.toAngleVec(absolutePosition, myTargetCameraPosition);
 			/*
 			 * substract 90 from the x value becaute calcanglevec returns 90 if
 			 * the rotation should be the horizon (which would mean no object
