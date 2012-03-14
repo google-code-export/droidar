@@ -21,20 +21,21 @@ import commands.Command;
  * The keytool.exe is part of the Java SDK you are using (eg: C:\Program
  * Files\Java\jdk1.6.0_22\bin\keytool.exe). <br>
  * <br>
- * So move the debug.keystore to C, start your cmd.exe and type: <br>
+ * So move the debug.keystore from "C:\Users\YourUserNameHere\.android" to
+ * "C:\", start your cmd.exe and type: <br>
  * <br>
  * C:\Program Files\Java\jdk1.6.0_22\bin>keytool -list -alias androiddebugkey
  * -keystore C:\debug.keystore -keypass android <br>
+ * You might be asked for a password, the password is "android" <br>
  * <br>
- * Here are more infos how to use the debug fingerprint:
- * http://code.google.com/android/add-ons/google-apis/mapkey.html#
- * getdebugfingerprint <br>
- * <br>
- * Now use the MD5 fingerprint you will get here:
+ * The cmd will display a MD5 fingerprint, copy and use this fingerprint here:
  * http://code.google.com/android/maps-api-signup.html <br>
  * <br>
  * The code you get from the signup page has to be passed in the constructor of
- * the GMap class
+ * the GMap class <br>
+ * Here are more infos how to use the debug fingerprint:
+ * http://code.google.com/android/add-ons/google-apis/mapkey.html#
+ * getdebugfingerprint <br>
  * 
  * @author Spobo
  * 
@@ -81,7 +82,8 @@ public class GMap extends MapView implements TouchEventInterface {
 		super(c, apiKey);
 
 		setLayoutParams(new android.view.ViewGroup.LayoutParams(
-				android.view.ViewGroup.LayoutParams.FILL_PARENT, android.view.ViewGroup.LayoutParams.FILL_PARENT));
+				android.view.ViewGroup.LayoutParams.FILL_PARENT,
+				android.view.ViewGroup.LayoutParams.FILL_PARENT));
 
 		// create a GestureDetector:
 		myGestureDetector = new GestureDetector(c, new CustomGestureListener(

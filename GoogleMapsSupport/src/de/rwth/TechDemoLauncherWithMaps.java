@@ -34,13 +34,6 @@ public class TechDemoLauncherWithMaps extends Activity {
 
 		LinearLayout l = ((LinearLayout) findViewById(R.id.demoScreenLinView));
 
-		l.addView(new SimpleButton("Run tests") {
-			@Override
-			public void onButtonPressed() {
-				runTests();
-			}
-		});
-
 		// showSetup("Indoor Navigator (Needs special localization service!)",
 		// new IndoorSetup());
 
@@ -71,17 +64,6 @@ public class TechDemoLauncherWithMaps extends Activity {
 		}
 
 		public abstract void onButtonPressed();
-	}
-
-	private void runTests() {
-		// execute all tests defined in the ARTestSuite:
-		try {
-			SimpleTesting.runAllTests(this);
-			new CommandShowToast(this, "All tests succeded on this device :)")
-					.execute();
-		} catch (Exception e) {
-			ErrorHandler.showErrorLog(this, e, true);
-		}
 	}
 
 }

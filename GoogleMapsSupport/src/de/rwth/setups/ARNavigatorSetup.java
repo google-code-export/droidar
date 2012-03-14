@@ -8,6 +8,7 @@ import geo.GeoUtils;
 import geo.NodeListener;
 import gl.Color;
 import gl.CustomGLSurfaceView;
+import gl.GL1Renderer;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.GLRenderer;
@@ -249,7 +250,7 @@ public class ARNavigatorSetup extends Setup {
 	}
 
 	@Override
-	public void _b_addWorldsToRenderer(GLRenderer renderer,
+	public void _b_addWorldsToRenderer(GL1Renderer renderer,
 			GLFactory objectFactory, GeoObj currentPosition) {
 		myRenderer = renderer;
 		camera = new GLCamera(new Vec(0, 0, 1.5f));
