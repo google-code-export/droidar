@@ -3,9 +3,9 @@ package de.rwth;
 import geo.GeoObj;
 import gl.Color;
 import gl.CustomGLSurfaceView;
+import gl.GL1Renderer;
 import gl.GLCamera;
 import gl.GLFactory;
-import gl.GLRenderer;
 import gl.animations.AnimationFaceToCamera;
 import gl.scenegraph.MeshComponent;
 import gl.scenegraph.Shape;
@@ -46,7 +46,7 @@ public class ExampleMarkerRenderSetup extends MarkerDetectionSetup {
 	}
 
 	@Override
-	public void _b_addWorldsToRenderer(GLRenderer renderer,
+	public void _b_addWorldsToRenderer(GL1Renderer renderer,
 			GLFactory objectFactory, GeoObj currentPosition) {
 		renderer.addRenderElement(world);
 		Obj o = new Obj();
