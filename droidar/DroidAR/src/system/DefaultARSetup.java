@@ -2,10 +2,9 @@ package system;
 
 import geo.GeoObj;
 import gl.CustomGLSurfaceView;
+import gl.GL1Renderer;
 import gl.GLCamera;
 import gl.GLFactory;
-import gl.GL1Renderer;
-import gl.GLRenderer;
 import gui.GuiSetup;
 import util.Log;
 import util.Vec;
@@ -47,7 +46,7 @@ public abstract class DefaultARSetup extends Setup {
 	public GLCamera camera;
 	public World world;
 	private ActionWASDMovement wasdAction;
-	private GLRenderer myRenderer;
+	private GL1Renderer myRenderer;
 	private boolean addObjCalledOneTieme;
 	private ActionWaitForAccuracy minAccuracyAction;
 	private Action rotateGLCameraAction;
@@ -77,7 +76,7 @@ public abstract class DefaultARSetup extends Setup {
 	 * @param world
 	 * @param objectFactory
 	 */
-	public abstract void addObjectsTo(GLRenderer renderer, World world,
+	public abstract void addObjectsTo(GL1Renderer renderer, World world,
 			GLFactory objectFactory);
 
 	@Override

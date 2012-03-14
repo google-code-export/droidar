@@ -1,8 +1,8 @@
 package de.rwth.setups;
 
+import gl.GL1Renderer;
 import gl.GLFactory;
 import gl.GLText;
-import gl.GLRenderer;
 import gl.scenegraph.MeshComponent;
 import gui.GuiSetup;
 
@@ -21,7 +21,7 @@ public class FastChangingTextSetup extends DefaultARSetup {
 	private GLText text;
 
 	@Override
-	public void addObjectsTo(GLRenderer renderer, World world,
+	public void addObjectsTo(GL1Renderer renderer, World world,
 			GLFactory objectFactory) {
 
 		text = new GLText("11223344swrvgweln@@@@", myTargetActivity, textMap,

@@ -2,8 +2,8 @@ package de.rwth.setups;
 
 import gl.Color;
 import gl.CustomGLSurfaceView;
+import gl.GL1Renderer;
 import gl.GLFactory;
-import gl.GLRenderer;
 import gl.LightSource;
 import gl.animations.AnimationRotate;
 import gl.scenegraph.MeshComponent;
@@ -56,7 +56,7 @@ public class LightningSetup extends DefaultARSetup {
 	}
 
 	@Override
-	public void addObjectsTo(GLRenderer renderer, World world,
+	public void addObjectsTo(GL1Renderer renderer, World world,
 			GLFactory objectFactory) {
 
 		addNewObjToWorld(world, objectFactory);
