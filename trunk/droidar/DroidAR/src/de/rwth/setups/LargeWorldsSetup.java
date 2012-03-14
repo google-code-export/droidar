@@ -1,7 +1,7 @@
 package de.rwth.setups;
 
+import gl.GL1Renderer;
 import gl.GLFactory;
-import gl.GLRenderer;
 import gui.InfoScreenSettings;
 import system.DefaultARSetup;
 import system.ErrorHandler;
@@ -32,7 +32,7 @@ public class LargeWorldsSetup extends DefaultARSetup {
 	}
 
 	@Override
-	public void addObjectsTo(GLRenderer renderer, World world,
+	public void addObjectsTo(GL1Renderer renderer, World world,
 			GLFactory objectFactory) {
 		RenderQuadList list = new RenderQuadList(getCamera(), 100, 10);
 		for (int x = (int) Math.sqrt(NUMBER_OF_OBJECTS); x >= 0; x--) {

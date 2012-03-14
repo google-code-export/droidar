@@ -4,8 +4,8 @@ import geo.DefaultNodeEdgeListener;
 import geo.GeoGraph;
 import geo.GeoObj;
 import gl.CustomGLSurfaceView;
+import gl.GL1Renderer;
 import gl.GLFactory;
-import gl.GLRenderer;
 import system.DefaultARSetup;
 import system.EventManager;
 import util.EfficientList;
@@ -16,7 +16,7 @@ import worldData.World;
 public class GraphMovementTestSetup extends DefaultARSetup {
 
 	@Override
-	public void addObjectsTo(GLRenderer renderer, World world,
+	public void addObjectsTo(GL1Renderer renderer, World world,
 			GLFactory objectFactory) {
 
 		EfficientList<GeoObj> l = new EfficientList<GeoObj>();

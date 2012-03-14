@@ -1,8 +1,8 @@
 package de.rwth.setups;
 
 import geo.GeoObj;
+import gl.GL1Renderer;
 import gl.GLFactory;
-import gl.GLRenderer;
 import gui.GuiSetup;
 import gui.RadarView;
 import system.DefaultARSetup;
@@ -29,7 +29,7 @@ public class FarAwayPOIScenarioSetup extends DefaultARSetup {
 	}
 
 	@Override
-	public void addObjectsTo(GLRenderer renderer, World world,
+	public void addObjectsTo(GL1Renderer renderer, World world,
 			final GLFactory objectFactory) {
 		GeoObj o = new GeoObj();
 		o.setComp(objectFactory.newCube());

@@ -4,8 +4,8 @@ import gamelogic.ActionThrowFireball;
 import gamelogic.GameAction;
 import gamelogic.GameParticipant;
 import gamelogic.Stat;
+import gl.GL1Renderer;
 import gl.GLFactory;
-import gl.GLRenderer;
 import gui.GuiSetup;
 import system.DefaultARSetup;
 import worldData.SystemUpdater;
@@ -31,7 +31,7 @@ public class GameDemoSetup extends DefaultARSetup {
 	}
 
 	@Override
-	public void addObjectsTo(GLRenderer renderer, World world,
+	public void addObjectsTo(GL1Renderer renderer, World world,
 			GLFactory objectFactory) {
 
 	}
