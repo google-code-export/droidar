@@ -1,6 +1,7 @@
 package de.rwth;
 
 import gl.CustomGLSurfaceView;
+import gl.GL1Renderer;
 import gl.GLFactory;
 import gl.GLRenderer;
 import gl.LightSource;
@@ -32,7 +33,7 @@ public class ModelLoaderSetup extends DefaultARSetup {
 	private String textureName;
 	private LightSource spotLight;
 	private Wrapper targetMoveWrapper;
-	private GLRenderer renderer;
+	private GL1Renderer renderer;
 
 	public ModelLoaderSetup(String fileName, String textureName) {
 		this.fileName = fileName;
@@ -49,7 +50,7 @@ public class ModelLoaderSetup extends DefaultARSetup {
 	}
 
 	@Override
-	public void addObjectsTo(GLRenderer renderer, final World world,
+	public void addObjectsTo(GL1Renderer renderer, final World world,
 			GLFactory objectFactory) {
 		this.renderer = renderer;
 		final Obj lightObject = new Obj();
@@ -150,4 +151,6 @@ public class ModelLoaderSetup extends DefaultARSetup {
 		}, "Lights on/of");
 
 	}
+
+	
 }
