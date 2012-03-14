@@ -1,6 +1,6 @@
 package de.rwth;
 
-import gl.GLRenderer;
+import gl.GL1Renderer;
 import gl.Renderable;
 import gl.scenegraph.MeshComponent;
 import system.Setup;
@@ -49,9 +49,9 @@ public abstract class ModelLoader implements gl.Renderable {
 	private KeyframedModel keyFramedModel;
 	private SkeletonModel skeletonModel;
 
-	private GLRenderer renderer;
+	private GL1Renderer renderer;
 
-	public ModelLoader(GLRenderer renderer, String fileName,
+	public ModelLoader(GL1Renderer renderer, String fileName,
 			String textureFileName) {
 		this.renderer = renderer;
 		this.fileName = fileName;

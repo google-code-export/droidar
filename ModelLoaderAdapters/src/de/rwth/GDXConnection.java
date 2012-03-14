@@ -1,6 +1,6 @@
 package de.rwth;
 
-import gl.GLRenderer;
+import gl.GL1Renderer;
 import gl.Renderable;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -22,9 +22,9 @@ import com.badlogic.gdx.graphics.Pixmap;
 
 public class GDXConnection implements Renderable {
 	private static boolean initGLStuff;
-	private GLRenderer myRenderer;
+	private GL1Renderer myRenderer;
 
-	public GDXConnection(GLRenderer renderer) {
+	public GDXConnection(GL1Renderer renderer) {
 		Gdx.app = new AndroidApplication();
 		myRenderer = renderer;
 
@@ -219,7 +219,7 @@ public class GDXConnection implements Renderable {
 		}
 	}
 
-	public static void init(Activity activity, GLRenderer renderer) {
+	public static void init(Activity activity, GL1Renderer renderer) {
 		Gdx.files = new AndroidFiles(activity.getAssets());
 		renderer.addRenderElement(new GDXConnection(renderer));
 	}
