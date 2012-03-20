@@ -42,7 +42,7 @@ public class ActionCalcRelativePos extends Action {
 	private static final double MAX_METER_DISTANCE = 1000; // 500 meter
 	private static final String LOG_TAG = "ActionCalcRelativePos";
 
-	private static final boolean LOG_SHOW_POSITION = true;
+	private static final boolean LOG_SHOW_POSITION = false;
 
 	/**
 	 * this could be replaces by the
