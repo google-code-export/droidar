@@ -38,7 +38,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 	private static final String LOG_TAG = "Event Manager";
 
-	private static final long MIN_MS_BEFOR_UPDATE = 1000;
+	private static final long MIN_MS_BEFOR_UPDATE = 200;
 	private static final float MIN_DIST_FOR_UPDATE = 1;
 
 	private static EventManager myInstance = new EventManager();
@@ -76,7 +76,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 			boolean useAccelAndMagnetoSensors) {
 		myTargetActivity = targetActivity;
 		registerSensorUpdates(targetActivity, useAccelAndMagnetoSensors);
-		registerLocationUpdates(targetActivity);
+		registerLocationUpdates();
 
 	}
 
@@ -109,12 +109,31 @@ public class EventManager implements LocationListener, SensorEventListener {
 		}
 	}
 
-	private void registerLocationUpdates(Activity myTargetActivity) {
+	/**
+	 * This method will try to find the best location source available (probably
+	 * GPS if enabled). Remember to wait some seconds before calling this if you
+	 * activated GPS programmatically using
+	 * {@link GeoUtils#enableGPS(Activity)}
+	 */
+	public void registerLocationUpdates() {
+
+		if (myTargetActivity == null) {
+			Log.e(LOG_TAG, "The target activity was undefined while "
+					+ "trying to register for location updates");
+		}
+
 		LocationManager locationManager = (LocationManager) myTargetActivity
 				.getSystemService(Context.LOCATION_SERVICE);
 		Log.i(LOG_TAG, "Got locationmanager: " + locationManager);
 
 		try {
+
+			if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+				Log.i(LOG_TAG, "GPS was enabled so this method should "
+						+ "come to the conclusion to use GPS as "
+						+ "the location source!");
+			}
+
 			/*
 			 * To register the EventManager in the LocationManager a Criteria
 			 * object has to be created and as the primary attribute accuracy
@@ -140,6 +159,11 @@ public class EventManager implements LocationListener, SensorEventListener {
 				if (provider == null)
 					Log.w(LOG_TAG, "No location-provider alternative "
 							+ "found!");
+			}
+
+			if (!provider.equals(LocationManager.GPS_PROVIDER)) {
+				Log.w(LOG_TAG, "The best location provider was not "
+						+ LocationManager.GPS_PROVIDER + ", it was " + provider);
 			}
 
 			locationManager.requestLocationUpdates(provider,
@@ -195,8 +219,13 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		Log.w(LOG_TAG, "Didnt handle onStatusChanged of " + provider
-				+ "(status=" + status + ")");
+
+		if (myTargetActivity != null) {
+			registerLocationUpdates();
+		} else
+			Log.w(LOG_TAG, "Didnt handle onStatusChanged of " + provider
+					+ "(status=" + status + ")");
+
 	}
 
 	public void addOnOrientationChangedAction(EventListener action) {

@@ -106,9 +106,9 @@ public class DebugSetup extends Setup {
 		MeshComponent s = GLFactory.getInstance().newCube(Color.blue());
 		MeshComponent s2 = GLFactory.getInstance().newCube(Color.red());
 		s2.setPosition(new Vec(5, 0, 0));
-		s2.setRotation(new Vec(0,0,45));
+		s2.setRotation(new Vec(0, 0, 45));
 		s.addChild(s2);
-		s.setRotation(new Vec(0,0,-45));
+		s.setRotation(new Vec(0, 0, -45));
 		o.setComp(s);
 		o.setVirtualPosition(new Vec(0, 20, 0));
 		w.add(o);
@@ -335,13 +335,14 @@ public class DebugSetup extends Setup {
 				5, 25));
 
 		geoupdater = new ActionCalcRelativePos(world, camera);
-		// eventManager.addOnLocationChangedAction(geoupdater);
+		eventManager.addOnLocationChangedAction(geoupdater);
 	}
 
 	@Override
 	public void _d_addElementsToUpdateThread(SystemUpdater worldUpdater) {
 		// add the created world to be updated:
 		worldUpdater.addObjectToUpdateCycle(world);
+
 	}
 
 	@Override
