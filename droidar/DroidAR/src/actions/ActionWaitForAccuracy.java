@@ -83,10 +83,10 @@ public abstract class ActionWaitForAccuracy extends Action {
 		stepCounter++;
 		myCurrentAccuracy = l.getAccuracy();
 		updateUI();
-		if ((l.getAccuracy() != 0 && l.getAccuracy() <= myMinAccuracy)
-				|| stepCounter >= myMaxPosUpdateCount) {
+		if ((myCurrentAccuracy != 0 && myCurrentAccuracy <= myMinAccuracy)
+				|| (stepCounter >= myMaxPosUpdateCount)) {
 			callFirstTimeAccReachedIfNotYetCalled(l);
-
+			hideUI();
 		}
 		return true;
 	}
@@ -96,7 +96,6 @@ public abstract class ActionWaitForAccuracy extends Action {
 			firstTimeReached = true;
 			Log.d(LOG_TAG, "Required accuracy was reached!");
 			minAccuracyReachedFirstTime(location, this);
-			hideUI();
 		} else
 			Log.w(LOG_TAG, "callFirstTimeAccReachedIfNotYetCalled was "
 					+ "called more then one time! This action should "
@@ -125,8 +124,10 @@ public abstract class ActionWaitForAccuracy extends Action {
 			public void onClick(View v) {
 				if (GeoUtils.enableGPS(myActivity)) {
 					warningText.setVisibility(View.GONE);
+					waitSomeSecondsAndThenRegisterForGPSEvents();
 				}
 			}
+
 		});
 
 		ImageView i = (ImageView) viewContainer.findViewById(R.id.awfa_image);
@@ -144,6 +145,31 @@ public abstract class ActionWaitForAccuracy extends Action {
 		showDebugInfosAboutTheUiElements();
 		updateUI();
 		return viewContainer;
+	}
+
+	private void waitSomeSecondsAndThenRegisterForGPSEvents() {
+
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+				}
+				EventManager.getInstance().registerLocationUpdates();
+				onGPSActivatedEvent();
+			}
+		}).start();
+
+	}
+
+	/**
+	 * Override this if you need additional custom behavior as soon as the user
+	 * activates GPS
+	 */
+	public void onGPSActivatedEvent() {
+		// on default do nothing
 	}
 
 	private void showDebugInfosAboutTheUiElements() {
@@ -195,6 +221,7 @@ public abstract class ActionWaitForAccuracy extends Action {
 			myActivity.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
+					Log.i(LOG_TAG, "Setting view container to invisible");
 					viewContainer.setVisibility(View.GONE);
 				}
 			});

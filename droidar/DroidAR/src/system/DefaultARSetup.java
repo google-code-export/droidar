@@ -52,13 +52,13 @@ public abstract class DefaultARSetup extends Setup {
 	private Action rotateGLCameraAction;
 
 	public DefaultARSetup() {
-		camera = new GLCamera(new Vec(0, 0, 2));
-		world = new World(camera);
+
 	}
 
 	@Override
 	public void _a_initFieldsIfNecessary() {
-
+		camera = new GLCamera(new Vec(0, 0, 2));
+		world = new World(camera);
 	}
 
 	public World getWorld() {
@@ -91,15 +91,14 @@ public abstract class DefaultARSetup extends Setup {
 			CustomGLSurfaceView arView, SystemUpdater updater) {
 		wasdAction = new ActionWASDMovement(camera, 25, 50, 20);
 		rotateGLCameraAction = new ActionRotateCameraBuffered(camera);
-		
+
 		arView.onTouchMoveAction = wasdAction;
 		eventManager.addOnOrientationChangedAction(rotateGLCameraAction);
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera,
 				5, 25));
 		eventManager.addOnLocationChangedAction(new ActionCalcRelativePos(
 				world, camera));
-		minAccuracyAction = new ActionWaitForAccuracy(getActivity(), 24.0f,
-				10) {
+		minAccuracyAction = new ActionWaitForAccuracy(getActivity(), 24.0f, 10) {
 			@Override
 			public void minAccuracyReachedFirstTime(Location l,
 					ActionWaitForAccuracy a) {
