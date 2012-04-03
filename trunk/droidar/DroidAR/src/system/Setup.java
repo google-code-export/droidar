@@ -166,9 +166,7 @@ public abstract class Setup {
 		debugLogDoSetupStep(STEP0);
 		resetAllSingletons();
 
-		debugLogDoSetupStep(STEP1);
-		Thread.setDefaultUncaughtExceptionHandler(new ErrorHandler(
-				myTargetActivity));
+		initializeErrorHandler();
 
 		/*
 		 * TODO move this to the end of the initialization method and use
@@ -278,6 +276,16 @@ public abstract class Setup {
 		addOverlaysAndShowInfoScreen();
 
 		debugLogDoSetupStep(STEP_DONE);
+	}
+
+	/**
+	 * By overriding this (and not calling the super metzhod) the
+	 * {@link ErrorHandler} system provided by DroidAR will be deactivated (e.g.
+	 * while debugging)
+	 */
+	public void initializeErrorHandler() {
+		debugLogDoSetupStep(STEP1);
+		ErrorHandler.registerNewErrorHandler(getActivity());
 	}
 
 	/**
@@ -486,8 +494,8 @@ public abstract class Setup {
 	/**
 	 * first you should create a new {@link GLCamera} and a new {@link World}
 	 * and then you can use the {@link GLFactory} object to add objects to the
-	 * created world. When your world is build, add it to the {@link GL1Renderer}
-	 * object by calling
+	 * created world. When your world is build, add it to the
+	 * {@link GL1Renderer} object by calling
 	 * {@link GL1Renderer#addRenderElement(worldData.Renderable)}
 	 * 
 	 * @param glRenderer
