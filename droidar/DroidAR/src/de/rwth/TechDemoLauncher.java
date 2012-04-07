@@ -2,6 +2,7 @@ package de.rwth;
 
 import system.ArActivity;
 import system.ErrorHandler;
+import system.EventManager;
 import system.Setup;
 import tests.AndroidDeviceOnlyTests;
 import tests.EfficientListTests;
@@ -11,6 +12,8 @@ import tests.IOTests;
 import tests.SystemTests;
 import tests.WorldTests;
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -32,7 +35,6 @@ import de.rwth.setups.PlaceObjectsSetup;
 import de.rwth.setups.PlaceObjectsSetupTwo;
 import de.rwth.setups.PositionTestsSetup;
 import de.rwth.setups.SensorTestSetup;
-import de.rwth.setups.TestSetup;
 
 public class TechDemoLauncher extends Activity {
 	@Override
@@ -64,6 +66,16 @@ public class TechDemoLauncher extends Activity {
 		showSetup("Graph creation Test", new GraphCreationSetup());
 		showSetup("Sensor Processing Demo", new SensorTestSetup());
 		showSetup("Position tests", new PositionTestsSetup());
+
+		l.addView(new SimpleButton(
+				"deviceHasLargeScreenAndOrientationFlipped = "
+						+ EventManager
+								.deviceHasLargeScreenAndOrientationFlipped(this)) {
+			@Override
+			public void onButtonPressed() {
+
+			}
+		});
 
 		l.addView(new SimpleButton("Run tests") {
 			@Override

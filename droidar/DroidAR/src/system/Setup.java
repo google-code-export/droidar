@@ -164,7 +164,7 @@ public abstract class Setup {
 		Log.i(LOG_TAG, "Setup process is executed now..");
 
 		debugLogDoSetupStep(STEP0);
-		resetAllSingletons();
+		initAllSingletons();
 
 		initializeErrorHandler();
 
@@ -339,13 +339,16 @@ public abstract class Setup {
 		}
 	}
 
-	private void resetAllSingletons() {
+	private void initAllSingletons() {
 		/*
 		 * a good examples why you should not use singletons if you can avoid
 		 * it.. TODO change all the singletons here to injection singletons.
 		 * more flexible then. this can be done here, so just insert instance
 		 * instead of resetInstance
 		 */
+
+		EventManager.initInstance(this.getActivity());
+
 		TextureManager.resetInstance();
 		TaskManager.resetInstance();
 		GLFactory.resetInstance();
@@ -353,7 +356,7 @@ public abstract class Setup {
 				30));
 		CommandProcessor.resetInstance();
 		FeedbackReports.resetInstance(); // TODO really reset it?
-		EventManager.resetInstance();
+
 	}
 
 	protected CameraView initCameraView(Activity a) {
