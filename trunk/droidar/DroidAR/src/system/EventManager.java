@@ -12,6 +12,7 @@ import util.Log;
 import actions.EventListenerGroup;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -41,7 +42,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 	private static final long MIN_MS_BEFOR_UPDATE = 200;
 	private static final float MIN_DIST_FOR_UPDATE = 1;
 
-	private static EventManager myInstance = new EventManager();
+	private static EventManager myInstance;
 
 	// all the predefined actions:
 	/**
@@ -67,6 +68,17 @@ public class EventManager implements LocationListener, SensorEventListener {
 	private Activity myTargetActivity;
 
 	private GeoObj zeroPos;
+
+	protected EventManager() {
+	}
+
+	public static void initInstance(Context c) {
+		if (deviceHasLargeScreenAndOrientationFlipped(c)) {
+			myInstance = new TabletEventManager();
+		} else {
+			myInstance = new EventManager();
+		}
+	}
 
 	public static EventManager getInstance() {
 		return myInstance;
@@ -112,8 +124,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 	/**
 	 * This method will try to find the best location source available (probably
 	 * GPS if enabled). Remember to wait some seconds before calling this if you
-	 * activated GPS programmatically using
-	 * {@link GeoUtils#enableGPS(Activity)}
+	 * activated GPS programmatically using {@link GeoUtils#enableGPS(Activity)}
 	 */
 	public void registerLocationUpdates() {
 
@@ -452,8 +463,20 @@ public class EventManager implements LocationListener, SensorEventListener {
 		currentLocation.setLocation(location);
 	}
 
-	public static void resetInstance() {
-		myInstance = new EventManager();
+	/**
+	 * This method returns true if the device is a tablet, can be used to handle
+	 * the different default orientation
+	 * 
+	 * @param c
+	 * @return
+	 */
+	public static boolean deviceHasLargeScreenAndOrientationFlipped(Context c) {
+		/*
+		 * Configuration.SCREENLAYOUT_SIZE_XLARGE only available for higher
+		 * Android versions, constant value is 4 so hardcoded here
+		 */
+		int Configuration_SCREENLAYOUT_SIZE_XLARGE = 4;
+		return (c.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration_SCREENLAYOUT_SIZE_XLARGE;
 	}
 
 	/**
