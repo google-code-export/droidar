@@ -1,3 +1,4 @@
+#summary All the important components you need to know about
 =How to understand the concepts of the framework=
 
 In this screencast I give some recommendations how to understand the concepts of the framework:
