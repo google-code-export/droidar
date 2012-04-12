@@ -1,3 +1,4 @@
+#summary Some tips how to create AR games with DroidAR
 <wiki:video url="http://www.youtube.com/watch?v=8yvzuiMmfQo"/>
 
 In this screencast I will introduce some usefull components and concepts to create games
