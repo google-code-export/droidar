@@ -1,5 +1,5 @@
+#summary The concept behind the Setup class
 #labels setupclass,tutorial,Featured,Phase-Implementation
-#How to work with the Setups class
 
 = Description =
 
