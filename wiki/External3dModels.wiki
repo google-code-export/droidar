@@ -1,3 +1,4 @@
+#summary How to load external 3D models (like .obj or .m3d)
 #labels 3d,model,loader,external,models
 This video tutorial will shortly explain how to load 3d models from external files using the [http://code.google.com/p/droidar/source/browse/#svn%2Ftrunk%2FModelLoaderAdapters model loader adapter extension]:
 
