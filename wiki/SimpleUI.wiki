@@ -1,0 +1,7 @@
+#summary Some infos about the SimpleUI package
+
+SimpleUI is a UI generator to create a fully functional Android UI in a few minutes. Here is a short tutorial video to get you started with the simpleUi package in DroidAR.
+
+<wiki:video url="http://www.youtube.com/watch?v=tMLi3OVEUCY"/>
+
+The blog post where you get more information about this is http://andrdev.blogspot.com/2010/12/i-want-to-create-fully-operative.html
