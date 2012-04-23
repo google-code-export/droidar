@@ -46,6 +46,8 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 	private static EventManager myInstance;
 
+	private static boolean isTabletDevice = false;
+
 	// all the predefined actions:
 	/**
 	 * this action will be executed when the user moves the finger over the
@@ -87,15 +89,18 @@ public class EventManager implements LocationListener, SensorEventListener {
 	}
 
 	public static void initInstance(Context c) {
-		if (deviceHasLargeScreenAndOrientationFlipped(c)) {
-			myInstance = new TabletEventManager();
-		} else {
-			myInstance = new EventManager();
-		}
+		isTabletDevice = deviceHasLargeScreenAndOrientationFlipped(c);
+		initInstance();
 	}
 
 	public static EventManager getInstance() {
+		if (myInstance == null)
+			initInstance();
 		return myInstance;
+	}
+
+	public static void initInstance() {
+		myInstance = new EventManager();
 	}
 
 	public void registerListeners(Activity targetActivity,
@@ -206,22 +211,37 @@ public class EventManager implements LocationListener, SensorEventListener {
 		// Log.d("sensor onAccuracyChanged", arg0 + " " + arg1);
 	}
 
+	private float[] accelerometerValues = new float[3];
+
 	@Override
 	public void onSensorChanged(SensorEvent event) {
+
+		float[] values = event.values;
+
+		if (isTabletDevice) {
+			/*
+			 * change accel sensor data according to http://code.google.com/p
+			 * /libgdx/source/browse/trunk/backends/gdx -backend-android/src/com
+			 * /badlogic/gdx/backends/android/AndroidInput.java
+			 */
+			values[0] = event.values[1];
+			values[1] = event.values[0];
+			values[2] = event.values[2];
+		}
 
 		if (onOrientationChangedAction != null) {
 
 			for (OrientationChangedListener a : onOrientationChangedAction) {
 				if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-					a.onAccelChanged(event.values);
+					a.onAccelChanged(values);
 				}
 				if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-					a.onMagnetChanged(event.values);
+					a.onMagnetChanged(values);
 				}
 
 				// else sensor input is set to orientation mode
 				if (event.sensor.getType() == 11) {// Sensor.TYPE_ROTATION_VECTOR)
-					a.onOrientationChanged(event.values);
+					a.onOrientationChanged(values);
 				}
 			}
 		}
