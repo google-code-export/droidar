@@ -46,7 +46,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 	private static EventManager myInstance;
 
-	private static boolean isTabletDevice = false;
+	public static boolean isTabletDevice = false;
 
 	// all the predefined actions:
 	private List<TrackBallEventListener> onTrackballEventAction;
@@ -208,16 +208,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 		float[] values = event.values;
 
-		if (isTabletDevice) {
-			/*
-			 * change accel sensor data according to http://code.google.com/p
-			 * /libgdx/source/browse/trunk/backends/gdx -backend-android/src/com
-			 * /badlogic/gdx/backends/android/AndroidInput.java
-			 */
-			values[0] = event.values[1];
-			values[1] = event.values[0];
-			values[2] = event.values[2];
-		}
+		
 
 		if (onOrientationChangedAction != null) {
 

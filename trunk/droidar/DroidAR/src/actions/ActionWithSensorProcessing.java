@@ -2,6 +2,7 @@ package actions;
 
 import gl.GLCamRotationController;
 import gl.GLUtilityClass;
+import system.EventManager;
 import util.Calculus;
 import worldData.Updateable;
 import actions.algos.Algo;
@@ -117,12 +118,23 @@ public abstract class ActionWithSensorProcessing extends Action {
 				GLUtilityClass.getRotationMatrixFromVector(unrotatedMatrix,
 						myOrientValues);
 			}
-
-			// then rotate it according to the screen rotation:
-			SensorManager.remapCoordinateSystem(unrotatedMatrix,
-					SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X,
-					rotationMatrix);
-
+			if (EventManager.isTabletDevice) {
+				/*
+				 * change accel sensor data according to
+				 * http://code.google.com/p
+				 * /libgdx/source/browse/trunk/backends/gdx
+				 * -backend-android/src/com
+				 * /badlogic/gdx/backends/android/AndroidInput.java
+				 */
+				SensorManager.remapCoordinateSystem(unrotatedMatrix,
+						SensorManager.AXIS_X, SensorManager.AXIS_Y,
+						rotationMatrix);
+			} else {
+				// then rotate it according to the screen rotation:
+				SensorManager.remapCoordinateSystem(unrotatedMatrix,
+						SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X,
+						rotationMatrix);
+			}
 			myTargetCamera.setRotationMatrix(rotationMatrix, 0);
 		}
 		return true;
