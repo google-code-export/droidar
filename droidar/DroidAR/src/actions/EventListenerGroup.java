@@ -7,6 +7,7 @@ import util.Vec;
 import android.location.Location;
 import android.view.MotionEvent;
 
+@Deprecated
 public class EventListenerGroup extends Action implements
 		Container<EventListener> {
 

@@ -1,18 +1,12 @@
 package gl;
 
 import gui.CustomGestureListener;
-
-import javax.microedition.khronos.egl.EGL10;
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.egl.EGLContext;
-import javax.microedition.khronos.egl.EGLDisplay;
-
 import listeners.EventListener;
 import system.EventManager;
 import system.TouchEventInterface;
 import util.Log;
 import actions.Action;
-import android.app.Activity;
+import actions.EventListenerGroup;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
@@ -21,7 +15,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 import commands.Command;
-import commands.ui.CommandShowToast;
 
 /**
  * This is the custom {@link GLSurfaceView} which is used to render the OpenGL
@@ -39,6 +32,8 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 	 * enables the opengl es debug output but reduces the frame-rate a lot!
 	 */
 	private static final boolean DEBUG_OUTPUT_ENABLED = false;
+
+	private static final String LOG_TAG = "CustomGLSurfaceView";
 
 	public EventListener onTouchMoveAction;
 
@@ -71,8 +66,6 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 		// Use a surface format with an Alpha channel:
 		this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
 	}
-
-	
 
 	@Override
 	public boolean dispatchTrackballEvent(MotionEvent event) {
@@ -148,8 +141,33 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 
 	public void addOnTouchMoveAction(Action action) {
 		Log.d("EventManager", "Adding onTouchMoveAction");
-		onTouchMoveAction = EventManager.addActionToTarget(onTouchMoveAction,
-				action);
+		onTouchMoveAction = addActionToTarget(onTouchMoveAction, action);
+	}
+
+	/**
+	 * TODO change onTouchMoveAction to a List
+	 * 
+	 * @param target
+	 * @param action
+	 * @return
+	 */
+	@Deprecated
+	private static EventListener addActionToTarget(EventListener target,
+			EventListener action) {
+		if (target == null) {
+			target = action;
+			Log.d(LOG_TAG, "Setting target command to " + action + "");
+		} else if (target instanceof EventListenerGroup) {
+			((EventListenerGroup) target).add(action);
+			Log.d(LOG_TAG, "Adding " + action + " to existing actiongroup.");
+		} else {
+			EventListenerGroup g = new EventListenerGroup();
+			g.add(target);
+			g.add(action);
+			target = g;
+			Log.d(LOG_TAG, "Adding " + action + " to new actiongroup.");
+		}
+		return target;
 	}
 
 	@Override
