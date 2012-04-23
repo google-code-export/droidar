@@ -33,7 +33,7 @@ public class TabletEventManager extends EventManager {
 				 */
 
 				accelerometerValues[0] = event.values[1];
-				accelerometerValues[1] = -event.values[0];
+				accelerometerValues[1] = event.values[0];
 				accelerometerValues[2] = event.values[2];
 
 				onOrientationChangedAction.onAccelChanged(accelerometerValues);
