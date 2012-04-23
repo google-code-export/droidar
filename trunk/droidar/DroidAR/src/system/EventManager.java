@@ -6,6 +6,7 @@ import gl.GLCamera;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import listeners.eventManagerListeners.LocationEventListener;
@@ -94,8 +95,10 @@ public class EventManager implements LocationListener, SensorEventListener {
 	}
 
 	public static EventManager getInstance() {
-		if (myInstance == null)
+		if (myInstance == null) {
+			Log.e(LOG_TAG, "EventManager instance was not initialized!");
 			initInstance();
+		}
 		return myInstance;
 	}
 
@@ -231,17 +234,19 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 		if (onOrientationChangedAction != null) {
 
-			for (OrientationChangedListener a : onOrientationChangedAction) {
+			for (int i = 0; i < onOrientationChangedAction.size(); i++) {
+
 				if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-					a.onAccelChanged(values);
+					onOrientationChangedAction.get(i).onAccelChanged(values);
 				}
 				if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-					a.onMagnetChanged(values);
+					onOrientationChangedAction.get(i).onMagnetChanged(values);
 				}
 
 				// else sensor input is set to orientation mode
 				if (event.sensor.getType() == 11) {// Sensor.TYPE_ROTATION_VECTOR)
-					a.onOrientationChanged(values);
+					onOrientationChangedAction.get(i).onOrientationChanged(
+							values);
 				}
 			}
 		}
@@ -250,8 +255,8 @@ public class EventManager implements LocationListener, SensorEventListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		if (onLocationChangedAction != null) {
-			for (LocationEventListener a : onLocationChangedAction) {
-				a.onLocationChanged(location);
+			for (int i = 0; i < onLocationChangedAction.size(); i++) {
+				onLocationChangedAction.get(i).onLocationChanged(location);
 			}
 		}
 	}
@@ -333,9 +338,12 @@ public class EventManager implements LocationListener, SensorEventListener {
 					break;
 				}
 				boolean result = true;
-				for (TrackBallEventListener l : onTrackballEventAction) {
-					result &= l.onTrackballEvent(x, y, null);
+
+				for (int i = 0; i < onTrackballEventAction.size(); i++) {
+					result &= onTrackballEventAction.get(i).onTrackballEvent(x,
+							y, null);
 				}
+
 				return result;
 			}
 
@@ -407,10 +415,10 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 	public boolean onTrackballEvent(MotionEvent event) {
 		if (onTrackballEventAction != null) {
-
 			boolean result = true;
-			for (TrackBallEventListener l : onTrackballEventAction) {
-				result &= l.onTrackballEvent(event.getX(), event.getY(), event);
+			for (int i = 0; i < onTrackballEventAction.size(); i++) {
+				result &= onTrackballEventAction.get(i).onTrackballEvent(
+						event.getX(), event.getY(), event);
 			}
 			return result;
 		}
