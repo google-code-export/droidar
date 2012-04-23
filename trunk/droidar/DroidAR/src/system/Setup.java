@@ -347,7 +347,7 @@ public abstract class Setup {
 		 * instead of resetInstance
 		 */
 
-		initEventManagerInstance();
+		initEventManagerInstance(this.getActivity());
 
 		TextureManager.resetInstance();
 		TaskManager.resetInstance();
@@ -359,8 +359,13 @@ public abstract class Setup {
 
 	}
 
-	public void initEventManagerInstance() {
-		EventManager.initInstance(this.getActivity(), new EventManager());
+	/**
+	 * You can create and set a subclass of {@link EventManager} here. To set
+	 * the instance use
+	 * {@link EventManager#initInstance(android.content.Context, EventManager)}
+	 */
+	public void initEventManagerInstance(Activity a) {
+		EventManager.initInstance(a, new EventManager());
 	}
 
 	protected CameraView initCameraView(Activity a) {
@@ -700,7 +705,6 @@ public abstract class Setup {
 		pauseUpdater();
 		worldUpdater.killUpdaterThread();
 		releaseCamera();
-
 		// killCompleteApplicationProcess();
 	}
 
