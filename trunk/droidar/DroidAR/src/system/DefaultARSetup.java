@@ -103,9 +103,10 @@ public abstract class DefaultARSetup extends Setup {
 			public void minAccuracyReachedFirstTime(Location l,
 					ActionWaitForAccuracy a) {
 				callAddObjectsToWorldIfNotCalledAlready();
-				if (eventManager.onLocationChangedAction instanceof EventListenerGroup)
-					((EventListenerGroup) eventManager.onLocationChangedAction)
-							.remove(a);
+				if (!eventManager.getOnLocationChangedAction().remove(a)) {
+					Log.e(LOG_TAG,
+							"Could not remove minAccuracyAction from the onLocationChangedAction list");
+				}
 			}
 		};
 		eventManager.addOnLocationChangedAction(minAccuracyAction);

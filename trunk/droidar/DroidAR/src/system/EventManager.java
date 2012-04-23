@@ -4,12 +4,14 @@ import geo.GeoObj;
 import geo.GeoUtils;
 import gl.GLCamera;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import listeners.EventListener;
+import listeners.eventManagerListeners.LocationEventListener;
+import listeners.eventManagerListeners.OrientationChangedListener;
+import listeners.eventManagerListeners.TrackBallEventListener;
 import util.Log;
-import actions.EventListenerGroup;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -50,10 +52,22 @@ public class EventManager implements LocationListener, SensorEventListener {
 	 * screen
 	 */
 	// private EventAction onTouchMoveAction;
-	public EventListener onTrackballEventAction;
-	public EventListener onOrientationChangedAction;
-	public EventListener onLocationChangedAction;
+	private List<TrackBallEventListener> onTrackballEventAction;
+	private List<OrientationChangedListener> onOrientationChangedAction;
+	private List<LocationEventListener> onLocationChangedAction;
 	public HashMap<Integer, Command> myOnKeyPressedCommandList;
+
+	public List<LocationEventListener> getOnLocationChangedAction() {
+		return onLocationChangedAction;
+	}
+
+	public List<OrientationChangedListener> getOnOrientationChangedAction() {
+		return onOrientationChangedAction;
+	}
+
+	public List<TrackBallEventListener> getOnTrackballEventAction() {
+		return onTrackballEventAction;
+	}
 
 	// public static final boolean USE_ACCEL_AND_MAGNET = true;
 	// final float[] inR = new float[16];
@@ -197,16 +211,18 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 		if (onOrientationChangedAction != null) {
 
-			if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-				onOrientationChangedAction.onAccelChanged(event.values);
-			}
-			if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-				onOrientationChangedAction.onMagnetChanged(event.values);
-			}
+			for (OrientationChangedListener a : onOrientationChangedAction) {
+				if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+					a.onAccelChanged(event.values);
+				}
+				if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+					a.onMagnetChanged(event.values);
+				}
 
-			// else sensor input is set to orientation mode
-			if (event.sensor.getType() == 11) {// Sensor.TYPE_ROTATION_VECTOR) {
-				onOrientationChangedAction.onOrientationChanged(event.values);
+				// else sensor input is set to orientation mode
+				if (event.sensor.getType() == 11) {// Sensor.TYPE_ROTATION_VECTOR)
+					a.onOrientationChanged(event.values);
+				}
 			}
 		}
 	}
@@ -214,7 +230,9 @@ public class EventManager implements LocationListener, SensorEventListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		if (onLocationChangedAction != null) {
-			onLocationChangedAction.onLocationChanged(location);
+			for (LocationEventListener a : onLocationChangedAction) {
+				a.onLocationChanged(location);
+			}
 		}
 	}
 
@@ -239,113 +257,26 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 	}
 
-	public void addOnOrientationChangedAction(EventListener action) {
+	public void addOnOrientationChangedAction(OrientationChangedListener action) {
 		Log.d(LOG_TAG, "Adding onOrientationChangedAction");
-		onOrientationChangedAction = addActionToTarget(
-				onOrientationChangedAction, action);
+		if (onOrientationChangedAction == null)
+			onOrientationChangedAction = new ArrayList<OrientationChangedListener>();
+		onOrientationChangedAction.add(action);
 	}
 
-	public void addOnTrackballAction(EventListener action) {
+	public void addOnTrackballAction(TrackBallEventListener action) {
 		Log.d(LOG_TAG, "Adding onTouchMoveAction");
-		onTrackballEventAction = addActionToTarget(onTrackballEventAction,
-				action);
+		if (onTrackballEventAction == null)
+			onTrackballEventAction = new ArrayList<TrackBallEventListener>();
+		onTrackballEventAction.add(action);
 
 	}
 
-	public void addOnLocationChangedAction(EventListener action) {
+	public void addOnLocationChangedAction(LocationEventListener action) {
 		Log.d(LOG_TAG, "Adding onLocationChangedAction");
-		onLocationChangedAction = addActionToTarget(onLocationChangedAction,
-				action);
-	}
-
-	public static EventListener addActionToTarget(EventListener target,
-			EventListener action) {
-		if (target == null) {
-			target = action;
-			Log.d(LOG_TAG, "Setting target command to " + action + "");
-		} else if (target instanceof EventListenerGroup) {
-			((EventListenerGroup) target).add(action);
-			Log.d(LOG_TAG, "Adding " + action + " to existing actiongroup.");
-		} else {
-			EventListenerGroup g = new EventListenerGroup();
-			g.add(target);
-			g.add(action);
-			target = g;
-			Log.d(LOG_TAG, "Adding " + action + " to new actiongroup.");
-		}
-		return target;
-	}
-
-	/**
-	 * @param actionToRemove
-	 *            the {@link EventListener} to remove
-	 * @param actionToInsert
-	 *            set it to null to just remove the {@link EventListener}-object
-	 * @return true if the actionToRemove-EventListener could be removed
-	 */
-	public boolean exchangeOnTrackballEventAction(EventListener actionToRemove,
-			EventListener actionToInsert) {
-
-		if (onTrackballEventAction instanceof EventListenerGroup) {
-			return exchangeAction((EventListenerGroup) onTrackballEventAction,
-					actionToRemove, actionToInsert);
-		} else if (actionToRemove == onTrackballEventAction) {
-			onTrackballEventAction = actionToInsert;
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * @param actionToRemove
-	 *            the {@link EventListener} to remove
-	 * @param actionToInsert
-	 *            set it to null to just remove the {@link EventListener}-object
-	 * @return true if the actionToRemove-EventListener could be removed
-	 */
-	public boolean exchangeOnOrientationChangedAction(
-			EventListener actionToRemove, EventListener actionToInsert) {
-		if (onOrientationChangedAction instanceof EventListenerGroup) {
-			return exchangeAction(
-					(EventListenerGroup) onOrientationChangedAction,
-					actionToRemove, actionToInsert);
-		} else if (actionToRemove == onOrientationChangedAction) {
-			onOrientationChangedAction = actionToInsert;
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * @param actionToRemove
-	 *            the {@link EventListener} to remove
-	 * @param actionToInsert
-	 *            set it to null to just remove the {@link EventListener}-object
-	 * @return true if the actionToRemove-EventListener could be removed
-	 */
-	public boolean exchangeOnLocationChangedAction(
-			EventListener actionToRemove, EventListener actionToInsert) {
-		if (onLocationChangedAction instanceof EventListenerGroup) {
-			return exchangeAction((EventListenerGroup) onLocationChangedAction,
-					actionToRemove, actionToInsert);
-		} else if (actionToRemove == onLocationChangedAction) {
-			onLocationChangedAction = actionToInsert;
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * @param targetGroup
-	 * @param actionToRemove
-	 * @param actionToInsert
-	 *            set it to null to just remove the {@link EventListener}-object
-	 */
-	private boolean exchangeAction(EventListenerGroup targetGroup,
-			EventListener actionToRemove, EventListener actionToInsert) {
-		if (actionToInsert != null)
-			targetGroup.add(actionToInsert);
-		return targetGroup.remove(actionToRemove);
+		if (onLocationChangedAction == null)
+			onLocationChangedAction = new ArrayList<LocationEventListener>();
+		onLocationChangedAction.add(action);
 	}
 
 	public void addOnKeyPressedCommand(int keycode, Command c) {
@@ -381,7 +312,11 @@ public class EventManager implements LocationListener, SensorEventListener {
 					x = stepLength;
 					break;
 				}
-				return onTrackballEventAction.onTrackballEvent(x, y, null);
+				boolean result = true;
+				for (TrackBallEventListener l : onTrackballEventAction) {
+					result &= l.onTrackballEvent(x, y, null);
+				}
+				return result;
 			}
 
 			return false;
@@ -452,8 +387,12 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 	public boolean onTrackballEvent(MotionEvent event) {
 		if (onTrackballEventAction != null) {
-			return onTrackballEventAction.onTrackballEvent(event.getX(),
-					event.getY(), event);
+
+			boolean result = true;
+			for (TrackBallEventListener l : onTrackballEventAction) {
+				result &= l.onTrackballEvent(event.getX(), event.getY(), event);
+			}
+			return result;
 		}
 		return false;
 	}

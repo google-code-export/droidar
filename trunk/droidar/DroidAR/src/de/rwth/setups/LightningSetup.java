@@ -128,8 +128,8 @@ public class LightningSetup extends DefaultARSetup {
 		super._c_addActionsToEvents(eventManager, arView, updater);
 
 		// clear some inputs set in default methods
-		eventManager.onLocationChangedAction = null;
-		eventManager.onTrackballEventAction = null;
+		eventManager.getOnLocationChangedAction().clear();
+		eventManager.getOnTrackballEventAction().clear();
 
 		eventManager.addOnTrackballAction(new ActionMoveObject(
 				targetMoveWrapper, getCamera(), 10, 100));

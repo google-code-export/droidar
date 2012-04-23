@@ -50,7 +50,7 @@ public class GraphMovementTestSetup extends DefaultARSetup {
 			CustomGLSurfaceView arView, SystemUpdater updater) {
 
 		super._c_addActionsToEvents(eventManager, arView, updater);
-		eventManager.onLocationChangedAction = null;
+		eventManager.getOnLocationChangedAction().clear();
 	}
 
 }

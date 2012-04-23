@@ -167,7 +167,8 @@ public class SensorTestSetup extends Setup {
 
 		@Override
 		public boolean execute() {
-			EventManager.getInstance().onOrientationChangedAction = myAction;
+			EventManager.getInstance().getOnOrientationChangedAction()
+					.add(myAction);
 			return true;
 		}
 
