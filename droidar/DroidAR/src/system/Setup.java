@@ -347,7 +347,7 @@ public abstract class Setup {
 		 * instead of resetInstance
 		 */
 
-		EventManager.initInstance(this.getActivity());
+		initEventManagerInstance();
 
 		TextureManager.resetInstance();
 		TaskManager.resetInstance();
@@ -357,6 +357,10 @@ public abstract class Setup {
 		CommandProcessor.resetInstance();
 		FeedbackReports.resetInstance(); // TODO really reset it?
 
+	}
+
+	public void initEventManagerInstance() {
+		EventManager.initInstance(this.getActivity(), new EventManager());
 	}
 
 	protected CameraView initCameraView(Activity a) {

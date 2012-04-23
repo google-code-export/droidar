@@ -49,11 +49,6 @@ public class EventManager implements LocationListener, SensorEventListener {
 	private static boolean isTabletDevice = false;
 
 	// all the predefined actions:
-	/**
-	 * this action will be executed when the user moves the finger over the
-	 * screen
-	 */
-	// private EventAction onTouchMoveAction;
 	private List<TrackBallEventListener> onTrackballEventAction;
 	private List<OrientationChangedListener> onOrientationChangedAction;
 	private List<LocationEventListener> onLocationChangedAction;
@@ -71,38 +66,33 @@ public class EventManager implements LocationListener, SensorEventListener {
 		return onTrackballEventAction;
 	}
 
-	// public static final boolean USE_ACCEL_AND_MAGNET = true;
-	// final float[] inR = new float[16];
-	// float[] orientation = new float[3];
-
-	// private float clickPossible = 0;
-	// private float[] gravityValues = new float[3];
-	// private float[] geomagneticValues = new float[3];
-
+	private GeoObj zeroPos;
 	private GeoObj currentLocation;
-
 	private Activity myTargetActivity;
 
-	private GeoObj zeroPos;
-
-	protected EventManager() {
+	public EventManager() {
 	}
 
-	public static void initInstance(Context c) {
+	/**
+	 * @param c
+	 * @param newInstance
+	 *            pass a subclass of {@link EventManager} here
+	 */
+	public static void initInstance(Context c, EventManager newInstance) {
 		isTabletDevice = deviceHasLargeScreenAndOrientationFlipped(c);
-		initInstance();
+		initInstance(newInstance);
 	}
 
 	public static EventManager getInstance() {
 		if (myInstance == null) {
 			Log.e(LOG_TAG, "EventManager instance was not initialized!");
-			initInstance();
+			initInstance(new EventManager());
 		}
 		return myInstance;
 	}
 
-	public static void initInstance() {
-		myInstance = new EventManager();
+	private static void initInstance(EventManager instance) {
+		myInstance = instance;
 	}
 
 	public void registerListeners(Activity targetActivity,
