@@ -6,7 +6,6 @@ import gl.GLCamera;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import listeners.eventManagerListeners.LocationEventListener;
@@ -213,8 +212,6 @@ public class EventManager implements LocationListener, SensorEventListener {
 	public void onAccuracyChanged(Sensor s, int accuracy) {
 		// Log.d("sensor onAccuracyChanged", arg0 + " " + arg1);
 	}
-
-	private float[] accelerometerValues = new float[3];
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
