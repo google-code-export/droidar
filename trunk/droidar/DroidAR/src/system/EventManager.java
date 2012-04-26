@@ -49,9 +49,9 @@ public class EventManager implements LocationListener, SensorEventListener {
 	public static boolean isTabletDevice = false;
 
 	// all the predefined actions:
-	private List<TrackBallEventListener> onTrackballEventAction;
-	private List<OrientationChangedListener> onOrientationChangedAction;
-	private List<LocationEventListener> onLocationChangedAction;
+	protected List<TrackBallEventListener> onTrackballEventAction;
+	protected List<OrientationChangedListener> onOrientationChangedAction;
+	protected List<LocationEventListener> onLocationChangedAction;
 	public HashMap<Integer, Command> myOnKeyPressedCommandList;
 
 	public List<LocationEventListener> getOnLocationChangedAction() {
