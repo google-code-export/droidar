@@ -108,7 +108,7 @@ public abstract class ActionWaitForAccuracy extends Action {
 	 * @param a
 	 *            the {@link ActionWaitForAccuracy} object which can be used to
 	 *            remove it from the {@link EventListenerGroup} it was contained
-	 *            in (e.g. the {@link EventManager#onLocationChangedAction})
+	 *            in (e.g. the {@link EventManager#onLocationChangedList})
 	 */
 	public abstract void minAccuracyReachedFirstTime(Location location,
 			ActionWaitForAccuracy a);
