@@ -49,21 +49,21 @@ public class EventManager implements LocationListener, SensorEventListener {
 	public static boolean isTabletDevice = false;
 
 	// all the predefined actions:
-	protected List<TrackBallEventListener> onTrackballEventAction;
-	protected List<OrientationChangedListener> onOrientationChangedAction;
-	protected List<LocationEventListener> onLocationChangedAction;
+	protected List<TrackBallEventListener> onTrackballEventList;
+	protected List<OrientationChangedListener> onOrientationChangedList;
+	protected List<LocationEventListener> onLocationChangedList;
 	public HashMap<Integer, Command> myOnKeyPressedCommandList;
 
 	public List<LocationEventListener> getOnLocationChangedAction() {
-		return onLocationChangedAction;
+		return onLocationChangedList;
 	}
 
 	public List<OrientationChangedListener> getOnOrientationChangedAction() {
-		return onOrientationChangedAction;
+		return onOrientationChangedList;
 	}
 
 	public List<TrackBallEventListener> getOnTrackballEventAction() {
-		return onTrackballEventAction;
+		return onTrackballEventList;
 	}
 
 	private GeoObj zeroPos;
@@ -103,7 +103,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 	}
 
-	private void registerSensorUpdates(Activity myTargetActivity,
+	protected void registerSensorUpdates(Activity myTargetActivity,
 			boolean useAccelAndMagnetoSensors) {
 		SensorManager sensorManager = (SensorManager) myTargetActivity
 				.getSystemService(Context.SENSOR_SERVICE);
@@ -210,20 +210,20 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 		
 
-		if (onOrientationChangedAction != null) {
+		if (onOrientationChangedList != null) {
 
-			for (int i = 0; i < onOrientationChangedAction.size(); i++) {
+			for (int i = 0; i < onOrientationChangedList.size(); i++) {
 
 				if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-					onOrientationChangedAction.get(i).onAccelChanged(values);
+					onOrientationChangedList.get(i).onAccelChanged(values);
 				}
 				if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-					onOrientationChangedAction.get(i).onMagnetChanged(values);
+					onOrientationChangedList.get(i).onMagnetChanged(values);
 				}
 
 				// else sensor input is set to orientation mode
 				if (event.sensor.getType() == 11) {// Sensor.TYPE_ROTATION_VECTOR)
-					onOrientationChangedAction.get(i).onOrientationChanged(
+					onOrientationChangedList.get(i).onOrientationChanged(
 							values);
 				}
 			}
@@ -232,9 +232,9 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		if (onLocationChangedAction != null) {
-			for (int i = 0; i < onLocationChangedAction.size(); i++) {
-				onLocationChangedAction.get(i).onLocationChanged(location);
+		if (onLocationChangedList != null) {
+			for (int i = 0; i < onLocationChangedList.size(); i++) {
+				onLocationChangedList.get(i).onLocationChanged(location);
 			}
 		}
 	}
@@ -262,24 +262,24 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 	public void addOnOrientationChangedAction(OrientationChangedListener action) {
 		Log.d(LOG_TAG, "Adding onOrientationChangedAction");
-		if (onOrientationChangedAction == null)
-			onOrientationChangedAction = new ArrayList<OrientationChangedListener>();
-		onOrientationChangedAction.add(action);
+		if (onOrientationChangedList == null)
+			onOrientationChangedList = new ArrayList<OrientationChangedListener>();
+		onOrientationChangedList.add(action);
 	}
 
 	public void addOnTrackballAction(TrackBallEventListener action) {
 		Log.d(LOG_TAG, "Adding onTouchMoveAction");
-		if (onTrackballEventAction == null)
-			onTrackballEventAction = new ArrayList<TrackBallEventListener>();
-		onTrackballEventAction.add(action);
+		if (onTrackballEventList == null)
+			onTrackballEventList = new ArrayList<TrackBallEventListener>();
+		onTrackballEventList.add(action);
 
 	}
 
 	public void addOnLocationChangedAction(LocationEventListener action) {
 		Log.d(LOG_TAG, "Adding onLocationChangedAction");
-		if (onLocationChangedAction == null)
-			onLocationChangedAction = new ArrayList<LocationEventListener>();
-		onLocationChangedAction.add(action);
+		if (onLocationChangedList == null)
+			onLocationChangedList = new ArrayList<LocationEventListener>();
+		onLocationChangedList.add(action);
 	}
 
 	public void addOnKeyPressedCommand(int keycode, Command c) {
@@ -298,7 +298,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 			 * 
 			 * top=19 down=20 left=21 right=22
 			 */
-			if (onTrackballEventAction != null) {
+			if (onTrackballEventList != null) {
 				final float stepLength = 0.3f;
 				float x = 0, y = 0;
 				switch (keyCode) {
@@ -317,8 +317,8 @@ public class EventManager implements LocationListener, SensorEventListener {
 				}
 				boolean result = true;
 
-				for (int i = 0; i < onTrackballEventAction.size(); i++) {
-					result &= onTrackballEventAction.get(i).onTrackballEvent(x,
+				for (int i = 0; i < onTrackballEventList.size(); i++) {
+					result &= onTrackballEventList.get(i).onTrackballEvent(x,
 							y, null);
 				}
 
@@ -392,10 +392,10 @@ public class EventManager implements LocationListener, SensorEventListener {
 	// }
 
 	public boolean onTrackballEvent(MotionEvent event) {
-		if (onTrackballEventAction != null) {
+		if (onTrackballEventList != null) {
 			boolean result = true;
-			for (int i = 0; i < onTrackballEventAction.size(); i++) {
-				result &= onTrackballEventAction.get(i).onTrackballEvent(
+			for (int i = 0; i < onTrackballEventList.size(); i++) {
+				result &= onTrackballEventList.get(i).onTrackballEvent(
 						event.getX(), event.getY(), event);
 			}
 			return result;
