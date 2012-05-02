@@ -1,23 +1,20 @@
 package gl;
 
+import gui.CustomGestureListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import gui.CustomGestureListener;
-import listeners.EventListener;
 import listeners.eventManagerListeners.TouchMoveListener;
 import system.EventManager;
 import system.TouchEventInterface;
 import util.Log;
-import actions.Action;
-import actions.EventListenerGroup;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.ViewDebug.ExportedProperty;
 
 import commands.Command;
 

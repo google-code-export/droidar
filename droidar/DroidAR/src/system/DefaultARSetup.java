@@ -16,7 +16,6 @@ import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
 import actions.ActionWASDMovement;
 import actions.ActionWaitForAccuracy;
-import actions.EventListenerGroup;
 import android.R;
 import android.app.Activity;
 import android.location.Location;
