@@ -1,7 +1,11 @@
 package gl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gui.CustomGestureListener;
 import listeners.EventListener;
+import listeners.eventManagerListeners.TouchMoveListener;
 import system.EventManager;
 import system.TouchEventInterface;
 import util.Log;
@@ -13,6 +17,7 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ViewDebug.ExportedProperty;
 
 import commands.Command;
 
@@ -35,9 +40,15 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 
 	private static final String LOG_TAG = "CustomGLSurfaceView";
 
-	public EventListener onTouchMoveAction;
+	private List<TouchMoveListener> onTouchListeners;
 
 	private GestureDetector myGestureDetector;
+
+	public void addOnTouchMoveListener(TouchMoveListener onTouchListener) {
+		if (onTouchListeners == null)
+			this.onTouchListeners = new ArrayList<TouchMoveListener>();
+		this.onTouchListeners.add(onTouchListener);
+	}
 
 	public CustomGLSurfaceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -90,8 +101,11 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 		}
 
 		if (event.getAction() == MotionEvent.ACTION_UP) {
-			if (onTouchMoveAction != null) {
-				onTouchMoveAction.onReleaseTouchMove();
+			if (onTouchListeners != null) {
+				for (int i = 0; i < onTouchListeners.size(); i++) {
+					onTouchListeners.get(i).onReleaseTouchMove();
+				}
+
 			}
 		}
 		return true;
@@ -139,42 +153,20 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 	public void setOnTabCommand(Command c) {
 	}
 
-	public void addOnTouchMoveAction(Action action) {
-		Log.d("EventManager", "Adding onTouchMoveAction");
-		onTouchMoveAction = addActionToTarget(onTouchMoveAction, action);
-	}
-
-	/**
-	 * TODO change onTouchMoveAction to a List
-	 * 
-	 * @param target
-	 * @param action
-	 * @return
-	 */
 	@Deprecated
-	private static EventListener addActionToTarget(EventListener target,
-			EventListener action) {
-		if (target == null) {
-			target = action;
-			Log.d(LOG_TAG, "Setting target command to " + action + "");
-		} else if (target instanceof EventListenerGroup) {
-			((EventListenerGroup) target).add(action);
-			Log.d(LOG_TAG, "Adding " + action + " to existing actiongroup.");
-		} else {
-			EventListenerGroup g = new EventListenerGroup();
-			g.add(target);
-			g.add(action);
-			target = g;
-			Log.d(LOG_TAG, "Adding " + action + " to new actiongroup.");
-		}
-		return target;
+	public void addOnTouchMoveAction(TouchMoveListener action) {
+		Log.d("EventManager", "Adding onTouchMoveAction");
+		addOnTouchMoveListener(action);
 	}
 
 	@Override
 	public void onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
-		if (onTouchMoveAction != null) {
-			onTouchMoveAction.onTouchMove(e1, e2, distanceX, distanceY);
+		if (onTouchListeners != null) {
+			for (int i = 0; i < onTouchListeners.size(); i++) {
+				onTouchListeners.get(i).onTouchMove(e1, e2, distanceX,
+						distanceY);
+			}
 		}
 	}
 
