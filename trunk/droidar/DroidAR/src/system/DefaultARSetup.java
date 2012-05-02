@@ -92,7 +92,7 @@ public abstract class DefaultARSetup extends Setup {
 		wasdAction = new ActionWASDMovement(camera, 25, 50, 20);
 		rotateGLCameraAction = new ActionRotateCameraBuffered(camera);
 
-		arView.onTouchMoveAction = wasdAction;
+		arView.addOnTouchMoveListener(wasdAction);
 		eventManager.addOnOrientationChangedAction(rotateGLCameraAction);
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera,
 				5, 25));

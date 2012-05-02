@@ -69,7 +69,8 @@ public class PositionTestsSetup extends Setup {
 	@Override
 	public void _c_addActionsToEvents(EventManager eventManager,
 			CustomGLSurfaceView arView, SystemUpdater updater) {
-		arView.onTouchMoveAction = new ActionMoveCameraBuffered(camera, 5, 25);
+		arView.addOnTouchMoveListener(new ActionMoveCameraBuffered(camera, 5,
+				25));
 
 		ActionRotateCameraBuffered rot = new ActionRotateCameraBuffered(camera);
 		updater.addObjectToUpdateCycle(rot);
