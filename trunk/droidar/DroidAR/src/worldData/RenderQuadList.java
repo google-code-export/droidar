@@ -142,6 +142,18 @@ public class RenderQuadList implements RenderableEntity,
 		}
 	}
 
+	/**
+	 * Call this method to update the list of objects that are rendered and
+	 * updated after you modified the quad tree
+	 */
+	public void refreshList() {
+		if (itemsInRange == null)
+			itemsInRange = new EfficientList<RenderableEntity>();
+		else
+			itemsInRange.clear();
+		refreshItemsInRangeList();
+	}
+
 	private void refreshItemsInRangeList() {
 		if (tree != null && itemsInRange != null)
 			tree.findInArea(itemsListener, oldX, oldY, myRenderDistance);
@@ -209,6 +221,7 @@ public class RenderQuadList implements RenderableEntity,
 		if (pos != null) {
 			addToTree(x, pos);
 			addToAllItemsList(x);
+			// refreshList(); //TODO?
 			return true;
 		}
 		return false;
