@@ -43,6 +43,13 @@ public class ArActivity extends Activity {
 				ArActivity.class));
 	}
 
+	public static void startWithSetupForResult(Activity currentActivity,
+			Setup setupToUse, int requestCode) {
+		ArActivity.staticSetupHolder = setupToUse;
+		currentActivity.startActivityForResult(new Intent(currentActivity,
+				ArActivity.class), requestCode);
+	}
+
 	private void runSetup() {
 		mySetupToUse.run(this);
 	}
