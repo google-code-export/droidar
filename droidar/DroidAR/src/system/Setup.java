@@ -29,12 +29,16 @@ import actions.Action;
 import actions.ActionCalcRelativePos;
 import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.SystemClock;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
@@ -121,6 +125,8 @@ public abstract class Setup {
 	private GLRenderer glRenderer;
 
 	private SystemUpdater worldUpdater;
+
+	public static Integer screenOrientation;
 
 	public Setup() {
 		this(true);
@@ -369,7 +375,10 @@ public abstract class Setup {
 	}
 
 	protected CameraView initCameraView(Activity a) {
-		return new CameraView(a);
+		if (isOldDeviceWhereNothingWorksAsExpected)
+			return new CameraViewForOldDevices(a);
+		else
+			return new CameraView(a);
 	}
 
 	/**
@@ -429,14 +438,30 @@ public abstract class Setup {
 		screenWidth = myTargetActivity.getWindowManager().getDefaultDisplay()
 				.getHeight();
 
-		if (Integer.parseInt(android.os.Build.VERSION.SDK) < 5) {
+		if (Integer.parseInt(android.os.Build.VERSION.SDK) <= Build.VERSION_CODES.DONUT) {
 			/*
 			 * Here is the problem: OpenGL seems to have rounding errors on
-			 * older devices (see ObjectPicker.floatToByteColorValue) Thus the
+			 * different gpus (see ObjectPicker.floatToByteColorValue) Thus the
 			 * G1 need a different value than a Nexus 1 eg.. TODO how to solve
 			 * this problem?
 			 */
 			isOldDeviceWhereNothingWorksAsExpected = true;
+			if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+				screenOrientation = Surface.ROTATION_0;
+			} else {
+				screenOrientation = Surface.ROTATION_90;
+			}
+		} else {
+			try {
+				Display display = ((WindowManager) this.getActivity()
+						.getSystemService(Activity.WINDOW_SERVICE))
+						.getDefaultDisplay();
+				screenOrientation = (Integer) display.getClass()
+						.getMethod("getRotation", null).invoke(display, null);
+				System.out.println("screenOrientation="+screenOrientation);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
