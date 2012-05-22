@@ -3,11 +3,13 @@ package actions;
 import gl.GLCamRotationController;
 import gl.GLUtilityClass;
 import system.EventManager;
+import system.Setup;
 import util.Calculus;
 import worldData.Updateable;
 import actions.algos.Algo;
 import android.hardware.SensorManager;
 import android.view.MotionEvent;
+import android.view.Surface;
 
 public abstract class ActionWithSensorProcessing extends Action {
 
@@ -36,9 +38,12 @@ public abstract class ActionWithSensorProcessing extends Action {
 	private float[] unrotatedMatrix = Calculus.createIdentityMatrix();
 	private float[] rotationMatrix = Calculus.createIdentityMatrix();
 
+	private final int screenRotation;
+
 	public ActionWithSensorProcessing(GLCamRotationController targetCamera) {
 		myTargetCamera = targetCamera;
 		initAlgos();
+		screenRotation = Setup.screenOrientation;
 	}
 
 	protected abstract void initAlgos();
@@ -118,6 +123,7 @@ public abstract class ActionWithSensorProcessing extends Action {
 				GLUtilityClass.getRotationMatrixFromVector(unrotatedMatrix,
 						myOrientValues);
 			}
+
 			if (EventManager.isTabletDevice) {
 				/*
 				 * change accel sensor data according to
@@ -130,10 +136,20 @@ public abstract class ActionWithSensorProcessing extends Action {
 						SensorManager.AXIS_X, SensorManager.AXIS_Y,
 						rotationMatrix);
 			} else {
-				// then rotate it according to the screen rotation:
-				SensorManager.remapCoordinateSystem(unrotatedMatrix,
-						SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X,
-						rotationMatrix);
+				/*
+				 * TODO do this for all 4 rotation possibilities!
+				 */
+				if (screenRotation == Surface.ROTATION_90) {
+					// then rotate it according to the screen rotation:
+					SensorManager.remapCoordinateSystem(unrotatedMatrix,
+							SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X,
+							rotationMatrix);
+				} else {
+					/*
+					 * else its in portrait mode so no remapping needed
+					 */
+					rotationMatrix = unrotatedMatrix;
+				}
 			}
 			myTargetCamera.setRotationMatrix(rotationMatrix, 0);
 		}
