@@ -3,7 +3,6 @@ package de.rwth;
 import gl.CustomGLSurfaceView;
 import gl.GL1Renderer;
 import gl.GLFactory;
-import gl.GLRenderer;
 import gl.LightSource;
 import gl.scenegraph.MeshComponent;
 import gl.scenegraph.Shape;
@@ -102,8 +101,8 @@ public class ModelLoaderSetup extends DefaultARSetup {
 		super._c_addActionsToEvents(eventManager, arView, updater);
 
 		// clear some inputs set in default methods
-		eventManager.onLocationChangedAction = null;
-		eventManager.onTrackballEventAction = null;
+		eventManager.getOnLocationChangedAction().clear();
+		eventManager.getOnTrackballEventAction().clear();
 
 		eventManager.addOnTrackballAction(new ActionMoveObject(
 				targetMoveWrapper, getCamera(), 10, 200));
