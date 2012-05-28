@@ -188,6 +188,18 @@ public class GDXConnection implements Renderable {
 			public void requestRendering() {
 
 			}
+
+			@Override
+			public float getRawDeltaTime() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public boolean isFullscreen() {
+				// TODO Auto-generated method stub
+				return false;
+			}
 		};
 		if (gl instanceof javax.microedition.khronos.opengles.GL11) {
 			String renderer = gl.glGetString(GL10.GL_RENDERER);
@@ -195,7 +207,7 @@ public class GDXConnection implements Renderable {
 				if (!renderer.toLowerCase().contains("pixelflinger")
 						&& !(android.os.Build.MODEL.equals("MB200")
 								|| android.os.Build.MODEL.equals("MB220") || android.os.Build.MODEL
-								.contains("Behold"))) {
+									.contains("Behold"))) {
 					if (gl instanceof javax.microedition.khronos.opengles.GL11) {
 						Gdx.gl11 = new AndroidGL11(
 								(javax.microedition.khronos.opengles.GL11) gl);
