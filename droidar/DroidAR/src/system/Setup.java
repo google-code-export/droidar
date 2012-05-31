@@ -126,6 +126,10 @@ public abstract class Setup {
 
 	private SystemUpdater worldUpdater;
 
+	/**
+	 * Default initialization with {@link Surface#ROTATION_90}, use landscape on
+	 * default mode if the initialization does not work
+	 */
 	public static Integer screenOrientation = Surface.ROTATION_90;
 
 	public Setup() {
