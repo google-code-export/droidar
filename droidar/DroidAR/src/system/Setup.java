@@ -126,7 +126,7 @@ public abstract class Setup {
 
 	private SystemUpdater worldUpdater;
 
-	public static Integer screenOrientation;
+	public static Integer screenOrientation = Surface.ROTATION_90;
 
 	public Setup() {
 		this(true);
@@ -458,7 +458,6 @@ public abstract class Setup {
 						.getDefaultDisplay();
 				screenOrientation = (Integer) display.getClass()
 						.getMethod("getRotation", null).invoke(display, null);
-				System.out.println("screenOrientation="+screenOrientation);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
