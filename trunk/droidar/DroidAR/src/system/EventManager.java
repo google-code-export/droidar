@@ -208,8 +208,6 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 		float[] values = event.values;
 
-		
-
 		if (onOrientationChangedList != null) {
 
 			for (int i = 0; i < onOrientationChangedList.size(); i++) {
@@ -223,8 +221,8 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 				// else sensor input is set to orientation mode
 				if (event.sensor.getType() == 11) {// Sensor.TYPE_ROTATION_VECTOR)
-					onOrientationChangedList.get(i).onOrientationChanged(
-							values);
+					onOrientationChangedList.get(i)
+							.onOrientationChanged(values);
 				}
 			}
 		}
@@ -375,6 +373,16 @@ public class EventManager implements LocationListener, SensorEventListener {
 		return currentLocation;
 	}
 
+	/**
+	 * Uses {@link GeoUtils#getCurrentLocation(Context)}.
+	 * 
+	 * If you need permanent location updates better create a
+	 * {@link LocationEventListener} and register it at
+	 * {@link EventManager#addOnLocationChangedAction(LocationEventListener)}
+	 * instead of calling this method here frequently.
+	 * 
+	 * @return
+	 */
 	public Location getCurrentLocation() {
 		return GeoUtils.getCurrentLocation(myTargetActivity);
 	}
