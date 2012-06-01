@@ -375,7 +375,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 	/**
 	 * Uses {@link GeoUtils#getCurrentLocation(Context)}.
-	 * 
+	 * <br><br>
 	 * If you need permanent location updates better create a
 	 * {@link LocationEventListener} and register it at
 	 * {@link EventManager#addOnLocationChangedAction(LocationEventListener)}

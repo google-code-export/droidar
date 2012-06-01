@@ -175,7 +175,7 @@ public class GeoUtils {
 	 * available. This includes also the last known position of the device if no
 	 * current position sources can't be accessed so the returned position might
 	 * be outdated
-	 * 
+	 * <br><br>
 	 * If you need permanent location updates better create a
 	 * {@link LocationEventListener} and register it at
 	 * {@link EventManager#addOnLocationChangedAction(LocationEventListener)}
