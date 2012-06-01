@@ -15,9 +15,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
 
+import listeners.eventManagerListeners.LocationEventListener;
+
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import system.EventManager;
 import util.Log;
 import util.Wrapper;
 import android.app.Activity;
@@ -173,8 +176,13 @@ public class GeoUtils {
 	 * current position sources can't be accessed so the returned position might
 	 * be outdated
 	 * 
+	 * If you need permanent location updates better create a
+	 * {@link LocationEventListener} and register it at
+	 * {@link EventManager#addOnLocationChangedAction(LocationEventListener)}
+	 * instead of calling this method here frequently.
+	 * 
 	 * @param context
-	 * @return
+	 * @return the current location
 	 */
 	public static Location getCurrentLocation(Context context) {
 		Location l = GeoUtils.getCurrentLocation(context,
@@ -205,6 +213,12 @@ public class GeoUtils {
 		return l;
 	}
 
+	/**
+	 * 
+	 * See {@link GeoUtils#getCurrentLocation(Context)}
+	 * 
+	 * @return
+	 */
 	public Location getCurrentLocation() {
 		return getCurrentLocation(myContext);
 	}
