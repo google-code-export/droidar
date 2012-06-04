@@ -1,5 +1,6 @@
 package geo;
 
+import gl.GLCamera;
 import gl.scenegraph.MeshComponent;
 import gl.scenegraph.Shape;
 import gui.MetaInfos;
@@ -715,6 +716,16 @@ public class GeoObj extends Obj implements HasDebugInformation {
 				"mySurroundGroup.myRotation=" + mySurroundGroup.getRotation());
 		Log.d(LOG_TAG, "mesh inside=" + mySurroundGroup.getChildren());
 
+	}
+
+	public static GeoObj newRandomGeoObjAroundCamera(GLCamera camera,
+			float maxDistance) {
+		GeoObj o = new GeoObj();
+		if (maxDistance < 3)
+			maxDistance = 3;
+		o.setVirtualPosition(Vec.getNewRandomPosInXYPlane(camera.getPosition(),
+				2, maxDistance));
+		return o;
 	}
 
 }

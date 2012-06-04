@@ -45,6 +45,29 @@ public class Shape extends MeshComponent {
 		myRenderData.updateShape(myShapeArray);
 	}
 
+	/**
+	 * use this to add multiple vectors at once and call
+	 * {@link Shape#updateRenderDataManually()} after all vectors are added!
+	 * 
+	 * @param v
+	 */
+	public void addFast(Vec v) {
+		if (myShapeArray == null)
+			myShapeArray = new ArrayList<Vec>();
+		myShapeArray.add(v.copy());
+	}
+
+	/**
+	 * Use this in combination with {@link Shape#addFast(Vec)}
+	 */
+	public void updateRenderDataManually() {
+		if (myShapeArray != null) {
+			if (myRenderData == null)
+				myRenderData = new RenderData();
+			myRenderData.updateShape(myShapeArray);
+		}
+	}
+
 	@Override
 	public void draw(GL10 gl, Renderable parent) {
 		if (myRenderData != null) {
