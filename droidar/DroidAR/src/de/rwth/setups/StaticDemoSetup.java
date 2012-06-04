@@ -81,7 +81,7 @@ public class StaticDemoSetup extends Setup {
 
 		initI9Tests(world);
 
-		world.add(objectFactory.newTextObject("text Input", new Vec(10, 1, 1),
+		world.add(objectFactory.newTextObject("DroidAR", new Vec(10, 1, 1),
 				getActivity(), camera));
 
 		addTestGeoObj(world, camera);
@@ -148,12 +148,6 @@ public class StaticDemoSetup extends Setup {
 
 		{
 			// transform android ui elements into opengl models:
-
-			TextView tv = new TextView(myTargetActivity);
-			tv.setTextColor(Color.white().toIntARGB());
-			tv.setTextSize(20);
-			tv.setText("! Hallo !");
-
 			Button b = new Button(myTargetActivity);
 			b.setText("Click Me");
 			MeshComponent button = GLFactory.getInstance().newTexturedSquare(
@@ -175,54 +169,18 @@ public class StaticDemoSetup extends Setup {
 
 	private synchronized void initWorld(RenderList l) {
 
-		l.add(GLFactory.getInstance().newSolarSystem(new Vec(0, 0, 5)));
-		l.add(GLFactory.getInstance().newHexGroupTest(new Vec(0, 0, -0.1f)));
+		l.add(GLFactory.getInstance().newSolarSystem(new Vec(-7, -7, 5)));
+		l.add(GLFactory.getInstance().newHexGroupTest(new Vec(0, 8, -0.1f)));
 
 		Obj treangle = new Obj();
 		MeshComponent treangleMesh = GLFactory.getInstance().newTexturedSquare(
 				"worldIconId",
 				IO.loadBitmapFromId(myTargetActivity, R.drawable.icon));
-		treangleMesh.setPosition(new Vec(0, -2, 1));
+		treangleMesh.setPosition(new Vec(0, -8, 1));
 		treangleMesh.setRotation(new Vec(0, 0, 0));
 		treangleMesh.addChild(new AnimationFaceToCamera(camera, 0.5f));
 		treangle.setComp(treangleMesh);
 		l.add(treangle);
-
-		// Obj x = new Obj();
-		// Shape s = F.f().newSquare(new Color(1, 0, 0, 0.8f));
-		// x.add(s);
-		// F.f().scaleEqual(s, .5f);
-		// s.myPosition = new Vec(.5f, .5f, -.5f);
-		// world.add(x);
-		// F.f().addRotateAnimation(s,120, new Vec(0, 0, 1));
-
-		// Obj y = new Obj();
-		// MeshComponent mesh = F.f().newTexturedSquare(y, null,
-		// loadBitmapFromFile(R.drawable.skate12));
-		// // MeshComponent mesh = F.f().newTextured2dShape(y, null,
-		// // loadBitmapFromFile(R.drawable.skate12));
-		// y.myMeshComonent = mesh;
-		// mesh.myPosition = new Vec(0, 0, 0);
-		// mesh.myRotation = new Vec(-70, 0, 0);
-		// world.add(y);
-
-		// Obj z = new Obj();
-		// MeshComponent mesh2 = F.f().newColoredPyramid(z, null);
-		// z.myMeshComonent = mesh2;
-		// mesh2.myPosition = new Vec(0, 0, 5);
-		// mesh2.myRotation = new Vec(-90, 0, 0);
-		// world.add(z);
-		//
-		// Obj z2 = new Obj();
-		// MeshComponent mesh22 = F.f().newColoredPyramid(z2, null);
-		// z2.myMeshComonent = mesh22;
-		// mesh22.myPosition = new Vec(0, 0, 10);
-		// mesh22.myRotation = new Vec(-70, 0, 0);
-		// world.add(z2);
-
-		// SpawnScript spawner = new SpawnScript(y);
-		// y.myScriptComonent = new ScriptComponent(y);
-		// y.myScriptComonent.add(spawner);
 
 	}
 
@@ -256,14 +214,12 @@ public class StaticDemoSetup extends Setup {
 	@Override
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity activity) {
 
-		guiSetup.setBottomBackroundColor(new Color(0.5f, 0.5f, 0.5f, 0.4f)
-				.toIntARGB());
-		guiSetup.setBottomMinimumHeight(100);
+		guiSetup.setBottomMinimumHeight(50);
 		guiSetup.setBottomViewCentered();
 
 		// addMapView(activity, guiSetup);
 
-		guiSetup.addButtonToLeftView(new Command() {
+		guiSetup.addButtonToBottomView(new Command() {
 
 			@Override
 			public boolean execute() {
@@ -271,7 +227,7 @@ public class StaticDemoSetup extends Setup {
 				return false;
 			}
 		}, "T+1");
-		guiSetup.addButtonToLeftView(new Command() {
+		guiSetup.addButtonToBottomView(new Command() {
 
 			@Override
 			public boolean execute() {
