@@ -3,51 +3,44 @@ package de.rwth.setups;
 import geo.GeoObj;
 import gl.Color;
 import gl.CustomGLSurfaceView;
+import gl.GL1Renderer;
 import gl.GLCamera;
 import gl.GLFactory;
-import gl.GL1Renderer;
-import gl.animations.AnimationBounce;
-import gl.animations.AnimationColorBounce;
 import gl.animations.AnimationFaceToCamera;
-import gl.animations.AnimationPulse;
-import gl.animations.AnimationRotate;
-import gl.animations.AnimationSwingRotate;
-import gl.animations.GLAnimation;
 import gl.scenegraph.MeshComponent;
 import gl.scenegraph.RenderList;
-import gl.scenegraph.Shape;
 import gui.GuiSetup;
+import gui.simpleUI.ModifierGroup;
+import gui.simpleUI.Theme;
+import gui.simpleUI.Theme.ThemeColors;
+import gui.simpleUI.modifiers.Headline;
+import gui.simpleUI.modifiers.InfoText;
 import system.ErrorHandler;
 import system.EventManager;
 import system.Setup;
 import util.IO;
-import util.Log;
 import util.Vec;
-import util.Wrapper;
 import worldData.Obj;
 import worldData.SystemUpdater;
 import worldData.World;
-import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
 import actions.ActionWASDMovement;
 import android.app.Activity;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.MeasureSpec;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
 import commands.Command;
-import commands.CommandGroup;
-import commands.DebugCommandPositionEvent;
-import commands.gl.CommandCameraMoveAndLookAt;
-import commands.logic.CommandSetWrapperToValue2;
-import commands.system.CameraSetARInputCommand;
-import commands.system.CommandPlaySound;
 import commands.ui.CommandShowToast;
 
 import de.rwth.R;
 
 public class StaticDemoSetup extends Setup {
 
+	private static final float MIN_DIST = 15f;
 	private static final float MAX_DIST = 55f;
 
 	protected static final String LOG_TAG = "StaticDemoSetup";
@@ -114,7 +107,7 @@ public class StaticDemoSetup extends Setup {
 			triangleMesh.setScale(new Vec(10, 10, 10));
 			triangleMesh.addChild(new AnimationFaceToCamera(camera, 0.5f));
 			GeoObj treangleGeo = new GeoObj(GeoObj.newRandomGeoObjAroundCamera(
-					camera, MAX_DIST), triangleMesh);
+					camera, MIN_DIST, MAX_DIST), triangleMesh);
 			w.add(treangleGeo);
 		}
 
@@ -123,12 +116,12 @@ public class StaticDemoSetup extends Setup {
 			MeshComponent triangleMesh = GLFactory.getInstance()
 					.newTexturedSquare(
 							"hippoId",
-							IO.loadBitmapFromId(myTargetActivity,
+							IO.loadBitmapFromId(getActivity(),
 									R.drawable.hippopotamus64));
 			triangleMesh.addChild(new AnimationFaceToCamera(camera, 0.5f));
 			triangleMesh.setScale(new Vec(10, 10, 10));
 			GeoObj treangleGeo = new GeoObj(GeoObj.newRandomGeoObjAroundCamera(
-					camera, MAX_DIST), triangleMesh);
+					camera, MIN_DIST, MAX_DIST), triangleMesh);
 			w.add(treangleGeo);
 
 		}
@@ -137,22 +130,34 @@ public class StaticDemoSetup extends Setup {
 			MeshComponent triangleMesh = GLFactory.getInstance()
 					.newTexturedSquare(
 							"pandaId",
-							IO.loadBitmapFromId(myTargetActivity,
+							IO.loadBitmapFromId(getActivity(),
 									R.drawable.panda64));
 			triangleMesh.addChild(new AnimationFaceToCamera(camera, 0.5f));
 			triangleMesh.setScale(new Vec(10, 10, 10));
 			GeoObj treangleGeo = new GeoObj(GeoObj.newRandomGeoObjAroundCamera(
-					camera, MAX_DIST), triangleMesh);
+					camera, MIN_DIST, MAX_DIST), triangleMesh);
+			w.add(treangleGeo);
+		}
+
+		{
+			MeshComponent triangleMesh = GLFactory
+					.getInstance()
+					.newTexturedSquare("droidAR logo",
+							IO.loadBitmapFromId(getActivity(), R.drawable.logo));
+			triangleMesh.addChild(new AnimationFaceToCamera(camera, 0.5f));
+			triangleMesh.setScale(new Vec(10, 10, 10));
+			GeoObj treangleGeo = new GeoObj(GeoObj.newRandomGeoObjAroundCamera(
+					camera, MIN_DIST, MAX_DIST), triangleMesh);
 			w.add(treangleGeo);
 		}
 
 		{
 			// transform android ui elements into opengl models:
-			Button b = new Button(myTargetActivity);
+			Button b = new Button(getActivity());
 			b.setText("Click Me");
 			MeshComponent button = GLFactory.getInstance().newTexturedSquare(
 					"buttonId", IO.loadBitmapFromView(b));
-			button.setOnClickCommand(new CommandShowToast(myTargetActivity,
+			button.setOnClickCommand(new CommandShowToast(getActivity(),
 					"Thanks alot"));
 
 			button.addChild(new AnimationFaceToCamera(camera, 0.5f));
@@ -160,7 +165,41 @@ public class StaticDemoSetup extends Setup {
 			button.setColor(Color.red());
 
 			GeoObj treangleGeo = new GeoObj(GeoObj.newRandomGeoObjAroundCamera(
-					camera, MAX_DIST), button);
+					camera, MIN_DIST, MAX_DIST), button);
+
+			w.add(treangleGeo);
+		}
+
+		{
+			// transform android ui elements into opengl models:
+
+			ModifierGroup l = new ModifierGroup(Theme.A(getActivity(),
+					ThemeColors.initToBlue()));
+			l.addModifier(new InfoText("Example UI", Gravity.CENTER));
+			l.addModifier(new Headline(R.drawable.infoboxblue, "Lorem ipsum "
+					+ "dolor sit amet, consectetur adipisicing elit, "
+					+ "sed do eiusmod tempor incididunt ut labore et "
+					+ "dolore magna aliqua."));
+			l.addModifier(new Headline(R.drawable.warningcirclered,
+					"Ut enim ad minim veniam, "
+							+ "quis nostrud exercitation ullamco laboris nisi "
+							+ "ut aliquip ex ea commodo consequat."));
+
+			View v = l.getView(getActivity());
+
+			MeshComponent button = GLFactory.getInstance().newTexturedSquare(
+					"simpleUiId",
+					IO.loadBitmapFromView(v, MeasureSpec.makeMeasureSpec(400, MeasureSpec.AT_MOST),
+							LayoutParams.WRAP_CONTENT));
+			button.setOnClickCommand(new CommandShowToast(getActivity(),
+					"Thanks alot"));
+
+			button.addChild(new AnimationFaceToCamera(camera, 0.5f));
+			button.setScale(new Vec(10, 10, 10));
+			button.setColor(Color.red());
+
+			GeoObj treangleGeo = new GeoObj(GeoObj.newRandomGeoObjAroundCamera(
+					camera, MIN_DIST, MAX_DIST), button);
 
 			w.add(treangleGeo);
 		}

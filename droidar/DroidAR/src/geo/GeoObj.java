@@ -719,12 +719,12 @@ public class GeoObj extends Obj implements HasDebugInformation {
 	}
 
 	public static GeoObj newRandomGeoObjAroundCamera(GLCamera camera,
-			float maxDistance) {
+			float minDist, float maxDist) {
 		GeoObj o = new GeoObj();
-		if (maxDistance < 3)
-			maxDistance = 3;
+		if (maxDist < minDist)
+			maxDist = minDist;
 		o.setVirtualPosition(Vec.getNewRandomPosInXYPlane(camera.getPosition(),
-				2, maxDistance));
+				minDist, maxDist));
 		return o;
 	}
 

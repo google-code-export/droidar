@@ -30,6 +30,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.ViewGroup.LayoutParams;
 
 public class IO {
@@ -140,8 +141,25 @@ public class IO {
 	 * @return the bitmap with the correct size of the view
 	 */
 	public static Bitmap loadBitmapFromView(View v) {
+		int width = LayoutParams.WRAP_CONTENT;
+		int heigth = LayoutParams.WRAP_CONTENT;
+		return loadBitmapFromView(v, width, heigth);
+	}
+
+	/**
+	 * turns any view in a bitmap to load it to openGL eg
+	 * 
+	 * @param v
+	 *            the view to convert to the bitmap
+	 * @param width
+	 *            e.g. LayoutParams.WRAP_CONTENT or
+	 *            MeasureSpec.makeMeasureSpec(*some width*, MeasureSpec.AT_MOST)
+	 * @param heigth
+	 * @return
+	 */
+	public static Bitmap loadBitmapFromView(View v, int width, int heigth) {
 		// first calc the size the view will need:
-		v.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		v.measure(width, heigth);
 		// then create a bitmap to store the views drawings:
 		Bitmap b = Bitmap.createBitmap(v.getMeasuredWidth(),
 				v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
@@ -303,9 +321,5 @@ public class IO {
 		}
 		return null;
 	}
-
-	
-
-	
 
 }
