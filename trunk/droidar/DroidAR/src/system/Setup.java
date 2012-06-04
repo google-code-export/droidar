@@ -3,9 +3,9 @@ package system;
 import gamelogic.FeedbackReports;
 import geo.GeoObj;
 import gl.CustomGLSurfaceView;
+import gl.GL1Renderer;
 import gl.GLCamera;
 import gl.GLFactory;
-import gl.GL1Renderer;
 import gl.GLRenderer;
 import gl.LightSource;
 import gl.ObjectPicker;
@@ -30,7 +30,6 @@ import actions.ActionCalcRelativePos;
 import actions.ActionRotateCameraBuffered;
 import android.app.Activity;
 import android.content.res.Configuration;
-import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.SystemClock;
 import android.view.Display;
@@ -83,7 +82,6 @@ public abstract class Setup {
 	public static boolean isOldDeviceWhereNothingWorksAsExpected;
 
 	public static boolean displaySetupStepLogging = true;
-	private static int setupStepsCount = 14;
 	private static final String STEP0 = "Resetting all static stuff, singletons, etc..";
 	private static final String STEP1 = "Registering exeption handler";
 	private static final String STEP2 = "Loading device dependent settings";
@@ -126,11 +124,7 @@ public abstract class Setup {
 
 	private SystemUpdater worldUpdater;
 
-	/**
-	 * Default initialization with {@link Surface#ROTATION_90}, use landscape on
-	 * default mode if the initialization does not work
-	 */
-	public static Integer screenOrientation = Surface.ROTATION_90;
+	private static Integer screenOrientation = Surface.ROTATION_90;
 
 	public Setup() {
 		this(true);
@@ -145,6 +139,19 @@ public abstract class Setup {
 	// TODO remove boolean here and add to EventManager.setListeners..!
 	public Setup(boolean useAccelAndMagnetoSensors) {
 		this.useAccelAndMagnetoSensors = useAccelAndMagnetoSensors;
+	}
+
+	/**
+	 * Default initialization is {@link Surface#ROTATION_90}, use landscape on
+	 * default mode if the initialization does not work
+	 */
+	public static int getScreenOrientation() {
+		if (screenOrientation == null) {
+			Log.e(LOG_TAG, "screenOrientation was not set! Will asume"
+					+ " default 90 degree rotation for screen");
+			return Surface.ROTATION_90;
+		}
+		return screenOrientation;
 	}
 
 	/**
@@ -186,10 +193,10 @@ public abstract class Setup {
 		 */
 
 		// Fullscreen:
-		if (myTargetActivity.requestWindowFeature(Window.FEATURE_NO_TITLE)) {
+		if (getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE)) {
 			if (gotoFullScreenMode) {
 				debugLogDoSetupStep(STEP13);
-				myTargetActivity.getWindow().setFlags(
+				getActivity().getWindow().setFlags(
 						WindowManager.LayoutParams.FLAG_FULLSCREEN,
 						WindowManager.LayoutParams.FLAG_FULLSCREEN);
 			}
@@ -203,24 +210,22 @@ public abstract class Setup {
 			 * process is initialized by Activity.setContentView(..); so wrong
 			 * place here:
 			 */
-			myTargetActivity
-					.requestWindowFeature(Window.PROGRESS_VISIBILITY_ON);
-			myTargetActivity.getWindow()
-					.requestFeature(Window.FEATURE_PROGRESS);
-			myTargetActivity.setProgressBarVisibility(true);
+			getActivity().requestWindowFeature(Window.PROGRESS_VISIBILITY_ON);
+			getActivity().getWindow().requestFeature(Window.FEATURE_PROGRESS);
+			getActivity().setProgressBarVisibility(true);
 			/*
 			 * TODO do not expect the opengl view to start at the top of the
 			 * screen!
 			 */
 		}
 
-		myTargetActivity.getWindow().setFlags(
+		getActivity().getWindow().setFlags(
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		// load device dependent settings:
 		debugLogDoSetupStep(STEP2);
-		loadDeviceDependentSettings();
+		loadDeviceDependentSettings(getActivity());
 
 		/*
 		 * set the orientation to always stay in landscape mode. this is
@@ -238,7 +243,7 @@ public abstract class Setup {
 
 		debugLogDoSetupStep(STEP4);
 		// setting up the sensor Listeners:
-		EventManager.getInstance().registerListeners(myTargetActivity,
+		EventManager.getInstance().registerListeners(getActivity(),
 				this.useAccelAndMagnetoSensors);
 
 		debugLogDoSetupStep(STEP5);
@@ -273,13 +278,13 @@ public abstract class Setup {
 
 		// create the thierd view on top of cameraPreview and OpenGL view and
 		// init it:
-		myOverlayView = new FrameLayout(myTargetActivity);
+		myOverlayView = new FrameLayout(getActivity());
 		/*
 		 * after everything is initialized add the guiElements to the screen.
 		 * this should be done last because the gui might need a initialized
 		 * renderer object or worldUpdater etc
 		 */
-		_e1_addElementsToOverlay(myOverlayView, myTargetActivity);
+		_e1_addElementsToOverlay(myOverlayView, getActivity());
 		// myTargetActivity.addContentView(myOverlayView, new LayoutParams(
 		// LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
@@ -438,8 +443,8 @@ public abstract class Setup {
 		}
 	}
 
-	private void loadDeviceDependentSettings() {
-		screenWidth = myTargetActivity.getWindowManager().getDefaultDisplay()
+	private static void loadDeviceDependentSettings(Activity activity) {
+		screenWidth = activity.getWindowManager().getDefaultDisplay()
 				.getHeight();
 
 		if (Integer.parseInt(android.os.Build.VERSION.SDK) <= Build.VERSION_CODES.DONUT) {
@@ -450,14 +455,14 @@ public abstract class Setup {
 			 * this problem?
 			 */
 			isOldDeviceWhereNothingWorksAsExpected = true;
-			if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+			if (activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 				screenOrientation = Surface.ROTATION_0;
 			} else {
 				screenOrientation = Surface.ROTATION_90;
 			}
 		} else {
 			try {
-				Display display = ((WindowManager) this.getActivity()
+				Display display = ((WindowManager) activity
 						.getSystemService(Activity.WINDOW_SERVICE))
 						.getDefaultDisplay();
 				screenOrientation = (Integer) display.getClass()
@@ -466,13 +471,6 @@ public abstract class Setup {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public static boolean addToStepsCount(int additionalSteps) {
-		if (additionalSteps <= 0)
-			return false;
-		setupStepsCount += additionalSteps;
-		return true;
 	}
 
 	/**

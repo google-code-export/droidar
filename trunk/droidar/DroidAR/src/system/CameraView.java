@@ -15,6 +15,7 @@ import android.view.SurfaceView;
 import android.view.WindowManager;
 
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
+	private static final String LOG_TAG = "CameraView";
 	SurfaceHolder mHolder;
 	Camera myCamera;
 
@@ -95,7 +96,12 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 			parameters.setPreviewSize(width, height);
 			setDisplayOrientation(180);
 		}
-		myCamera.setParameters(parameters);
+		try {
+			myCamera.setParameters(parameters);
+		} catch (Exception e) {
+			Log.e(LOG_TAG, "Could not set camera parameters:");
+			e.printStackTrace();
+		}
 	}
 
 	private void setDisplayOrientation(int inDegree) {

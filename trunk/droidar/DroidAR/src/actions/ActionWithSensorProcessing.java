@@ -43,7 +43,7 @@ public abstract class ActionWithSensorProcessing extends Action {
 	public ActionWithSensorProcessing(GLCamRotationController targetCamera) {
 		myTargetCamera = targetCamera;
 		initAlgos();
-		screenRotation = Setup.screenOrientation;
+		screenRotation = Setup.getScreenOrientation();
 	}
 
 	protected abstract void initAlgos();
