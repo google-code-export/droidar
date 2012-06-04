@@ -35,6 +35,7 @@ import de.rwth.setups.PlaceObjectsSetup;
 import de.rwth.setups.PlaceObjectsSetupTwo;
 import de.rwth.setups.PositionTestsSetup;
 import de.rwth.setups.SensorTestSetup;
+import de.rwth.setups.StaticDemoSetup;
 
 public class TechDemoLauncher extends Activity {
 	@Override
@@ -53,6 +54,7 @@ public class TechDemoLauncher extends Activity {
 		LinearLayout l = ((LinearLayout) findViewById(R.id.demoScreenLinView));
 		l.removeAllViews();
 
+		showSetup("Demo Setup", new StaticDemoSetup());
 		showSetup("Animation Demo", new DebugSetup());
 		showSetup("Game Demo", new GameDemoSetup());
 		showSetup("'Too far away' scenario", new FarAwayPOIScenarioSetup());
