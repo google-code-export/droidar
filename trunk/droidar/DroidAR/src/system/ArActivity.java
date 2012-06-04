@@ -9,6 +9,13 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+/**
+ * This is an example activity which demonstrates how to use a Setup object. It
+ * wraps the Setup object and forwards all needed events to it. 
+ * 
+ * @author Simon Heinen
+ * 
+ */
 public class ArActivity extends Activity {
 
 	private static final String LOG_TAG = "ArActivity";
