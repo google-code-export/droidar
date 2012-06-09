@@ -24,17 +24,24 @@ public class SensorAlgo1 extends Algo {
 
 	@Override
 	public float[] execute(float[] v) {
-		oldV[0] = checkAndCalc(oldV[0], v[0], myBarrier);
-		oldV[1] = checkAndCalc(oldV[1], v[1], myBarrier);
-		oldV[2] = checkAndCalc(oldV[2], v[2], myBarrier);
+		oldV[0] = checkAndCalc(oldV[0], v[0]);
+		oldV[1] = checkAndCalc(oldV[1], v[1]);
+		oldV[2] = checkAndCalc(oldV[2], v[2]);
 		return oldV;
 	}
 
-	private float checkAndCalc(float oldV, float newV, float barrier) {
+	private float checkAndCalc(float oldV, float newV) {
 		float delta = oldV - newV;
-		if (delta < -barrier || barrier < delta) {
+		/*
+		 * if the new value is very different from the old one, morph to the new
+		 * one
+		 */
+		if (delta < -myBarrier || myBarrier < delta) {
 			return (oldV + newV) / 2;
 		}
+		/*
+		 * else reuse the old one
+		 */
 		return oldV;
 	}
 

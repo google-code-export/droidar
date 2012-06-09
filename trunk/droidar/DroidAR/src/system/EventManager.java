@@ -206,7 +206,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 
-		float[] values = event.values;
+		float[] values = event.values.clone();
 
 		if (onOrientationChangedList != null) {
 

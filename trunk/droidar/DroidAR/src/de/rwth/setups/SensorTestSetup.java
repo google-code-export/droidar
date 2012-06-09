@@ -26,6 +26,7 @@ import actions.ActionRotateCameraBufferedDebug;
 import actions.ActionRotateCameraBufferedDirect;
 import actions.ActionRotateCameraUnbuffered;
 import actions.ActionRotateCameraUnbuffered2;
+import actions.ActionUseCameraAngles2;
 import android.app.Activity;
 
 import commands.Command;
@@ -157,7 +158,7 @@ public class SensorTestSetup extends Setup {
 				"Camera Unbuffered 2");
 	}
 
-	class myRotateAction extends Command {
+	private class myRotateAction extends Command {
 
 		private Action myAction;
 
@@ -167,6 +168,7 @@ public class SensorTestSetup extends Setup {
 
 		@Override
 		public boolean execute() {
+			EventManager.getInstance().getOnOrientationChangedAction().clear();
 			EventManager.getInstance().getOnOrientationChangedAction()
 					.add(myAction);
 			return true;

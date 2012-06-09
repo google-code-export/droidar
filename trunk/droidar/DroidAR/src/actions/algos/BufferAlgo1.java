@@ -63,7 +63,7 @@ public class BufferAlgo1 extends Algo {
 				return v;
 			if (b <= -x)
 				return newV;
-			return v - (-x) * m + n;
+			return v + x * m + n;
 		}
 	}
 

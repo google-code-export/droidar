@@ -124,6 +124,11 @@ public abstract class ActionWithSensorProcessing extends Action {
 						myOrientValues);
 			}
 
+			/*
+			 * Then in addition the values have to be remapped of the device is
+			 * used in landscape mode or if it is a tablet etc
+			 */
+
 			if (EventManager.isTabletDevice) {
 				/*
 				 * change accel sensor data according to

@@ -11,6 +11,7 @@ import util.Log;
 import util.Vec;
 import worldData.MoveComp;
 import worldData.Updateable;
+import actions.ActionUseCameraAngles2;
 import android.location.Location;
 import android.opengl.Matrix;
 
@@ -72,13 +73,16 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	private float[] invRotMatrix = Calculus.createIdentityMatrix();
 
 	/**
+	 * use a {@link ActionUseCameraAngles2} instead
+	 * 
 	 * The order is z,x,y achses.
 	 * 
-	 * The camera rotation angles (in radians, positive and COUNTERCLOCKWISE !!)
+	 * The camera rotation angles (positive and COUNTERCLOCKWISE !!)
 	 * extracted from the rotation matrix. These values will only be calculated
 	 * if an angleUpdateListener is set or
 	 * {@link GLCamera#forceAngleCalculation} is set to true
 	 */
+	@Deprecated
 	private float[] cameraAnglesInDegree = new float[3];
 	float[] initDir = new float[4];
 	private float[] rotDirection = new float[4];
@@ -118,6 +122,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	}
 
 	@Override
+	@Deprecated
 	public void setRotation(Vec rotation) {
 		if (myRotationVec == null)
 			myRotationVec = rotation;
@@ -156,6 +161,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		}
 	}
 
+	@Deprecated
 	public void setNewRotation(Vec cameraRotation) {
 		if (cameraRotation != null) {
 			if (myNewRotationVec == null) {
@@ -341,7 +347,9 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		glLoadPosition(gl, myPosition);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see gl.GLCamRotationController#setRotationMatrix(float[], int)
 	 */
 	@Override
@@ -353,17 +361,19 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	}
 
 	/**
+	 * Use a {@link ActionUseCameraAngles2} subclass instead
+	 * 
 	 * Currently only the azimuth is calculated here
 	 * 
 	 * @return [0]=azimuth (0 is north and 90 is east)
 	 */
+	@Deprecated
 	public float[] getCameraAnglesInDegree() {
-		// TODO only call when angles changed. boolean helper war needed
-		// therefore
 		updateCameraAngles();
 		return cameraAnglesInDegree;
 	}
 
+	@Deprecated
 	private void updateCameraAngles() {
 		Calculus.invertM(invRotMatrix, 0, rotationMatrix, matrixOffset);
 		initDir[0] = 0;
@@ -396,9 +406,7 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		 * 
 		 * y is always the angle from floor to top and x always the clockwise
 		 * rotation (like when you lean to the side on a motorcycle) angle of
-		 * the camera. does this make sense for example when y=0 and x=90 the
-		 * camera is rotated clockwise and doesnt look at the horizon is this
-		 * correct?
+		 * the camera.
 		 */
 		if (vec != null) {
 			gl.glRotatef(vec.y, 0, 1, 0);
@@ -408,18 +416,38 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 	}
 
 	/**
-	 * This will change the rotation vector instantly. if you want to use a
-	 * buffered smooth rotation you have to use
-	 * {@link GLCamera#setNewRotation(Vec)}
+	 * y is always the angle from floor to top (rotation around green achsis
+	 * counterclockwise) and x always the clockwise rotation (like when you lean
+	 * to the side on a motorcycle) angle of the camera.
+	 * 
+	 * to rotate from the green to the red axis (clockwise) you would have to
+	 * add 90 degree.
 	 * 
 	 * @param xAngle
+	 *            0 means the car drives straight forward, positive values (0 to
+	 *            90) mean that the car turns left, negative values mean that
+	 *            the car turns right
 	 * @param yAngle
+	 *            0 means the camera targets the ground, 180 the camera looks
+	 *            into the sky
 	 * @param zAngle
+	 *            like a compass (0=north, 90 east and so on
 	 */
 	public void setRotation(float xAngle, float yAngle, float zAngle) {
 		myRotationVec.x = xAngle;
 		myRotationVec.y = yAngle;
 		myRotationVec.z = zAngle;
+	}
+
+	@Deprecated
+	public void setNewRotation(float xAngle, float yAngle, float zAngle) {
+		if (myNewRotationVec == null) {
+			myNewRotationVec = new Vec(xAngle, yAngle, zAngle);
+		} else {
+			myNewRotationVec.x = xAngle;
+			myNewRotationVec.y = yAngle;
+			myNewRotationVec.z = zAngle;
+		}
 	}
 
 	/**
@@ -452,7 +480,9 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		myPosition.y += deltaY;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see gl.GLCamRotationController#resetBufferedAngle()
 	 */
 	@Override
@@ -475,7 +505,9 @@ public class GLCamera implements Updateable, HasDebugInformation, Renderable,
 		myRotationVec.z += deltaZ;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see gl.GLCamRotationController#changeZAngleBuffered(float)
 	 */
 	@Override
