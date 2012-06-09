@@ -5,11 +5,16 @@ import worldData.Updateable;
 import android.hardware.SensorManager;
 
 /**
+ * Use 
+ * 
  * Children of this class can access the angles of the specified camera
+ * 
+ * 
  * 
  * @author Spobo
  * 
  */
+ @Deprecated
 public abstract class ActionUseCameraAngles extends Action {
 
 	@Deprecated
