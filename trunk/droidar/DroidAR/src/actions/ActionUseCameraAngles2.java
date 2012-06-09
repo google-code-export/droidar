@@ -1,8 +1,17 @@
 package actions;
 
+import system.EventManager;
 import listeners.eventManagerListeners.OrientationChangedListener;
 import android.hardware.SensorManager;
 
+/**
+ * Register it in the
+ * {@link EventManager#addOnOrientationChangedAction(OrientationChangedListener)}
+ * and you will get updates whenever the angles change
+ * 
+ * @author Simon Heinen
+ * 
+ */
 public abstract class ActionUseCameraAngles2 implements
 		OrientationChangedListener {
 
