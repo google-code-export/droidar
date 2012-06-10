@@ -59,7 +59,7 @@ public class SensorTestSetup extends Setup {
 		rotActionB2 = new ActionRotateCameraBufferedDirect(camera);
 		rotActionB3 = new ActionRotateCameraBuffered3(camera);
 		rotActionB4 = new ActionRotateCameraBuffered4(camera);
-		rotActionDebug = new ActionRotateCameraBufferedDebug(camera);
+		new ActionRotateCameraBufferedDebug(camera);
 		rotActionUnB = new ActionRotateCameraUnbuffered(camera);
 		rotActionUnB2 = new ActionRotateCameraUnbuffered2(camera);
 
@@ -128,6 +128,18 @@ public class SensorTestSetup extends Setup {
 		eventManager.addOnOrientationChangedAction(rotActionB1);
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(camera,
 				5, 25));
+
+		eventManager
+				.addOnOrientationChangedAction(new ActionUseCameraAngles2() {
+
+					@Override
+					public void onAnglesUpdated(float pitch, float roll,
+							float compassAzimuth) {
+						/*
+						 * the angles could be used in some way here..
+						 */
+					}
+				});
 
 	}
 
