@@ -1,8 +1,10 @@
 package actions;
 
 import system.EventManager;
+import system.Setup;
 import listeners.eventManagerListeners.OrientationChangedListener;
 import android.hardware.SensorManager;
+import android.view.Surface;
 
 /**
  * Register it in the
@@ -21,9 +23,11 @@ public abstract class ActionUseCameraAngles2 implements
 	float[] R = new float[16];
 	float[] outR = new float[16];
 	float[] I = new float[16];
+	private int screenRotation;
 
-	final float rad2deg = 180 / (float) Math.PI;
-	float[] o = new float[3];
+	public ActionUseCameraAngles2() {
+		screenRotation = Setup.getScreenOrientation();
+	}
 
 	@Override
 	public boolean onMagnetChanged(float[] values) {
@@ -49,46 +53,74 @@ public abstract class ActionUseCameraAngles2 implements
 	private void calcMatrix() {
 		if (mag != null && accel != null && sensorRead) {
 			sensorRead = false;
-
 			SensorManager.getRotationMatrix(R, I, accel, mag);
-			SensorManager.remapCoordinateSystem(R, SensorManager.AXIS_X,
-					SensorManager.AXIS_Z, outR);
-			SensorManager.getOrientation(R, o);
-
-			updatePitch(o[1] * rad2deg);
-			// north=0 east = 90 south 180 west=180
-			updateCompassAzimuth(o[0] * rad2deg + 90);
-			// floor=0 horizon 90 sky=180 (or -180)
-			updateRoll(o[2] * rad2deg);
+			onRotationMatrixUpdated(R);
 		}
 	}
 
 	/**
-	 * pitch is the rotation around the x axis. when the device would be a
-	 * steering wheel, this method would indicate how much it is rotated
-	 * 
-	 * @param pitchAngle
-	 *            0 means the car drives straight forward, positive values (0 to
-	 *            90) mean that the car turns left, negative values mean that
-	 *            the car turns right
+	 * @return the correctly rotated matrix which can then be used in OpenGL e.g.
 	 */
-	public abstract void updatePitch(float pitchAngle);
+	public float[] getRotateMatrixAccordingToDeviceOrientation() {
+		if (EventManager.isTabletDevice) {
+			/*
+			 * change accel sensor data according to http://code.google.com/p
+			 * /libgdx/source/browse/trunk/backends/gdx -backend-android/src/com
+			 * /badlogic/gdx/backends/android/AndroidInput.java
+			 */
+			SensorManager.remapCoordinateSystem(R, SensorManager.AXIS_X,
+					SensorManager.AXIS_Y, outR);
+		} else {
+			/*
+			 * TODO do this for all 4 rotation possibilities!
+			 */
+			if (screenRotation == Surface.ROTATION_90) {
+				// then rotate it according to the screen rotation:
+				SensorManager.remapCoordinateSystem(R, SensorManager.AXIS_Y,
+						SensorManager.AXIS_MINUS_X, outR);
+			} else {
+				outR = R;
+			}
+		}
+		return outR;
+	}
+
+	private final float rad2deg = 180 / (float) Math.PI;
+	private float[] o = new float[3];
 
 	/**
-	 * the roll is the rotation around the y axis. if the device would be your
-	 * head 0 would mean you are looking on the ground, 90 would mean you look
-	 * in front of you and 180 would mean you look in the sky
+	 * you can also use
+	 * {@link ActionUseCameraAngles2#getRotateMatrixAccordingToDeviceOrientation()}
+	 * here to rotate R correctly automatically. so this method body might look
+	 * like this: <br>
+	 * <br>
+	 * glCamera.setRotationMatrix(getRotateMatrixAccordingToDeviceOrientation(),
+	 * 0);
 	 * 
-	 * @param rollAngle
-	 *            from 0 to 360. 0 means the camera targets the ground, 180 the
-	 *            camera looks into the sky
+	 * @param updatedRotationMatrix
 	 */
-	public abstract void updateRoll(float rollAngle);
+	public void onRotationMatrixUpdated(float[] updatedRotationMatrix) {
+		SensorManager.getOrientation(updatedRotationMatrix, o);
+		onAnglesUpdated(o[1] * rad2deg, -o[2] * rad2deg, o[0] * rad2deg + 90);
+	}
 
 	/**
-	 * @param azimuth
+	 * @param pitch
+	 *            pitch is the rotation around the x axis. when the device would
+	 *            be a steering wheel, this method would indicate how much it is
+	 *            rotated. 0 means the car drives straight forward, positive
+	 *            values (0 to 90) mean that the car turns left, negative values
+	 *            mean that the car turns right
+	 * @param roll
+	 *            the roll is the rotation around the y axis. if the device
+	 *            would be your head 0 would mean you are looking on the ground,
+	 *            90 would mean you look in front of you and 180 would mean you
+	 *            look in the sky. from 0 to 360. 0 means the camera targets the
+	 *            ground, 180 the camera looks into the sky
+	 * @param compassAzimuth
 	 *            0=north 90=east 180=south 270=west
 	 */
-	public abstract void updateCompassAzimuth(float azimuth);
+	public abstract void onAnglesUpdated(float pitch, float roll,
+			float compassAzimuth);
 
 }
