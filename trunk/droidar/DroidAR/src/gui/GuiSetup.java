@@ -205,17 +205,17 @@ public class GuiSetup {
 	}
 
 	/**
-	 * @param map
+	 * @param v
 	 * @param weight
 	 *            2 or 3 is a good value
 	 * @param height
 	 *            <150
 	 * @return
 	 */
-	public void addMapToBottomRight(View map, float weight, int height) {
-		bottomRightView.addView(map);
+	public void addViewToBottomRight(View v, float weight, int heightInPixels) {
+		bottomRightView.addView(v);
 		LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, height);
+				LayoutParams.FILL_PARENT, heightInPixels);
 		p.weight = weight;
 		bottomRightView.setLayoutParams(p);
 	}

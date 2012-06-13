@@ -19,10 +19,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -40,9 +38,6 @@ import commands.Command;
 public class EventManager implements LocationListener, SensorEventListener {
 
 	private static final String LOG_TAG = "Event Manager";
-
-	private static final long MIN_MS_BEFOR_UPDATE = 200;
-	private static final float MIN_DIST_FOR_UPDATE = 1;
 
 	private static EventManager myInstance;
 
@@ -144,52 +139,9 @@ public class EventManager implements LocationListener, SensorEventListener {
 					+ "trying to register for location updates");
 		}
 
-		LocationManager locationManager = (LocationManager) myTargetActivity
-				.getSystemService(Context.LOCATION_SERVICE);
-		Log.i(LOG_TAG, "Got locationmanager: " + locationManager);
-
 		try {
-
-			if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-				Log.i(LOG_TAG, "GPS was enabled so this method should "
-						+ "come to the conclusion to use GPS as "
-						+ "the location source!");
-			}
-
-			/*
-			 * To register the EventManager in the LocationManager a Criteria
-			 * object has to be created and as the primary attribute accuracy
-			 * should be used to get as accurate position data as possible:
-			 */
-
-			Criteria criteria = new Criteria();
-			criteria.setAccuracy(Criteria.ACCURACY_FINE);
-
-			String provider = locationManager.getBestProvider(criteria, true);
-			if (provider == null) {
-				Log.w(LOG_TAG, "No location-provider with the "
-						+ "specified requierments found.. Trying to find "
-						+ "an alternative.");
-				List<String> providerList = locationManager.getProviders(true);
-				for (String possibleProvider : providerList) {
-					if (possibleProvider != null) {
-						Log.w(LOG_TAG, "Location-provider alternative "
-								+ "found: " + possibleProvider);
-						provider = possibleProvider;
-					}
-				}
-				if (provider == null)
-					Log.w(LOG_TAG, "No location-provider alternative "
-							+ "found!");
-			}
-
-			if (!provider.equals(LocationManager.GPS_PROVIDER)) {
-				Log.w(LOG_TAG, "The best location provider was not "
-						+ LocationManager.GPS_PROVIDER + ", it was " + provider);
-			}
-
-			locationManager.requestLocationUpdates(provider,
-					MIN_MS_BEFOR_UPDATE, MIN_DIST_FOR_UPDATE, this);
+			SimpleLocationManager.getInstance(myTargetActivity)
+					.requestLocationUpdates(this);
 		} catch (Exception e) {
 			Log.e(LOG_TAG, "There was an error registering the "
 					+ "EventManger for location-updates. The phone might be "
@@ -374,8 +326,8 @@ public class EventManager implements LocationListener, SensorEventListener {
 	}
 
 	/**
-	 * Uses {@link GeoUtils#getCurrentLocation(Context)}.
-	 * <br><br>
+	 * Uses {@link GeoUtils#getCurrentLocation(Context)}. <br>
+	 * <br>
 	 * If you need permanent location updates better create a
 	 * {@link LocationEventListener} and register it at
 	 * {@link EventManager#addOnLocationChangedAction(LocationEventListener)}
@@ -467,9 +419,9 @@ public class EventManager implements LocationListener, SensorEventListener {
 		SensorManager sensorManager = (SensorManager) myTargetActivity
 				.getSystemService(Context.SENSOR_SERVICE);
 		sensorManager.unregisterListener(this);
-		LocationManager locationManager = (LocationManager) myTargetActivity
-				.getSystemService(Context.LOCATION_SERVICE);
-		locationManager.removeUpdates(this);
+
+		SimpleLocationManager.getInstance(myTargetActivity)
+				.pauseLocationManagerUpdates();
 	}
 
 }

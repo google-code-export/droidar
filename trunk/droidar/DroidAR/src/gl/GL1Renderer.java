@@ -10,7 +10,6 @@ import javax.microedition.khronos.opengles.GL10;
 import util.EfficientList;
 import util.Log;
 import util.Vec;
-import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.os.SystemClock;
 

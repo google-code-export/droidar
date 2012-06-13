@@ -21,6 +21,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import system.EventManager;
+import system.SimpleLocationManager;
 import util.Log;
 import util.Wrapper;
 import android.app.Activity;
@@ -31,7 +32,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
@@ -171,11 +171,13 @@ public class GeoUtils {
 	}
 
 	/**
+	 * use {@link SimpleLocationManager#getCurrentLocation(Context)} instead
+	 * 
 	 * This method will try to get the most accurate position currently
 	 * available. This includes also the last known position of the device if no
 	 * current position sources can't be accessed so the returned position might
-	 * be outdated
-	 * <br><br>
+	 * be outdated <br>
+	 * <br>
 	 * If you need permanent location updates better create a
 	 * {@link LocationEventListener} and register it at
 	 * {@link EventManager#addOnLocationChangedAction(LocationEventListener)}
@@ -184,62 +186,35 @@ public class GeoUtils {
 	 * @param context
 	 * @return the current location
 	 */
+	@Deprecated
 	public static Location getCurrentLocation(Context context) {
-		Location l = GeoUtils.getCurrentLocation(context,
-				Criteria.ACCURACY_FINE);
-		if (l == null) {
-			Log.e(LOG_TAG,
-					"Fine accuracy position could not be detected! Will use coarse location.");
-			l = GeoUtils.getCurrentLocation(context, Criteria.ACCURACY_COARSE);
-			if (l == null) {
-				Log.e(LOG_TAG,
-						"Coarse accuracy position could not be detected! Last try..");
-				try {
-					LocationManager lm = ((LocationManager) context
-							.getSystemService(Context.LOCATION_SERVICE));
-					Log.d(LOG_TAG, "Searching through "
-							+ lm.getAllProviders().size()
-							+ " location providers");
-					for (int i = lm.getAllProviders().size() - 1; i >= 0; i--) {
-						l = lm.getLastKnownLocation(lm.getAllProviders().get(i));
-						if (l != null)
-							break;
-					}
-				} catch (Exception e) {
-				}
-			}
-		}
-		Log.d(LOG_TAG, "current position=" + l);
-		return l;
+		return SimpleLocationManager.getInstance(context)
+				.getCurrentLocation();
 	}
 
 	/**
+	 * use {@link SimpleLocationManager#getCurrentLocation(Context)} instead
 	 * 
 	 * See {@link GeoUtils#getCurrentLocation(Context)}
 	 * 
 	 * @return
 	 */
+	@Deprecated
 	public Location getCurrentLocation() {
 		return getCurrentLocation(myContext);
 	}
 
+	/**
+	 * Use {@link SimpleLocationManager#getCurrentLocation(int)} instead
+	 * 
+	 * @param context
+	 * @param accuracy
+	 * @return
+	 */
+	@Deprecated
 	public static Location getCurrentLocation(Context context, int accuracy) {
-		if (context != null) {
-			try {
-				LocationManager lm = (LocationManager) context
-						.getSystemService(Context.LOCATION_SERVICE);
-				Criteria criteria = new Criteria();
-				criteria.setAccuracy(accuracy);
-				return lm.getLastKnownLocation(lm.getBestProvider(criteria,
-						true));
-			} catch (Exception e) {
-				Log.e(LOG_TAG, "Could not receive the current location");
-				e.printStackTrace();
-				return null;
-			}
-		}
-		Log.e(LOG_TAG, "The passed activity was null!");
-		return null;
+		return SimpleLocationManager.getInstance(context).getCurrentLocation(
+				accuracy);
 	}
 
 	/**
@@ -435,16 +410,18 @@ public class GeoUtils {
 
 	public static void enableLocationProvidersIfNeeded(Activity activity) {
 		try {
-			boolean useWifiForLocation = ((LocationManager) activity
-					.getSystemService(Context.LOCATION_SERVICE))
-					.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-			if (isGPSDisabled(activity) && !useWifiForLocation) {
-				openLocationSettingsPage(activity);
+			if (isGPSDisabled(activity)) {
+				switchGPS(activity, true, true);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static boolean isWifiDisabled(Activity activity) {
+		return !((LocationManager) activity
+				.getSystemService(Context.LOCATION_SERVICE))
+				.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 	}
 
 	/**

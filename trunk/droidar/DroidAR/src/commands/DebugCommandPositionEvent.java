@@ -1,7 +1,6 @@
 package commands;
 
 import geo.GeoObj;
-import listeners.EventListener;
 import listeners.eventManagerListeners.LocationEventListener;
 import system.EventManager;
 import util.Log;

@@ -4,7 +4,6 @@ import gl.Color;
 import gl.GLCamera;
 import gl.GLFactory;
 import gl.scenegraph.MeshComponent;
-import gl.scenegraph.RenderList;
 import gl.scenegraph.Shape;
 import util.Log;
 import util.Vec;
