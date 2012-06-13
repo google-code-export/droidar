@@ -1,8 +1,8 @@
 package actions;
 
+import listeners.eventManagerListeners.OrientationChangedListener;
 import system.EventManager;
 import system.Setup;
-import listeners.eventManagerListeners.OrientationChangedListener;
 import android.hardware.SensorManager;
 import android.view.Surface;
 

@@ -363,7 +363,7 @@ public abstract class Setup {
 		 */
 
 		initEventManagerInstance(this.getActivity());
-
+		SimpleLocationManager.resetInstance();
 		TextureManager.resetInstance();
 		TaskManager.resetInstance();
 		GLFactory.resetInstance();

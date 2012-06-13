@@ -5,7 +5,6 @@ import gui.simpleUI.ModifierGroup;
 import util.IO;
 import worldData.Entity;
 import worldData.EntityList;
-import worldData.UpdateTimer;
 import worldData.Updateable;
 import android.content.Context;
 import android.view.View;

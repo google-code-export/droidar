@@ -1,6 +1,5 @@
 package components;
 
-import geo.GeoObj;
 import gl.GLCamera;
 import gl.HasPosition;
 import gl.scenegraph.MeshComponent;

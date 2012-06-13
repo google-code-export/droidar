@@ -1,7 +1,6 @@
 package de.rwth.setups;
 
 import gamelogic.ActionThrowFireball;
-import gamelogic.GameAction;
 import gamelogic.GameParticipant;
 import gamelogic.Stat;
 import gl.GL1Renderer;
