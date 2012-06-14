@@ -12,7 +12,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-public class SimpleLocationManager {
+public abstract class SimpleLocationManager {
 
 	private static final String LOG_TAG = "SimpleLocationManager";
 	private static final long MIN_MS_BEFOR_UPDATE = 200;
@@ -24,9 +24,13 @@ public class SimpleLocationManager {
 	private LocationListener listener;
 	private ArrayList<LocationListener> myListeners;
 
+	public SimpleLocationManager(Context context) {
+		this.context = context;
+	}
+
 	public static SimpleLocationManager getInstance(Context context) {
 		if (instance == null)
-			instance = new SimpleLocationManager(context);
+			instance = new ConcreteSimpleLocationManager(context);
 		return instance;
 	}
 
@@ -40,32 +44,45 @@ public class SimpleLocationManager {
 
 	private LocationListener initListener() {
 		return new LocationListener() {
-			
+
 			@Override
-			public void onStatusChanged(String provider, int status, Bundle extras) {
-				// TODO Auto-generated method stub
-				
+			public void onStatusChanged(String provider, int status,
+					Bundle extras) {
+				for (LocationListener l : myListeners) {
+					l.onStatusChanged(provider, status, extras);
+				}
 			}
-			
+
 			@Override
 			public void onProviderEnabled(String provider) {
-				// TODO Auto-generated method stub
-				
+				for (LocationListener l : myListeners) {
+					l.onProviderEnabled(provider);
+				}
 			}
-			
+
 			@Override
 			public void onProviderDisabled(String provider) {
-				// TODO Auto-generated method stub
-				
+				for (LocationListener l : myListeners) {
+					l.onProviderDisabled(provider);
+				}
 			}
-			
+
 			@Override
 			public void onLocationChanged(Location location) {
-				// TODO Auto-generated method stub
-				
+				locationUpdateFromAndroidLocationManager(location, myListeners);
 			}
 		};
 	}
+
+	/**
+	 * This method buffers the location and passes the buffered location down to
+	 * the locationListeners
+	 * 
+	 * @param location
+	 * @param listenersToInform
+	 */
+	public abstract void locationUpdateFromAndroidLocationManager(
+			Location location, ArrayList<LocationListener> listenersToInform);
 
 	/**
 	 * will pause updates from the {@link LocationManager} to the
@@ -80,14 +97,15 @@ public class SimpleLocationManager {
 		return false;
 	}
 
-	private SimpleLocationManager(Context context) {
-		this.context = context;
-	}
-
 	private LocationManager getLocationManager() {
 		return (LocationManager) context
 				.getSystemService(Context.LOCATION_SERVICE);
 	}
+
+	/**
+	 * @return null if there is no current location measured yet
+	 */
+	public abstract Location getCurrentBUfferedLocation();
 
 	/**
 	 * @param accuracy
@@ -96,6 +114,11 @@ public class SimpleLocationManager {
 	 * @return
 	 */
 	public Location getCurrentLocation(int accuracy) {
+
+		Location l = getCurrentBUfferedLocation();
+		if (l != null)
+			return l;
+
 		if (context != null) {
 			try {
 				LocationManager lm = getLocationManager();
@@ -127,7 +150,12 @@ public class SimpleLocationManager {
 	 * @return
 	 */
 	public Location getCurrentLocation() {
-		Location l = getCurrentLocation(Criteria.ACCURACY_FINE);
+
+		Location l = getCurrentBUfferedLocation();
+		if (l != null)
+			return l;
+
+		l = getCurrentLocation(Criteria.ACCURACY_FINE);
 		if (l == null) {
 			Log.e(LOG_TAG,
 					"Fine accuracy position could not be detected! Will use coarse location.");

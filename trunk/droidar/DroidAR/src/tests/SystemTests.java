@@ -1,9 +1,11 @@
 package tests;
 
+import android.location.Location;
 import gl.ObjectPicker;
 import gl.scenegraph.MeshComponent;
 import gl.scenegraph.Shape;
 import util.Calculus;
+import util.LimitedQueue;
 import util.Log;
 import util.Vec;
 import util.Wrapper;
@@ -22,17 +24,35 @@ public class SystemTests extends SimpleTesting {
 		vecTests();
 		objTests();
 		utilTests();
+		LimitedQueueTests();
 		colorTests();
+	}
+
+	private void LimitedQueueTests() throws Exception {
+		LimitedQueue<Integer> l = new LimitedQueue<Integer>(20);
+		for (int i = 0; i < 30; i++) {
+			l.add(i);
+		}
+
+		for (Integer i : l) {
+			/*
+			 * work on list
+			 */
+			i.byteValue();
+		}
+		// make sure no elements were removed automatically
+		assertTrue(l.size() == 20);
+		assertTrue(l.getFirst()==10);
+		assertTrue(l.getFirst()==10);
+
 	}
 
 	private void colorTests() throws Exception {
 
 		float input = 0x000001;
-		//TODO
+		// TODO
 		System.out.println("" + input + " is converted to " + convInput(input));
 
-		
-		
 	}
 
 	private byte convInput(float input) {
@@ -46,9 +66,9 @@ public class SystemTests extends SimpleTesting {
 			assertTrue(Calculus.getRandomFloat(0, 2) >= 0);
 			assertTrue(Calculus.getRandomFloat(0, 2) <= 2);
 		}
-		
+
 		System.out.println(Log.getCurrentMethod(2));
-		
+
 	}
 
 	private void objTests() throws Exception {

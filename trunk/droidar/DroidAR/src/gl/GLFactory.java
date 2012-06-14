@@ -228,6 +228,12 @@ public class GLFactory {
 		return pyr;
 	}
 
+	public Obj newPositionMarker(GLCamera camera) {
+		Obj o = camera.getGPSPositionAsGeoObj();
+		o.setComp(newDiamond(Color.getRandomRGBColor()));
+		return o;
+	}
+
 	private void addRotateAnimation(MeshComponent target, int speed,
 			Vec rotationVec) {
 		AnimationRotate a = new AnimationRotate(speed, rotationVec);
@@ -447,8 +453,7 @@ public class GLFactory {
 		return s;
 	}
 
-	public Shape newNSidedPolygon(int numberOfSides, float radius,
-			Color c) {
+	public Shape newNSidedPolygon(int numberOfSides, float radius, Color c) {
 		Shape s = new Shape(c);
 
 		Vec v = new Vec(radius, 0, 0);
