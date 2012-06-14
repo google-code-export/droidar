@@ -3,6 +3,7 @@ package system;
 import java.util.ArrayList;
 
 import util.LimitedQueue;
+import util.Log;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -20,6 +21,8 @@ public class ConcreteSimpleLocationManager extends SimpleLocationManager {
 
 	private static final double SQRT2PII = Math.sqrt(2 * Math.PI);
 
+	private static final String LOG_TAG = "ConcreteSimpleLocationManager";
+
 	private Location currentPosition;
 	private LimitedQueue<Location> lastPositions;
 
@@ -32,12 +35,12 @@ public class ConcreteSimpleLocationManager extends SimpleLocationManager {
 	public LimitedQueue<Location> getLastPositions() {
 		return lastPositions;
 	}
-	
+
 	@Override
 	public Location getCurrentBUfferedLocation() {
 		return currentPosition;
 	}
-	
+
 	@Override
 	public void locationUpdateFromAndroidLocationManager(Location location,
 			ArrayList<LocationListener> listenersToInform) {
@@ -72,7 +75,8 @@ public class ConcreteSimpleLocationManager extends SimpleLocationManager {
 		 * anzI=i*(i+1)/2
 		 */
 		int numberOfLocations = lastPositions.size();
-
+		Log.d(LOG_TAG, "Calculating average of " + numberOfLocations
+				+ " locations");
 		for (int i = 0; i < numberOfLocations; i++) {
 			Location l = lastPositions.get(i);
 			float acc = ACCURACY_WEIGHTING / l.getAccuracy();
@@ -87,6 +91,8 @@ public class ConcreteSimpleLocationManager extends SimpleLocationManager {
 		target.setAltitude(meanAlti / numberOfLocations);
 		target.setLatitude(meanLat / inverseAccuracySum);
 		target.setLongitude(meanLong / inverseAccuracySum);
+
+		Log.d(LOG_TAG, "Average is: " + target);
 
 		/*
 		 * check with gausian distr if value is ok to add (>a certaion

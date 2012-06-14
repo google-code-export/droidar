@@ -188,8 +188,7 @@ public class GeoUtils {
 	 */
 	@Deprecated
 	public static Location getCurrentLocation(Context context) {
-		return SimpleLocationManager.getInstance(context)
-				.getCurrentLocation();
+		return SimpleLocationManager.getInstance(context).getCurrentLocation();
 	}
 
 	/**
@@ -408,6 +407,11 @@ public class GeoUtils {
 		return switchGPS(activity, true, true);
 	}
 
+	/**
+	 * This method will activate gps if it is disabled
+	 * 
+	 * @param activity
+	 */
 	public static void enableLocationProvidersIfNeeded(Activity activity) {
 		try {
 			if (isGPSDisabled(activity)) {

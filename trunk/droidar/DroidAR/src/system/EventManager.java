@@ -131,8 +131,10 @@ public class EventManager implements LocationListener, SensorEventListener {
 	 * This method will try to find the best location source available (probably
 	 * GPS if enabled). Remember to wait some seconds before calling this if you
 	 * activated GPS programmatically using {@link GeoUtils#enableGPS(Activity)}
+	 * 
+	 * @return true if the Eventmanager was registered correctly
 	 */
-	public void registerLocationUpdates() {
+	public boolean registerLocationUpdates() {
 
 		if (myTargetActivity == null) {
 			Log.e(LOG_TAG, "The target activity was undefined while "
@@ -140,7 +142,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 		}
 
 		try {
-			SimpleLocationManager.getInstance(myTargetActivity)
+			return SimpleLocationManager.getInstance(myTargetActivity)
 					.requestLocationUpdates(this);
 		} catch (Exception e) {
 			Log.e(LOG_TAG, "There was an error registering the "
@@ -148,6 +150,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 					+ "in airplane-mode..");
 			e.printStackTrace();
 		}
+		return false;
 	}
 
 	@Override
@@ -184,7 +187,13 @@ public class EventManager implements LocationListener, SensorEventListener {
 	public void onLocationChanged(Location location) {
 		if (onLocationChangedList != null) {
 			for (int i = 0; i < onLocationChangedList.size(); i++) {
-				onLocationChangedList.get(i).onLocationChanged(location);
+				LocationEventListener l = onLocationChangedList.get(i);
+				if (!l.onLocationChanged(location)) {
+					Log.w(LOG_TAG, "Action " + l
+							+ " returned false so it will be "
+							+ "removed from the location listener list!");
+					getOnLocationChangedAction().remove(l);
+				}
 			}
 		}
 	}
@@ -201,9 +210,11 @@ public class EventManager implements LocationListener, SensorEventListener {
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-
+		Log.i(LOG_TAG, "Status change of " + provider + ": " + status);
 		if (myTargetActivity != null) {
-			registerLocationUpdates();
+			if (!registerLocationUpdates())
+				Log.d(LOG_TAG, "EventManager was already contained in "
+						+ "to the listener list of SimpleLocationManager");
 		} else
 			Log.w(LOG_TAG, "Didnt handle onStatusChanged of " + provider
 					+ "(status=" + status + ")");

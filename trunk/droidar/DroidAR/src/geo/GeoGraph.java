@@ -535,12 +535,17 @@ public class GeoGraph extends AbstractObj implements Container<GeoObj> {
 		setMyParent(parent);
 		{
 			for (int i = 0; i < myNodes.myLength; i++) {
-				myNodes.get(i).update(timeDelta, this);
+				if (!myNodes.get(i).update(timeDelta, this)) {
+					// remove node if no longer needed (it returned false)
+					remove(myNodes.get(i));
+				}
 			}
 		}
 		if (useEdges && myEdges != null) {
 			for (int i = 0; i < myEdges.myLength; i++) {
-				myEdges.get(i).update(timeDelta, this);
+				if (!myEdges.get(i).update(timeDelta, this)) {
+					remove(myEdges.get(i));
+				}
 			}
 		}
 		return true;

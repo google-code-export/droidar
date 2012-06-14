@@ -48,22 +48,23 @@ public abstract class SimpleLocationManager {
 			@Override
 			public void onStatusChanged(String provider, int status,
 					Bundle extras) {
-				for (LocationListener l : myListeners) {
-					l.onStatusChanged(provider, status, extras);
+				for (int i = 0; i < myListeners.size(); i++) {
+					myListeners.get(i)
+							.onStatusChanged(provider, status, extras);
 				}
 			}
 
 			@Override
 			public void onProviderEnabled(String provider) {
-				for (LocationListener l : myListeners) {
-					l.onProviderEnabled(provider);
+				for (int i = 0; i < myListeners.size(); i++) {
+					myListeners.get(i).onProviderEnabled(provider);
 				}
 			}
 
 			@Override
 			public void onProviderDisabled(String provider) {
-				for (LocationListener l : myListeners) {
-					l.onProviderDisabled(provider);
+				for (int i = 0; i < myListeners.size(); i++) {
+					myListeners.get(i).onProviderDisabled(provider);
 				}
 			}
 
@@ -91,7 +92,9 @@ public abstract class SimpleLocationManager {
 	public boolean pauseLocationManagerUpdates() {
 		// its important to use instance here and not getInstance()!
 		if (listener != null) {
+			Log.i(LOG_TAG, "Pausing position updates!");
 			getLocationManager().removeUpdates(listener);
+			listener = null;
 			return true;
 		}
 		return false;
@@ -154,6 +157,9 @@ public abstract class SimpleLocationManager {
 		Location l = getCurrentBUfferedLocation();
 		if (l != null)
 			return l;
+
+		Log.w(LOG_TAG, "buffered current location object was null, "
+				+ "will use the one from the android LocationManager!");
 
 		l = getCurrentLocation(Criteria.ACCURACY_FINE);
 		if (l == null) {
@@ -223,13 +229,13 @@ public abstract class SimpleLocationManager {
 		return provider;
 	}
 
-	public void requestLocationUpdates(String provider, long minMsBeforUpdate,
+	public boolean requestLocationUpdates(String provider, long minMsBeforUpdate,
 			float minDistForUpdate, LocationListener locationListener) {
 
 		registerSimpleEventManagerAsListenerIfNotDoneJet(provider,
 				minMsBeforUpdate, minDistForUpdate);
 
-		addToListeners(locationListener);
+		return addToListeners(locationListener);
 
 	}
 
@@ -237,20 +243,31 @@ public abstract class SimpleLocationManager {
 			String provider, long minMsBeforUpdate, float minDistForUpdate) {
 		if (listener == null) {
 			listener = initListener();
+			Log.i(LOG_TAG,
+					"Created location listener and now registering for updates..");
+			Log.i(LOG_TAG, "    > provider=" + provider);
+			Log.i(LOG_TAG, "    > minMsBeforUpdate=" + minMsBeforUpdate);
+			Log.i(LOG_TAG, "    > minDistForUpdate=" + minDistForUpdate);
 			getLocationManager().requestLocationUpdates(provider,
 					minMsBeforUpdate, minDistForUpdate, listener);
 		}
 	}
 
-	public void requestLocationUpdates(LocationListener locationListener) {
-		requestLocationUpdates(findBestLocationProvider(), MIN_MS_BEFOR_UPDATE,
+	public boolean requestLocationUpdates(LocationListener locationListener) {
+		return requestLocationUpdates(findBestLocationProvider(), MIN_MS_BEFOR_UPDATE,
 				MIN_DIST_FOR_UPDATE, locationListener);
 	}
 
-	private void addToListeners(LocationListener locationListener) {
+	private boolean addToListeners(LocationListener locationListener) {
 		if (myListeners == null)
 			myListeners = new ArrayList<LocationListener>();
-		myListeners.add(locationListener);
+		if (!myListeners.contains(locationListener)) {
+			Log.i(LOG_TAG, "Adding listener " + locationListener + " to list");
+			myListeners.add(locationListener);
+			return true;
+		}
+		return false;
+
 	}
 
 }
