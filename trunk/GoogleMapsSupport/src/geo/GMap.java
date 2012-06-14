@@ -153,8 +153,13 @@ public class GMap extends MapView implements TouchEventInterface {
 		 * MyGestureListener class which will inform the map when a special
 		 * event like a tab, doubleTab, LongPress, .. happened
 		 */
-		myGestureDetector.onTouchEvent(event);
-		return super.onTouchEvent(event);
+		boolean backupResultInCaseOfError=myGestureDetector.onTouchEvent(event);
+		try {
+			return super.onTouchEvent(event);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return backupResultInCaseOfError;
 	}
 
 	@Override
