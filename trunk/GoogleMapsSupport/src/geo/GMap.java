@@ -3,6 +3,7 @@ package geo;
 import gui.CustomGestureListener;
 import system.EventManager;
 import system.TouchEventInterface;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
@@ -10,9 +11,12 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import commands.Command;
+import de.rwth.setups.GoogleMapsDebugKeys;
 
 /**
  * To get a maps api key you have to use a keytool to generate a MD5 fingerprint
@@ -29,7 +33,7 @@ import commands.Command;
  * You might be asked for a password, the password is "android" <br>
  * <br>
  * The cmd will display a MD5 fingerprint, copy and use this fingerprint here:
- * http://code.google.com/android/maps-api-signup.html <br>
+ * https://developers.google.com/android/maps-api-signup <br>
  * <br>
  * The code you get from the signup page has to be passed in the constructor of
  * the GMap class <br>
@@ -236,6 +240,31 @@ public class GMap extends MapView implements TouchEventInterface {
 	public static GeoObj toGeoObj(GeoPoint point) {
 		return new GeoObj(point.getLatitudeE6() / 1E6,
 				point.getLongitudeE6() / 1E6);
+	}
+
+	public static GMap newDefaultGMap(MapActivity mapActivity,
+			String pc1debugkey) {
+		final GMap map = new GMap(mapActivity, GoogleMapsDebugKeys.pc1DebugKey);
+		final MyLocationOverlay o = new MyLocationOverlay(mapActivity, map);
+		o.enableCompass();
+		o.enableMyLocation();
+		map.addOverlay(o);
+		map.setSatellite(true);
+		map.setZoomLevel(17);
+		map.setClickable(true);
+		o.runOnFirstFix(new Runnable() {
+
+			@Override
+			public void run() {
+				/*
+				 * When the positionis available for the first time center the
+				 * map to this location:
+				 */
+				map.getController().setCenter(o.getMyLocation());
+			}
+		});
+
+		return map;
 	}
 
 }

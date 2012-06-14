@@ -300,7 +300,7 @@ public class ARNavigatorSetup extends Setup {
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity context) {
 
 		map = new GMap(myTargetActivity, MAPS_KEY);
-		guiSetup.addMapToBottomRight(map, 2, 130);
+		guiSetup.addViewToBottomRight(map, 2, 130);
 		map.setCenterToCurrentPos();
 		map.setZoomLevel(20);
 		map.setClickable(true);
