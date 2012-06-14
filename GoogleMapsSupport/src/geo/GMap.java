@@ -22,14 +22,20 @@ import de.rwth.setups.GoogleMapsDebugKeys;
  * To get a maps api key you have to use a keytool to generate a MD5 fingerprint
  * for your computer. <br>
  * <br>
- * The keytool.exe is part of the Java SDK you are using (eg: C:\Program
- * Files\Java\jdk1.6.0_22\bin\keytool.exe). <br>
+ * The keytool.exe is part of the Java SDK you are using- eg: <br>
+ * <br>
+ * C:\Program Files\Java\jdk1.6.0_22\bin\keytool.exe <br>
+ * (You can also add the C:\Program Files\Java\jdk1.6.0_22\bin path to your
+ * System variables, add it to the Path variable with "...;C:\Program
+ * Files\Java\jdk1.6.0_22\bin" ) <br>
  * <br>
  * So move the debug.keystore from "C:\Users\YourUserNameHere\.android" to
  * "C:\", start your cmd.exe and type: <br>
  * <br>
  * C:\Program Files\Java\jdk1.6.0_22\bin>keytool -list -alias androiddebugkey
- * -keystore C:\debug.keystore -keypass android <br>
+ * -keystore C:\debug.keystore -keypass android -v <br>
+ * 
+ * <br>
  * You might be asked for a password, the password is "android" <br>
  * <br>
  * The cmd will display a MD5 fingerprint, copy and use this fingerprint here:

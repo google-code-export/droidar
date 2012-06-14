@@ -28,7 +28,14 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	 * additionally holds the associated {@link GeoObj} to inform it on
 	 * selection etc
 	 */
-	private EfficientList<GeoObjWrapper> myItemList = new EfficientList<GeoObjWrapper>();
+	private EfficientList<GeoObjWrapper> itemList;
+	private GeoGraph mygraph;
+
+	public EfficientList<GeoObjWrapper> getItemList() {
+		if (itemList == null)
+			itemList = new EfficientList<GeoObjWrapper>();
+		return itemList;
+	}
 
 	/**
 	 * @param graph
@@ -41,10 +48,10 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	public CustomItemizedOverlay(GeoGraph graph, Drawable defaultIcon)
 			throws Exception {
 		super(defaultIcon);
-		fillItemListWithItems(graph);
+		mygraph = graph;
 		setMarkerBottomCenterd(defaultIcon);
 		boundCenter(defaultIcon);
-		Log.e("", "myItemList=" + myItemList);
+		Log.e("", "myItemList=" + getItemList());
 
 		this.populate();
 
@@ -52,41 +59,50 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 
 	@Override
 	protected boolean onTap(int index) {
-		return myItemList.get(index).onTab();
-	}
-
-	private void fillItemListWithItems(GeoGraph graph) {
-		/*
-		 * its important to load all objects of your own datastructure that you
-		 * want to display in an prepared List which will be accessed by the
-		 * ItemizedOverlay on any map change (movement, zoom,..). so convert
-		 * your datastructure here and access the OverlayItems directly in the
-		 * createItem method. that way it will work as fast as possible
-		 */
-		EfficientListQualified<GeoObj> nodes = graph.getAllItems();
-		for (int i = 0; i < nodes.myLength; i++) {
-			myItemList.add(new GeoObjWrapper(nodes.get(i)));
-		}
+		return getItemList().get(index).onTab();
 	}
 
 	@Override
 	protected OverlayItem createItem(int pos) {
 		// this method will be used by the superclass to access the Overlay
 		// items and display them
-		GeoObjWrapper x = myItemList.get(pos);
+		GeoObjWrapper x = getItemList().get(pos);
 		if (x == null) {
 			Log.e("Gmaps",
 					"CusomizedOverlay error: createItem() tried to get an null item an NULL item and will probably crash now!");
-		} else if (x.myGeoObj.isDeleted()) {
+		} else if (x.getGeoObj().isDeleted()) {
 			// if the GeoObj was deleted release the wrapper
-			myItemList.remove(x);
+			getItemList().remove(x);
 		}
+
 		return x;
 	}
 
 	@Override
 	public int size() {
-		return myItemList.myLength;
+
+		if (itemList.myLength != mygraph.length()) {
+			/*
+			 * its important to load all objects of your own datastructure that
+			 * you want to display in an prepared List which will be accessed by
+			 * the ItemizedOverlay on any map change (movement, zoom,..). so
+			 * convert your datastructure here and access the OverlayItems
+			 * directly in the createItem method. that way it will work as fast
+			 * as possible
+			 */
+			Log.d("LOG_TAG", "Updating gmap item overlay");
+			itemList.clear();
+			EfficientListQualified<GeoObj> nodes = mygraph.getAllItems();
+			for (int i = 0; i < nodes.myLength; i++) {
+				itemList.add(new GeoObjWrapper(nodes.get(i)));
+			}
+			/*
+			 * and then update the overlay
+			 */
+			populate();
+		}
+
+		return itemList.myLength;
 	}
 
 	/**
