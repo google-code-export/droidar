@@ -65,10 +65,17 @@ public abstract class ActionWaitForAccuracy extends Action {
 		if (l != null) {
 			myCurrentAccuracy = l.getAccuracy();
 			long passedTime = System.currentTimeMillis() - l.getTime();
-			Log.d(LOG_TAG, "Passed time since last location event="
-					+ (passedTime / 1000f / 10f) + " minutes");
-			if (passedTime <= MAX_TIME_SINCE_LAST_UPDATE_IN_MS)
+			Log.i(LOG_TAG, "Last known pos accuracy=" + myCurrentAccuracy);
+			Log.i(LOG_TAG, "Last known pos age=" + (passedTime / 1000f / 10f)
+					+ " minutes");
+			if (passedTime <= MAX_TIME_SINCE_LAST_UPDATE_IN_MS) {
 				onLocationChanged(l);
+			} else {
+				Log.i(LOG_TAG, "Last known pos age was to old to use it "
+						+ "as a current position, will now wait "
+						+ "for position signal");
+				myCurrentAccuracy = 1000; // 1000m
+			}
 		} else {
 			GeoUtils.enableLocationProvidersIfNeeded(myActivity);
 		}
@@ -87,6 +94,7 @@ public abstract class ActionWaitForAccuracy extends Action {
 				|| (stepCounter >= myMaxPosUpdateCount)) {
 			callFirstTimeAccReachedIfNotYetCalled(l);
 			hideUI();
+			return false;
 		}
 		return true;
 	}
@@ -188,8 +196,10 @@ public abstract class ActionWaitForAccuracy extends Action {
 
 			@Override
 			public void onClick(View v) {
+				Log.d(LOG_TAG, "Trying to skip accuracy detection");
 				callFirstTimeAccReachedIfNotYetCalled(GeoUtils
 						.getCurrentLocation(myActivity));
+				hideUI();
 				dialog.dismiss();
 			}
 		});

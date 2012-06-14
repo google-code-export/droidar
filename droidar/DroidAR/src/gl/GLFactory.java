@@ -228,8 +228,8 @@ public class GLFactory {
 		return pyr;
 	}
 
-	public Obj newPositionMarker(GLCamera camera) {
-		Obj o = camera.getGPSPositionAsGeoObj();
+	public GeoObj newPositionMarker(GLCamera camera) {
+		GeoObj o = camera.getGPSPositionAsGeoObj();
 		o.setComp(newDiamond(Color.getRandomRGBColor()));
 		return o;
 	}

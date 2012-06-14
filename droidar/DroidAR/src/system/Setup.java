@@ -293,6 +293,10 @@ public abstract class Setup {
 		debugLogDoSetupStep(STEP_DONE);
 	}
 
+	public SystemUpdater getSystemUpdater() {
+		return worldUpdater;
+	}
+	
 	/**
 	 * By overriding this (and not calling the super metzhod) the
 	 * {@link ErrorHandler} system provided by DroidAR will be deactivated (e.g.
