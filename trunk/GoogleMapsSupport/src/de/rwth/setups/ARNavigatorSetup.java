@@ -67,10 +67,7 @@ import de.rwth.R;
 
 public class ARNavigatorSetup extends Setup {
 
-	/**
-	 * TODO set your {@link GMap}s key here. for more details see {@link GMap}
-	 */
-	private static final String MAPS_KEY = "";
+	
 
 	private SystemUpdater myWorldUpdater;
 	private GLCamera camera;
@@ -299,7 +296,7 @@ public class ARNavigatorSetup extends Setup {
 	@Override
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity context) {
 
-		map = new GMap(myTargetActivity, MAPS_KEY);
+		map = new GMap(myTargetActivity, GoogleMapsDebugKeys.pc1DebugKey);
 		guiSetup.addViewToBottomRight(map, 2, 130);
 		map.setCenterToCurrentPos();
 		map.setZoomLevel(20);
