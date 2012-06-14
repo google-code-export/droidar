@@ -1,5 +1,7 @@
 package de.rwth.setups;
 
+import org.xml.sax.ErrorHandler;
+
 import com.google.android.maps.MapActivity;
 import commands.Command;
 import components.TimerComp;
@@ -38,6 +40,10 @@ public class AccuracyTestsSetup extends DefaultARSetup {
 	@Override
 	public void addObjectsTo(GL1Renderer renderer, World world,
 			GLFactory objectFactory) {
+
+		system.ErrorHandler.enableEmailReports("simon.heinen@gmail.com",
+				"AccuracyTestsSetup Error");
+
 		world.add(pins);
 		world.add(measureData);
 	}
