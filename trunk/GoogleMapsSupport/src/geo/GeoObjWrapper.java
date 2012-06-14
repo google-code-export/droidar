@@ -10,8 +10,9 @@ import commands.Command;
 
 public class GeoObjWrapper extends OverlayItem {
 
-	public GeoObj myGeoObj;
+	private GeoObj myGeoObj;
 	private Drawable myMarker;
+	private GeoPoint geoPoint;
 
 	public GeoObjWrapper(GeoObj o) {
 		super(GMap.toGeoPoint(o), o.getInfoObject().getShortDescr(), o
@@ -23,9 +24,16 @@ public class GeoObjWrapper extends OverlayItem {
 
 	}
 
+	public GeoObj getGeoObj() {
+		geoPoint = null;
+		return myGeoObj;
+	}
+
 	@Override
 	public GeoPoint getPoint() {
-		return GMap.toGeoPoint(myGeoObj);
+		if (geoPoint == null)
+			geoPoint = GMap.toGeoPoint(myGeoObj);
+		return geoPoint;
 	}
 
 	@Override
