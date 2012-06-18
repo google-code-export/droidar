@@ -18,6 +18,12 @@ public abstract class SimpleLocationManager {
 	private static final String LOG_TAG = "SimpleLocationManager";
 	private static final long MIN_MS_BEFOR_UPDATE = 200;
 	private static final float MIN_DIST_FOR_UPDATE = 0.5f;
+	protected static final int NUMBER_OF_STEPS_IN_SAME_DIRECTION = 2;
+	/**
+	 * This is needed to use step detection only if the accuracy from the other
+	 * location providers is not to bad
+	 */
+	protected static final float MIN_AVV_ACCURACY = 30;
 
 	private static SimpleLocationManager instance;
 
@@ -73,7 +79,7 @@ public abstract class SimpleLocationManager {
 
 			@Override
 			public void onLocationChanged(Location location) {
-				locationUpdateFromAndroidLocationManager(location, myListeners);
+				onLocationEventFromGPS(location, myListeners);
 			}
 		};
 	}
@@ -85,8 +91,8 @@ public abstract class SimpleLocationManager {
 	 * @param location
 	 * @param listenersToInform
 	 */
-	public abstract void locationUpdateFromAndroidLocationManager(
-			Location location, ArrayList<LocationListener> listenersToInform);
+	public abstract void onLocationEventFromGPS(Location location,
+			ArrayList<LocationListener> listenersToInform);
 
 	/**
 	 * will pause updates from the {@link LocationManager} to the
@@ -265,10 +271,28 @@ public abstract class SimpleLocationManager {
 		if (stepListener == null) {
 			stepListener = new OnStepListener() {
 				@Override
-				public void onStep(double bearing, double steplength) {
+				public void onStep(double compassAngle, double steplength) {
 					Log.d(LOG_TAG, "Step detected");
-					Log.d(LOG_TAG, "    > angle=" + bearing);
+					Log.d(LOG_TAG, "    > compassAngle=" + compassAngle);
 					Log.d(LOG_TAG, "    > distance=" + steplength);
+					Location location = getCurrentBUfferedLocation();
+
+					if (location != null)
+						Log.i(LOG_TAG,
+								"location.getAccuracy()="
+										+ location.getAccuracy());
+
+					if (location != null
+							&& location.getAccuracy() < MIN_AVV_ACCURACY) {
+						for (int i = 0; i < NUMBER_OF_STEPS_IN_SAME_DIRECTION; i++) {
+							location = StepManager.newLocationOneStepFurther(
+									location, steplength, compassAngle);
+							onLocationEventFromSteps(location, myListeners);
+						}
+					} else {
+						Log.w(LOG_TAG,
+								"Current location was unknown, cant do steps");
+					}
 				}
 			};
 			if (stepManager == null) {
@@ -278,6 +302,9 @@ public abstract class SimpleLocationManager {
 			Log.i(LOG_TAG, "Step listener registered");
 		}
 	}
+
+	public abstract void onLocationEventFromSteps(Location location,
+			ArrayList<LocationListener> listenersToInform);
 
 	public boolean requestLocationUpdates(LocationListener locationListener) {
 		return requestLocationUpdates(findBestLocationProvider(),

@@ -1,6 +1,7 @@
 package system;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -9,7 +10,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Handler;
-import android.util.Log;
 
 /**
  * @author Paul Smith code@uvwxy.de
@@ -19,10 +19,10 @@ public class StepManager implements SensorEventListener {
 
 	private SensorManager sensorManager;
 
-	private LinkedList<OnStepListener> listeners;
+	private List<OnStepListener> listeners;
 
-	private int step_timeout_ms = 666;
-	private double minStepPeakSize = 0.8;
+	private int MIN_TIME_BETWEEN_STEPS = 866;
+	private double minStepPeakSize = 1.9;
 	private double step_length_in_m = 0.6;
 
 	private Handler handler = new Handler();
@@ -78,7 +78,7 @@ public class StepManager implements SensorEventListener {
 
 	public void registerStepListener(Context context, OnStepListener l) {
 		if (listeners == null) {
-			listeners = new LinkedList<OnStepListener>();
+			listeners = new ArrayList<OnStepListener>();
 			registerSensors(context);
 			start();
 		}
@@ -128,7 +128,7 @@ public class StepManager implements SensorEventListener {
 	 * @param bearing
 	 * @return
 	 */
-	public static Location moveLocationOneStep(Location l, double d,
+	public static Location newLocationOneStepFurther(Location l, double d,
 			double bearing) {
 		bearing = Math.toRadians(bearing);
 		double R = 6378100; // m equatorial radius
@@ -142,7 +142,7 @@ public class StepManager implements SensorEventListener {
 						Math.sin(bearing) * Math.sin(d / R) * Math.cos(lat1),
 						Math.cos(d / R) - Math.sin(lat1) * Math.sin(lat2));
 
-		Location ret = l;// new Location("LOCMOV");
+		Location ret = new Location("LOCMOV");
 		ret.setLatitude(Math.toDegrees(lat2));
 		ret.setLongitude(Math.toDegrees(lon2));
 		ret.setAccuracy((float) (2.0f * d));
@@ -158,14 +158,10 @@ public class StepManager implements SensorEventListener {
 			handler.removeCallbacks(handlerStepDetection);
 			addCurrentSensorData();
 			long t = System.currentTimeMillis();
-			if (t - last_step_ms > step_timeout_ms && checkIfStepHappend()) {
-
-				System.out.println("Step detected");
-
-				for (OnStepListener l : listeners) {
-					l.onStep(orientation, step_length_in_m);
+			if (t - last_step_ms > MIN_TIME_BETWEEN_STEPS && checkIfStepHappend()) {
+				for (int i = 0; i < listeners.size(); i++) {
+					listeners.get(i).onStep(orientation, step_length_in_m);
 				}
-
 				last_step_ms = t;
 			}
 
@@ -197,7 +193,7 @@ public class StepManager implements SensorEventListener {
 			float x = event.values[0] - gravity[0];
 			float y = event.values[1] - gravity[1];
 			float z = event.values[2] - gravity[2];
-			last_acc_event = (float) Math.sqrt(x * x + y * y + z * z);
+			last_acc_event = z;//(float) Math.sqrt(x * x + y * y + z * z);
 
 			break;
 

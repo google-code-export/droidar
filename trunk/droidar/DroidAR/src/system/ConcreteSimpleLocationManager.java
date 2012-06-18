@@ -42,7 +42,7 @@ public class ConcreteSimpleLocationManager extends SimpleLocationManager {
 	}
 
 	@Override
-	public void locationUpdateFromAndroidLocationManager(Location location,
+	public void onLocationEventFromGPS(Location location,
 			ArrayList<LocationListener> listenersToInform) {
 		if (currentPosition == null)
 			currentPosition = new Location("AveragePosition");
@@ -53,6 +53,12 @@ public class ConcreteSimpleLocationManager extends SimpleLocationManager {
 		}
 	}
 
+	@Override
+	public void onLocationEventFromSteps(Location location,
+			ArrayList<LocationListener> listenersToInform) {
+		onLocationEventFromGPS(location, listenersToInform);
+	}
+	
 	private boolean calcFromLastPositions(Location target, Location newLocation) {
 
 		addToLastLocationsList(newLocation);
