@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import listeners.eventManagerListeners.LocationEventListener;
+import system.StepManager.OnStepListener;
 import util.Log;
 import android.content.Context;
 import android.location.Criteria;
@@ -21,8 +22,10 @@ public abstract class SimpleLocationManager {
 	private static SimpleLocationManager instance;
 
 	private Context context;
-	private LocationListener listener;
+	private LocationListener gpslistener;
 	private ArrayList<LocationListener> myListeners;
+	private OnStepListener stepListener;
+	private StepManager stepManager;
 
 	public SimpleLocationManager(Context context) {
 		this.context = context;
@@ -91,10 +94,18 @@ public abstract class SimpleLocationManager {
 	 */
 	public boolean pauseLocationManagerUpdates() {
 		// its important to use instance here and not getInstance()!
-		if (listener != null) {
+		if (gpslistener != null) {
 			Log.i(LOG_TAG, "Pausing position updates!");
-			getLocationManager().removeUpdates(listener);
-			listener = null;
+			getLocationManager().removeUpdates(gpslistener);
+			gpslistener = null;
+		}
+		if (stepListener != null) {
+			Log.i(LOG_TAG, "Pausing step updates!");
+			stepManager.stop();
+			stepManager.unregisterSensors();
+			stepManager.unRegisterStepListener(stepListener);
+			stepListener = null;
+			stepManager = null;
 			return true;
 		}
 		return false;
@@ -229,8 +240,9 @@ public abstract class SimpleLocationManager {
 		return provider;
 	}
 
-	public boolean requestLocationUpdates(String provider, long minMsBeforUpdate,
-			float minDistForUpdate, LocationListener locationListener) {
+	public boolean requestLocationUpdates(String provider,
+			long minMsBeforUpdate, float minDistForUpdate,
+			LocationListener locationListener) {
 
 		registerSimpleEventManagerAsListenerIfNotDoneJet(provider,
 				minMsBeforUpdate, minDistForUpdate);
@@ -241,21 +253,38 @@ public abstract class SimpleLocationManager {
 
 	private void registerSimpleEventManagerAsListenerIfNotDoneJet(
 			String provider, long minMsBeforUpdate, float minDistForUpdate) {
-		if (listener == null) {
-			listener = initListener();
+		if (gpslistener == null) {
+			gpslistener = initListener();
 			Log.i(LOG_TAG,
 					"Created location listener and now registering for updates..");
 			Log.i(LOG_TAG, "    > provider=" + provider);
 			Log.i(LOG_TAG, "    > minMsBeforUpdate=" + minMsBeforUpdate);
 			Log.i(LOG_TAG, "    > minDistForUpdate=" + minDistForUpdate);
 			getLocationManager().requestLocationUpdates(provider,
-					minMsBeforUpdate, minDistForUpdate, listener);
+					minMsBeforUpdate, minDistForUpdate, gpslistener);
+		}
+		if (stepManager == null) {
+			stepManager = new StepManager();
+			stepManager.registerSensors(context);
+			stepManager.start();
+		}
+		if (stepListener == null) {
+			stepListener = new OnStepListener() {
+				@Override
+				public void onStep(double bearing, double steplength) {
+					Log.d(LOG_TAG, "Step detected");
+					Log.d(LOG_TAG, "    > angle=" + bearing);
+					Log.d(LOG_TAG, "    > distance=" + steplength);
+				}
+			};
+			stepManager.registerStepListener(stepListener);
+			Log.i(LOG_TAG, "Step listener registered");
 		}
 	}
 
 	public boolean requestLocationUpdates(LocationListener locationListener) {
-		return requestLocationUpdates(findBestLocationProvider(), MIN_MS_BEFOR_UPDATE,
-				MIN_DIST_FOR_UPDATE, locationListener);
+		return requestLocationUpdates(findBestLocationProvider(),
+				MIN_MS_BEFOR_UPDATE, MIN_DIST_FOR_UPDATE, locationListener);
 	}
 
 	private boolean addToListeners(LocationListener locationListener) {
