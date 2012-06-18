@@ -11,6 +11,10 @@ import android.location.Location;
 import android.os.Handler;
 import android.util.Log;
 
+/**
+ * @author Paul Smith code@uvwxy.de
+ * 
+ */
 public class StepManager implements SensorEventListener {
 
 	private SensorManager sensorManager;
@@ -23,7 +27,6 @@ public class StepManager implements SensorEventListener {
 
 	private Handler handler = new Handler();
 	private long handler_delay_millis = 1000 / 30;
-	private boolean handler_is_initialized = false;
 	boolean handler_is_running = false;
 
 	private float[] last_acc_event = { 0f, 0f, 0f };
@@ -32,7 +35,7 @@ public class StepManager implements SensorEventListener {
 	private static final int vhSize = 6;
 
 	private static final String LOG_TAG = "StepManager";
-	private float[][] stepDetectionWindow = new float[vhSize][];
+	private float[][] stepDetecWindow = new float[vhSize][];
 	private int vhPointer = 0;
 
 	public interface OnStepListener {
@@ -82,8 +85,8 @@ public class StepManager implements SensorEventListener {
 	}
 
 	private void addSensorData(float[] value) {
-		
-		stepDetectionWindow[vhPointer % vhSize] = value;
+
+		stepDetecWindow[vhPointer % vhSize] = value.clone();
 		vhPointer++;
 		vhPointer = vhPointer % vhSize;
 	}
@@ -94,12 +97,15 @@ public class StepManager implements SensorEventListener {
 		int lookahead = 5;
 		for (int t = 1; t <= lookahead; t++) {
 
-			float[] a = stepDetectionWindow[(vhPointer - 1 - t + vhSize + vhSize)
+			float[] a = stepDetecWindow[(vhPointer - 1 - t + vhSize + vhSize)
 					% vhSize];
-			float[] b = stepDetectionWindow[(vhPointer - 1 + vhSize) % vhSize];
+			float[] b = stepDetecWindow[(vhPointer - 1 + vhSize) % vhSize];
 
 			if (a != null) {
 				double check = a[2] - b[2];
+				// System.out.println("a[2]=" + a[2]);
+				// System.out.println("b[2]=" + b[2]);
+				// System.out.println("check=" + check);
 				if (check >= minStepPeakSize) {
 					Log.i(LOG_TAG, "Detected step with t = " + t
 							+ ", peakSize = " + minStepPeakSize + " < " + check);
@@ -147,6 +153,8 @@ public class StepManager implements SensorEventListener {
 			long t = System.currentTimeMillis();
 			if (t - last_step_ms > step_timeout_ms && checkForStep()) {
 
+				System.out.println("Step detected");
+
 				// ############ ACTION ! ##########
 				// notify listeners
 
@@ -176,8 +184,6 @@ public class StepManager implements SensorEventListener {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 
-		
-		
 		switch (event.sensor.getType()) {
 		case Sensor.TYPE_ACCELEROMETER:
 			gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
@@ -187,11 +193,7 @@ public class StepManager implements SensorEventListener {
 			last_acc_event[0] = event.values[0] - gravity[0];
 			last_acc_event[1] = event.values[1] - gravity[1];
 			last_acc_event[2] = event.values[2] - gravity[2];
-			
-			System.out.println("last_acc_event[0]="+last_acc_event[0]);
-			System.out.println("last_acc_event[1]="+last_acc_event[1]);
-			System.out.println("last_acc_event[2]="+last_acc_event[2]);
-			
+
 			break;
 
 		case Sensor.TYPE_ORIENTATION:
