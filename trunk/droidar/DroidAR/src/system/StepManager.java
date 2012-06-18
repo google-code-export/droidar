@@ -18,7 +18,7 @@ public class StepManager implements SensorEventListener {
 	private LinkedList<OnStepListener> listeners = new LinkedList<OnStepListener>();
 
 	private int step_timeout_ms = 666;
-	private double stepPeak = 0.8;
+	private double minStepPeakSize = 0.8;
 	private double step_length_in_m = 0.6;
 
 	private Handler handler = new Handler();
@@ -43,25 +43,25 @@ public class StepManager implements SensorEventListener {
 	public void registerSensors(Context context) {
 		// register acceleraion sensor
 
-		sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+		sensorManager = (SensorManager) context
+				.getSystemService(Context.SENSOR_SERVICE);
 
-		Sensor magnetSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-		sensorManager.registerListener(this, magnetSensor, SensorManager.SENSOR_DELAY_GAME);
-		Sensor accelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		sensorManager.registerListener(this, accelSensor, SensorManager.SENSOR_DELAY_GAME);
+		Sensor magnetSensor = sensorManager
+				.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+		sensorManager.registerListener(this, magnetSensor,
+				SensorManager.SENSOR_DELAY_GAME);
+		Sensor accelSensor = sensorManager
+				.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		sensorManager.registerListener(this, accelSensor,
+				SensorManager.SENSOR_DELAY_GAME);
 
 	}
 
 	public void start() {
-		if (!handler_is_initialized) {
-			handlerStepDetection.run();
-			handler_is_initialized = true;
-			handler_is_running = true;
-		} else {
-			handler.removeCallbacks(handlerStepDetection);
-			handler.postDelayed(handlerStepDetection, handler_delay_millis);
-			handler_is_running = true;
-		}
+		handler_is_running = true;
+		handler.removeCallbacks(handlerStepDetection);
+		handler.postDelayed(handlerStepDetection, handler_delay_millis);
+
 	}
 
 	public void stop() {
@@ -82,23 +82,27 @@ public class StepManager implements SensorEventListener {
 	}
 
 	private void addSensorData(float[] value) {
+		
 		stepDetectionWindow[vhPointer % vhSize] = value;
 		vhPointer++;
 		vhPointer = vhPointer % vhSize;
 	}
 
-	private boolean checkForStep(double peakSize) {
+	private boolean checkForStep() {
 		// Add value to values_history
 
 		int lookahead = 5;
-
 		for (int t = 1; t <= lookahead; t++) {
-			// catch nullpointer exception at the beginning
-			if (stepDetectionWindow[(vhPointer - 1 - t + vhSize + vhSize) % vhSize] != null) {
-				double check = stepDetectionWindow[(vhPointer - 1 - t + vhSize + vhSize) % vhSize][2] - stepDetectionWindow[(vhPointer - 1 + vhSize) % vhSize][2];
-				if (check >= peakSize) {
-					// Log.i("JNR_LOCMOV", "Detected step with t = " + t
-					// + ", peakSize = " + peakSize + " < " + check);
+
+			float[] a = stepDetectionWindow[(vhPointer - 1 - t + vhSize + vhSize)
+					% vhSize];
+			float[] b = stepDetectionWindow[(vhPointer - 1 + vhSize) % vhSize];
+
+			if (a != null) {
+				double check = a[2] - b[2];
+				if (check >= minStepPeakSize) {
+					Log.i(LOG_TAG, "Detected step with t = " + t
+							+ ", peakSize = " + minStepPeakSize + " < " + check);
 					return true;
 				}
 			}
@@ -114,8 +118,12 @@ public class StepManager implements SensorEventListener {
 		double lat1 = Math.toRadians(l.getLatitude());
 		double lon1 = Math.toRadians(l.getLongitude());
 		double dr = d / R;
-		double lat2 = Math.asin(Math.sin(lat1) * Math.cos(dr) + Math.cos(lat1) * Math.sin(dr) * Math.cos(bearing));
-		double lon2 = lon1 + Math.atan2(Math.sin(bearing) * Math.sin(d / R) * Math.cos(lat1), Math.cos(d / R) - Math.sin(lat1) * Math.sin(lat2));
+		double lat2 = Math.asin(Math.sin(lat1) * Math.cos(dr) + Math.cos(lat1)
+				* Math.sin(dr) * Math.cos(bearing));
+		double lon2 = lon1
+				+ Math.atan2(
+						Math.sin(bearing) * Math.sin(d / R) * Math.cos(lat1),
+						Math.cos(d / R) - Math.sin(lat1) * Math.sin(lat2));
 
 		Location ret = new Location("LOCMOV");
 		ret.setLatitude(Math.toDegrees(lat2));
@@ -123,8 +131,9 @@ public class StepManager implements SensorEventListener {
 		ret.setAccuracy((float) (2.0f * d));
 		ret.setAltitude(0);
 		ret.setTime(System.currentTimeMillis());
-		Log.i("JNR_LOCMOV", "From " + l.getLatitude() + "/" + l.getLongitude() + " to " + ret.getLatitude() + "/" + ret.getLongitude() + " using " + d + "m ("
-				+ bearing + ")");
+		Log.i("JNR_LOCMOV", "From " + l.getLatitude() + "/" + l.getLongitude()
+				+ " to " + ret.getLatitude() + "/" + ret.getLongitude()
+				+ " using " + d + "m (" + bearing + ")");
 
 		return ret;
 	}
@@ -134,20 +143,17 @@ public class StepManager implements SensorEventListener {
 		public void run() {
 			// if start is called twice: we have "two" threads, i.e clean this
 			handler.removeCallbacks(handlerStepDetection);
-
 			addSensorData(last_acc_event);
-
 			long t = System.currentTimeMillis();
-
-			if (checkForStep(stepPeak) && last_step_ms > step_timeout_ms) {
+			if (t - last_step_ms > step_timeout_ms && checkForStep()) {
 
 				// ############ ACTION ! ##########
 				// notify listeners
 
-				for(OnStepListener l: listeners){
-					l.onStep(orientation,step_length_in_m);
+				for (OnStepListener l : listeners) {
+					l.onStep(orientation, step_length_in_m);
 				}
-				
+
 				last_step_ms = t;
 			}
 
@@ -161,7 +167,7 @@ public class StepManager implements SensorEventListener {
 
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		
+
 	}
 
 	final float alpha = 0.8f;
@@ -169,6 +175,8 @@ public class StepManager implements SensorEventListener {
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
+
+		
 		
 		switch (event.sensor.getType()) {
 		case Sensor.TYPE_ACCELEROMETER:
@@ -179,6 +187,11 @@ public class StepManager implements SensorEventListener {
 			last_acc_event[0] = event.values[0] - gravity[0];
 			last_acc_event[1] = event.values[1] - gravity[1];
 			last_acc_event[2] = event.values[2] - gravity[2];
+			
+			System.out.println("last_acc_event[0]="+last_acc_event[0]);
+			System.out.println("last_acc_event[1]="+last_acc_event[1]);
+			System.out.println("last_acc_event[2]="+last_acc_event[2]);
+			
 			break;
 
 		case Sensor.TYPE_ORIENTATION:
