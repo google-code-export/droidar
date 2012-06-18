@@ -19,7 +19,7 @@ public class StepManager implements SensorEventListener {
 
 	private SensorManager sensorManager;
 
-	private LinkedList<OnStepListener> listeners = new LinkedList<OnStepListener>();
+	private LinkedList<OnStepListener> listeners;
 
 	private int step_timeout_ms = 666;
 	private double minStepPeakSize = 0.8;
@@ -29,13 +29,13 @@ public class StepManager implements SensorEventListener {
 	private long handler_delay_millis = 1000 / 30;
 	boolean handler_is_running = false;
 
-	private float[] last_acc_event = { 0f, 0f, 0f };
+	private float last_acc_event = 0f;
 	private long last_step_ms;
 	private float orientation = 0.0f;
 	private static final int vhSize = 6;
 
 	private static final String LOG_TAG = "StepManager";
-	private float[][] stepDetecWindow = new float[vhSize][];
+	private float[] stepDetecWindow = new float[vhSize];
 	private int vhPointer = 0;
 
 	public interface OnStepListener {
@@ -43,7 +43,7 @@ public class StepManager implements SensorEventListener {
 		public void onStep(double bearing, double steplength);
 	}
 
-	public void registerSensors(Context context) {
+	private void registerSensors(Context context) {
 		// register acceleraion sensor
 
 		sensorManager = (SensorManager) context
@@ -60,65 +60,76 @@ public class StepManager implements SensorEventListener {
 
 	}
 
-	public void start() {
+	private void start() {
 		handler_is_running = true;
 		handler.removeCallbacks(handlerStepDetection);
 		handler.postDelayed(handlerStepDetection, handler_delay_millis);
 
 	}
 
-	public void stop() {
+	private void stop() {
 		handler.removeCallbacks(handlerStepDetection);
 		handler_is_running = false;
 	}
 
-	public void unregisterSensors() {
+	private void unregisterSensors() {
 		sensorManager.unregisterListener(this);
 	}
 
-	public void registerStepListener(OnStepListener l) {
+	public void registerStepListener(Context context, OnStepListener l) {
+		if (listeners == null) {
+			listeners = new LinkedList<OnStepListener>();
+			registerSensors(context);
+			start();
+		}
 		listeners.add(l);
 	}
 
 	public void unRegisterStepListener(OnStepListener l) {
 		listeners.remove(l);
+		if (listeners.isEmpty()) {
+			stop();
+			unregisterSensors();
+			listeners = null;
+		}
 	}
 
-	private void addSensorData(float[] value) {
-
-		stepDetecWindow[vhPointer % vhSize] = value.clone();
+	private void addCurrentSensorData() {
+		stepDetecWindow[vhPointer % vhSize] = last_acc_event;
 		vhPointer++;
 		vhPointer = vhPointer % vhSize;
 	}
 
-	private boolean checkForStep() {
+	private boolean checkIfStepHappend() {
 		// Add value to values_history
-
 		int lookahead = 5;
 		for (int t = 1; t <= lookahead; t++) {
-
-			float[] a = stepDetecWindow[(vhPointer - 1 - t + vhSize + vhSize)
-					% vhSize];
-			float[] b = stepDetecWindow[(vhPointer - 1 + vhSize) % vhSize];
-
-			if (a != null) {
-				double check = a[2] - b[2];
-				// System.out.println("a[2]=" + a[2]);
-				// System.out.println("b[2]=" + b[2]);
-				// System.out.println("check=" + check);
-				if (check >= minStepPeakSize) {
-					Log.i(LOG_TAG, "Detected step with t = " + t
-							+ ", peakSize = " + minStepPeakSize + " < " + check);
-					return true;
-				}
+			double check = stepDetecWindow[(vhPointer - 1 - t + vhSize + vhSize)
+					% vhSize]
+					- stepDetecWindow[(vhPointer - 1 + vhSize) % vhSize];
+			if (check >= minStepPeakSize) {
+				// Log.i(LOG_TAG, "Detected step with t = " + t +
+				// ", peakSize = "
+				// + minStepPeakSize + " < " + check);
+				return true;
 			}
+
 		}
 		return false;
 	}
 
 	// Handler code
 
-	private Location moveLocation(Location l, double d, double bearing) {
+	/**
+	 * Takes a location and updates its position according to the step
+	 * 
+	 * @param l
+	 * @param d
+	 * @param bearing
+	 * @return
+	 */
+	public static Location moveLocationOneStep(Location l, double d,
+			double bearing) {
 		bearing = Math.toRadians(bearing);
 		double R = 6378100; // m equatorial radius
 		double lat1 = Math.toRadians(l.getLatitude());
@@ -131,16 +142,12 @@ public class StepManager implements SensorEventListener {
 						Math.sin(bearing) * Math.sin(d / R) * Math.cos(lat1),
 						Math.cos(d / R) - Math.sin(lat1) * Math.sin(lat2));
 
-		Location ret = new Location("LOCMOV");
+		Location ret = l;// new Location("LOCMOV");
 		ret.setLatitude(Math.toDegrees(lat2));
 		ret.setLongitude(Math.toDegrees(lon2));
 		ret.setAccuracy((float) (2.0f * d));
 		ret.setAltitude(0);
 		ret.setTime(System.currentTimeMillis());
-		Log.i("JNR_LOCMOV", "From " + l.getLatitude() + "/" + l.getLongitude()
-				+ " to " + ret.getLatitude() + "/" + ret.getLongitude()
-				+ " using " + d + "m (" + bearing + ")");
-
 		return ret;
 	}
 
@@ -149,14 +156,11 @@ public class StepManager implements SensorEventListener {
 		public void run() {
 			// if start is called twice: we have "two" threads, i.e clean this
 			handler.removeCallbacks(handlerStepDetection);
-			addSensorData(last_acc_event);
+			addCurrentSensorData();
 			long t = System.currentTimeMillis();
-			if (t - last_step_ms > step_timeout_ms && checkForStep()) {
+			if (t - last_step_ms > step_timeout_ms && checkIfStepHappend()) {
 
 				System.out.println("Step detected");
-
-				// ############ ACTION ! ##########
-				// notify listeners
 
 				for (OnStepListener l : listeners) {
 					l.onStep(orientation, step_length_in_m);
@@ -190,9 +194,10 @@ public class StepManager implements SensorEventListener {
 			gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
 			gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
 
-			last_acc_event[0] = event.values[0] - gravity[0];
-			last_acc_event[1] = event.values[1] - gravity[1];
-			last_acc_event[2] = event.values[2] - gravity[2];
+			float x = event.values[0] - gravity[0];
+			float y = event.values[1] - gravity[1];
+			float z = event.values[2] - gravity[2];
+			last_acc_event = (float) Math.sqrt(x * x + y * y + z * z);
 
 			break;
 

@@ -101,8 +101,6 @@ public abstract class SimpleLocationManager {
 		}
 		if (stepListener != null) {
 			Log.i(LOG_TAG, "Pausing step updates!");
-			stepManager.stop();
-			stepManager.unregisterSensors();
 			stepManager.unRegisterStepListener(stepListener);
 			stepListener = null;
 			stepManager = null;
@@ -263,11 +261,7 @@ public abstract class SimpleLocationManager {
 			getLocationManager().requestLocationUpdates(provider,
 					minMsBeforUpdate, minDistForUpdate, gpslistener);
 		}
-		if (stepManager == null) {
-			stepManager = new StepManager();
-			stepManager.registerSensors(context);
-			stepManager.start();
-		}
+
 		if (stepListener == null) {
 			stepListener = new OnStepListener() {
 				@Override
@@ -277,7 +271,10 @@ public abstract class SimpleLocationManager {
 					Log.d(LOG_TAG, "    > distance=" + steplength);
 				}
 			};
-			stepManager.registerStepListener(stepListener);
+			if (stepManager == null) {
+				stepManager = new StepManager();
+			}
+			stepManager.registerStepListener(context, stepListener);
 			Log.i(LOG_TAG, "Step listener registered");
 		}
 	}
