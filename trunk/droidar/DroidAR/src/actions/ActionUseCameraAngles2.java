@@ -101,7 +101,9 @@ public abstract class ActionUseCameraAngles2 implements
 	 */
 	public void onRotationMatrixUpdated(float[] updatedRotationMatrix) {
 		SensorManager.getOrientation(updatedRotationMatrix, o);
-		onAnglesUpdated(o[1] * rad2deg, -o[2] * rad2deg, o[0] * rad2deg + 90);
+		float magnet = o[0] * rad2deg + 90;
+		if (magnet<0 )magnet+=360;
+		onAnglesUpdated(o[1] * rad2deg, -o[2] * rad2deg, magnet);
 	}
 
 	/**

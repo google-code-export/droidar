@@ -3,6 +3,7 @@ package system;
 import java.util.ArrayList;
 import java.util.List;
 
+import actions.ActionUseCameraAngles2;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -40,7 +41,7 @@ public class StepManager implements SensorEventListener {
 
 	public interface OnStepListener {
 
-		public void onStep(double bearing, double steplength);
+		public void onStep(double compassAngle, double steplength);
 	}
 
 	private void registerSensors(Context context) {
@@ -50,7 +51,7 @@ public class StepManager implements SensorEventListener {
 				.getSystemService(Context.SENSOR_SERVICE);
 
 		Sensor magnetSensor = sensorManager
-				.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+				.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 		sensorManager.registerListener(this, magnetSensor,
 				SensorManager.SENSOR_DELAY_GAME);
 		Sensor accelSensor = sensorManager
@@ -158,7 +159,8 @@ public class StepManager implements SensorEventListener {
 			handler.removeCallbacks(handlerStepDetection);
 			addCurrentSensorData();
 			long t = System.currentTimeMillis();
-			if (t - last_step_ms > MIN_TIME_BETWEEN_STEPS && checkIfStepHappend()) {
+			if (t - last_step_ms > MIN_TIME_BETWEEN_STEPS
+					&& checkIfStepHappend()) {
 				for (int i = 0; i < listeners.size(); i++) {
 					listeners.get(i).onStep(orientation, step_length_in_m);
 				}
@@ -179,26 +181,47 @@ public class StepManager implements SensorEventListener {
 	}
 
 	final float alpha = 0.8f;
-	float[] gravity = { .0f, .0f, .0f };
+	float[] bufferedAccel = { .0f, .0f, .0f };
+
+	final float magnetoalpha = 0.8f;
+	float[] bufferedMagneto = { .0f, .0f, .0f };
+
+	ActionUseCameraAngles2 compassAzimuthCalcer = new ActionUseCameraAngles2() {
+
+		@Override
+		public void onAnglesUpdated(float pitch, float roll,
+				float compassAzimuth) {
+			orientation = compassAzimuth;
+		}
+	};
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 
 		switch (event.sensor.getType()) {
 		case Sensor.TYPE_ACCELEROMETER:
-			gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
-			gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
-			gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
+			bufferedAccel[0] = alpha * bufferedAccel[0] + (1 - alpha)
+					* event.values[0];
+			bufferedAccel[1] = alpha * bufferedAccel[1] + (1 - alpha)
+					* event.values[1];
+			bufferedAccel[2] = alpha * bufferedAccel[2] + (1 - alpha)
+					* event.values[2];
 
-			float x = event.values[0] - gravity[0];
-			float y = event.values[1] - gravity[1];
-			float z = event.values[2] - gravity[2];
-			last_acc_event = z;//(float) Math.sqrt(x * x + y * y + z * z);
-
+			float x = event.values[0] - bufferedAccel[0];
+			float y = event.values[1] - bufferedAccel[1];
+			float z = event.values[2] - bufferedAccel[2];
+			last_acc_event =  (float) Math.sqrt(x * x + y * y + z * z);
+			compassAzimuthCalcer.onAccelChanged(bufferedAccel);
 			break;
 
-		case Sensor.TYPE_ORIENTATION:
-			orientation = event.values[0];
+		case Sensor.TYPE_MAGNETIC_FIELD:
+			bufferedMagneto[0] = magnetoalpha * bufferedMagneto[0]
+					+ (1 - magnetoalpha) * event.values[0];
+			bufferedMagneto[1] = magnetoalpha * bufferedMagneto[1]
+					+ (1 - magnetoalpha) * event.values[1];
+			bufferedMagneto[2] = magnetoalpha * bufferedMagneto[2]
+					+ (1 - magnetoalpha) * event.values[2];
+			compassAzimuthCalcer.onMagnetChanged(bufferedMagneto);
 			break;
 		}
 	}

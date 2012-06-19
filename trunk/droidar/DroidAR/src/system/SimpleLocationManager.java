@@ -17,8 +17,8 @@ public abstract class SimpleLocationManager {
 
 	private static final String LOG_TAG = "SimpleLocationManager";
 	private static final long MIN_MS_BEFOR_UPDATE = 200;
-	private static final float MIN_DIST_FOR_UPDATE = 0.5f;
-	protected static final int NUMBER_OF_STEPS_IN_SAME_DIRECTION = 2;
+	private static final float MIN_DIST_FOR_UPDATE = 0f;
+	protected static final int NUMBER_OF_STEPS_IN_SAME_DIRECTION = 4;
 	/**
 	 * This is needed to use step detection only if the accuracy from the other
 	 * location providers is not to bad
@@ -270,8 +270,10 @@ public abstract class SimpleLocationManager {
 
 		if (stepListener == null) {
 			stepListener = new OnStepListener() {
+
 				@Override
 				public void onStep(double compassAngle, double steplength) {
+
 					Log.d(LOG_TAG, "Step detected");
 					Log.d(LOG_TAG, "    > compassAngle=" + compassAngle);
 					Log.d(LOG_TAG, "    > distance=" + steplength);
@@ -303,6 +305,10 @@ public abstract class SimpleLocationManager {
 		}
 	}
 
+	public StepManager getStepManager() {
+		return stepManager;
+	}
+	
 	public abstract void onLocationEventFromSteps(Location location,
 			ArrayList<LocationListener> listenersToInform);
 
