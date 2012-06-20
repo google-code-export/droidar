@@ -23,8 +23,8 @@ public class StepManager implements SensorEventListener {
 	private List<OnStepListener> listeners;
 
 	private int minTimeBetweenSteps = 866;
-	private double minStepPeakSize = 1.9;
-	private double stepLengthInMeter = 0.6;
+	private double minStepPeakSize = 0.9;
+	private double stepLengthInMeter = 0.9;
 
 	private Handler handler = new Handler();
 	private long handler_delay_millis = 1000 / 30;
