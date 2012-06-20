@@ -34,7 +34,7 @@ public class AccuracyTestsSetup extends DefaultARSetup {
 
 	private GeoGraph measureData = new GeoGraph(false);
 	private GeoGraph pins = new GeoGraph(false);
-	
+
 	private ViewPosCalcerComp viewPosCalcer;
 	private MoveComp moveComp;
 	private Obj selectedObj;
@@ -48,8 +48,7 @@ public class AccuracyTestsSetup extends DefaultARSetup {
 
 		world.add(pins);
 		world.add(measureData);
-		
-		
+
 		viewPosCalcer = new ViewPosCalcerComp(camera, 150, 0.1f) {
 			@Override
 			public void onPositionUpdate(worldData.Updateable parent,
@@ -64,7 +63,7 @@ public class AccuracyTestsSetup extends DefaultARSetup {
 			}
 		};
 		moveComp = new MoveComp(4);
-		
+
 	}
 
 	private Obj newObject() {
@@ -72,7 +71,7 @@ public class AccuracyTestsSetup extends DefaultARSetup {
 		Color c = Color.getRandomRGBColor();
 		c.alpha = 0.7f;
 		MeshComponent diamond = GLFactory.getInstance().newDiamond(c);
-		diamond.setScale(new Vec(0.4f,0.4f,0.4f));
+		diamond.setScale(new Vec(0.4f, 0.4f, 0.4f));
 		obj.setComp(diamond);
 		setComps(obj);
 		diamond.setOnClickCommand(new Command() {
@@ -95,7 +94,7 @@ public class AccuracyTestsSetup extends DefaultARSetup {
 		obj.setComp(moveComp);
 		selectedObj = obj;
 	}
-	
+
 	@Override
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity activity) {
 
@@ -194,7 +193,7 @@ public class AccuracyTestsSetup extends DefaultARSetup {
 			}
 
 		}, "Place next");
-		
+
 		guiSetup.addButtonToBottomView(new Command() {
 
 			@Override
