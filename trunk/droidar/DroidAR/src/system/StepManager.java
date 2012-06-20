@@ -22,9 +22,9 @@ public class StepManager implements SensorEventListener {
 
 	private List<OnStepListener> listeners;
 
-	private int MIN_TIME_BETWEEN_STEPS = 866;
+	private int minTimeBetweenSteps = 866;
 	private double minStepPeakSize = 1.9;
-	private double step_length_in_m = 0.6;
+	private double stepLengthInMeter = 0.6;
 
 	private Handler handler = new Handler();
 	private long handler_delay_millis = 1000 / 30;
@@ -159,10 +159,9 @@ public class StepManager implements SensorEventListener {
 			handler.removeCallbacks(handlerStepDetection);
 			addCurrentSensorData();
 			long t = System.currentTimeMillis();
-			if (t - last_step_ms > MIN_TIME_BETWEEN_STEPS
-					&& checkIfStepHappend()) {
+			if (t - last_step_ms > minTimeBetweenSteps && checkIfStepHappend()) {
 				for (int i = 0; i < listeners.size(); i++) {
-					listeners.get(i).onStep(orientation, step_length_in_m);
+					listeners.get(i).onStep(orientation, stepLengthInMeter);
 				}
 				last_step_ms = t;
 			}
@@ -210,7 +209,7 @@ public class StepManager implements SensorEventListener {
 			float x = event.values[0] - bufferedAccel[0];
 			float y = event.values[1] - bufferedAccel[1];
 			float z = event.values[2] - bufferedAccel[2];
-			last_acc_event =  (float) Math.sqrt(x * x + y * y + z * z);
+			last_acc_event = (float) Math.sqrt(x * x + y * y + z * z);
 			compassAzimuthCalcer.onAccelChanged(bufferedAccel);
 			break;
 
@@ -224,6 +223,30 @@ public class StepManager implements SensorEventListener {
 			compassAzimuthCalcer.onMagnetChanged(bufferedMagneto);
 			break;
 		}
+	}
+
+	public void setMinTimeBetweenSteps(int minTimeBetweenSteps) {
+		this.minTimeBetweenSteps = minTimeBetweenSteps;
+	}
+
+	public void setMinStepPeakSize(double minStepPeakSize) {
+		this.minStepPeakSize = minStepPeakSize;
+	}
+
+	public void setStepLengthInMeter(double stepLengthInMeter) {
+		this.stepLengthInMeter = stepLengthInMeter;
+	}
+
+	public int getMinTimeBetweenSteps() {
+		return minTimeBetweenSteps;
+	}
+
+	public double getMinStepPeakSize() {
+		return minStepPeakSize;
+	}
+
+	public double getStepLengthInMeter() {
+		return stepLengthInMeter;
 	}
 
 }
