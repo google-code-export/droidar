@@ -21,7 +21,7 @@ public class StepManager implements SensorEventListener {
 	private SensorManager sensorManager;
 
 	private List<OnStepListener> listeners;
-
+ 
 	private int minTimeBetweenSteps = 866;
 	private double minStepPeakSize = 0.9;
 	private double stepLengthInMeter = 0.9;
