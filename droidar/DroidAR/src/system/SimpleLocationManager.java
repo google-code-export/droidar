@@ -18,12 +18,12 @@ public abstract class SimpleLocationManager {
 	private static final String LOG_TAG = "SimpleLocationManager";
 	private static final long MIN_MS_BEFOR_UPDATE = 200;
 	private static final float MIN_DIST_FOR_UPDATE = 0f;
-	protected static final int NUMBER_OF_STEPS_IN_SAME_DIRECTION = 4;
+	private static int numberOfSimulatedStepsInSameDirection = 4;
 	/**
 	 * This is needed to use step detection only if the accuracy from the other
 	 * location providers is not to bad
 	 */
-	protected static final float MIN_AVV_ACCURACY = 200;
+	private static float minimumAverageAccuracy = 200;
 
 	private static SimpleLocationManager instance;
 
@@ -35,6 +35,23 @@ public abstract class SimpleLocationManager {
 
 	public SimpleLocationManager(Context context) {
 		this.context = context;
+	}
+
+	public static float getMinimumAverageAccuracy() {
+		return minimumAverageAccuracy;
+	}
+
+	public static int getNumberOfSimulatedStepsInSameDirection() {
+		return numberOfSimulatedStepsInSameDirection;
+	}
+
+	public static void setMinimumAverageAccuracy(float minimumAverageAccuracy) {
+		SimpleLocationManager.minimumAverageAccuracy = minimumAverageAccuracy;
+	}
+
+	public static void setNumberOfSimulatedStepsInSameDirection(
+			int numberOfSimulatedStepsInSameDirection) {
+		SimpleLocationManager.numberOfSimulatedStepsInSameDirection = numberOfSimulatedStepsInSameDirection;
 	}
 
 	public static SimpleLocationManager getInstance(Context context) {
@@ -285,8 +302,8 @@ public abstract class SimpleLocationManager {
 										+ location.getAccuracy());
 
 					if (location != null) {
-						if (location.getAccuracy() < MIN_AVV_ACCURACY) {
-							for (int i = 0; i < NUMBER_OF_STEPS_IN_SAME_DIRECTION; i++) {
+						if (location.getAccuracy() < minimumAverageAccuracy) {
+							for (int i = 0; i < numberOfSimulatedStepsInSameDirection; i++) {
 								location = StepManager
 										.newLocationOneStepFurther(location,
 												steplength, compassAngle);
