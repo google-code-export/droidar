@@ -28,6 +28,8 @@ public class ConcreteSimpleLocationManager extends SimpleLocationManager {
 
 	private float mimProb = 0.5f; // TODO
 
+	private Location lastStepPos;
+
 	public ConcreteSimpleLocationManager(Context context) {
 		super(context);
 	}
@@ -56,7 +58,12 @@ public class ConcreteSimpleLocationManager extends SimpleLocationManager {
 	@Override
 	public void onLocationEventFromSteps(Location location,
 			ArrayList<LocationListener> listenersToInform) {
+		lastStepPos=location;
 		onLocationEventFromGPS(location, listenersToInform);
+	}
+	
+	public Location getLastStepPos() {
+		return lastStepPos;
 	}
 	
 	private boolean calcFromLastPositions(Location target, Location newLocation) {

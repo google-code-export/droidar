@@ -23,7 +23,7 @@ public abstract class SimpleLocationManager {
 	 * This is needed to use step detection only if the accuracy from the other
 	 * location providers is not to bad
 	 */
-	protected static final float MIN_AVV_ACCURACY = 30;
+	protected static final float MIN_AVV_ACCURACY = 200;
 
 	private static SimpleLocationManager instance;
 
@@ -284,12 +284,17 @@ public abstract class SimpleLocationManager {
 								"location.getAccuracy()="
 										+ location.getAccuracy());
 
-					if (location != null
-							&& location.getAccuracy() < MIN_AVV_ACCURACY) {
-						for (int i = 0; i < NUMBER_OF_STEPS_IN_SAME_DIRECTION; i++) {
-							location = StepManager.newLocationOneStepFurther(
-									location, steplength, compassAngle);
-							onLocationEventFromSteps(location, myListeners);
+					if (location != null) {
+						if (location.getAccuracy() < MIN_AVV_ACCURACY) {
+							for (int i = 0; i < NUMBER_OF_STEPS_IN_SAME_DIRECTION; i++) {
+								location = StepManager
+										.newLocationOneStepFurther(location,
+												steplength, compassAngle);
+								onLocationEventFromSteps(location, myListeners);
+							}
+						} else {
+							Log.w(LOG_TAG,
+									"Location accuracy was to low, wont use step");
 						}
 					} else {
 						Log.w(LOG_TAG,
@@ -308,7 +313,7 @@ public abstract class SimpleLocationManager {
 	public StepManager getStepManager() {
 		return stepManager;
 	}
-	
+
 	public abstract void onLocationEventFromSteps(Location location,
 			ArrayList<LocationListener> listenersToInform);
 
