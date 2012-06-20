@@ -13,6 +13,7 @@ import system.ConcreteSimpleLocationManager;
 import system.DefaultARSetup;
 import system.SimpleLocationManager;
 import system.StepManager.OnStepListener;
+import system.StepSettingsControllerView;
 import util.IO;
 import util.LimitedQueue;
 import util.Vec;
@@ -127,6 +128,16 @@ public class AccuracyTestsSetup extends DefaultARSetup {
 				return true;
 			}
 		}, "Show/Hide \n map");
+
+		guiSetup.addItemToOptionsMenu(new Command() {
+
+			@Override
+			public boolean execute() {
+				gui.v2.simpleUi.SimpleUI.showInfoDialog(getActivity(), "Save",
+						new StepSettingsControllerView(getActivity()));
+				return true;
+			}
+		}, "Step Settings");
 
 		guiSetup.addButtonToBottomView(new Command() {
 
