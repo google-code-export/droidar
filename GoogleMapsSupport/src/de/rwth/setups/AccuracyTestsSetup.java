@@ -9,6 +9,7 @@ import gl.GL1Renderer;
 import gl.GLFactory;
 import gl.scenegraph.MeshComponent;
 import gui.GuiSetup;
+import gui.InfoScreenSettings;
 import system.ConcreteSimpleLocationManager;
 import system.DefaultARSetup;
 import system.SimpleLocationManager;
@@ -96,6 +97,17 @@ public class AccuracyTestsSetup extends DefaultARSetup {
 		selectedObj = obj;
 	}
 
+	@Override
+	public void _f_addInfoScreen(InfoScreenSettings infoScreenData) {
+		
+		infoScreenData.addText("This setup visualizes the position calculations");
+		infoScreenData.addText("You can place objects around you with the 'Place next' button");
+		infoScreenData.addText("Press menu to change the step settings");
+		infoScreenData.addText("The blue dots which appear automatically are the predicted positions you will go");
+		infoScreenData.addText("To display the GPS measurements press the 'show measurements' button");
+		
+	}
+	
 	@Override
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity activity) {
 
