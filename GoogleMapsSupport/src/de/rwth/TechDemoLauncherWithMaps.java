@@ -19,25 +19,19 @@ public class TechDemoLauncherWithMaps extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.demoselector);
-		showSetup("Accuracy Tests Setup", new AccuracyTestsSetup());
-		showSetup("AR Navigator", new ARNavigatorSetup());
-
-		// showSetup("With calibration dialogs", new CalibratorSetup());
-
-		// showSetup("Animation Demo", new DebugSetup());
-		// showSetup("Collecting Items Demo", new CollectItemsSetup());
-		// showSetup("Placing objects Demo", new PlaceObjectsSetup());
-		// showSetup("Sensor Processing Demo", new SensorTestSetup());
-		// showSetup("Position tests", new PositionTestsSetup());
-
-		// LinearLayout l = ((LinearLayout)
-		// findViewById(R.id.demoScreenLinView));
-
-		// showSetup("Indoor Navigator (Needs special localization service!)",
-		// new IndoorSetup());
+		
 
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		((LinearLayout) findViewById(R.id.demoScreenLinView)).removeAllViews();
+		showSetup("Accuracy Tests Setup", new AccuracyTestsSetup());
+		showSetup("AR Navigator", new ARNavigatorSetup());
+		
+	}
+	
 	private void showSetup(String string, final Setup aSetupInstance) {
 		((LinearLayout) findViewById(R.id.demoScreenLinView))
 				.addView(new SimpleButton(string) {
