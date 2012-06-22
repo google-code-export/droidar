@@ -1,15 +1,34 @@
 package system;
 
-import android.content.Context;
-import android.view.View;
+import gui.v2.simpleUi.M_Checkbox;
 import gui.v2.simpleUi.M_Container;
 import gui.v2.simpleUi.M_Double;
 import gui.v2.simpleUi.M_Integer;
-import gui.v2.simpleUi.ModifierInterface;
+import android.content.Context;
 
 public class StepSettingsControllerView extends M_Container {
 
 	public StepSettingsControllerView(Context context) {
+
+		this.add(new M_Checkbox() {
+
+			@Override
+			public boolean save(boolean newValue) {
+				SimpleLocationManager.setStepDetectionEnabled(newValue);
+				return true;
+			}
+
+			@Override
+			public boolean loadVar() {
+				return SimpleLocationManager.isStepDetectionEnabled();
+			}
+
+			@Override
+			public CharSequence getVarName() {
+				return "StepDetectionEnabled";
+			}
+		});
+
 		this.add(new M_Double() {
 
 			@Override

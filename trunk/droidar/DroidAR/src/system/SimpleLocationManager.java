@@ -18,6 +18,7 @@ public abstract class SimpleLocationManager {
 	private static final String LOG_TAG = "SimpleLocationManager";
 	private static final long MIN_MS_BEFOR_UPDATE = 200;
 	private static final float MIN_DIST_FOR_UPDATE = 0f;
+	private static boolean stepDetectionEnabled = true;
 	private static int numberOfSimulatedStepsInSameDirection = 4;
 	/**
 	 * This is needed to use step detection only if the accuracy from the other
@@ -43,6 +44,14 @@ public abstract class SimpleLocationManager {
 
 	public static int getNumberOfSimulatedStepsInSameDirection() {
 		return numberOfSimulatedStepsInSameDirection;
+	}
+
+	public static void setStepDetectionEnabled(boolean stepDetectionEnabled) {
+		SimpleLocationManager.stepDetectionEnabled = stepDetectionEnabled;
+	}
+
+	public static boolean isStepDetectionEnabled() {
+		return stepDetectionEnabled;
 	}
 
 	public static void setMinimumAverageAccuracy(float minimumAverageAccuracy) {
@@ -290,6 +299,10 @@ public abstract class SimpleLocationManager {
 
 				@Override
 				public void onStep(double compassAngle, double steplength) {
+
+					if (!stepDetectionEnabled) {
+						return;
+					}
 
 					Log.d(LOG_TAG, "Step detected");
 					Log.d(LOG_TAG, "    > compassAngle=" + compassAngle);
