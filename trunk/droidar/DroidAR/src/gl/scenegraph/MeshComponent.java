@@ -219,6 +219,9 @@ public abstract class MeshComponent implements RenderableEntity,
 			if (myPickColor != null) {
 				gl.glColor4f(myPickColor.red, myPickColor.green,
 						myPickColor.blue, myPickColor.alpha);
+			} else {
+				Log.d("Object Picker", "Object " + this
+						+ " had no picking color");
 			}
 		} else if (myColor != null) {
 			gl.glColor4f(myColor.red, myColor.green, myColor.blue,
