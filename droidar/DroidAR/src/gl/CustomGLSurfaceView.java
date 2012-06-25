@@ -7,6 +7,7 @@ import java.util.List;
 
 import listeners.eventManagerListeners.TouchMoveListener;
 import system.EventManager;
+import system.Setup;
 import system.TouchEventInterface;
 import util.Log;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.Surface;
 
 import commands.Command;
 
@@ -37,15 +39,18 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 
 	private static final String LOG_TAG = "CustomGLSurfaceView";
 
+	private float viewWidth = 320;
+
+	private float viewHeight = 320;
+
 	private List<TouchMoveListener> onTouchListeners;
 
 	private GestureDetector myGestureDetector;
 
-	public void addOnTouchMoveListener(TouchMoveListener onTouchListener) {
-		if (onTouchListeners == null)
-			this.onTouchListeners = new ArrayList<TouchMoveListener>();
-		this.onTouchListeners.add(onTouchListener);
-	}
+	private int startPosOnScreenWidth;
+	private int startPosOnScreenHeigth;
+
+	private boolean LANDSCAPE_MODE = true;
 
 	public CustomGLSurfaceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -63,6 +68,14 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 			setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
 		}
 
+		int screenOrientation = Setup.getScreenOrientation();
+		if (screenOrientation == Surface.ROTATION_90
+				|| screenOrientation == Surface.ROTATION_270) {
+			LANDSCAPE_MODE = true;
+		} else {
+			LANDSCAPE_MODE = false;
+		}
+
 		this.setFocusableInTouchMode(true);
 		myGestureDetector = new GestureDetector(context,
 				new CustomGestureListener(this));
@@ -73,6 +86,36 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 
 		// Use a surface format with an Alpha channel:
 		this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+	}
+
+	@Override
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		super.onSizeChanged(w, h, oldw, oldh);
+		int[] startPosOnScreen = { 0, 0 };
+		this.getLocationInWindow(startPosOnScreen);
+
+		if (LANDSCAPE_MODE) {
+			viewHeight = w;
+			viewWidth = h;
+			startPosOnScreenWidth = startPosOnScreen[1];
+			startPosOnScreenHeigth = startPosOnScreen[0];
+		} else {
+			viewHeight = h;
+			viewWidth = w;
+			startPosOnScreenWidth = startPosOnScreen[0];
+			startPosOnScreenHeigth = startPosOnScreen[1];
+		}
+		Log.i(LOG_TAG, "OpenGL view size:");
+		Log.i(LOG_TAG, "  > startPosOnScreenx=" + startPosOnScreenWidth);
+		Log.i(LOG_TAG, "  > startPosOnScreeny=" + startPosOnScreenHeigth);
+		Log.i(LOG_TAG, "  > viewHeight=" + viewHeight);
+		Log.i(LOG_TAG, "  > viewWidth=" + viewWidth);
+	}
+
+	public void addOnTouchMoveListener(TouchMoveListener onTouchListener) {
+		if (onTouchListeners == null)
+			this.onTouchListeners = new ArrayList<TouchMoveListener>();
+		this.onTouchListeners.add(onTouchListener);
 	}
 
 	@Override
@@ -123,19 +166,39 @@ public class CustomGLSurfaceView extends GLSurfaceView implements
 		return null;
 	}
 
+	private float getOpenGlY(float y) {
+		// first invert y values because the 0,0 point of the opengl view is
+		// upper left and the 0,0 point of the sensor event ist lower left
+		if (LANDSCAPE_MODE) {
+			Log.i(LOG_TAG, "y=" + (viewWidth - y));
+			return viewWidth - y;
+		} else {
+			Log.i(LOG_TAG, "y=" + (viewHeight - y));
+			return viewHeight - y;
+		}
+	}
+
+	private float getOpenGlX(float x) {
+		Log.i(LOG_TAG, "x=" + x);
+		return x;
+	}
+
 	@Override
 	public void onDoubleTap(MotionEvent e) {
-		ObjectPicker.getInstance().setDoubleClickPosition(e.getX(), e.getY());
+		ObjectPicker.getInstance().setDoubleClickPosition(getOpenGlX(e.getX()),
+				getOpenGlY(e.getY()));
 	}
 
 	@Override
 	public void onLongPress(MotionEvent e) {
-		ObjectPicker.getInstance().setLongClickPosition(e.getX(), e.getY());
+		ObjectPicker.getInstance().setLongClickPosition(getOpenGlX(e.getX()),
+				getOpenGlY(e.getY()));
 	}
 
 	@Override
 	public void onSingleTab(MotionEvent e) {
-		ObjectPicker.getInstance().setClickPosition(e.getX(), e.getY());
+		ObjectPicker.getInstance().setClickPosition(getOpenGlX(e.getX()),
+				getOpenGlY(e.getY()));
 	}
 
 	@Override

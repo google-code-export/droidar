@@ -199,9 +199,6 @@ public class ObjectPicker {
 	}
 
 	private void setClick(float x, float y) {
-		// first invert y values because the 0,0 point of the opengl view is
-		// upper left and the 0,0 point of the sensor event ist lower left
-		y = Setup.getScreenWidth() - y;
 		this.x = (int) x;
 		this.y = (int) y;
 		readyToDrawWithColor = true;

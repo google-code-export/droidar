@@ -72,13 +72,6 @@ public abstract class Setup {
 
 	private static final String LOG_TAG = "Setup";
 
-	/**
-	 * the default screen width value. it will be changed in a setup init-method
-	 * TODO very important might be the fact that the opengl view might be a
-	 * dynamical view inside a moving scollview or something..
-	 */
-	private static float screenWidth = 320;
-
 	public static boolean isOldDeviceWhereNothingWorksAsExpected;
 
 	public static boolean displaySetupStepLogging = true;
@@ -144,6 +137,10 @@ public abstract class Setup {
 	/**
 	 * Default initialization is {@link Surface#ROTATION_90}, use landscape on
 	 * default mode if the initialization does not work
+	 * 
+	 * @return {@link Surface#ROTATION_0} or {@link Surface#ROTATION_180} would
+	 *         mean portrait mode and 90 and 270 would meen landscape mode
+	 *         (should be the same on tablets and mobile devices
 	 */
 	public static int getScreenOrientation() {
 		if (screenOrientation == null) {
@@ -296,7 +293,7 @@ public abstract class Setup {
 	public SystemUpdater getSystemUpdater() {
 		return worldUpdater;
 	}
-	
+
 	/**
 	 * By overriding this (and not calling the super metzhod) the
 	 * {@link ErrorHandler} system provided by DroidAR will be deactivated (e.g.
@@ -448,9 +445,6 @@ public abstract class Setup {
 	}
 
 	private static void loadDeviceDependentSettings(Activity activity) {
-		screenWidth = activity.getWindowManager().getDefaultDisplay()
-				.getHeight();
-
 		if (Integer.parseInt(android.os.Build.VERSION.SDK) <= Build.VERSION_CODES.DONUT) {
 			/*
 			 * Here is the problem: OpenGL seems to have rounding errors on
@@ -869,8 +863,24 @@ public abstract class Setup {
 		return EventManager.getInstance().onKeyDown(keyCode, event);
 	}
 
-	public static float getScreenWidth() {
-		return screenWidth;
+	public float getScreenWidth() {
+		if (getScreenOrientation() == Surface.ROTATION_90
+				|| getScreenOrientation() == Surface.ROTATION_270)
+			return getActivity().getWindowManager().getDefaultDisplay()
+					.getHeight();
+		else
+			return getActivity().getWindowManager().getDefaultDisplay()
+					.getWidth();
+	}
+
+	public float getScreenHeigth() {
+		if (getScreenOrientation() == Surface.ROTATION_90
+				|| getScreenOrientation() == Surface.ROTATION_270)
+			return getActivity().getWindowManager().getDefaultDisplay()
+					.getWidth();
+		else
+			return getActivity().getWindowManager().getDefaultDisplay()
+					.getHeight();
 	}
 
 }
