@@ -11,8 +11,6 @@ import gl.textures.TexturedShape;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import de.rwth.R;
-
 import util.IO;
 import util.Log;
 import util.Vec;
@@ -597,9 +595,9 @@ public class GLFactory {
 	 * @param glCamera
 	 * @return an {@link GeoObj} which can be added to the {@link World} e.g.
 	 */
-	public GeoObj newIconFacingToCamera(GeoObj latitude,
-			MeshComponent longitude, int bitmap, Context uniqueBitmapName,
-			float heightInMeters, GLCamera glCamera) {
+	public GeoObj newIconFacingToCamera(double latitude, double longitude,
+			int bitmap, Context uniqueBitmapName, float heightInMeters,
+			GLCamera glCamera) {
 		MeshComponent triangleMesh = GLFactory.getInstance().newTexturedSquare(
 				uniqueBitmapName, bitmap, heightInMeters);
 		triangleMesh.addChild(new AnimationFaceToCamera(glCamera, 0.5f));
