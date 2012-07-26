@@ -596,7 +596,7 @@ public class GLFactory {
 	 * @return an {@link GeoObj} which can be added to the {@link World} e.g.
 	 */
 	public GeoObj newIconFacingToCamera(double latitude, double longitude,
-			int bitmap, Context uniqueBitmapName, float heightInMeters,
+			Bitmap bitmap, String uniqueBitmapName, float heightInMeters,
 			GLCamera glCamera) {
 		MeshComponent triangleMesh = GLFactory.getInstance().newTexturedSquare(
 				uniqueBitmapName, bitmap, heightInMeters);
