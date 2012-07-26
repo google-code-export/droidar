@@ -32,7 +32,7 @@ import android.widget.LinearLayout;
  * 
  */
 @Deprecated
-public class SimpleUI extends Activity {
+public class SimpleUIv1 extends Activity {
 
 	public static final int DEFAULT_PADDING = 4;
 
@@ -144,7 +144,7 @@ public class SimpleUI extends Activity {
 
 	public static void show(Context context, EditItem itemToDisplay,
 			Object optionalMessage, UIConfig config) {
-		Intent intent = new Intent(context, SimpleUI.class);
+		Intent intent = new Intent(context, SimpleUIv1.class);
 		if (itemToDisplay != null) {
 			String key = addTransfairObject(context, itemToDisplay,
 					optionalMessage, config);

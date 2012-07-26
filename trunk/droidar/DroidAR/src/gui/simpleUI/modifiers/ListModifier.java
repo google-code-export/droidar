@@ -2,7 +2,7 @@ package gui.simpleUI.modifiers;
 
 import gui.simpleUI.AbstractModifier;
 import gui.simpleUI.ModifierInterface;
-import gui.simpleUI.SimpleUI;
+import gui.simpleUI.SimpleUIv1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,12 +119,12 @@ public abstract class ListModifier extends AbstractModifier {
 		listView.addView(scrollContainer);
 		listView.addView(myListView);
 
-		listView.setPadding(SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING,
-				SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING);
-		listControls.setPadding(SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING,
-				SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING);
-		myListView.setPadding(SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING,
-				SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING);
+		listView.setPadding(SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING,
+				SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING);
+		listControls.setPadding(SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING,
+				SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING);
+		myListView.setPadding(SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING,
+				SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING);
 		if (getTheme() != null) {
 			getTheme().applyOuter1(listView);
 			getTheme().applyOuter2(listControls);

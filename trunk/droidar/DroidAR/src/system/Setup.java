@@ -15,7 +15,7 @@ import gui.InfoScreen;
 import gui.InfoScreenSettings;
 import gui.simpleUI.EditItem;
 import gui.simpleUI.ModifierGroup;
-import gui.simpleUI.SimpleUI;
+import gui.simpleUI.SimpleUIv1;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -620,7 +620,7 @@ public abstract class Setup {
 
 			@Override
 			public boolean execute() {
-				SimpleUI.showInfoScreen(currentActivity, new EditItem() {
+				SimpleUIv1.showInfoScreen(currentActivity, new EditItem() {
 					@Override
 					public void customizeScreen(ModifierGroup group,
 							Object message) {

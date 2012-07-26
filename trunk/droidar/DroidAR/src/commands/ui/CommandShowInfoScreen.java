@@ -1,7 +1,7 @@
 package commands.ui;
 
 import gui.simpleUI.EditItem;
-import gui.simpleUI.SimpleUI;
+import gui.simpleUI.SimpleUIv1;
 import android.app.Activity;
 
 import commands.Command;
@@ -26,7 +26,7 @@ public class CommandShowInfoScreen extends Command {
 
 	@Override
 	public boolean execute() {
-		SimpleUI.showInfoScreen(myCurrentActivity, myObjectToDisplay,
+		SimpleUIv1.showInfoScreen(myCurrentActivity, myObjectToDisplay,
 				myOptionalMessage);
 		return true;
 	}

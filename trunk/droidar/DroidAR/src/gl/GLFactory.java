@@ -11,11 +11,14 @@ import gl.textures.TexturedShape;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import de.rwth.R;
+
 import util.IO;
 import util.Log;
 import util.Vec;
 import worldData.Obj;
 import worldData.Visitor;
+import worldData.World;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -119,13 +122,14 @@ public class GLFactory {
 		return newTexturedSquare(bitmapName, bitmap, 1);
 	}
 
-	public MeshComponent newTexturedSquare(Context c, int iconId, float size) {
+	public MeshComponent newTexturedSquare(Context c, int iconId,
+			float heightInMeters) {
 		return newTexturedSquare("" + iconId, IO.loadBitmapFromId(c, iconId),
-				size);
+				heightInMeters);
 	}
 
 	public MeshComponent newTexturedSquare(String bitmapName, Bitmap bitmap,
-			float size) {
+			float heightInMeters) {
 
 		if (bitmapName == null) {
 			Log.e(LOG_TAG,
@@ -140,10 +144,10 @@ public class GLFactory {
 
 		TexturedShape s = new TexturedShape(bitmapName, bitmap);
 		float f = (float) bitmap.getHeight() / (float) bitmap.getWidth();
-		float x = size / f;
+		float x = heightInMeters / f;
 
 		float w2 = -x / 2;
-		float h2 = -size / 2;
+		float h2 = -heightInMeters / 2;
 
 		Log.d(LOG_TAG, "Creating textured mesh for " + bitmapName);
 		Log.v(LOG_TAG, "   > bitmap.getHeight()=" + bitmap.getHeight());
@@ -580,4 +584,27 @@ public class GLFactory {
 		o.setComp(mesh);
 		return o;
 	}
+
+	/**
+	 * @param latitude
+	 * @param longitude
+	 * @param bitmap
+	 *            the loaded bitmap (e.g. via
+	 *            {@link IO#loadBitmapFromURL(String)}
+	 * @param uniqueBitmapName
+	 *            a unique bitmap name
+	 * @param heightInMeters
+	 * @param glCamera
+	 * @return an {@link GeoObj} which can be added to the {@link World} e.g.
+	 */
+	public GeoObj newIconFacingToCamera(GeoObj latitude,
+			MeshComponent longitude, int bitmap, Context uniqueBitmapName,
+			float heightInMeters, GLCamera glCamera) {
+		MeshComponent triangleMesh = GLFactory.getInstance().newTexturedSquare(
+				uniqueBitmapName, bitmap, heightInMeters);
+		triangleMesh.addChild(new AnimationFaceToCamera(glCamera, 0.5f));
+		GeoObj o = new GeoObj(latitude, longitude);
+		return o;
+	}
+
 }
