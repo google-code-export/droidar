@@ -19,7 +19,7 @@ import android.widget.Button;
  * < activity android:name="v2.simpleUi.SimpleUI" android:theme=
  * "@android:style/Theme.Translucent"/> <br>
  * <br>
- *  
+ * 
  * to your Manifest.xml file!
  * 
  * @author Simon Heinen
@@ -68,7 +68,12 @@ public class SimpleUI extends Activity {
 			 * The key to the object will be stored in the extras of the intent:
 			 */
 			intent.putExtra(TRANSFAIR_KEY_ID, key);
-			context.startActivity(intent);
+			if (context instanceof Activity) {
+				context.startActivity(intent);
+			} else {
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(intent);
+			}
 			return true;
 		}
 		return false;
