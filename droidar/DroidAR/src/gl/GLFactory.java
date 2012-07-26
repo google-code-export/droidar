@@ -602,6 +602,7 @@ public class GLFactory {
 				uniqueBitmapName, bitmap, heightInMeters);
 		triangleMesh.addChild(new AnimationFaceToCamera(glCamera, 0.5f));
 		GeoObj o = new GeoObj(latitude, longitude);
+		o.setComp(triangleMesh);
 		return o;
 	}
 
