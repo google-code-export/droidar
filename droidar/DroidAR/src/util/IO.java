@@ -106,21 +106,16 @@ public class IO {
 	}
 
 	/**
-	 * TODO test this method! and create a list of already loaded images and
-	 * save them in a database? no extra memory would be necessary!
-	 * 
 	 * @param url
-	 * @param maxImageSize
 	 * @return
 	 */
-	public static Bitmap loadBitmapFromURL(String url, int maxImageSize) {
+	public static Bitmap loadBitmapFromURL(String url) {
 
 		try {
 			HttpURLConnection connection = (HttpURLConnection) new URL(url)
 					.openConnection();
 			int length = connection.getContentLength();
-
-			if (length > -1 && length < maxImageSize) {
+			if (length > -1) {
 				BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
 				bitmapOptions.inPreferredConfig = Bitmap.Config.RGB_565;
 				return BitmapFactory.decodeStream(connection.getInputStream(),

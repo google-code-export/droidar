@@ -1,7 +1,7 @@
 package gui.simpleUI.modifiers;
 
 import gui.simpleUI.AbstractModifier;
-import gui.simpleUI.SimpleUI;
+import gui.simpleUI.SimpleUIv1;
 import gui.simpleUI.Theme;
 import android.content.Context;
 import android.view.View;
@@ -51,7 +51,7 @@ public class InfoText extends AbstractModifier {
 			e.setLayoutParams(p2);
 			e.setText(myText);
 			l.addView(e);
-			l.setPadding(SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING);
+			l.setPadding(SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING);
 
 			if (getTheme() != null) {
 				getTheme().applyOuter1(l);
@@ -64,7 +64,7 @@ public class InfoText extends AbstractModifier {
 			TextView t = new TextView(context);
 			t.setText(myText);
 			t.setGravity(myGravity);
-			t.setPadding(SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING);
+			t.setPadding(SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING);
 
 			if (getTheme() != null)
 				getTheme().applyNormal2(t);

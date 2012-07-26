@@ -1,7 +1,7 @@
 package gui.simpleUI.modifiers;
 
 import gui.simpleUI.AbstractModifier;
-import gui.simpleUI.SimpleUI;
+import gui.simpleUI.SimpleUIv1;
 
 import java.util.ArrayList;
 
@@ -29,7 +29,7 @@ public abstract class ImageModifier extends AbstractModifier {
 				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT, 1);
 
 		LinearLayout l = new LinearLayout(context);
-		l.setPadding(SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING);
+		l.setPadding(SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING);
 		l.setOrientation(LinearLayout.VERTICAL);
 
 		TextView t = new TextView(context);

@@ -93,7 +93,6 @@ public class MetaInfos implements EditItem {
 	/**
 	 * this defines the maximum size of an imaged downloaded from an URL
 	 */
-	private static final int MAX_URL_ICON_SIZE = 999999; // TODO find good value
 	protected static final String SHORT_DISCR_NAME = "Name";
 	protected static final String LONG_DISCR_NAME = "Desciption";
 	protected static final String COLOR_NAME = "ARGB Color";
@@ -181,7 +180,7 @@ public class MetaInfos implements EditItem {
 		}
 
 		if (myIconURL != null) {
-			myIcon = IO.loadBitmapFromURL(myIconURL, MAX_URL_ICON_SIZE);
+			myIcon = IO.loadBitmapFromURL(myIconURL);
 			return myIcon;
 		}
 

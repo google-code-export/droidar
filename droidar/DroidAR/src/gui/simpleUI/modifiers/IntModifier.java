@@ -1,7 +1,7 @@
 package gui.simpleUI.modifiers;
 
 import gui.simpleUI.AbstractModifier;
-import gui.simpleUI.SimpleUI;
+import gui.simpleUI.SimpleUIv1;
 import util.Log;
 import android.content.Context;
 import android.view.Gravity;
@@ -42,7 +42,7 @@ public abstract class IntModifier extends AbstractModifier {
 		e.setText("" + load());
 
 		l.addView(e);
-		l.setPadding(SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING, SimpleUI.DEFAULT_PADDING);
+		l.setPadding(SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING, SimpleUIv1.DEFAULT_PADDING);
 
 		if (getTheme() != null) {
 			getTheme().applyOuter1(l);

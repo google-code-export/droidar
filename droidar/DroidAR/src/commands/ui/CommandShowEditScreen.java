@@ -1,7 +1,7 @@
 package commands.ui;
 
 import gui.simpleUI.EditItem;
-import gui.simpleUI.SimpleUI;
+import gui.simpleUI.SimpleUIv1;
 import android.app.Activity;
 
 import commands.Command;
@@ -26,7 +26,7 @@ public class CommandShowEditScreen extends Command {
 
 	@Override
 	public boolean execute() {
-		SimpleUI.showEditScreen(myCurrentActivity, myObjectToEdit,
+		SimpleUIv1.showEditScreen(myCurrentActivity, myObjectToEdit,
 				myOptionalMessage);
 		return true;
 	}
