@@ -38,7 +38,15 @@ public class TextureManager implements HasDebugInformation {
 	private HashMap<String, Texture> myTextureMap;
 	private TexturReloader myReloader;
 
-	// TODO reuse of same texture not possible this way
+	/**
+	 * @param target
+	 *            The target mesh where the texture will be set to
+	 * @param bitmap
+	 *            The bitmap that should be used as the texture
+	 * @param textureName
+	 *            An unique name for the texture. Textures with the same name
+	 *            will have the same OpenGL textures!
+	 */
 	public void addTexture(TexturedRenderData target, Bitmap bitmap,
 			String textureName) {
 

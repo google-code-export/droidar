@@ -15,6 +15,14 @@ public class TexturedShape extends Shape {
 	 */
 	ArrayList<Vec> myTexturePositions = new ArrayList<Vec>();
 
+	/**
+	 * Please read
+	 * {@link TextureManager#addTexture(TexturedRenderData, Bitmap, String)} for
+	 * information about the parameters
+	 * 
+	 * @param textureName
+	 * @param texture
+	 */
 	public TexturedShape(String textureName, Bitmap texture) {
 		super(null);
 		myRenderData = new TexturedRenderData();
