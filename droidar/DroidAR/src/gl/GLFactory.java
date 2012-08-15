@@ -6,7 +6,9 @@ import gl.animations.AnimationRotate;
 import gl.scenegraph.MeshComponent;
 import gl.scenegraph.MultiColoredShape;
 import gl.scenegraph.Shape;
+import gl.textures.TextureManager;
 import gl.textures.Textured2dShape;
+import gl.textures.TexturedRenderData;
 import gl.textures.TexturedShape;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -113,6 +115,9 @@ public class GLFactory {
 	}
 
 	/**
+	 * see {@link GLFactory#newTexturedSquare(String, Bitmap, float)}
+	 * 
+	 * @param bitmapName
 	 * @param bitmap
 	 * @return A 1 x 1 meter square
 	 */
@@ -120,12 +125,37 @@ public class GLFactory {
 		return newTexturedSquare(bitmapName, bitmap, 1);
 	}
 
-	public MeshComponent newTexturedSquare(Context c, int iconId,
+	/**
+	 * see {@link GLFactory#newTexturedSquare(String, Bitmap, float)}
+	 * 
+	 * @param context
+	 * @param iconId
+	 *            The id of the icon that should be used as the texture (will
+	 *            also be used as the unique texture name)
+	 * @param heightInMeters
+	 * @return
+	 */
+	public MeshComponent newTexturedSquare(Context context, int iconId,
 			float heightInMeters) {
-		return newTexturedSquare("" + iconId, IO.loadBitmapFromId(c, iconId),
-				heightInMeters);
+		return newTexturedSquare("" + iconId,
+				IO.loadBitmapFromId(context, iconId), heightInMeters);
 	}
 
+	/**
+	 * Please read
+	 * {@link TextureManager#addTexture(TexturedRenderData, Bitmap, String)} for
+	 * information about the parameters.
+	 * 
+	 * @param bitmapName
+	 *            see
+	 *            {@link TextureManager#addTexture(TexturedRenderData, Bitmap, String)}
+	 * @param bitmap
+	 *            see
+	 *            {@link TextureManager#addTexture(TexturedRenderData, Bitmap, String)}
+	 * @param heightInMeters
+	 *            the square will have this height and width
+	 * @return
+	 */
 	public MeshComponent newTexturedSquare(String bitmapName, Bitmap bitmap,
 			float heightInMeters) {
 
@@ -554,7 +584,8 @@ public class GLFactory {
 	}
 
 	/**
-	 * will face to the camera
+	 * will face to the camera. also read
+	 * {@link GLFactory#newTexturedSquare(String, Bitmap, float)}
 	 * 
 	 * @param textToDisplay
 	 * @param textPosition
@@ -584,6 +615,8 @@ public class GLFactory {
 	}
 
 	/**
+	 * also read {@link GLFactory#newTexturedSquare(String, Bitmap, float)}
+	 * 
 	 * @param latitude
 	 * @param longitude
 	 * @param bitmap
