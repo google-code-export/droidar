@@ -19,6 +19,9 @@ import android.widget.EditText;
 import de.rwth.R;
 
 /**
+ * use the {@link v2.simpleUi.util.ErrorHandler} instead
+ * </br></br></br></br></br></br>
+ * 
  * Register the {@link ErrorHandler} like this: </br>
  * Thread.setDefaultUncaughtExceptionHandler(new ErrorHandler(currentActivity));
  * </br></br>
@@ -149,6 +152,7 @@ import de.rwth.R;
  * @author Spobo
  * 
  */
+@Deprecated
 public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 
 	/**
