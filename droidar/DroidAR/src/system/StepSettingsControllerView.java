@@ -1,9 +1,9 @@
 package system;
 
-import gui.v2.simpleUi.M_Checkbox;
-import gui.v2.simpleUi.M_Container;
-import gui.v2.simpleUi.M_Double;
-import gui.v2.simpleUi.M_Integer;
+import v2.simpleUi.M_Checkbox;
+import v2.simpleUi.M_Container;
+import v2.simpleUi.M_Double;
+import v2.simpleUi.M_Integer;
 import android.content.Context;
 
 public class StepSettingsControllerView extends M_Container {
