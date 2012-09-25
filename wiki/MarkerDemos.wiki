@@ -14,6 +14,6 @@ This is a very basic example, but the source should explain the general idea of 
 ===How to run the project===
 
  * First get both the DroidAR and ARMarker projects and set them up as [http://code.google.com/p/droidar/wiki/Markerdetection described].
- * Download the MarkerDemos project and set both the DroidAR and ARMarker projects as libraries for the MarkerDemos project. 
+ * Download the MarkerDemos project from [http://code.google.com/p/droidar/source/browse/#svn%2Ftrunk%2FMarkerDemos here] and set both the DroidAR and ARMarker projects as libraries for the MarkerDemos project. 
  * Run the project on an android device with a camera. 
  * Either generate the 0-marker using the MarkerGenerator, which is a java applet, or download the marker from the [http://code.google.com/p/droidar/downloads/list Downloads section].
