@@ -123,7 +123,7 @@ public class Vec {
 	 * 
 	 * @param angleInDegree
 	 */
-	public synchronized void rotateAroundZAxis(double angleInDegree) {
+	public synchronized Vec rotateAroundZAxis(double angleInDegree) {
 		/*
 		 * Rotation matrix:
 		 * 
@@ -139,6 +139,7 @@ public class Vec {
 		float x2 = cos * x - sin * y;
 		y = sin * x + cos * y;
 		x = x2;
+		return this;
 	}
 
 	/**
@@ -162,7 +163,7 @@ public class Vec {
 	 * 
 	 * @param angleInDegree
 	 */
-	public synchronized void rotateAroundXAxis(double angleInDegree) {
+	public synchronized Vec rotateAroundXAxis(double angleInDegree) {
 		/*
 		 * Rotation matrix:
 		 * 
@@ -178,6 +179,7 @@ public class Vec {
 		float y2 = cos * y + sin * z;
 		z = cos * z - sin * y;
 		y = y2;
+		return this;
 	}
 
 	public Vec div(float factor) {
