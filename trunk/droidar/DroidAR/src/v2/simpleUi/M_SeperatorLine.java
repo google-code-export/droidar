@@ -10,17 +10,19 @@ import android.widget.LinearLayout.LayoutParams;
 
 public abstract class M_SeperatorLine implements ModifierInterface {
 
+	private LinearLayout line;
+
 	@Override
 	public View getView(Context context) {
-		LinearLayout l = new LinearLayout(context);
+		line = new LinearLayout(context);
 		LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT,
-				(int) ImageTransform.dipToPixels(l.getResources(),
+				(int) ImageTransform.dipToPixels(line.getResources(),
 						getHeigthInDip()));
 		int p = 10;
 		lp.setMargins(p, 2 * p, p, 2 * p);
-		l.setLayoutParams(lp);
-		loadBGUtils().applyTo(l);
-		return l;
+		line.setLayoutParams(lp);
+		loadBGUtils().applyTo(line);
+		return line;
 	}
 
 	public BGUtils loadBGUtils() {
@@ -28,6 +30,10 @@ public abstract class M_SeperatorLine implements ModifierInterface {
 		BGUtils bgUtils = new BGUtils(Orientation.LEFT_RIGHT, colorsInGradient,
 				BGUtils.genCornerArray(2));
 		return bgUtils;
+	}
+
+	public LinearLayout getLine() {
+		return line;
 	}
 
 	public abstract Integer getHeigthInDip();

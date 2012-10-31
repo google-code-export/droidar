@@ -24,6 +24,7 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.ViewDebug.ExportedProperty;
 
 import commands.Command;
 
@@ -337,6 +338,12 @@ public class EventManager implements LocationListener, SensorEventListener {
 	}
 
 	/**
+	 * use SimpleLocationManager.getCurrentLocation(Context) instead This method
+	 * will try to get the most accurate position currently available. This
+	 * includes also the last known position of the device if no current
+	 * position sources can't be accessed so the returned position might be
+	 * outdated
+	 * 
 	 * Uses {@link GeoUtils#getCurrentLocation(Context)}. <br>
 	 * <br>
 	 * If you need permanent location updates better create a
@@ -346,6 +353,7 @@ public class EventManager implements LocationListener, SensorEventListener {
 	 * 
 	 * @return
 	 */
+	 @Deprecated
 	public Location getCurrentLocation() {
 		return GeoUtils.getCurrentLocation(myTargetActivity);
 	}

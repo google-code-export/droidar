@@ -2,13 +2,10 @@ package v2.simpleUi;
 
 import v2.simpleUi.uiDecoration.UiDecoratable;
 import v2.simpleUi.uiDecoration.UiDecorator;
-import v2.simpleUi.util.TextUtils;
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -20,6 +17,7 @@ public abstract class M_IconButtonWithText implements ModifierInterface,
 	private String myText;
 	private UiDecorator myDecorator;
 	private int myIconId;
+	private ImageView imageButton;
 
 	public M_IconButtonWithText(int iconId) {
 		myIconId = iconId;
@@ -43,7 +41,7 @@ public abstract class M_IconButtonWithText implements ModifierInterface,
 
 		// l.setGravity(Gravity.CENTER_HORIZONTAL);
 
-		final ImageView imageButton = new ImageView(context);
+		imageButton = new ImageView(context);
 		LayoutParams imparams = new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT);
 		int p = 3;
@@ -71,13 +69,18 @@ public abstract class M_IconButtonWithText implements ModifierInterface,
 			int level = myDecorator.getCurrentLevel();
 			myDecorator.decorate(context, imageButton, level + 1,
 					UiDecorator.TYPE_ICON);
-			if (t != null)
+			if (t != null) {
 				myDecorator.decorate(context, t, level + 1,
 						UiDecorator.TYPE_INFO_TEXT);
+			}
 		}
 
 		return l;
 
+	}
+
+	public ImageView getImageButton() {
+		return imageButton;
 	}
 
 	@Override
@@ -92,5 +95,12 @@ public abstract class M_IconButtonWithText implements ModifierInterface,
 	}
 
 	public abstract void onClick(Context context, ImageView clickedButton);
+
+	public void setIconId(int iconId) {
+		myIconId = iconId;
+		if (imageButton != null) {
+			imageButton.setImageResource(myIconId);
+		}
+	}
 
 }

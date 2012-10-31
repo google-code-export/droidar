@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Resources.NotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -56,8 +57,9 @@ public class IO {
 	}
 
 	public static String convertInputStreamToString(InputStream stream) {
-		if (stream == null)
+		if (stream == null) {
 			return null;
+		}
 
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -122,18 +124,28 @@ public class IO {
 	 * @return the bitmap with the correct size of the view
 	 */
 	public static Bitmap loadBitmapFromView(View v) {
-		// first calc the size the view will need:
-		v.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		// then create a bitmap to store the views drawings:
-		Bitmap b = Bitmap.createBitmap(v.getMeasuredWidth(),
-				v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-		// wrap the bitmap:
-		Canvas c = new Canvas(b);
-		// set the view size to the mesured values:
-		v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
-		// and draw the view onto the bitmap contained in the canvas:
-		v.draw(c);
-		return b;
+		if (v.getMeasuredHeight() <= 0) {
+			// first calc the size the view will need:
+			v.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+
+			// then create a bitmap to store the views drawings:
+			Bitmap b = Bitmap.createBitmap(v.getMeasuredWidth(),
+					v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+			// wrap the bitmap:
+			Canvas c = new Canvas(b);
+			// set the view size to the mesured values:
+			v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
+			// and draw the view onto the bitmap contained in the canvas:
+			v.draw(c);
+			return b;
+		} else {
+			Bitmap b = Bitmap.createBitmap(v.getMeasuredWidth(),
+					v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+			Canvas c = new Canvas(b);
+			v.draw(c);
+			return b;
+		}
+
 	}
 
 	/**
@@ -142,7 +154,8 @@ public class IO {
 	 *            something like "R.drawable.icon"
 	 * @return
 	 */
-	public static Drawable loadDrawableFromId(Context context, int id) {
+	public static Drawable loadDrawableFromId(Context context, int id)
+			throws NotFoundException {
 		return context.getResources().getDrawable(id);
 	}
 
@@ -263,22 +276,25 @@ public class IO {
 		}
 
 		public void storeString(String key, String value) {
-			if (e == null)
+			if (e == null) {
 				e = context.getSharedPreferences(mySettingsName, mode).edit();
+			}
 			e.putString(key, value);
 			e.commit();
 		}
 
 		public void storeBool(String key, boolean value) {
-			if (e == null)
+			if (e == null) {
 				e = context.getSharedPreferences(mySettingsName, mode).edit();
+			}
 			e.putBoolean(key, value);
 			e.commit();
 		}
 
 		public void storeInt(String key, int value) {
-			if (e == null)
+			if (e == null) {
 				e = context.getSharedPreferences(mySettingsName, mode).edit();
+			}
 			e.putInt(key, value);
 			e.commit();
 		}

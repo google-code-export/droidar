@@ -17,7 +17,7 @@ public abstract class M_Spinner implements ModifierInterface {
 
 	private static Handler myHandler = new Handler(Looper.getMainLooper());
 
-	public class SpinnerItem {
+	public static class SpinnerItem {
 
 		private int id;
 		private String text;
@@ -85,8 +85,9 @@ public abstract class M_Spinner implements ModifierInterface {
 		s.setPrompt(getVarName());
 		setEditable(isEditable());
 		setSelectedItemId(loadSelectedItemId());
-		if (selectedItemPos != 0)
+		if (selectedItemPos != 0) {
 			selectInSpinner(selectedItemPos);
+		}
 
 		container.addView(s);
 
@@ -97,7 +98,7 @@ public abstract class M_Spinner implements ModifierInterface {
 
 	public void setEditable(boolean editable) {
 		this.editable = editable;
-		if (s != null)
+		if (s != null) {
 			myHandler.post(new Runnable() {
 				@Override
 				public void run() {
@@ -105,6 +106,7 @@ public abstract class M_Spinner implements ModifierInterface {
 					s.setFocusable(isEditable());
 				}
 			});
+		}
 	}
 
 	public boolean isEditable() {
@@ -143,12 +145,13 @@ public abstract class M_Spinner implements ModifierInterface {
 
 	public void selectInSpinner(int posInList) {
 		this.selectedItemPos = posInList;
-		if (s != null)
+		if (s != null) {
 			myHandler.post(new Runnable() {
 				@Override
 				public void run() {
 					s.setSelection(selectedItemPos);
 				}
 			});
+		}
 	}
 }

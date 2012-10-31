@@ -38,8 +38,10 @@ public abstract class M_SimpleRatingBarController implements ModifierInterface {
 		for (RatingItem i : questions) {
 			result &= i.save();
 		}
-		if (result) return savedAllChildrenSuccessfully();
-		else return false;
+		if (result)
+			return savedAllChildrenSuccessfully();
+		else
+			return false;
 	}
 
 	public abstract boolean savedAllChildrenSuccessfully();

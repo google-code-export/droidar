@@ -1,21 +1,22 @@
 package v2.simpleUi.util;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Properties;
 
 import v2.simpleUi.M_Button;
 import v2.simpleUi.M_Caption;
+import v2.simpleUi.M_Checkbox;
 import v2.simpleUi.M_Container;
 import v2.simpleUi.M_InfoText;
 import v2.simpleUi.M_TextInput;
-import v2.simpleUi.ModifierInterface;
 import android.R;
 import android.app.Activity;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -192,8 +193,9 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 	@Deprecated
 	// DO NOT DELETE THIS CONSTURUCTOR!
 	public ErrorHandler() {
-		if (defaultHandler == null)
+		if (defaultHandler == null) {
 			defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+		}
 	}
 
 	/**
@@ -203,11 +205,12 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 	 */
 	public ErrorHandler(Activity a) {
 		setCurrentActivity(a);
-		if (defaultHandler == null)
+		if (defaultHandler == null) {
 			defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+		}
 	}
 
-	public static void showBugReportPage(Activity a, Exception errorToShow,
+	public static void showErrorActivity(Activity a, Exception errorToShow,
 			boolean keepBrokenProcessRunning) {
 		showErrorActivity(a, throwableToString(errorToShow), null,
 				keepBrokenProcessRunning);
@@ -220,36 +223,38 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 	 *            something like "file://"+"/sdcard/folderA/fileB.jpg"
 	 * @param keepBrokenProcessRunning
 	 */
-	public static void showBugReportPage(Activity a, Exception errorToShow,
-			String optionalFilePathToSend, boolean keepBrokenProcessRunning) {
+	public static void showErrorActivity(Activity a, Exception errorToShow,
+			String[] optionalFilePathToSend, boolean keepBrokenProcessRunning) {
 		showErrorActivity(a, throwableToString(errorToShow),
 				optionalFilePathToSend, keepBrokenProcessRunning);
 	}
 
 	public static String throwableToString(Throwable t) {
-		if (t == null)
+		if (t == null) {
 			return "";
+		}
 		StringWriter sw = new StringWriter();
 		PrintWriter p = new PrintWriter(sw);
 		t.printStackTrace(p);
 		String s = sw.toString();
 		p.close();
 
-		if (t.getCause() != null)
+		if (t.getCause() != null) {
 			s += "\n\n Details about the cause for " + t + " was:\n"
 					+ throwableToString(t.getCause());
+		}
 
 		return s;
 	}
 
 	public static void showErrorActivity(final Activity activity,
-			final String errorText, String optionalFilePathToSend,
+			final String errorText, String[] optionalFilePathsToSend,
 			boolean keepBrokenProcessRunning) {
 		if (activity != null) {
 			myCurrentActivity = activity;
 			Intent i = new Intent(Intent.ACTION_VIEW);
 			i.putExtra(PASSED_ERROR_TEXT_ID, errorText);
-			i.putExtra(PASSED_FILE_ID, optionalFilePathToSend);
+			i.putExtra(PASSED_FILE_ID, optionalFilePathsToSend);
 			i.putExtra(DEV_MAIL_ID, myDeveloperMailAdress);
 			i.putExtra(MAIL_TITLE_ID, myMailSubject);
 			i.setType(DATA_ANDROID_MIME_TYPE);
@@ -277,35 +282,40 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 		super.onCreate(savedInstanceState);
 		String myErrorText = getIntent().getExtras().getString(
 				PASSED_ERROR_TEXT_ID);
-		String errorFile = getIntent().getExtras().getString(PASSED_FILE_ID);
+		String[] errorFiles = getIntent().getExtras().getStringArray(
+				PASSED_FILE_ID);
 		/*
 		 * because this is a new process even the static fields will be reseted!
 		 * the correct values can be restored by passing them in the intent
 		 */
 		myDeveloperMailAdress = getIntent().getExtras().getString(DEV_MAIL_ID);
 		myMailSubject = getIntent().getExtras().getString(MAIL_TITLE_ID);
-		setErrorContentView(this, myErrorText, errorFile);
+		setErrorContentView(this, myErrorText, errorFiles);
 	}
 
 	private static void setErrorContentView(final Activity a,
-			String myErrorText, String errorFilePath) {
+			String myErrorText, String[] errorFilePaths) {
 		View v = loadModifier(a, myErrorText, myDeveloperMailAdress,
-				addDebugInfosToErrorMessage(a), errorFilePath);
+				addDebugInfosToErrorMessage(a), errorFilePaths);
 		a.setContentView(v);
 	}
 
 	public static String mailText;
-	private static String savedErrorFilePath;
+	private static String[] savedErrorFilePaths;
+	private static boolean includeFiles = true;
 
 	public static View loadModifier(final Activity a,
 			final String exceptionText, String myDeveloperMailAdress,
-			final String deviceDebugInformation, final String errorFilePath) {
+			final String deviceDebugInformation, final String[] errorFilePaths) {
+
+		savedErrorFilePaths = errorFilePaths;
 
 		final M_Container c = new M_Container();
-		if (myMailSubject != null && !myMailSubject.equals(""))
+		if (myMailSubject != null && !myMailSubject.equals("")) {
 			c.add(new M_Caption(myMailSubject));
-		else
+		} else {
 			c.add(new M_Caption("The application crashed"));
+		}
 		c.add(new M_InfoText(R.drawable.ic_dialog_alert,
 				"We are sorry the application had a problem "
 						+ "with your device. \n\n You can send "
@@ -315,7 +325,10 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 
 			@Override
 			public boolean save(String newText) {
-				mailText += "\n\n\n[" + getVarName() + "]\n" + newText;
+				mailText += "[" + getVarName() + "]\n" + newText;
+				if (exceptionText != null) {
+					mailText += "\n\n[Error Information]\n" + exceptionText;
+				}
 				return true;
 			}
 
@@ -330,41 +343,55 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 			}
 		};
 
-		if (exceptionText != null && !exceptionText.equals(""))
+		if (exceptionText != null && !exceptionText.equals("")) {
 			problemDescr
 					.setInfoText("You can add some information about the problem here..");
-		else
+		} else {
 			problemDescr.setInfoText("Write your problem down here...");
+		}
 
 		c.add(problemDescr);
 
-		if (errorFilePath != null) {
-			c.add(new M_TextInput(true, true, false) {
+		if (errorFilePaths != null) {
+			c.add(new M_Checkbox() {
 
 				@Override
-				public boolean save(String newText) {
-					savedErrorFilePath = newText;
+				public boolean save(boolean newValue) {
+					includeFiles = newValue;
 					return true;
 				}
 
 				@Override
-				public String load() {
-					return errorFilePath;
+				public boolean loadVar() {
+					return true;
 				}
 
 				@Override
-				public String getVarName() {
-					return "Added File";
+				public CharSequence getVarName() {
+					return "Include files to allow reconstructing the error";
 				}
 			});
 		}
 
-		if (exceptionText != null && !exceptionText.equals(""))
-			c.add(new M_TextInput(false, true, true) {
+		if (myDeveloperMailAdress != null) {
+			c.add(new M_Button("Send error mail to developers..") {
+
+				@Override
+				public void onClick(Context context, Button clickedButton) {
+					mailText = ""; // clear mail text
+					c.save();
+					sendMail(a, mailText);
+					a.finish();
+				}
+			});
+		}
+
+		if (exceptionText != null && !exceptionText.equals("")) {
+			c.add(new M_TextInput(false, true, false) {
 
 				@Override
 				public boolean save(String newText) {
-					mailText += "\n\n[" + getVarName() + "]\n" + newText;
+					// will never be called because editable flag is false
 					return true;
 				}
 
@@ -378,20 +405,9 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 					return "Error Information";
 				}
 			});
+		}
 
-		if (myDeveloperMailAdress != null)
-			c.add(new M_Button("Send error mail to developers..") {
-
-				@Override
-				public void onClick(Context context, Button clickedButton) {
-					mailText = ""; // clear mail text
-					c.save();
-					sendMail(a, mailText);
-					a.finish();
-				}
-			});
-
-		if (deviceDebugInformation != null)
+		if (deviceDebugInformation != null) {
 			c.add(new M_TextInput(true, true, true) {
 
 				@Override
@@ -410,29 +426,40 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 					return "Device Information";
 				}
 			});
+		}
 
 		return c.getView(a);
 	}
 
-	private static void sendMail(Activity a, String emailtext) {
-		final Intent emailIntent = new Intent(
-				android.content.Intent.ACTION_SEND);
-		emailIntent.setType("plain/text");
-		emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
-				new String[] { myDeveloperMailAdress });
+	public static void sendMail(Context context, String emailText) {
+		// need to "send multiple" to get more than one attachment
+		Intent emailIntent = new Intent(
+				android.content.Intent.ACTION_SEND_MULTIPLE);
+		if (!includeFiles || savedErrorFilePaths == null
+				|| savedErrorFilePaths.length == 1) {
+			// if no files appended use the default intent type
+			emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+		}
 		emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
 				myMailSubject);
-
-		if (savedErrorFilePath != null && !"".equals(savedErrorFilePath))
-			try {
-				emailIntent.putExtra(Intent.EXTRA_STREAM,
-						Uri.parse(savedErrorFilePath));
-			} catch (Exception e) {
-				e.printStackTrace();
+		emailIntent.setType("*/*");
+		emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+				new String[] { myDeveloperMailAdress });
+		emailIntent.putExtra(Intent.EXTRA_TEXT, emailText);
+		if (includeFiles && savedErrorFilePaths != null) {
+			// has to be an ArrayList
+			ArrayList<Uri> uris = new ArrayList<Uri>();
+			// convert from paths to Android friendly Parcelable Uri's
+			for (int i = 0; i < savedErrorFilePaths.length; i++) {
+				File fileIn = new File(savedErrorFilePaths[i]);
+				Uri u = Uri.fromFile(fileIn);
+				if (fileIn.exists()) {
+					uris.add(u);
+				}
 			}
-
-		emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, emailtext);
-		a.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+			emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+		}
+		context.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
 	}
 
 	private static String addDebugInfosToErrorMessage(Activity a) {
@@ -534,17 +561,6 @@ public class ErrorHandler extends Activity implements UncaughtExceptionHandler {
 	public static void registerNewErrorHandler(Activity currentActivity) {
 		Thread.setDefaultUncaughtExceptionHandler(new ErrorHandler(
 				currentActivity));
-	}
-
-	public static ModifierInterface getReportProblemButton(String buttonText) {
-
-		return new M_Button(buttonText) {
-
-			@Override
-			public void onClick(Context context, Button clickedButton) {
-				showBugReportPage((Activity) context, null, true);
-			}
-		};
 	}
 
 }

@@ -2,13 +2,11 @@ package v2.simpleUi;
 
 import v2.simpleUi.uiDecoration.UiDecoratable;
 import v2.simpleUi.uiDecoration.UiDecorator;
-import v2.simpleUi.util.TextUtils;
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 public abstract class M_Button implements ModifierInterface, UiDecoratable {
 
