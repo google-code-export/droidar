@@ -3,13 +3,6 @@ package v2.simpleUi;
 import java.util.Date;
 import java.util.HashMap;
 
-import v2.simpleUi.M_Button;
-import v2.simpleUi.M_Container;
-import v2.simpleUi.M_HalfHalf;
-import v2.simpleUi.M_InfoText;
-import v2.simpleUi.ModifierInterface;
-import v2.simpleUi.SimpleUiApplication;
-
 import android.R;
 import android.app.Activity;
 import android.content.Context;

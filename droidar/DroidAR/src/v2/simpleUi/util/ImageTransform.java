@@ -7,10 +7,10 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.PorterDuff.Mode;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -29,7 +29,7 @@ public class ImageTransform {
 		int width = bitmap.getWidth();
 		int height = bitmap.getHeight();
 
-		Bitmap result = Bitmap.createBitmap(width, height, bitmap.getConfig());
+		Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444);
 		Canvas canvas = new Canvas(result);
 		Rect rect = new Rect(0, 0, width, height);
 		RectF roundCornerFrameRect = new RectF(rect);

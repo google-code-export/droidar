@@ -3,7 +3,6 @@ package v2.simpleUi;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-
 import v2.simpleUi.uiDecoration.UiDecoratable;
 import v2.simpleUi.uiDecoration.UiDecorator;
 import android.content.Context;

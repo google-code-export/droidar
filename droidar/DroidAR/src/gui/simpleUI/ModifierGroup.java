@@ -35,6 +35,10 @@ public class ModifierGroup extends AbstractModifier {
 		myList.add(groupElement);
 	}
 
+	public ArrayList<ModifierInterface> getMyList() {
+		return myList;
+	}
+
 	@Override
 	public View getView(Context context) {
 

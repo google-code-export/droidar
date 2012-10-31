@@ -5,7 +5,6 @@ import java.util.List;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.test.IsolatedContext;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RadioButton;

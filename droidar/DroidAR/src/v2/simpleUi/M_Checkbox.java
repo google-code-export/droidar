@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,7 +33,7 @@ public abstract class M_Checkbox implements ModifierInterface, UiDecoratable {
 	}
 
 	@Override
-	public View getView(Context context) {
+	public View getView(final Context context) {
 		LinearLayout l = new LinearLayout(context);
 		l.setGravity(Gravity.CENTER_VERTICAL);
 		l.setPadding(DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING,
@@ -64,6 +66,15 @@ public abstract class M_Checkbox implements ModifierInterface, UiDecoratable {
 		e.setChecked(loadVar());
 		e.setEnabled(editable);
 		e.setFocusable(editable);
+		e.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				M_Checkbox.this.onCheckedChanged(context, e, isChecked);
+			}
+
+		});
 
 		LinearLayout l2 = new LinearLayout(context);
 		l2.setLayoutParams(p2);
@@ -78,6 +89,10 @@ public abstract class M_Checkbox implements ModifierInterface, UiDecoratable {
 		}
 
 		return l;
+	}
+
+	public void onCheckedChanged(Context context, CheckBox e, boolean isChecked) {
+		// on default do not react to this
 	}
 
 	public boolean isEditable() {
@@ -104,7 +119,7 @@ public abstract class M_Checkbox implements ModifierInterface, UiDecoratable {
 				}
 			});
 	}
-	
+
 	@Override
 	public boolean assignNewDecorator(UiDecorator decorator) {
 		myDecorator = decorator;

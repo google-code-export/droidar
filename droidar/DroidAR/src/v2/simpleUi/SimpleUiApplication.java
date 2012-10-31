@@ -3,7 +3,7 @@ package v2.simpleUi;
 import java.util.HashMap;
 
 import android.app.Application;
-import android.util.Log;
+import android.content.Context;
 
 /**
  * You need to add <br>
@@ -22,12 +22,29 @@ import android.util.Log;
  * 
  */
 public class SimpleUiApplication extends Application {
-	private static final String LOG_TAG = "SimpleUiApplication";
 	private HashMap<String, Object> transfairList;
+	private static Context context;
 
 	public HashMap<String, Object> getTransfairList() {
-		if (transfairList == null)
+		if (transfairList == null) {
 			transfairList = new HashMap<String, Object>();
+		}
 		return transfairList;
+	}
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		this.context = getApplicationContext();
+	}
+
+	public static void setContext(Context context) {
+		if (context != null) {
+			SimpleUiApplication.context = context;
+		}
+	}
+
+	public static Context getContext() {
+		return context;
 	}
 }

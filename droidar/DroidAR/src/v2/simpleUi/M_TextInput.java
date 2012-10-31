@@ -36,8 +36,7 @@ public abstract class M_TextInput implements ModifierInterface, UiDecoratable {
 	public M_TextInput() {
 	}
 
-	public M_TextInput(boolean editable, boolean isLongText,
-			boolean horizontalScrollable) {
+	public M_TextInput(boolean editable, boolean isLongText, boolean horizontalScrollable) {
 		setLongText(isLongText);
 		setEditable(editable);
 		setHorizontalScrollable(horizontalScrollable);
@@ -64,8 +63,9 @@ public abstract class M_TextInput implements ModifierInterface, UiDecoratable {
 		myHandler.post(new Runnable() {
 			@Override
 			public void run() {
-				if (editText != null)
+				if (editText != null) {
 					editText.setHint(additionalInfoText);
+				}
 			}
 		});
 	}
@@ -73,19 +73,15 @@ public abstract class M_TextInput implements ModifierInterface, UiDecoratable {
 	@Override
 	public View getView(Context context) {
 		LinearLayout container = new LinearLayout(context);
-		container.setPadding(DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING,
-				DEFAULT_PADDING);
-		
+		container.setPadding(DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING, DEFAULT_PADDING);
+
 		container.setGravity(Gravity.CENTER_VERTICAL);
-		LayoutParams p = new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT,
-				weightOfDescription);
-		LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT,
-				weightOfInputText);
+		LayoutParams p = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT, weightOfDescription);
+		LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT, weightOfInputText);
 		if (isLongText()) {
 			int m = 8;
 			p2.setMargins(2 * m, m, 2 * m, m);
+			container.setOrientation(LinearLayout.VERTICAL);
 		}
 
 		TextView nameText = new TextView(context);
@@ -96,8 +92,9 @@ public abstract class M_TextInput implements ModifierInterface, UiDecoratable {
 		editText = new EditText(context) {
 			@Override
 			public boolean onTouchEvent(MotionEvent event) {
-				if (horizontalScrollable)
+				if (horizontalScrollable) {
 					getParent().requestDisallowInterceptTouchEvent(true);
+				}
 				return super.onTouchEvent(event);
 			}
 		};
@@ -107,28 +104,23 @@ public abstract class M_TextInput implements ModifierInterface, UiDecoratable {
 		editText.setFocusable(editable);
 		editText.setFocusableInTouchMode(editable);
 		setInfoText(additionalInfoText);
-		if (isLongText()) {
-			container.setOrientation(LinearLayout.VERTICAL);
-		}
-		if (isHorizontalScrollable())
+		if (isHorizontalScrollable()) {
 			editText.setHorizontallyScrolling(true);
+		}
 
 		container.addView(editText);
-		
 
 		if (myDecorator != null) {
 			int currentLevel = myDecorator.getCurrentLevel();
-			myDecorator.decorate(context, nameText, currentLevel + 1,
-					UiDecorator.TYPE_INFO_TEXT);
-			myDecorator.decorate(context, editText, currentLevel + 1,
-					UiDecorator.TYPE_EDIT_TEXT);
+			myDecorator.decorate(context, nameText, currentLevel + 1, UiDecorator.TYPE_INFO_TEXT);
+			myDecorator.decorate(context, editText, currentLevel + 1, UiDecorator.TYPE_EDIT_TEXT);
 		}
 		return container;
 	}
 
 	public void setEditable(boolean editable) {
 		this.editable = editable;
-		if (editText != null)
+		if (editText != null) {
 			myHandler.post(new Runnable() {
 				@Override
 				public void run() {
@@ -137,6 +129,7 @@ public abstract class M_TextInput implements ModifierInterface, UiDecoratable {
 					editText.setFocusableInTouchMode(isEditable());
 				}
 			});
+		}
 	}
 
 	public boolean isEditable() {
@@ -151,8 +144,9 @@ public abstract class M_TextInput implements ModifierInterface, UiDecoratable {
 
 	@Override
 	public boolean save() {
-		if (!editable)
+		if (!editable) {
 			return true;
+		}
 		return save(editText.getText().toString());
 	}
 

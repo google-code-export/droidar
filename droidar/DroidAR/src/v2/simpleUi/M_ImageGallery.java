@@ -2,10 +2,8 @@ package v2.simpleUi;
 
 import java.util.ArrayList;
 
-
 import v2.simpleUi.uiDecoration.UiDecoratable;
 import v2.simpleUi.uiDecoration.UiDecorator;
-
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;

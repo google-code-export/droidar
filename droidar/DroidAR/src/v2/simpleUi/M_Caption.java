@@ -3,10 +3,9 @@ package v2.simpleUi;
 import v2.simpleUi.uiDecoration.UiDecoratable;
 import v2.simpleUi.uiDecoration.UiDecorator;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,6 +14,8 @@ public class M_Caption implements ModifierInterface, UiDecoratable {
 	private String myText;
 	private float mySizeFactor = 1.1f;
 	private UiDecorator myDecorator;
+	private OnClickListener myOnClickListener;
+	private LinearLayout container;
 
 	public M_Caption(String text) {
 		myText = text;
@@ -34,35 +35,43 @@ public class M_Caption implements ModifierInterface, UiDecoratable {
 		this.myText = myText;
 	}
 
+	public void setOnClickListener(OnClickListener onClickListener) {
+		this.myOnClickListener = onClickListener;
+	}
+
 	@Override
 	public View getView(Context context) {
 
 		int bottomAndTopPadding = 4;
 		int textPadding = 7;
 
-		LinearLayout l = new LinearLayout(context);
-		l.setGravity(Gravity.CENTER);
+		container = new LinearLayout(context);
+		container.setGravity(Gravity.CENTER);
 
-		l.setPadding(0, bottomAndTopPadding, 0, bottomAndTopPadding);
+		container.setPadding(0, bottomAndTopPadding, 0, bottomAndTopPadding);
 
 		TextView t = new TextView(context);
 		t.setText(myText);
 		t.setPadding(textPadding, textPadding, textPadding, textPadding);
 		t.setGravity(Gravity.CENTER_HORIZONTAL);
-		l.addView(t);
+		if (myOnClickListener != null) {
+			t.setOnClickListener(myOnClickListener);
+		}
+		container.addView(t);
 
-		if (mySizeFactor != 1)
+		if (mySizeFactor != 1) {
 			t.setTextSize(t.getTextSize() * mySizeFactor);
+		}
 
 		if (myDecorator != null) {
 			int level = myDecorator.getCurrentLevel();
-			myDecorator.decorate(context, l, level + 1,
+			myDecorator.decorate(context, container, level + 1,
 					UiDecorator.TYPE_CONTAINER);
 			myDecorator.decorate(context, t, level + 1,
 					UiDecorator.TYPE_CAPTION);
 		}
 
-		return l;
+		return container;
 	}
 
 	@Override
@@ -74,6 +83,10 @@ public class M_Caption implements ModifierInterface, UiDecoratable {
 	@Override
 	public boolean save() {
 		return true;
+	}
+
+	public int getHeightInPixels() {
+		return container.getHeight();
 	}
 
 }

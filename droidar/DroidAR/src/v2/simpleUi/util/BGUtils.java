@@ -1,5 +1,6 @@
 package v2.simpleUi.util;
 
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.view.View;
@@ -30,6 +31,16 @@ public class BGUtils {
 	 */
 	public static int toARGB(int alpha, int red, int green, int blue) {
 		return android.graphics.Color.argb(alpha, red, green, blue);
+	}
+
+	/**
+	 * @param colorString
+	 *            #RRGGBB or #AARRGGBB or... read
+	 *            {@link Color#parseColor(String)}
+	 * @return
+	 */
+	public static int toARGB(String colorString) {
+		return android.graphics.Color.parseColor(colorString);
 	}
 
 	public static int[] createGrayGradient1() {

@@ -6,7 +6,6 @@ import v2.simpleUi.util.ImageTransform;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
