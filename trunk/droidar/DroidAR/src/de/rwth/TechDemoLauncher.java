@@ -8,6 +8,7 @@ import tests.AndroidDeviceOnlyTests;
 import tests.EfficientListTests;
 import tests.GameLogicTests;
 import tests.GeoTests;
+import tests.GlTests;
 import tests.IOTests;
 import tests.SystemTests;
 import tests.WorldTests;
@@ -137,6 +138,7 @@ public class TechDemoLauncher extends Activity {
 			new WorldTests().run();
 			new AndroidDeviceOnlyTests(this).run();
 			new GameLogicTests().run();
+			new GlTests().run();
 
 			new CommandShowToast(this, "All tests succeded on this device :)")
 					.execute();
