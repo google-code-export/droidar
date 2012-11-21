@@ -53,10 +53,10 @@ public class Color {
 	 */
 	public Color(String string) {
 		int c = android.graphics.Color.parseColor(string);
-		red = android.graphics.Color.red(c / 255);
-		green = android.graphics.Color.green(c / 255);
-		blue = android.graphics.Color.blue(c / 255);
-		alpha = android.graphics.Color.alpha(c / 255);
+		red = (float) android.graphics.Color.red(c) / 255;
+		green = (float) android.graphics.Color.green(c) / 255;
+		blue = (float) android.graphics.Color.blue(c) / 255;
+		alpha = (float) android.graphics.Color.alpha(c) / 255;
 	}
 
 	/**
@@ -65,10 +65,10 @@ public class Color {
 	 *            {@link android.graphics.Color} for example
 	 */
 	public Color(int color) {
-		red = android.graphics.Color.red(color / 255);
-		green = android.graphics.Color.green(color / 255);
-		blue = android.graphics.Color.blue(color / 255);
-		alpha = android.graphics.Color.alpha(color / 255);
+		red = (float) android.graphics.Color.red(color) / 255;
+		green = (float) android.graphics.Color.green(color) / 255;
+		blue = (float) android.graphics.Color.blue(color) / 255;
+		alpha = (float) android.graphics.Color.alpha(color) / 255;
 	}
 
 	/**
@@ -230,6 +230,18 @@ public class Color {
 		green = c.green;
 		blue = c.blue;
 		red = c.red;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		return other instanceof Color ? 
+			this.toIntARGB() == ((Color) other).toIntARGB() : 
+			false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.toIntARGB();
 	}
 
 }
