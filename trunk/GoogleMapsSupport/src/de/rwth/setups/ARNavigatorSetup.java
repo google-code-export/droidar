@@ -296,7 +296,7 @@ public class ARNavigatorSetup extends Setup {
 	@Override
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity context) {
 
-		map = new GMap(myTargetActivity, GoogleMapsDebugKeys.pc1DebugKey);
+		map = new GMap(myTargetActivity, GoogleMapsKey.pc1DebugKey);
 		guiSetup.addViewToBottomRight(map, 2, 130);
 		map.setCenterToCurrentPos();
 		map.setZoomLevel(20);

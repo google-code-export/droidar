@@ -18,6 +18,7 @@ import system.StepSettingsControllerView;
 import util.IO;
 import util.LimitedQueue;
 import util.Vec;
+import v2.simpleUi.SimpleUI;
 import worldData.MoveComp;
 import worldData.Obj;
 import worldData.World;
@@ -114,7 +115,7 @@ public class AccuracyTestsSetup extends DefaultARSetup {
 		super._e2_addElementsToGuiSetup(guiSetup, activity);
 
 		final GMap map = GMap.newDefaultGMap((MapActivity) getActivity(),
-				GoogleMapsDebugKeys.pc1DebugKey);
+				GoogleMapsKey.pc1DebugKey);
 
 		try {
 			map.addOverlay(new CustomItemizedOverlay(measureData, IO
@@ -145,7 +146,7 @@ public class AccuracyTestsSetup extends DefaultARSetup {
 
 			@Override
 			public boolean execute() {
-				gui.v2.simpleUi.SimpleUI.showInfoDialog(getActivity(), "Save",
+				SimpleUI.showInfoDialog(getActivity(), "Save",
 						new StepSettingsControllerView(getActivity()));
 				return true;
 			}
