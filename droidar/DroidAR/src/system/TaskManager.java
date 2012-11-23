@@ -37,24 +37,27 @@ public class TaskManager implements Runnable, ProcessListener {
 	private String myWorkingSuffix = ">";
 
 	public void addHighPrioTask(Command commandToAdd) {
-		if (myTasks == null)
+		if (myTasks == null) {
 			myTasks = new TaskList();
+		}
 		myTasks.addHighPrioTask(commandToAdd);
 		updateProgressIfNecesarry(myTasks.getMyHighPrioTasks().myLength);
 		startTaskManagerIfNecesarry();
 	}
 
 	public void addNormalPrioTask(Command commandToAdd) {
-		if (myTasks == null)
+		if (myTasks == null) {
 			myTasks = new TaskList();
+		}
 		myTasks.addNormalPrioTask(commandToAdd);
 		updateProgressIfNecesarry(myTasks.getMyNormalPrioTasks().myLength);
 		startTaskManagerIfNecesarry();
 	}
 
 	public void addLowPrioTask(Command commandToAdd) {
-		if (myTasks == null)
+		if (myTasks == null) {
 			myTasks = new TaskList();
+		}
 		myTasks.addLowPrioTask(commandToAdd);
 		updateProgressIfNecesarry(myTasks.getMyLowPrioTasks().myLength);
 		startTaskManagerIfNecesarry();
@@ -120,8 +123,9 @@ public class TaskManager implements Runnable, ProcessListener {
 	}
 
 	private synchronized boolean checkIfIsNotEmpty(EfficientList<Command> l) {
-		if (l.myLength > 0)
+		if (l.myLength > 0) {
 			return true;
+		}
 		return false;
 	}
 
@@ -132,8 +136,11 @@ public class TaskManager implements Runnable, ProcessListener {
 			onProcessStep(i, myTasks.getMyHighPrioTasks().myLength, l.get(i));
 			// dont use if to better find possible errors:
 			// if (l.myArray[i] != null)
-			(l.get(i)).execute();
-			l.remove(l.get(i));
+			Command x = l.get(i);
+			if (x != null) {
+				x.execute();
+				l.remove(x);
+			}
 		}
 		resetGui();
 		return false;
@@ -204,8 +211,9 @@ public class TaskManager implements Runnable, ProcessListener {
 	}
 
 	private void resetProgressWheel() {
-		if (myProgressWheel != null)
+		if (myProgressWheel != null) {
 			myProgressWheel.setVisibility(View.GONE);
+		}
 	}
 
 	public View getProgressTextView(Context context, String idleText,
@@ -219,17 +227,20 @@ public class TaskManager implements Runnable, ProcessListener {
 			((ViewGroup) myProgressText.getParent()).removeView(myProgressText);
 		}
 
-		if (idleText != null)
+		if (idleText != null) {
 			myIdleText = idleText;
-		if (workingPrefix != null)
+		}
+		if (workingPrefix != null) {
 			myWorkingPrefix = workingPrefix;
+		}
 		resetProgressText();
 		return myProgressText;
 	}
 
 	private void resetProgressText() {
-		if (myProgressText != null)
+		if (myProgressText != null) {
 			myProgressText.setText(myIdleText);
+		}
 	}
 
 	public View getProgressSizeText(Context context, String idleText,
@@ -244,19 +255,23 @@ public class TaskManager implements Runnable, ProcessListener {
 					.removeView(myProgressSizeText);
 		}
 
-		if (idleText != null)
+		if (idleText != null) {
 			myIdleText = idleText;
-		if (workingMiddle != null)
+		}
+		if (workingMiddle != null) {
 			myWorkingMiddle = workingMiddle;
-		if (workingSuffix != null)
+		}
+		if (workingSuffix != null) {
 			myWorkingSuffix = workingSuffix;
+		}
 		resetProgressSizeText();
 		return myProgressSizeText;
 	}
 
 	private void resetProgressSizeText() {
-		if (myProgressSizeText != null)
+		if (myProgressSizeText != null) {
 			myProgressSizeText.setText(myIdleText);
+		}
 	}
 
 	@Override
