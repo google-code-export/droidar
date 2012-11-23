@@ -16,7 +16,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import commands.Command;
-import de.rwth.setups.GoogleMapsDebugKeys;
+import de.rwth.setups.GoogleMapsKey;
 
 /**
  * To get a maps api key you have to use a keytool to generate a MD5 fingerprint
@@ -255,7 +255,7 @@ public class GMap extends MapView implements TouchEventInterface {
 
 	public static GMap newDefaultGMap(MapActivity mapActivity,
 			String pc1debugkey) {
-		final GMap map = new GMap(mapActivity, GoogleMapsDebugKeys.pc1DebugKey);
+		final GMap map = new GMap(mapActivity, GoogleMapsKey.pc1DebugKey);
 		final MyLocationOverlay o = new MyLocationOverlay(mapActivity, map);
 		o.enableCompass();
 		o.enableMyLocation();
