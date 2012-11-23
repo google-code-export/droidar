@@ -54,7 +54,7 @@
 
         <!-- an activity to easily display any kind of ui -->
         <activity
-            android:name="gui.simpleUI.SimpleUI"
+            android:name="gui.simpleUI.SimpleUIv1"
             android:theme="@android:style/Theme.Translucent" >
         </activity>
     </application>
@@ -64,7 +64,7 @@
 		work for devices with android 1.5 as well. The development version is set 
 		to 1.6 to get access to stuff like high res. screens (eg samsung galaxy tab)
     -->
-    <uses-sdk android:minSdkVersion="3" />
+    <uses-sdk android:minSdkVersion="4" />
 
     <!--
          IMPORTANT: The following permissions should also be added to each project 
