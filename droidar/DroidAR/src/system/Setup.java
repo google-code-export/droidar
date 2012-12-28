@@ -28,6 +28,7 @@ import worldData.World;
 import actions.Action;
 import actions.ActionCalcRelativePos;
 import actions.ActionRotateCameraBuffered;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -414,8 +415,11 @@ public abstract class Setup {
 		myTargetActivity.addContentView(myOverlayView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	}
 
+	@SuppressLint("NewApi")
 	public void addGLSurfaceOverlay() {
-		myGLSurfaceView.setZOrderMediaOverlay(true);
+		if (Integer.parseInt(android.os.Build.VERSION.SDK) >= Build.VERSION_CODES.ECLAIR) {
+			myGLSurfaceView.setZOrderMediaOverlay(true);
+		}
 		myTargetActivity.addContentView(myGLSurfaceView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	}
 
