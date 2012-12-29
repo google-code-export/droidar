@@ -53,8 +53,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
+	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		// Now that the size is known, set up the camera parameters and
 		// begin the preview.
 		// Camera.Parameters parameters = mCamera.getParameters();
@@ -71,8 +70,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	 */
 	public void setPreviewAccordingToScreenOrientation(int width, int height) {
 		Parameters parameters = myCamera.getParameters();
-		Display display = ((WindowManager) this.getContext().getSystemService(
-				Activity.WINDOW_SERVICE)).getDefaultDisplay();
+		Display display = ((WindowManager) this.getContext().getSystemService(Activity.WINDOW_SERVICE)).getDefaultDisplay();
 		/*
 		 * int rotation = display.getRotation();
 		 * 
@@ -80,8 +78,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		 */
 		int rotation = 0;
 		try {
-			rotation = (Integer) display.getClass()
-					.getMethod("getRotation", null).invoke(display, null);
+			rotation = (Integer) display.getClass().getMethod("getRotation", null).invoke(display, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -90,8 +87,10 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 			setDisplayOrientation(90);
 		} else if (rotation == Surface.ROTATION_90) {
 			parameters.setPreviewSize(width, height);
+			setDisplayOrientation(0);
 		} else if (rotation == Surface.ROTATION_180) {
 			parameters.setPreviewSize(height, width);
+			setDisplayOrientation(0);
 		} else if (rotation == Surface.ROTATION_270) {
 			parameters.setPreviewSize(width, height);
 			setDisplayOrientation(180);
@@ -111,8 +110,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		 * does not work on older devices so use reflection
 		 */
 		try {
-			myCamera.getClass().getMethod("setDisplayOrientation", int.class)
-					.invoke(myCamera, inDegree);
+			myCamera.getClass().getMethod("setDisplayOrientation", int.class).invoke(myCamera, inDegree);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -130,11 +128,9 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	public void resumeCamera() {
 		if (myCamera != null) {
 			myCamera.startPreview();
-			Log.d("Activity", "Camera preview started (camera=" + myCamera
-					+ ")");
+			Log.d("Activity", "Camera preview started (camera=" + myCamera + ")");
 		} else {
-			Log.d("Activity",
-					"Camera preview not started because no camera set til now");
+			Log.d("Activity", "Camera preview not started because no camera set til now");
 		}
 	}
 
