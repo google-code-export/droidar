@@ -101,7 +101,21 @@ public class PhoneGestureSensor implements SensorEventListener {
 		 * @return The builder instance for method chaining.
 		 */
 		public Builder withLogging() {
-			sensor.addDetector(new LoggingDetector());
+			sensor.addDetector(new LoggingDetector(LoggingDetector.LOG_ALL));
+			return this;
+		}
+
+		/**
+		 * Will cause the measured values to be printed to the debug log
+		 * whenever a sensor event occurs.
+		 * 
+		 * @param logMask
+		 *            A bitmask specifying the messages to log. See
+		 *            {@link LoggingDetector}.
+		 * @return The builder instance for method chaining.
+		 */
+		public Builder withLogging(int logMask) {
+			sensor.addDetector(new LoggingDetector(logMask));
 			return this;
 		}
 
