@@ -14,6 +14,24 @@ import gestures.SensorData;
  */
 public class LoggingDetector implements PhoneGestureDetector {
 
+	public static final int LOG_LINEAR_ACCELERATION = 1;
+	public static final int LOG_ABSOLUTE_ACCELERATION = 2;
+	public static final int LOG_GRAVITY = 4;
+	public static final int LOG_ALL = 0xFF;
+
+	private final int logMask;
+
+	/**
+	 * Creates a detector that will log sensor data whenever it occurs.
+	 * 
+	 * @param logMask
+	 *            A bitmask specifying which messages to log. Create it by
+	 *            combining LoggingDetector.LOG_* constants using OR.
+	 */
+	public LoggingDetector(int logMask) {
+		this.logMask = logMask;
+	}
+
 	@Override
 	public PhoneGesture getType() {
 		return PhoneGesture.NONE;
@@ -26,12 +44,27 @@ public class LoggingDetector implements PhoneGestureDetector {
 
 	@Override
 	public void feedSensorEvent(SensorData sensorData) {
-		Log.d("LoggingDetector", String.format("Abs: %.4f\nGra: %s\nLin: %s",
-				sensorData.absoluteAcceleration, 
-				formatArray(sensorData.gravity),
-				formatArray(sensorData.linearAcceleration)));
+		StringBuilder builder = new StringBuilder();
+
+		if ((logMask & LOG_ABSOLUTE_ACCELERATION) != 0) {
+			builder.append("Abs: ").append(sensorData.absoluteAcceleration)
+					.append("\n");
+		}
+
+		if ((logMask & LOG_GRAVITY) != 0) {
+			builder.append("Gra: ").append(formatArray(sensorData.gravity))
+					.append("\n");
+		}
+
+		if ((logMask & LOG_LINEAR_ACCELERATION) != 0) {
+			builder.append("Lin: ")
+					.append(formatArray(sensorData.linearAcceleration))
+					.append("\n");
+		}
+
+		Log.d("LoggingDetector", builder.toString());
 	}
-	
+
 	private String formatArray(double[] array) {
 		StringBuilder builder = new StringBuilder("[ ");
 		for (double value : array) {
