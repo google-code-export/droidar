@@ -1,6 +1,7 @@
 package gestures;
 
 import gestures.detectors.DummyDetector;
+import gestures.detectors.LoggingDetector;
 import gestures.detectors.LookingDetector;
 import gestures.detectors.SlashDetector;
 
@@ -32,7 +33,7 @@ public class PhoneGestureSensor implements SensorEventListener {
 	 * 
 	 * @author marmat (Martin Matysiak)
 	 */
-	public class Builder {
+	public static class Builder {
 		private PhoneGestureSensor sensor;
 
 		/**
@@ -90,6 +91,17 @@ public class PhoneGestureSensor implements SensorEventListener {
 		 */
 		public Builder withLookingDetection() {
 			sensor.addDetector(new LookingDetector());
+			return this;
+		}
+
+		/**
+		 * Will cause the measured values to be printed to the debug log
+		 * whenever a sensor event occurs.
+		 * 
+		 * @return The builder instance for method chaining.
+		 */
+		public Builder withLogging() {
+			sensor.addDetector(new LoggingDetector());
 			return this;
 		}
 
@@ -280,9 +292,10 @@ public class PhoneGestureSensor implements SensorEventListener {
 	public void onSensorChanged(SensorEvent event) {
 		double[] linearAcceleration = getLinearAcceleration(event);
 
+		SensorData data = new SensorData(gravity, linearAcceleration);
 		PhoneGestureDetector mostProbableDetector = null;
 		for (PhoneGestureDetector detector : phoneGestureDetectors) {
-			detector.feedSensorEvent(linearAcceleration);
+			detector.feedSensorEvent(data);
 			if (mostProbableDetector == null
 					|| detector.getProbability() > mostProbableDetector
 							.getProbability()) {

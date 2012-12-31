@@ -2,6 +2,7 @@ package gestures.detectors;
 
 import gestures.PhoneGesture;
 import gestures.PhoneGestureDetector;
+import gestures.SensorData;
 
 /**
  * A detector to detect "Slashing" movements by simple peak detection.
@@ -38,12 +39,8 @@ public class SlashDetector implements PhoneGestureDetector {
 	}
 
 	@Override
-	public void feedSensorEvent(double[] linearAcceleration) {
-		double totalAcceleration = Math.sqrt(Math.pow(linearAcceleration[0], 2)
-				+ Math.pow(linearAcceleration[1], 2)
-				+ Math.pow(linearAcceleration[2], 2));
-
-		if (totalAcceleration > SLASH_THRESHOLD) {
+	public void feedSensorEvent(SensorData sensorData) {
+		if (sensorData.absoluteAcceleration > SLASH_THRESHOLD) {
 			gestureProbability = 1;
 		} else {
 			gestureProbability *= (1 - PROBABILITY_DECAY);

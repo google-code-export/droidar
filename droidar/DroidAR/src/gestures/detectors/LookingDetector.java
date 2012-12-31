@@ -2,6 +2,7 @@ package gestures.detectors;
 
 import gestures.PhoneGesture;
 import gestures.PhoneGestureDetector;
+import gestures.SensorData;
 
 /**
  * A detector which detects if the user is holding the phone stable for a
@@ -43,13 +44,8 @@ public class LookingDetector implements PhoneGestureDetector {
 	}
 
 	@Override
-	public void feedSensorEvent(double[] linearAcceleration) {
-		double absoluteAcceleration = Math.sqrt(Math.pow(linearAcceleration[0],
-				2)
-				+ Math.pow(linearAcceleration[1], 2)
-				+ Math.pow(linearAcceleration[2], 2));
-
-		if (absoluteAcceleration <= STABILITY_THRESHOLD) {
+	public void feedSensorEvent(SensorData sensorData) {
+		if (sensorData.absoluteAcceleration <= STABILITY_THRESHOLD) {
 			/*
 			 * A few notes to the following equation:
 			 * 
@@ -66,7 +62,8 @@ public class LookingDetector implements PhoneGestureDetector {
 			 * 1.0 (the rate will approach 1 but never quite reach it).
 			 */
 
-			gestureProbability += (STABILITY_THRESHOLD - absoluteAcceleration)
+			gestureProbability += 
+					(STABILITY_THRESHOLD - sensorData.absoluteAcceleration)
 					/ STABILITY_THRESHOLD * PROBABILITY_INCREASE
 					* (1 - gestureProbability);
 		} else {

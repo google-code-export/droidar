@@ -2,6 +2,7 @@ package gestures.detectors;
 
 import gestures.PhoneGesture;
 import gestures.PhoneGestureDetector;
+import gestures.SensorData;
 
 /**
  * A dummy detector that will always return the given constant probability for
@@ -32,7 +33,7 @@ public class DummyDetector implements PhoneGestureDetector {
 	}
 
 	@Override
-	public void feedSensorEvent(double[] linearAcceleration) {
+	public void feedSensorEvent(SensorData sensorData) {
 		// do nothing
 	}
 }

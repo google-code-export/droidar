@@ -37,8 +37,8 @@ public interface PhoneGestureDetector {
 	 * (the reconstructed 3d path that Simon mentioned), so that the
 	 * implementing classes have to do that on their own.
 	 * 
-	 * @param linearAcceleration
-	 *            The current measured linear acceleration.
+	 * @param sensorData
+	 *            Data collected by the PhoneGestureSensor.
 	 */
-	public void feedSensorEvent(double[] linearAcceleration);
+	public void feedSensorEvent(SensorData sensorData);
 }
