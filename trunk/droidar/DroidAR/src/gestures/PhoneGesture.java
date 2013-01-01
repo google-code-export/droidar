@@ -14,5 +14,7 @@ public enum PhoneGesture {
 	/* A simple slashing gesture */
 	SLASH,
 	/* User holds the phone in a stable position, as if looking at it */
-	LOOKING
+	LOOKING,
+	/* A "punching" gesture that goes vertically upwards */
+	UPPERCUT
 }
