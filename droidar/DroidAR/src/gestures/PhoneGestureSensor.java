@@ -4,6 +4,7 @@ import gestures.detectors.DummyDetector;
 import gestures.detectors.LoggingDetector;
 import gestures.detectors.LookingDetector;
 import gestures.detectors.SlashDetector;
+import gestures.detectors.UppercutDetector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +92,17 @@ public class PhoneGestureSensor implements SensorEventListener {
 		 */
 		public Builder withLookingDetection() {
 			sensor.addDetector(new LookingDetector());
+			return this;
+		}
+		
+
+		/**
+		 * Adds a detector for the UPPERCUT gesture.
+		 * 
+		 * @return The builder instance for method chaining.
+		 */		
+		public Builder withUppercutDetection() {
+			sensor.addDetector(new UppercutDetector());
 			return this;
 		}
 
