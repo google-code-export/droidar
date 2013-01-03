@@ -17,7 +17,7 @@ public class ConcreteSimpleLocationManager extends SimpleLocationManager {
 	 */
 	private static final float ACCURACY_WEIGHTING = 1f;
 
-	private static final int MAX_NUMBR_OF_LOCATIONS = 20;
+	private static final int MAX_NUMBR_OF_LOCATIONS = 15;
 
 	private static final double SQRT2PII = Math.sqrt(2 * Math.PI);
 
@@ -46,8 +46,9 @@ public class ConcreteSimpleLocationManager extends SimpleLocationManager {
 	@Override
 	public void onLocationEventFromGPS(Location location,
 			ArrayList<LocationListener> listenersToInform) {
-		if (currentPosition == null)
+		if (currentPosition == null) {
 			currentPosition = new Location("AveragePosition");
+		}
 		calcFromLastPositions(currentPosition, location);
 
 		for (int i = 0; i < listenersToInform.size(); i++) {
@@ -58,14 +59,14 @@ public class ConcreteSimpleLocationManager extends SimpleLocationManager {
 	@Override
 	public void onLocationEventFromSteps(Location location,
 			ArrayList<LocationListener> listenersToInform) {
-		lastStepPos=location;
+		lastStepPos = location;
 		onLocationEventFromGPS(location, listenersToInform);
 	}
-	
+
 	public Location getLastStepPos() {
 		return lastStepPos;
 	}
-	
+
 	private boolean calcFromLastPositions(Location target, Location newLocation) {
 
 		addToLastLocationsList(newLocation);
@@ -127,8 +128,9 @@ public class ConcreteSimpleLocationManager extends SimpleLocationManager {
 	}
 
 	private void addToLastLocationsList(Location location) {
-		if (lastPositions == null)
+		if (lastPositions == null) {
 			lastPositions = new LimitedQueue<Location>(MAX_NUMBR_OF_LOCATIONS);
+		}
 		lastPositions.add(location);
 	}
 }
