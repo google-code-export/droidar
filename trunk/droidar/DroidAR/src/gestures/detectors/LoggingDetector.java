@@ -65,7 +65,7 @@ public class LoggingDetector implements PhoneGestureDetector {
 		Log.d("LoggingDetector", builder.toString());
 	}
 
-	private String formatArray(double[] array) {
+	private String formatArray(float[] array) {
 		StringBuilder builder = new StringBuilder("[ ");
 		for (double value : array) {
 			builder.append(String.format("% 8.4f ", value));

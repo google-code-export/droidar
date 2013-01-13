@@ -1,6 +1,7 @@
 package gestures;
 
 import gestures.detectors.DummyDetector;
+import gestures.detectors.FullTurnDetector;
 import gestures.detectors.LoggingDetector;
 import gestures.detectors.LookingDetector;
 import gestures.detectors.SlashDetector;
@@ -70,7 +71,7 @@ public class PhoneGestureSensor implements SensorEventListener {
 		 *            detected.
 		 * @return The builder instance for method chaining.
 		 */
-		public Builder withMinimumConfidence(double confidence) {
+		public Builder withMinimumConfidence(float confidence) {
 			sensor.addDetector(new DummyDetector(PhoneGesture.NONE, confidence));
 			return this;
 		}
@@ -103,6 +104,16 @@ public class PhoneGestureSensor implements SensorEventListener {
 		 */		
 		public Builder withUppercutDetection() {
 			sensor.addDetector(new UppercutDetector());
+			return this;
+		}
+		
+		/**
+		 * Adds a detector for the FULL_TURN gesture.
+		 * 
+		 * @return The builder instance for method chaining.
+		 */
+		public Builder withFullTurnDetection() {
+			sensor.addDetector(new FullTurnDetector());
 			return this;
 		}
 
@@ -179,17 +190,17 @@ public class PhoneGestureSensor implements SensorEventListener {
 	 * The gravity vector indicating the measured values of gravity along the
 	 * phone's axes.
 	 */
-	private double[] gravity = { 0, 0, 0 };
+	private float[] gravity = { 0, 0, 0 };
 
 	/**
 	 * The weight for the high pass filter when filtering out gravity.
 	 */
-	private final double alpha = 0.8;
-
+	private final float alpha = 0.8f;
+	
 	/**
 	 * The minimal amount of time between to gestures in milliseconds.
 	 */
-	private long gestureTimeout = 500;
+	public long gestureTimeout = 500;
 
 	/**
 	 * Creates a new sensor instance that will be looking for phone gestures.
@@ -260,8 +271,8 @@ public class PhoneGestureSensor implements SensorEventListener {
 	 *            The SensorEvent that occurred.
 	 * @return The linear acceleration vector along the phone's axes.
 	 */
-	private double[] getLinearAcceleration(SensorEvent event) {
-		double[] result = { 0, 0, 0 };
+	private float[] getLinearAcceleration(SensorEvent event) {
+		float[] result = { 0, 0, 0 };
 
 		switch (event.sensor.getType()) {
 		case Sensor.TYPE_ACCELEROMETER:
@@ -277,6 +288,25 @@ public class PhoneGestureSensor implements SensorEventListener {
 		// TODO: Add support for Sensor.TYPE_LINEAR_ACCELERATION
 		}
 
+		return result;
+	}
+	
+	/**
+	 * Gets the current readings of the magnetic field sensor.
+	 * 
+	 * @param event The SensorEvent that occurred.
+	 * @return The readings of the magnetic sensor.
+	 */
+	private float[] getMagneticField(SensorEvent event) {
+		float[] result = { 0, 0, 0 };
+
+		switch (event.sensor.getType()) {
+		case Sensor.TYPE_MAGNETIC_FIELD:
+			result[0] = event.values[0];
+			result[1] = event.values[1];
+			result[2] = event.values[2];
+		}
+		
 		return result;
 	}
 
@@ -313,12 +343,13 @@ public class PhoneGestureSensor implements SensorEventListener {
 		// TODO: check if we should handle this
 
 	}
-
+	
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		double[] linearAcceleration = getLinearAcceleration(event);
+		float[] linearAcceleration = getLinearAcceleration(event);
+		float[] mag = getMagneticField(event);
 
-		SensorData data = new SensorData(gravity, linearAcceleration);
+		SensorData data = new SensorData(gravity, linearAcceleration, mag);
 		PhoneGestureDetector mostProbableDetector = null;
 		for (PhoneGestureDetector detector : phoneGestureDetectors) {
 			detector.feedSensorEvent(data);
@@ -348,6 +379,11 @@ public class PhoneGestureSensor implements SensorEventListener {
 		sensorManager.registerListener(this,
 				sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
 				SensorManager.SENSOR_DELAY_GAME);
+		sensorManager.registerListener(this,
+				sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
+				SensorManager.SENSOR_DELAY_GAME);
+		
+		
 	}
 
 	/**
