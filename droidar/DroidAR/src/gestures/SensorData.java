@@ -16,20 +16,25 @@ public class SensorData {
 	/**
 	 * Gravity along the three phone axes in m/s^2.
 	 */
-	public final double[] gravity;
+	public final float[] gravity;
 	
 	/**
 	 * Linear acceleration along the three phone axes (i.e. excluding influence
 	 * of gravity) in m/s^2.
 	 */
-	public final double[] linearAcceleration;
+	public final float[] linearAcceleration;
 	
 	/**
 	 * Total acceleration (euclidean norm) in m/s^2.
 	 */
 	public final double absoluteAcceleration;
+	
+	/**
+	 * The readings of the gravity sensor.
+	 */
+	public final float[] mag;	
 
-	public SensorData(double[] gravity, double[] linearAcceleration) {
+	public SensorData(float[] gravity, float[] linearAcceleration, float[] mag) {
 		this.timestamp = System.nanoTime();
 		this.gravity = gravity;
 		this.linearAcceleration = linearAcceleration;
@@ -37,5 +42,6 @@ public class SensorData {
 				Math.pow(linearAcceleration[0], 2)
 				+ Math.pow(linearAcceleration[1], 2)
 				+ Math.pow(linearAcceleration[2], 2));
+		this.mag = mag;
 	}
 }

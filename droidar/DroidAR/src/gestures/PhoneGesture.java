@@ -16,5 +16,7 @@ public enum PhoneGesture {
 	/* User holds the phone in a stable position, as if looking at it */
 	LOOKING,
 	/* A "punching" gesture that goes vertically upwards */
-	UPPERCUT
+	UPPERCUT,
+	/* A "360° turn" of the player (i.e., the player's nose faces all georgraphic directions once) */
+	FULL_TURN
 }
