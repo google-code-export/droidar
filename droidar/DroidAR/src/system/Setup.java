@@ -28,7 +28,6 @@ import worldData.World;
 import actions.Action;
 import actions.ActionCalcRelativePos;
 import actions.ActionRotateCameraBuffered;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -430,7 +429,6 @@ public abstract class Setup {
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	}
 
-	@TargetApi(Build.VERSION_CODES.ECLAIR)
 	public void addGLSurfaceOverlay() {
 		if (Integer.parseInt(android.os.Build.VERSION.SDK) >= Build.VERSION_CODES.ECLAIR) {
 			myGLSurfaceView.setZOrderMediaOverlay(true);
