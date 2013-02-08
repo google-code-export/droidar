@@ -28,7 +28,7 @@ import worldData.World;
 import actions.Action;
 import actions.ActionCalcRelativePos;
 import actions.ActionRotateCameraBuffered;
-import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -124,7 +124,8 @@ public abstract class Setup {
 		this(true);
 	}
 
-	public Setup(Activity target, SetupListener listener, boolean useAccelAndMagnetoSensors) {
+	public Setup(Activity target, SetupListener listener,
+			boolean useAccelAndMagnetoSensors) {
 		this(useAccelAndMagnetoSensors);
 		mySetupListener = listener;
 	}
@@ -144,7 +145,8 @@ public abstract class Setup {
 	 */
 	public static int getScreenOrientation() {
 		if (screenOrientation == null) {
-			Log.e(LOG_TAG, "screenOrientation was not set! Will asume" + " default 90 degree rotation for screen");
+			Log.e(LOG_TAG, "screenOrientation was not set! Will asume"
+					+ " default 90 degree rotation for screen");
 			return Surface.ROTATION_90;
 		}
 		return screenOrientation;
@@ -192,7 +194,9 @@ public abstract class Setup {
 		if (getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE)) {
 			if (gotoFullScreenMode) {
 				debugLogDoSetupStep(STEP13);
-				getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+				getActivity().getWindow().setFlags(
+						WindowManager.LayoutParams.FLAG_FULLSCREEN,
+						WindowManager.LayoutParams.FLAG_FULLSCREEN);
 			}
 		} else {
 
@@ -213,7 +217,9 @@ public abstract class Setup {
 			 */
 		}
 
-		getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		getActivity().getWindow().setFlags(
+				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		// load device dependent settings:
 		debugLogDoSetupStep(STEP2);
@@ -235,7 +241,8 @@ public abstract class Setup {
 
 		debugLogDoSetupStep(STEP4);
 		// setting up the sensor Listeners:
-		EventManager.getInstance().registerListeners(getActivity(), this.useAccelAndMagnetoSensors);
+		EventManager.getInstance().registerListeners(getActivity(),
+				this.useAccelAndMagnetoSensors);
 
 		debugLogDoSetupStep(STEP5);
 		_a_initFieldsIfNecessary();
@@ -243,7 +250,9 @@ public abstract class Setup {
 		debugLogDoSetupStep(STEP6);
 
 		if (glRenderer instanceof GL1Renderer) {
-			_b_addWorldsToRenderer((GL1Renderer) glRenderer, GLFactory.getInstance(), EventManager.getInstance().getCurrentLocationObject());
+			_b_addWorldsToRenderer((GL1Renderer) glRenderer,
+					GLFactory.getInstance(), EventManager.getInstance()
+							.getCurrentLocationObject());
 		}
 		initializeCamera();
 
@@ -251,7 +260,8 @@ public abstract class Setup {
 
 		// set sensorinput actions:
 		worldUpdater = new SystemUpdater();
-		_c_addActionsToEvents(EventManager.getInstance(), myGLSurfaceView, worldUpdater);
+		_c_addActionsToEvents(EventManager.getInstance(), myGLSurfaceView,
+				worldUpdater);
 
 		debugLogDoSetupStep(STEP9);
 		// and then init the worldupdater to be able to animate the world:
@@ -305,7 +315,8 @@ public abstract class Setup {
 	 */
 	public boolean _a2_initLightning(EfficientList<LightSource> lights) {
 		lights.add(LightSource.newDefaultAmbientLight(GL10.GL_LIGHT0));
-		lights.add(LightSource.newDefaultSpotLight(GL10.GL_LIGHT1, new Vec(5, 5, 5), new Vec(0, 0, 0)));
+		lights.add(LightSource.newDefaultSpotLight(GL10.GL_LIGHT1, new Vec(5,
+				5, 5), new Vec(0, 0, 0)));
 		// TODO lights.add(LightSource.newDefaultDayLight(GL10.GL_LIGHT1, new
 		// Date()));
 		return true;
@@ -320,7 +331,8 @@ public abstract class Setup {
 
 	private void addOverlaysAndShowInfoScreen() {
 		debugLogDoSetupStep(STEP11);
-		InfoScreenSettings infoScreenData = new InfoScreenSettings(myTargetActivity);
+		InfoScreenSettings infoScreenData = new InfoScreenSettings(
+				myTargetActivity);
 		if (isOldDeviceWhereNothingWorksAsExpected) {
 			Log.d(LOG_TAG, "This is an old device (old Android version)");
 			addOverlaysInCrazyOrder();
@@ -357,7 +369,8 @@ public abstract class Setup {
 		TextureManager.resetInstance();
 		TaskManager.resetInstance();
 		GLFactory.resetInstance();
-		ObjectPicker.resetInstance(new CommandDeviceVibrate(myTargetActivity, 30));
+		ObjectPicker.resetInstance(new CommandDeviceVibrate(myTargetActivity,
+				30));
 		CommandProcessor.resetInstance();
 		FeedbackReports.resetInstance(); // TODO really reset it?
 
@@ -394,7 +407,8 @@ public abstract class Setup {
 	}
 
 	private void showInfoDialog(InfoScreenSettings infoScreenData) {
-		ActivityConnector.getInstance().startActivity(myTargetActivity, InfoScreen.class, infoScreenData);
+		ActivityConnector.getInstance().startActivity(myTargetActivity,
+				InfoScreen.class, infoScreenData);
 
 	}
 
@@ -412,23 +426,27 @@ public abstract class Setup {
 
 	private void addGUIOverlay() {
 		// add overlay view as an content view to the activity:
-		myTargetActivity.addContentView(myOverlayView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		myTargetActivity.addContentView(myOverlayView, new LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	}
 
-	@SuppressLint("NewApi")
+	@TargetApi(Build.VERSION_CODES.ECLAIR)
 	public void addGLSurfaceOverlay() {
 		if (Integer.parseInt(android.os.Build.VERSION.SDK) >= Build.VERSION_CODES.ECLAIR) {
 			myGLSurfaceView.setZOrderMediaOverlay(true);
 		}
-		myTargetActivity.addContentView(myGLSurfaceView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		myTargetActivity.addContentView(myGLSurfaceView, new LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	}
 
 	public void addCameraOverlay() {
 		if (myCameraView != null) {
 			Log.d(LOG_TAG, "Camera preview added as view");
-			myTargetActivity.addContentView(myCameraView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			myTargetActivity.addContentView(myCameraView, new LayoutParams(
+					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		} else {
-			Log.e(LOG_TAG, "Camera preview not added to view because it wasnt initialized !");
+			Log.e(LOG_TAG,
+					"Camera preview not added to view because it wasnt initialized !");
 		}
 	}
 
@@ -448,8 +466,11 @@ public abstract class Setup {
 			}
 		} else {
 			try {
-				Display display = ((WindowManager) activity.getSystemService(Activity.WINDOW_SERVICE)).getDefaultDisplay();
-				screenOrientation = (Integer) display.getClass().getMethod("getRotation", null).invoke(display, null);
+				Display display = ((WindowManager) activity
+						.getSystemService(Activity.WINDOW_SERVICE))
+						.getDefaultDisplay();
+				screenOrientation = (Integer) display.getClass()
+						.getMethod("getRotation", null).invoke(display, null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -479,7 +500,8 @@ public abstract class Setup {
 		lastTime = currentTime;
 		if (msTheLastStepTook != 0) {
 			if (displaySetupStepLogging) {
-				Log.d(LOG_TAG, "   -> Done (It took " + msTheLastStepTook + "ms)");
+				Log.d(LOG_TAG, "   -> Done (It took " + msTheLastStepTook
+						+ "ms)");
 			}
 		}
 		if (displaySetupStepLogging) {
@@ -530,7 +552,8 @@ public abstract class Setup {
 	 * @param currentPosition
 	 *            might be null if no position information is available!
 	 */
-	public abstract void _b_addWorldsToRenderer(GL1Renderer glRenderer, GLFactory objectFactory, GeoObj currentPosition);
+	public abstract void _b_addWorldsToRenderer(GL1Renderer glRenderer,
+			GLFactory objectFactory, GeoObj currentPosition);
 
 	/**
 	 * This method should be used to add {@link Action}s to the
@@ -565,7 +588,8 @@ public abstract class Setup {
 	 *            -method can be used to react on touch-screen input
 	 * @param worldUpdater
 	 */
-	public abstract void _c_addActionsToEvents(EventManager eventManager, CustomGLSurfaceView arView, SystemUpdater updater);
+	public abstract void _c_addActionsToEvents(EventManager eventManager,
+			CustomGLSurfaceView arView, SystemUpdater updater);
 
 	/**
 	 * All elements (normally that should only be {@link World}s) which should
@@ -589,7 +613,8 @@ public abstract class Setup {
 	 * @param activity
 	 *            use this as the context for new views
 	 */
-	public void _e1_addElementsToOverlay(FrameLayout overlayView, Activity activity) {
+	public void _e1_addElementsToOverlay(FrameLayout overlayView,
+			Activity activity) {
 		// the main.xml layout is loaded and the guiSetup is created for
 		// customization. then the customized view is added to overlayView
 		View sourceView = View.inflate(activity, defaultArLayoutId, null);
@@ -607,10 +632,15 @@ public abstract class Setup {
 			public boolean execute() {
 				SimpleUIv1.showInfoScreen(currentActivity, new EditItem() {
 					@Override
-					public void customizeScreen(ModifierGroup group, Object message) {
-						group.addModifier(new gui.simpleUI.modifiers.Headline(R.drawable.logo, "DroidAR"));
-						group.addModifier(new gui.simpleUI.modifiers.InfoText("This was creat" + "ed with the Droid" + "AR fram" + "ework", Gravity.CENTER));
-						group.addModifier(new gui.simpleUI.modifiers.InfoText("droidar.goog" + "lecode.com", Gravity.CENTER));
+					public void customizeScreen(ModifierGroup group,
+							Object message) {
+						group.addModifier(new gui.simpleUI.modifiers.Headline(
+								R.drawable.logo, "DroidAR"));
+						group.addModifier(new gui.simpleUI.modifiers.InfoText(
+								"This was creat" + "ed with the Droid"
+										+ "AR fram" + "ework", Gravity.CENTER));
+						group.addModifier(new gui.simpleUI.modifiers.InfoText(
+								"droidar.goog" + "lecode.com", Gravity.CENTER));
 					}
 				}, null);
 				return true;
@@ -634,7 +664,8 @@ public abstract class Setup {
 	 *            {@link Setup#myTargetActivity} but its easier to access this
 	 *            way
 	 */
-	public abstract void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity activity);
+	public abstract void _e2_addElementsToGuiSetup(GuiSetup guiSetup,
+			Activity activity);
 
 	public GLRenderer initOpenGLRenderer() {
 		GL1Renderer r = new GL1Renderer();
@@ -658,18 +689,21 @@ public abstract class Setup {
 		}
 	}
 
-	private boolean fillMenuWithCommandsFromCommandgroup(Menu menu, CommandGroup g) {
+	private boolean fillMenuWithCommandsFromCommandgroup(Menu menu,
+			CommandGroup g) {
 		EfficientList<Command> cList = g.myList;
 		final int l = g.myList.myLength;
 		for (int i = 0; i < l; i++) {
-			menu.add(Menu.NONE, i, Menu.NONE, cList.get(i).getInfoObject().getShortDescr());
+			menu.add(Menu.NONE, i, Menu.NONE, cList.get(i).getInfoObject()
+					.getShortDescr());
 		}
 		return true;
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (myOptionsMenuCommands != null) {
-			return fillMenuWithCommandsFromCommandgroup(menu, myOptionsMenuCommands);
+			return fillMenuWithCommandsFromCommandgroup(menu,
+					myOptionsMenuCommands);
 		}
 		return false;
 	}
@@ -688,7 +722,8 @@ public abstract class Setup {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		if (featureId == Window.FEATURE_OPTIONS_PANEL) {
 			if (myOptionsMenuCommands != null) {
-				return myOptionsMenuCommands.myList.get(item.getItemId()).execute();
+				return myOptionsMenuCommands.myList.get(item.getItemId())
+						.execute();
 			}
 		}
 		return false;
@@ -786,7 +821,8 @@ public abstract class Setup {
 	}
 
 	public void resumeEventManager() {
-		EventManager.getInstance().resumeEventListeners(myTargetActivity, useAccelAndMagnetoSensors);
+		EventManager.getInstance().resumeEventListeners(myTargetActivity,
+				useAccelAndMagnetoSensors);
 	}
 
 	public void pauseUpdater() {
@@ -842,18 +878,24 @@ public abstract class Setup {
 	}
 
 	public float getScreenWidth() {
-		if (getScreenOrientation() == Surface.ROTATION_90 || getScreenOrientation() == Surface.ROTATION_270) {
-			return getActivity().getWindowManager().getDefaultDisplay().getHeight();
+		if (getScreenOrientation() == Surface.ROTATION_90
+				|| getScreenOrientation() == Surface.ROTATION_270) {
+			return getActivity().getWindowManager().getDefaultDisplay()
+					.getHeight();
 		} else {
-			return getActivity().getWindowManager().getDefaultDisplay().getWidth();
+			return getActivity().getWindowManager().getDefaultDisplay()
+					.getWidth();
 		}
 	}
 
 	public float getScreenHeigth() {
-		if (getScreenOrientation() == Surface.ROTATION_90 || getScreenOrientation() == Surface.ROTATION_270) {
-			return getActivity().getWindowManager().getDefaultDisplay().getWidth();
+		if (getScreenOrientation() == Surface.ROTATION_90
+				|| getScreenOrientation() == Surface.ROTATION_270) {
+			return getActivity().getWindowManager().getDefaultDisplay()
+					.getWidth();
 		} else {
-			return getActivity().getWindowManager().getDefaultDisplay().getHeight();
+			return getActivity().getWindowManager().getDefaultDisplay()
+					.getHeight();
 		}
 	}
 
