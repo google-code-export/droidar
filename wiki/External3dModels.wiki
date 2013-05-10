@@ -6,7 +6,7 @@ This video tutorial will shortly explain how to load 3d models from external fil
 
 The following three projects have to be added to your workspace to get the model loader extension running(also explained in the video):
 
-[http://code.google.com/p/libgdx/source/browse/#svn%2Ftrunk%2Fgdx gdx]
+[http://code.google.com/p/libgdx/source/browse/#svn%2Ftrunk%2Fgdx gdx](version of Apr 12, 2012 should work)
 
 [http://code.google.com/p/libgdx/source/browse/#svn%2Ftrunk%2Fbackends%2Fgdx-backend-android android backend]
 
