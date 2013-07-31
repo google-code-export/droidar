@@ -1,2 +1,2 @@
+#summary The wiki moved to https://github.com/bitstars/droidar/wiki/_pages
 #labels wiki,moved
-The wiki moved to https://github.com/bitstars/droidar/wiki/_pages
